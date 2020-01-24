@@ -1,7 +1,7 @@
 # Copyright (C) 2019 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using JuMP, LinearAlgebra, Geodesy
+using JuMP, LinearAlgebra, Geodesy, Cbc
 
 mutable struct ReverseManufacturingModel
     mip::JuMP.Model
@@ -205,6 +205,87 @@ function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
     x = LLA(source_lat, source_lon, 0.0)
     y = LLA(dest_lat, dest_lon, 0.0)
     return round(distance(x, y) / 1000.0, digits=2)
+end
+
+function print_solution(instance, model)
+    vals = Dict()
+    for a in values(model.arcs)
+        vals[a] = JuMP.value(model.vars.flow[a])
+    end
+    for n in values(model.process_nodes)
+        vals[n] = JuMP.value(model.vars.node[n])
+    end    
+    for (plant_name, plant) in instance.plants
+        for (location_name, location) in plant["locations"]
+            unused = true
+            printstyled(@sprintf("%s (at %s):\n", plant_name, location_name),
+                        bold=true,
+                        color=:red)
+            for arc in model.arcs
+                arc.dest.plant_name == plant_name || continue
+                arc.dest.location_name == location_name || continue
+                arc.source.plant_name != plant_name || continue
+                vals[arc] > 0.0 || continue
+                @printf("    ← Receive %.2f kg of %s from %s (at %s)\n",
+                    vals[arc],
+                    arc.source.product_name,
+                    arc.source.plant_name,
+                    arc.source.location_name)
+                @printf("            Distance %.2f km\n", arc.values["distance"])
+                @printf("            Transportation cost %.2f USD\n",
+                    vals[arc] * arc.costs["transportation"])            
+                if arc.costs["variable"] > 0
+                    @printf("            Variable operating cost %.2f USD\n",
+                        arc.costs["variable"] * vals[arc])
+                else
+                    @printf("            Revenue %.2f USD\n",
+                        -arc.costs["variable"] * vals[arc])
+                end
+                unused = false
+            end
+            for arc in model.arcs
+                arc.source.plant_name == plant_name || continue
+                arc.source.location_name == location_name || continue
+                arc.dest.plant_name == plant_name || continue
+                arc.dest.location_name == location_name || continue
+                vals[arc] > 0.0 || continue
+                @printf("    ↺ Convert %.2f kg of %s into %.2f kg of %s\n",
+                    vals[arc] / arc.values["weight"],
+                    arc.source.product_name,
+                    vals[arc],
+                    arc.dest.product_name)
+                unused = false
+            end 
+            for arc in model.arcs
+                arc.source.plant_name == plant_name || continue
+                arc.source.location_name == location_name || continue
+                arc.dest.plant_name != plant_name || continue
+                vals[arc] > 0.0 || continue
+                @printf("    → Send %.2f kg of %s to %s (at %s)\n",
+                    vals[arc],
+                    arc.dest.product_name,
+                    arc.dest.plant_name,
+                    arc.dest.location_name)
+                unused = false
+            end  
+            if unused
+                println("    Not used")
+            end
+            println()
+        end
+    end
+    printstyled(@sprintf("Total profit: %.2f USD", -objective_value(model.mip)),
+                bold=true,
+                color=:red)
+end
+
+function solve(filename::String;
+               optimizer=with_optimizer(Cbc.Optimizer,
+                                        logLevel=0))
+    instance = ReverseManufacturing.readfile(filename)
+    model = ReverseManufacturing.build_model(instance, optimizer)
+    JuMP.optimize!(model.mip)
+    print_solution(instance, model)
 end
 
 export FlowArc

@@ -72,3 +72,7 @@ using ReverseManufacturing, Cbc, JuMP, Printf
 #                 a.weight)
 #     end
 end
+
+@testset "Solve" begin
+    ReverseManufacturing.solve("$(pwd())/../instances/samples/s2.json")
+end
