@@ -47,9 +47,15 @@ function Base.show(io::IO, node::Node)
 end
 
 mutable struct Arc
+    # Origin of the arc
     source::Node
+    # Destination of the arc
     dest::Node
+    # Costs dictionary. Each value in this dictionary is multiplied by the arc flow variable 
+    # and added to the objective function.
     costs::Dict
+    # Values dictionary. This dictionary is used to store extra information about the
+    # arc. They are not used automatically by the model.
     values::Dict
 end
 
@@ -61,6 +67,7 @@ function build_model(instance::ReverseManufacturingInstance,
                      optimizer,
                     ) :: ReverseManufacturingModel
 
+    println("Building optimization model...")
     mip = isa(optimizer, JuMP.OptimizerFactory) ? Model(optimizer) : direct_model(optimizer)
     decision_nodes, process_nodes, arcs = create_nodes_and_arcs(instance)
     vars = DotDict()
@@ -68,9 +75,19 @@ function build_model(instance::ReverseManufacturingInstance,
     vars.node = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
     create_decision_node_constraints!(mip, decision_nodes, vars)
     create_process_node_constraints!(mip, process_nodes, vars)
-    flow_costs = sum(a.costs[c] * vars.flow[a] for a in arcs for c in keys(a.costs))
-    node_costs = sum(n.cost * vars.node[n] for n in values(process_nodes))
-    @objective(mip, Min, flow_costs + node_costs)
+    
+    println("    Creating objective function...")
+    obj = @expression(mip, 0 * @variable(mip))
+    for a in arcs
+        for c in keys(a.costs)
+            add_to_expression!(obj, a.costs[c], vars.flow[a])
+        end
+    end
+    for n in values(process_nodes)
+        add_to_expression!(obj, n.cost, vars.node[n])
+    end
+    @objective(mip, Min, obj)
+    
     return return ReverseManufacturingModel(mip,
                                             vars,
                                             arcs,
@@ -79,6 +96,7 @@ function build_model(instance::ReverseManufacturingInstance,
 end
 
 function create_decision_node_constraints!(mip, nodes, vars)
+    println("    Creating decision-node constraints...")
     for (id, n) in nodes
         @constraint(mip,
             sum(vars.flow[a] for a in n.incoming_arcs) + n.balance ==
@@ -87,9 +105,10 @@ function create_decision_node_constraints!(mip, nodes, vars)
 end
 
 function create_process_node_constraints!(mip, nodes, vars)
+    println("    Creating process-node constraints...")
     for (id, n) in nodes
         # Output amount is implied by input amount
-        input_sum = sum(vars.flow[a] for a in n.incoming_arcs)
+        input_sum = isempty(n.incoming_arcs) ? 0 : sum(vars.flow[a] for a in n.incoming_arcs)
         for a in n.outgoing_arcs
             @constraint(mip, vars.flow[a] == a.values["weight"] * input_sum)
         end
@@ -99,6 +118,7 @@ function create_process_node_constraints!(mip, nodes, vars)
 end
 
 function create_nodes_and_arcs(instance)
+    println("    Creating nodes and arcs...")
     arcs = Arc[]
     decision_nodes = Dict()
     process_nodes = Dict()
@@ -166,7 +186,7 @@ function create_nodes_and_arcs(instance)
             for source_location_name in keys(source_plant["locations"])
                 source_location = source_plant["locations"][source_location_name]
 
-                # Process-arcs within a plant
+                # Process arcs (conversions within a plant)
                 source = process_nodes[source_plant["input"], source_plant["name"], source_location_name]
                 dest = decision_nodes[product_name, source_plant["name"], source_location_name]
                 costs = Dict()
@@ -176,7 +196,7 @@ function create_nodes_and_arcs(instance)
                 push!(source.outgoing_arcs, a)
                 push!(dest.incoming_arcs, a)
                 
-                # Transportation-arcs from one plant to another
+                # Transportation arcs (from one plant to another)
                 for dest_plant in product["input plants"]
                     for dest_location_name in keys(dest_plant["locations"])
                         dest_location = dest_plant["locations"][dest_location_name]
@@ -207,85 +227,102 @@ function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
     return round(distance(x, y) / 1000.0, digits=2)
 end
 
-function print_solution(instance, model)
+function solve(filename::String;
+               optimizer=with_optimizer(Cbc.Optimizer,
+                                        logLevel=0))
+    println("Reading $filename")
+    instance = ReverseManufacturing.readfile(filename)
+    model = ReverseManufacturing.build_model(instance, optimizer)
+    
+    println("Optimizing...")
+    JuMP.optimize!(model.mip)
+    
+    println("Extracting solution...")
+    return get_solution(instance, model, vals)
+end
+
+function get_solution(instance::ReverseManufacturingInstance,
+                      model::ReverseManufacturingModel)
+    
     vals = Dict()
     for a in values(model.arcs)
         vals[a] = JuMP.value(model.vars.flow[a])
     end
     for n in values(model.process_nodes)
         vals[n] = JuMP.value(model.vars.node[n])
-    end    
+    end
+    
+    output = Dict(
+        "plants" => Dict(),
+        "costs" => Dict(
+            "fixed" => 0.0,
+            "variable" => 0.0,
+            "transportation" => 0.0,
+            "total" => 0.0,
+        )
+    )
+
     for (plant_name, plant) in instance.plants
+        input_product_name = plant["input"]
         for (location_name, location) in plant["locations"]
-            unused = true
-            printstyled(@sprintf("%s (at %s):\n", plant_name, location_name),
-                        bold=true,
-                        color=:red)
-            for arc in model.arcs
-                arc.dest.plant_name == plant_name || continue
-                arc.dest.location_name == location_name || continue
-                arc.source.plant_name != plant_name || continue
-                vals[arc] > 0.0 || continue
-                @printf("    ← Receive %.2f kg of %s from %s (at %s)\n",
-                    vals[arc],
-                    arc.source.product_name,
-                    arc.source.plant_name,
-                    arc.source.location_name)
-                @printf("            Distance %.2f km\n", arc.values["distance"])
-                @printf("            Transportation cost %.2f USD\n",
-                    vals[arc] * arc.costs["transportation"])            
-                if arc.costs["variable"] > 0
-                    @printf("            Variable operating cost %.2f USD\n",
-                        arc.costs["variable"] * vals[arc])
-                else
-                    @printf("            Revenue %.2f USD\n",
-                        -arc.costs["variable"] * vals[arc])
+            skip_plant = true
+            process_node = model.process_nodes[input_product_name, plant_name, location_name]
+
+            dict = Dict{Any, Any}(
+                "input" => Dict(),
+                "output" => Dict(),
+                "total input" => 0.0,
+                "total output" => Dict(),
+                "transportation costs" => Dict(),
+                "variable costs" => Dict(),
+            )
+
+            dict["fixed cost"] = round(vals[process_node] * process_node.cost, digits=5)
+            output["costs"]["fixed"] += dict["fixed cost"]
+
+            # Inputs
+            for a in process_node.incoming_arcs
+                if vals[a] > 0
+                    val = round(vals[a], digits=5)
+                    skip_plant = false
+                    source_key = "$(a.source.plant_name) ($(a.source.location_name))"
+                    dict["input"][source_key] = val
+                    dict["total input"] += val
+
+                    cost_transportation = round(a.costs["transportation"] * val, digits=5)
+                    cost_variable = round(a.costs["variable"] * val, digits=5)
+                    dict["transportation costs"][source_key] = cost_transportation
+                    dict["variable costs"][source_key] = cost_variable
+                    output["costs"]["transportation"] += cost_transportation
+                    output["costs"]["variable"] += cost_variable
                 end
-                unused = false
             end
-            for arc in model.arcs
-                arc.source.plant_name == plant_name || continue
-                arc.source.location_name == location_name || continue
-                arc.dest.plant_name == plant_name || continue
-                arc.dest.location_name == location_name || continue
-                vals[arc] > 0.0 || continue
-                @printf("    ↺ Convert %.2f kg of %s into %.2f kg of %s\n",
-                    vals[arc] / arc.values["weight"],
-                    arc.source.product_name,
-                    vals[arc],
-                    arc.dest.product_name)
-                unused = false
-            end 
-            for arc in model.arcs
-                arc.source.plant_name == plant_name || continue
-                arc.source.location_name == location_name || continue
-                arc.dest.plant_name != plant_name || continue
-                vals[arc] > 0.0 || continue
-                @printf("    → Send %.2f kg of %s to %s (at %s)\n",
-                    vals[arc],
-                    arc.dest.product_name,
-                    arc.dest.plant_name,
-                    arc.dest.location_name)
-                unused = false
-            end  
-            if unused
-                println("    Not used")
+
+            # Outputs
+            for output_product_name in keys(plant["outputs"])
+                dict["output"][output_product_name] = output_dict = Dict()
+                dict["total output"][output_product_name] = 0.0
+                decision_node = model.decision_nodes[output_product_name, plant_name, location_name]
+                for a in decision_node.outgoing_arcs
+                    if vals[a] > 0
+                        val = round(vals[a], digits=5)
+                        skip_plant = false
+                        dict["total output"][output_product_name] += val
+                        dest_key = "$(a.dest.plant_name) ($(a.dest.location_name))"
+                        output_dict[dest_key] = val
+                    end
+                end
             end
-            println()
+
+            if !skip_plant
+                key = "$(plant_name) ($(location_name))"
+                output["plants"][key] = dict
+            end
         end
     end
-    printstyled(@sprintf("Total profit: %.2f USD", -objective_value(model.mip)),
-                bold=true,
-                color=:red)
-end
 
-function solve(filename::String;
-               optimizer=with_optimizer(Cbc.Optimizer,
-                                        logLevel=0))
-    instance = ReverseManufacturing.readfile(filename)
-    model = ReverseManufacturing.build_model(instance, optimizer)
-    JuMP.optimize!(model.mip)
-    print_solution(instance, model)
+    output["costs"]["total"] = sum(values(output["costs"]))
+    return output
 end
 
 export FlowArc

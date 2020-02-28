@@ -53,6 +53,16 @@ Example
 """    
 function readfile(path::String)::ReverseManufacturingInstance
     json = JSON.parsefile(path)
+    
+    for plant_name in keys(json["plants"])
+        "outputs" in keys(json["plants"][plant_name]) || continue
+        for output_name in keys(json["plants"][plant_name]["outputs"])
+            if json["plants"][plant_name]["outputs"][output_name] < 1e-5
+                delete!(json["plants"][plant_name]["outputs"], output_name)
+            end
+        end
+    end
+    
     products = Dict(key => json["products"][key]
                     for key in keys(json["products"]))
     plants = Dict(key => json["plants"][key]
@@ -75,11 +85,12 @@ function readfile(path::String)::ReverseManufacturingInstance
         push!(input_product["input plants"], plant)
         
         # Output products
-        if haskey(plant, "outputs")
-            for product_name in keys(plant["outputs"])
-                product = products[product_name]
-                push!(product["output plants"], plant)
-            end
+        if !haskey(plant, "outputs")
+            plant["outputs"] = Dict()
+        end
+        for product_name in keys(plant["outputs"])
+            product = products[product_name]
+            push!(product["output plants"], plant)
         end
     end
     
