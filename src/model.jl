@@ -238,12 +238,11 @@ function solve(filename::String;
     JuMP.optimize!(model.mip)
     
     println("Extracting solution...")
-    return get_solution(instance, model, vals)
+    return get_solution(instance, model)
 end
 
 function get_solution(instance::ReverseManufacturingInstance,
                       model::ReverseManufacturingModel)
-    
     vals = Dict()
     for a in values(model.arcs)
         vals[a] = JuMP.value(model.vars.flow[a])
