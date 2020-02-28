@@ -6,15 +6,12 @@ ReverseManufacturing.jl
 Table of Contents
 =================
 
-   * [ReverseManufacturing.jl](#reversemanufacturingjl)
-      * [Installation](#installation)
-      * [Typical Usage](#typical-usage)
-         * [Describing an instance](#describing-an-instance)
-            * [Products](#products)
-            * [Processing Plants](#processing-plants)
-         * [Optimizing](#optimizing)
-      * [Current Limitations](#current-limitations)
-      * [Authors](#authors)
+  * [Installation](#installation)
+  * [Typical Usage](#typical-usage)
+     * [Describing an instance](#describing-an-instance)
+     * [Optimizing](#optimizing)
+  * [Current Limitations](#current-limitations)
+  * [Authors](#authors)
 
 Installation
 ------------
@@ -24,7 +21,7 @@ The package was developed and tested with Julia 1.3 and may not be compatible wi
 pkg> add git@github.com:iSoron/ReverseManufacturing.git
 ```
 
-To make sure that the package has been correctly installed
+To make sure that the package has been correctly installed:
 
 ```
 pkg> test ReverseManufacturing
@@ -72,7 +69,6 @@ After creating a JSON file describing the reverse manufacturing process and the 
 
 ```julia
 using ReverseManufacturing
-
 ReverseManufacturing.solve("/home/user/instance.json")
 ```
 
