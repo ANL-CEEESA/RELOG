@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using Printf, JSON
+using Printf, JSON, JSONSchema
 import Base.getindex, Base.time
 
 """
@@ -52,7 +52,15 @@ Example
 
 """    
 function readfile(path::String)::ReverseManufacturingInstance
+    basedir = dirname(@__FILE__)
     json = JSON.parsefile(path)
+    schema = Schema(JSON.parsefile("$basedir/schemas/input.json"))
+    
+    validation_results = JSONSchema.validate(json, schema)
+    if validation_results !== nothing
+        println(validation_results)
+        throw("Invalid input file")
+    end
     
     for plant_name in keys(json["plants"])
         "outputs" in keys(json["plants"][plant_name]) || continue
