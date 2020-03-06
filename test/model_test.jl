@@ -46,33 +46,15 @@ using ReverseManufacturing, Cbc, JuMP, Printf
     arc = p2_f1_l1.incoming_arcs[1]
     @test arc.values["weight"] == 0.2
     @test isempty(arc.costs)
-    
-#     @show model.mip
-#     JuMP.optimize!(model.mip)
-    
-#     values = Dict(a => JuMP.value(model.vars.flow[a]) for a in model.arcs)
-#     @printf("source,dest,amount\n")
-#     for (arc, value) in values
-#         if value > 1e-6
-#             @printf("%s-%s-%s,%s-%s-%s,%.2f\n",
-#                 arc.source.plant_name,
-#                 arc.source.location_name,
-#                 arc.source.product_name,
-#                 arc.dest.plant_name,
-#                 arc.dest.location_name,
-#                 arc.dest.product_name,
-#                 value)
-#         end
-#     end
-    
-#     for a in model.arcs
-#         @printf("%20s\t%20s\t%8.2f\n",
-#                 "$(a.source.product_name) $(a.source.plant_name) $(a.source.location_name)",
-#                 "$(a.dest.product_name) $(a.dest.plant_name) $(a.dest.location_name)",
-#                 a.weight)
-#     end
 end
 
 @testset "Solve" begin
-    ReverseManufacturing.solve("$(pwd())/../instances/samples/s2.json")
+    solution = ReverseManufacturing.solve("$(pwd())/../instances/samples/s1.json")
+    @test "plants" in keys(solution)
+    @test "F1" in keys(solution["plants"])
+    @test "F2" in keys(solution["plants"])
+    @test "F3" in keys(solution["plants"])
+    @test "F4" in keys(solution["plants"])
+    @test "L2" in keys(solution["plants"]["F1"])
+    @test "total output" in keys(solution["plants"]["F1"]["L2"])
 end

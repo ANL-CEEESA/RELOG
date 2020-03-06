@@ -1,137 +1,337 @@
 {
   "plants": {
-    "Disassembly Plant (Darien)": {
-      "total output": {
-        "lead": 138000.0,
-        "plastic casings": 11500.0
-      },
-      "fixed cost": 11000.0,
-      "output": {
-        "lead": {
-          "Lead Recycling Plant (Milwaukee)": 138000.0
+    "Lead Recycling Plant": {
+      "Milwaukee": {
+        "total output": {
+          "lead ingots": 189000.0
         },
-        "plastic casings": {
-          "Plastic Recycling Plant (Milwaukee)": 11500.0
-        }
-      },
-      "total input": 230000.0,
-      "transportation costs": {
-        "Origin (Westmont)": 204.0,
-        "Origin (Darien)": 0.0,
-        "Origin (Chicago)": 8673.0
-      },
-      "variable costs": {
-        "Origin (Westmont)": 3000.0,
-        "Origin (Darien)": 3600.0,
-        "Origin (Chicago)": 21000.0
-      },
-      "input": {
-        "Origin (Westmont)": 25000.0,
-        "Origin (Darien)": 30000.0,
-        "Origin (Chicago)": 175000.0
-      }
-    },
-    "Plastic Sales Point (Milwaukee)": {
-      "total output": {},
-      "fixed cost": 0.0,
-      "output": {},
-      "total input": 15750.0,
-      "transportation costs": {
-        "Plastic Recycling Plant (Milwaukee)": 0.0
-      },
-      "variable costs": {
-        "Plastic Recycling Plant (Milwaukee)": -9765.0
-      },
-      "input": {
-        "Plastic Recycling Plant (Milwaukee)": 15750.0
-      }
-    },
-    "Lead Recycling Plant (Milwaukee)": {
-      "total output": {
-        "lead ingots": 189000.0
-      },
-      "fixed cost": 11000.0,
-      "output": {
-        "lead ingots": {
-          "Lead Sales Point (Milwaukee)": 189000.0
-        }
-      },
-      "total input": 210000.0,
-      "transportation costs": {
-        "Disassembly Plant (Darien)": 29998.44,
-        "Disassembly Plant (Greendale)": 1411.56
-      },
-      "variable costs": {
-        "Disassembly Plant (Darien)": 27600.0,
-        "Disassembly Plant (Greendale)": 14400.0
-      },
-      "input": {
-        "Disassembly Plant (Darien)": 138000.0,
-        "Disassembly Plant (Greendale)": 72000.0
-      }
-    },
-    "Plastic Recycling Plant (Milwaukee)": {
-      "total output": {
-        "plastic pellets": 15750.0
-      },
-      "fixed cost": 11000.0,
-      "output": {
-        "plastic pellets": {
-          "Plastic Sales Point (Milwaukee)": 15750.0
-        }
-      },
-      "total input": 17500.0,
-      "transportation costs": {
-        "Disassembly Plant (Darien)": 3833.134,
-        "Disassembly Plant (Greendale)": 180.366
-      },
-      "variable costs": {
-        "Disassembly Plant (Darien)": 920.0,
-        "Disassembly Plant (Greendale)": 480.0
-      },
-      "input": {
-        "Disassembly Plant (Darien)": 11500.0,
-        "Disassembly Plant (Greendale)": 6000.0
-      }
-    },
-    "Lead Sales Point (Milwaukee)": {
-      "total output": {},
-      "fixed cost": 0.0,
-      "output": {},
-      "total input": 189000.0,
-      "transportation costs": {
-        "Lead Recycling Plant (Milwaukee)": 0.0
-      },
-      "variable costs": {
-        "Lead Recycling Plant (Milwaukee)": -519750.0
-      },
-      "input": {
-        "Lead Recycling Plant (Milwaukee)": 189000.0
-      }
-    },
-    "Disassembly Plant (Greendale)": {
-      "total output": {
-        "lead": 72000.0,
-        "plastic casings": 6000.0
-      },
-      "fixed cost": 11000.0,
-      "output": {
-        "lead": {
-          "Lead Recycling Plant (Milwaukee)": 72000.0
+        "latitude": 43.05,
+        "fixed cost": 11000.0,
+        "output": {
+          "lead ingots": {
+            "Lead Sales Point": {
+              "Milwaukee": 189000.0
+            }
+          }
         },
-        "plastic casings": {
-          "Plastic Recycling Plant (Milwaukee)": 6000.0
+        "longitude": -87.95,
+        "total input": 210000.0,
+        "transportation costs": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "latitude": 42.9375,
+              "cost": 1411.56,
+              "distance": 13.07,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 29998.44,
+              "distance": 144.92,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "variable costs": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "latitude": 42.9375,
+              "cost": 14400.0,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 27600.0,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "input": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "amount": 72000.0,
+              "latitude": 42.9375,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "amount": 138000.0,
+              "latitude": 41.745556,
+              "longitude": -87.981111
+            }
+          }
+        }
+      }
+    },
+    "Disassembly Plant": {
+      "Greendale": {
+        "total output": {
+          "lead": 72000.0,
+          "plastic casings": 6000.0
+        },
+        "latitude": 42.9375,
+        "fixed cost": 11000.0,
+        "output": {
+          "lead": {
+            "Lead Recycling Plant": {
+              "Milwaukee": 72000.0
+            }
+          },
+          "plastic casings": {
+            "Plastic Recycling Plant": {
+              "Milwaukee": 6000.0
+            }
+          }
+        },
+        "longitude": -87.996944,
+        "total input": 120000.0,
+        "transportation costs": {
+          "Origin": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": 2352.6,
+              "distance": 13.07,
+              "longitude": -87.95
+            }
+          }
+        },
+        "variable costs": {
+          "Origin": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": 21600.0,
+              "longitude": -87.95
+            }
+          }
+        },
+        "input": {
+          "Origin": {
+            "Milwaukee": {
+              "amount": 120000.0,
+              "latitude": 43.05,
+              "longitude": -87.95
+            }
+          }
         }
       },
-      "total input": 120000.0,
-      "transportation costs": {
-        "Origin (Milwaukee)": 2352.6
-      },
-      "variable costs": {
-        "Origin (Milwaukee)": 21600.0
-      },
-      "input": {
-        "Origin (Milwaukee)": 120000.0
+      "Darien": {
+        "total output": {
+          "lead": 138000.0,
+          "plastic casings": 11500.0
+        },
+        "latitude": 41.745556,
+        "fixed cost": 11000.0,
+        "output": {
+          "lead": {
+            "Lead Recycling Plant": {
+              "Milwaukee": 138000.0
+            }
+          },
+          "plastic casings": {
+            "Plastic Recycling Plant": {
+              "Milwaukee": 11500.0
+            }
+          }
+        },
+        "longitude": -87.981111,
+        "total input": 230000.0,
+        "transportation costs": {
+          "Origin": {
+            "Chicago": {
+              "latitude": 41.881944,
+              "cost": 8673.0,
+              "distance": 33.04,
+              "longitude": -87.627778
+            },
+            "Westmont": {
+              "latitude": 41.794444,
+              "cost": 204.0,
+              "distance": 5.44,
+              "longitude": -87.976389
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 0.0,
+              "distance": 0.0,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "variable costs": {
+          "Origin": {
+            "Chicago": {
+              "latitude": 41.881944,
+              "cost": 21000.0,
+              "longitude": -87.627778
+            },
+            "Westmont": {
+              "latitude": 41.794444,
+              "cost": 3000.0,
+              "longitude": -87.976389
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 3600.0,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "input": {
+          "Origin": {
+            "Chicago": {
+              "amount": 175000.0,
+              "latitude": 41.881944,
+              "longitude": -87.627778
+            },
+            "Westmont": {
+              "amount": 25000.0,
+              "latitude": 41.794444,
+              "longitude": -87.976389
+            },
+            "Darien": {
+              "amount": 30000.0,
+              "latitude": 41.745556,
+              "longitude": -87.981111
+            }
+          }
+        }
+      }
+    },
+    "Plastic Recycling Plant": {
+      "Milwaukee": {
+        "total output": {
+          "plastic pellets": 15750.0
+        },
+        "latitude": 43.05,
+        "fixed cost": 11000.0,
+        "output": {
+          "plastic pellets": {
+            "Plastic Sales Point": {
+              "Milwaukee": 15750.0
+            }
+          }
+        },
+        "longitude": -87.95,
+        "total input": 17500.0,
+        "transportation costs": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "latitude": 42.9375,
+              "cost": 180.366,
+              "distance": 13.07,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 3833.134,
+              "distance": 144.92,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "variable costs": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "latitude": 42.9375,
+              "cost": 480.0,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "latitude": 41.745556,
+              "cost": 920.0,
+              "longitude": -87.981111
+            }
+          }
+        },
+        "input": {
+          "Disassembly Plant": {
+            "Greendale": {
+              "amount": 6000.0,
+              "latitude": 42.9375,
+              "longitude": -87.996944
+            },
+            "Darien": {
+              "amount": 11500.0,
+              "latitude": 41.745556,
+              "longitude": -87.981111
+            }
+          }
+        }
+      }
+    },
+    "Lead Sales Point": {
+      "Milwaukee": {
+        "total output": {},
+        "latitude": 43.05,
+        "fixed cost": 0.0,
+        "output": {},
+        "longitude": -87.95,
+        "total input": 189000.0,
+        "transportation costs": {
+          "Lead Recycling Plant": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": 0.0,
+              "distance": 0.0,
+              "longitude": -87.95
+            }
+          }
+        },
+        "variable costs": {
+          "Lead Recycling Plant": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": -519750.0,
+              "longitude": -87.95
+            }
+          }
+        },
+        "input": {
+          "Lead Recycling Plant": {
+            "Milwaukee": {
+              "amount": 189000.0,
+              "latitude": 43.05,
+              "longitude": -87.95
+            }
+          }
+        }
+      }
+    },
+    "Plastic Sales Point": {
+      "Milwaukee": {
+        "total output": {},
+        "latitude": 43.05,
+        "fixed cost": 0.0,
+        "output": {},
+        "longitude": -87.95,
+        "total input": 15750.0,
+        "transportation costs": {
+          "Plastic Recycling Plant": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": 0.0,
+              "distance": 0.0,
+              "longitude": -87.95
+            }
+          }
+        },
+        "variable costs": {
+          "Plastic Recycling Plant": {
+            "Milwaukee": {
+              "latitude": 43.05,
+              "cost": -9765.0,
+              "longitude": -87.95
+            }
+          }
+        },
+        "input": {
+          "Plastic Recycling Plant": {
+            "Milwaukee": {
+              "amount": 15750.0,
+              "latitude": 43.05,
+              "longitude": -87.95
+            }
+          }
+        }
       }
     }
   },

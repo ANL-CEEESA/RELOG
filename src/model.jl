@@ -262,61 +262,97 @@ function get_solution(instance::ReverseManufacturingInstance,
     )
 
     for (plant_name, plant) in instance.plants
+        skip_plant = true
+        plant_dict = Dict{Any, Any}()
         input_product_name = plant["input"]
+        
         for (location_name, location) in plant["locations"]
-            skip_plant = true
+            skip_location = true
             process_node = model.process_nodes[input_product_name, plant_name, location_name]
 
-            dict = Dict{Any, Any}(
+            plant_loc_dict = Dict{Any, Any}(
                 "input" => Dict(),
                 "output" => Dict(),
                 "total input" => 0.0,
                 "total output" => Dict(),
                 "transportation costs" => Dict(),
                 "variable costs" => Dict(),
+                "latitude" => location["latitude"],
+                "longitude" => location["longitude"],
             )
 
-            dict["fixed cost"] = round(vals[process_node] * process_node.cost, digits=5)
-            output["costs"]["fixed"] += dict["fixed cost"]
+            plant_loc_dict["fixed cost"] = round(vals[process_node] * process_node.cost, digits=5)
+            output["costs"]["fixed"] += plant_loc_dict["fixed cost"]
 
             # Inputs
             for a in process_node.incoming_arcs
-                if vals[a] > 0
-                    val = round(vals[a], digits=5)
-                    skip_plant = false
-                    source_key = "$(a.source.plant_name) ($(a.source.location_name))"
-                    dict["input"][source_key] = val
-                    dict["total input"] += val
-
-                    cost_transportation = round(a.costs["transportation"] * val, digits=5)
-                    cost_variable = round(a.costs["variable"] * val, digits=5)
-                    dict["transportation costs"][source_key] = cost_transportation
-                    dict["variable costs"][source_key] = cost_variable
-                    output["costs"]["transportation"] += cost_transportation
-                    output["costs"]["variable"] += cost_variable
+                if vals[a] <= 0
+                    continue
                 end
+                skip_plant = skip_location = false
+                val = round(vals[a], digits=5)
+                if !(a.source.plant_name in keys(plant_loc_dict["input"]))
+                    plant_loc_dict["input"][a.source.plant_name] = Dict()
+                    plant_loc_dict["transportation costs"][a.source.plant_name] = Dict()
+                    plant_loc_dict["variable costs"][a.source.plant_name] = Dict()
+                end
+                if a.source.plant_name == "Origin"
+                    product = instance.products[a.source.product_name]
+                    source_location = product["initial amounts"][a.source.location_name]
+                else
+                    source_plant = instance.plants[a.source.plant_name]
+                    source_location = source_plant["locations"][a.source.location_name]
+                end
+                
+                # Input
+                plant_loc_dict["input"][a.source.plant_name][a.source.location_name] = dict = Dict()
+                dict["amount"] = val
+                dict["latitude"] = source_location["latitude"]
+                dict["longitude"] = source_location["longitude"]
+                plant_loc_dict["total input"] += val
+                
+                # Transportation costs
+                cost_transportation = round(a.costs["transportation"] * val, digits=5)
+                plant_loc_dict["transportation costs"][a.source.plant_name][a.source.location_name] = dict = Dict()
+                dict["cost"] = cost_transportation
+                dict["latitude"] = source_location["latitude"]
+                dict["longitude"] = source_location["longitude"]
+                dict["distance"] = a.values["distance"]
+                output["costs"]["transportation"] += cost_transportation
+                
+                cost_variable = round(a.costs["variable"] * val, digits=5)
+                plant_loc_dict["variable costs"][a.source.plant_name][a.source.location_name] = dict = Dict()
+                dict["cost"] = cost_variable
+                dict["latitude"] = source_location["latitude"]
+                dict["longitude"] = source_location["longitude"]
+                output["costs"]["variable"] += cost_variable
             end
 
             # Outputs
             for output_product_name in keys(plant["outputs"])
-                dict["output"][output_product_name] = output_dict = Dict()
-                dict["total output"][output_product_name] = 0.0
+                plant_loc_dict["total output"][output_product_name] = 0.0
+                plant_loc_dict["output"][output_product_name] = product_dict = Dict()
                 decision_node = model.decision_nodes[output_product_name, plant_name, location_name]
                 for a in decision_node.outgoing_arcs
-                    if vals[a] > 0
-                        val = round(vals[a], digits=5)
-                        skip_plant = false
-                        dict["total output"][output_product_name] += val
-                        dest_key = "$(a.dest.plant_name) ($(a.dest.location_name))"
-                        output_dict[dest_key] = val
+                    if vals[a] <= 0
+                        continue
                     end
+                    skip_plant = skip_location = false
+                    if !(a.dest.plant_name in keys(product_dict))
+                        product_dict[a.dest.plant_name] = Dict{Any,Any}()
+                    end
+                    val = round(vals[a], digits=5)
+                    plant_loc_dict["total output"][output_product_name] += val
+                    product_dict[a.dest.plant_name][a.dest.location_name] = val
                 end
             end
-
-            if !skip_plant
-                key = "$(plant_name) ($(location_name))"
-                output["plants"][key] = dict
+            
+            if !skip_location
+                plant_dict[location_name] = plant_loc_dict
             end
+        end
+        if !skip_plant
+            output["plants"][plant_name] = plant_dict
         end
     end
 
