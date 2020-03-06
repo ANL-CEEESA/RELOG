@@ -1,0 +1,83 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://axavier.org/ReverseManufacturing/input/schema",
+    "title": "Schema for ReverseManufacturing Input File",
+    "definitions": {
+        "Plant": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "input": { "type": "string" },
+                    "outputs": {
+                        "type": "object",
+                        "additionalProperties": { "type": "number" }
+                    },
+                    "locations": { "$ref": "#/definitions/PlantLocation" }
+                },
+                "required": [
+                    "input",
+                    "locations"
+                ]
+            }
+        },
+        "PlantLocation": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "latitude": { "type": "number" },
+                    "longitude": { "type": "number" },
+                    "variable operating cost": { "type": "number" },
+                    "fixed operating cost": { "type": "number" },
+                    "opening cost": { "type": "number" }
+                },
+                "required": [
+                    "latitude",
+                    "longitude",
+                    "variable operating cost",
+                    "fixed operating cost",
+                    "opening cost"
+                ]
+            }
+        },
+        "InitialAmount": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "latitude": { "type": "number" },
+                    "longitude": { "type": "number" },
+                    "amount": { "type": "number" }
+                },
+                "required": [
+                    "latitude",
+                    "longitude",
+                    "amount"
+                ]
+            }
+        },
+        "Product": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "transportation cost": { "type": "number" },
+                    "initial amounts": { "$ref": "#/definitions/InitialAmount" }
+                },
+                "required": [
+                    "transportation cost"
+                ]
+            }            
+        }
+    },
+    "type": "object",
+    "properties": {
+        "plants": { "$ref": "#/definitions/Plant" },
+        "products": { "$ref": "#/definitions/Product" }
+    },
+    "required": [
+        "plants",
+        "products"
+    ]
+}
