@@ -1,7 +1,7 @@
 # Copyright (C) 2019 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using JuMP, LinearAlgebra, Geodesy, Cbc
+using JuMP, LinearAlgebra, Geodesy, Cbc, ProgressBars
 
 mutable struct ReverseManufacturingModel
     mip::JuMP.Model
@@ -68,8 +68,13 @@ function build_model(instance::ReverseManufacturingInstance,
                     ) :: ReverseManufacturingModel
 
     println("Building optimization model...")
-    mip = isa(optimizer, JuMP.OptimizerFactory) ? Model(optimizer) : direct_model(optimizer)
+    mip = Model(optimizer)
     decision_nodes, process_nodes, arcs = create_nodes_and_arcs(instance)
+    
+    println("        $(length(decision_nodes)) decision nodes")
+    println("        $(length(process_nodes)) process nodes")
+    println("        $(length(arcs)) arcs")
+
     vars = DotDict()
     vars.flow = Dict(a => @variable(mip, lower_bound=0) for a in arcs)
     vars.node = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
@@ -78,26 +83,26 @@ function build_model(instance::ReverseManufacturingInstance,
     
     println("    Creating objective function...")
     obj = @expression(mip, 0 * @variable(mip))
-    for a in arcs
+    for a in tqdm(arcs)
         for c in keys(a.costs)
             add_to_expression!(obj, a.costs[c], vars.flow[a])
         end
     end
-    for n in values(process_nodes)
+    for n in tqdm(values(process_nodes))
         add_to_expression!(obj, n.cost, vars.node[n])
     end
     @objective(mip, Min, obj)
     
-    return return ReverseManufacturingModel(mip,
-                                            vars,
-                                            arcs,
-                                            decision_nodes,
-                                            process_nodes)
+    return ReverseManufacturingModel(mip,
+                                     vars,
+                                     arcs,
+                                     decision_nodes,
+                                     process_nodes)
 end
 
 function create_decision_node_constraints!(mip, nodes, vars)
     println("    Creating decision-node constraints...")
-    for (id, n) in nodes
+    for (id, n) in tqdm(nodes)
         @constraint(mip,
             sum(vars.flow[a] for a in n.incoming_arcs) + n.balance ==
             sum(vars.flow[a] for a in n.outgoing_arcs))
@@ -106,7 +111,7 @@ end
 
 function create_process_node_constraints!(mip, nodes, vars)
     println("    Creating process-node constraints...")
-    for (id, n) in nodes
+    for (id, n) in tqdm(nodes)
         # Output amount is implied by input amount
         input_sum = isempty(n.incoming_arcs) ? 0 : sum(vars.flow[a] for a in n.incoming_arcs)
         for a in n.outgoing_arcs
@@ -228,8 +233,7 @@ function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
 end
 
 function solve(filename::String;
-               optimizer=with_optimizer(Cbc.Optimizer,
-                                        logLevel=0))
+               optimizer=Cbc.Optimizer)
     println("Reading $filename")
     instance = ReverseManufacturing.readfile(filename)
     model = ReverseManufacturing.build_model(instance, optimizer)

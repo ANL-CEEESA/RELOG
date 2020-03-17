@@ -5,7 +5,7 @@ using ReverseManufacturing, Cbc, JuMP, Printf
 
 @testset "Model" begin
     instance = ReverseManufacturing.load("samples/s1")
-    model = ReverseManufacturing.build_model(instance, with_optimizer(Cbc.Optimizer))
+    model = ReverseManufacturing.build_model(instance, Cbc.Optimizer)
     
     # Verify nodes
     @test ("P1", "Origin", "C1") in keys(model.decision_nodes)
