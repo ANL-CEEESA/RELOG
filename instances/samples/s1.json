@@ -79,7 +79,17 @@
                     "capacity": 500,
                     "opening cost": 2000,
                     "fixed operating cost": 70.0,
-                    "variable operating cost": 70.0
+                    "variable operating cost": 70.0,
+                    "disposal": {
+                        "P2": {
+                            "cost": -10.0,
+                            "limit": 1.0
+                        },
+                        "P3": {
+                            "cost": -10.0,
+                            "limit": 1.0
+                        }
+                    }
                 },
                 "L2": {
                     "latitude": 0.5,

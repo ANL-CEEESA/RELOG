@@ -30,14 +30,17 @@ mutable struct ShippingNode <: Node
     incoming_arcs::Array
     outgoing_arcs::Array
     balance::Float64
+    disposal_cost::Float64
+    disposal_limit::Float64
 end
 
 function Base.show(io::IO, node::ProcessNode)
-    print(io, "ProcessNode($(node.product_name), $(node.plant_name), $(node.location_name), $(node.fixed_cost))")
+    print(io, "ProcessNode($(node.product_name), $(node.plant_name), $(node.location_name), fixed_cost=$(node.fixed_cost))")
 end
 
 function Base.show(io::IO, node::ShippingNode)
-    print(io, "ShippingNode($(node.product_name), $(node.plant_name), $(node.location_name), $(node.balance))")
+    print(io, "ShippingNode($(node.product_name), $(node.plant_name), $(node.location_name), balance=$(node.balance), ")
+    print(io, "disposal_cost=$(node.disposal_cost), disposal_limit=$(node.disposal_limit))")
 end
 
 mutable struct Arc
@@ -74,20 +77,34 @@ function build_model(instance::ReverseManufacturingInstance,
 
     vars = DotDict()
     vars.flow = Dict(a => @variable(mip, lower_bound=0) for a in arcs)
-    vars.node = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
+    vars.dispose = Dict(n => @variable(mip,
+                                       lower_bound = 0,
+                                       upper_bound = n.disposal_limit)
+                        for n in values(shipping_nodes))
+    vars.open_plant = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
     create_shipping_node_constraints!(mip, shipping_nodes, vars)
     create_process_node_constraints!(mip, process_nodes, vars)
     
     println("    Creating objective function...")
     obj = @expression(mip, 0 * @variable(mip))
+
+    # Shipping and variable operating costs
     for a in tqdm(arcs)
         for c in keys(a.costs)
             add_to_expression!(obj, a.costs[c], vars.flow[a])
         end
     end
+
+    # Opening and fixed operating costs
     for n in tqdm(values(process_nodes))
-        add_to_expression!(obj, n.fixed_cost, vars.node[n])
+        add_to_expression!(obj, n.fixed_cost, vars.open_plant[n])
     end
+
+    # Disposal costs
+    for n in tqdm(values(shipping_nodes))
+        add_to_expression!(obj, n.disposal_cost, vars.dispose[n])
+    end
+
     @objective(mip, Min, obj)
     
     return ReverseManufacturingModel(mip,
@@ -102,7 +119,7 @@ function create_shipping_node_constraints!(mip, nodes, vars)
     for (id, n) in tqdm(nodes)
         @constraint(mip,
             sum(vars.flow[a] for a in n.incoming_arcs) + n.balance ==
-            sum(vars.flow[a] for a in n.outgoing_arcs))
+            sum(vars.flow[a] for a in n.outgoing_arcs) + vars.dispose[n])
     end
 end
 
@@ -115,7 +132,7 @@ function create_process_node_constraints!(mip, nodes, vars)
             @constraint(mip, vars.flow[a] == a.values["weight"] * input_sum)
         end
         # If plant is closed, input must be zero
-        @constraint(mip, input_sum <= 1e6 * vars.node[n])
+        @constraint(mip, input_sum <= 1e6 * vars.open_plant[n])
     end
 end
 
@@ -131,8 +148,16 @@ function create_nodes_and_arcs(instance)
         # Shipping nodes for initial amounts
         if haskey(product, "initial amounts")
             for location_name in keys(product["initial amounts"])
-                amount = product["initial amounts"][location_name]["amount"]
-                n = ShippingNode(product_name, "Origin", location_name, [], [], amount)
+                balance = product["initial amounts"][location_name]["amount"]
+                n = ShippingNode(product_name,
+                                 "Origin", # plant_name
+                                 location_name,
+                                 [], # incoming_arcs
+                                 [], # outgoing_arcs
+                                 balance,
+                                 0.0, # disposal_cost
+                                 0.0, # disposal_limit
+                                )
                 shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -148,8 +173,29 @@ function create_nodes_and_arcs(instance)
         
         # Shipping nodes for each plant
         for plant in product["output plants"]
-            for location_name in keys(plant["locations"])
-                n = ShippingNode(product_name, plant["name"], location_name, [], [], 0)
+            for (location_name, location) in plant["locations"]
+                disposal_cost = 0.0
+                disposal_limit = 0.0
+
+                if "disposal" in keys(location) product_name in keys(location["disposal"])
+                    dict = location["disposal"][product_name]
+                    disposal_cost = dict["cost"]
+                    if "limit" in keys(dict)
+                        disposal_limit = dict["limit"]
+                    else
+                        disposal_limit = 1e30
+                    end
+                end
+
+                n = ShippingNode(product_name,
+                                 plant["name"],
+                                 location_name,
+                                 [], # incoming_arcs
+                                 [], # outgoing_arcs
+                                 0.0, # balance
+                                 disposal_cost,
+                                 disposal_limit,
+                                )
                 shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -249,7 +295,7 @@ function get_solution(instance::ReverseManufacturingInstance,
         vals[a] = JuMP.value(model.vars.flow[a])
     end
     for n in values(model.process_nodes)
-        vals[n] = JuMP.value(model.vars.node[n])
+        vals[n] = JuMP.value(model.vars.open_plant[n])
     end
     
     output = Dict(
@@ -258,6 +304,7 @@ function get_solution(instance::ReverseManufacturingInstance,
             "fixed" => 0.0,
             "variable" => 0.0,
             "transportation" => 0.0,
+            "disposal" => 0.0,
             "total" => 0.0,
         )
     )
@@ -273,11 +320,12 @@ function get_solution(instance::ReverseManufacturingInstance,
 
             plant_loc_dict = Dict{Any, Any}(
                 "input" => Dict(),
-                "output" => Dict(),
+                "output" => Dict(
+                    "send" => Dict(),
+                    "dispose" => Dict(),
+                ),
                 "total input" => 0.0,
                 "total output" => Dict(),
-                "transportation costs" => Dict(),
-                "variable costs" => Dict(),
                 "latitude" => location["latitude"],
                 "longitude" => location["longitude"],
             )
@@ -294,8 +342,6 @@ function get_solution(instance::ReverseManufacturingInstance,
                 val = round(vals[a], digits=5)
                 if !(a.source.plant_name in keys(plant_loc_dict["input"]))
                     plant_loc_dict["input"][a.source.plant_name] = Dict()
-                    plant_loc_dict["transportation costs"][a.source.plant_name] = Dict()
-                    plant_loc_dict["variable costs"][a.source.plant_name] = Dict()
                 end
                 if a.source.plant_name == "Origin"
                     product = instance.products[a.source.product_name]
@@ -306,34 +352,36 @@ function get_solution(instance::ReverseManufacturingInstance,
                 end
                 
                 # Input
+                cost_transportation = round(a.costs["transportation"] * val, digits=5)
                 plant_loc_dict["input"][a.source.plant_name][a.source.location_name] = dict = Dict()
+                cost_variable = round(a.costs["variable"] * val, digits=5)
                 dict["amount"] = val
+                dict["distance"] = a.values["distance"]
+                dict["transportation cost"] = cost_transportation
+                dict["variable operating cost"] = cost_variable
                 dict["latitude"] = source_location["latitude"]
                 dict["longitude"] = source_location["longitude"]
                 plant_loc_dict["total input"] += val
                 
-                # Transportation costs
-                cost_transportation = round(a.costs["transportation"] * val, digits=5)
-                plant_loc_dict["transportation costs"][a.source.plant_name][a.source.location_name] = dict = Dict()
-                dict["cost"] = cost_transportation
-                dict["latitude"] = source_location["latitude"]
-                dict["longitude"] = source_location["longitude"]
-                dict["distance"] = a.values["distance"]
                 output["costs"]["transportation"] += cost_transportation
-                
-                cost_variable = round(a.costs["variable"] * val, digits=5)
-                plant_loc_dict["variable costs"][a.source.plant_name][a.source.location_name] = dict = Dict()
-                dict["cost"] = cost_variable
-                dict["latitude"] = source_location["latitude"]
-                dict["longitude"] = source_location["longitude"]
                 output["costs"]["variable"] += cost_variable
             end
 
             # Outputs
             for output_product_name in keys(plant["outputs"])
                 plant_loc_dict["total output"][output_product_name] = 0.0
-                plant_loc_dict["output"][output_product_name] = product_dict = Dict()
+                plant_loc_dict["output"]["send"][output_product_name] = product_dict = Dict()
                 shipping_node = model.shipping_nodes[output_product_name, plant_name, location_name]
+
+                disposal_amount = JuMP.value(model.vars.dispose[shipping_node])
+                if disposal_amount > 1e-5
+                    plant_loc_dict["output"]["dispose"][output_product_name] = disposal_dict = Dict()
+                    disposal_dict["amount"] = JuMP.value(model.vars.dispose[shipping_node])
+                    disposal_dict["cost"] = disposal_dict["amount"] * shipping_node.disposal_cost
+                    plant_loc_dict["total output"][output_product_name] += disposal_amount
+                    output["costs"]["disposal"] += disposal_dict["cost"]
+                end
+
                 for a in shipping_node.outgoing_arcs
                     if vals[a] <= 0
                         continue
@@ -342,9 +390,14 @@ function get_solution(instance::ReverseManufacturingInstance,
                     if !(a.dest.plant_name in keys(product_dict))
                         product_dict[a.dest.plant_name] = Dict{Any,Any}()
                     end
+                    dest_location = instance.plants[a.dest.plant_name]["locations"][a.dest.location_name]
                     val = round(vals[a], digits=5)
                     plant_loc_dict["total output"][output_product_name] += val
-                    product_dict[a.dest.plant_name][a.dest.location_name] = val
+                    product_dict[a.dest.plant_name][a.dest.location_name] = dict = Dict()
+                    dict["amount"] = val
+                    dict["distance"] = a.values["distance"]
+                    dict["latitude"] = dest_location["latitude"]
+                    dict["longitude"] = dest_location["longitude"]
                 end
             end
             

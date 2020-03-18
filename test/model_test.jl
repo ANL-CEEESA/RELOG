@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using ReverseManufacturing, Cbc, JuMP, Printf
+using ReverseManufacturing, Cbc, JuMP, Printf, JSON
 
 @testset "Model" begin
     instance = ReverseManufacturing.load("samples/s1")
@@ -50,6 +50,8 @@ end
 
 @testset "Solve" begin
     solution = ReverseManufacturing.solve("$(pwd())/../instances/samples/s1.json")
+    println(JSON.print(solution, 2))
+
     @test "plants" in keys(solution)
     @test "F1" in keys(solution["plants"])
     @test "F2" in keys(solution["plants"])

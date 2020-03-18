@@ -30,7 +30,20 @@
                     "longitude": { "type": "number" },
                     "variable operating cost": { "type": "number" },
                     "fixed operating cost": { "type": "number" },
-                    "opening cost": { "type": "number" }
+                    "opening cost": { "type": "number" },
+                    "disposal": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "cost": { "type": "number" },
+                                "limit": { "type": "number" }
+                            },
+                            "required": [
+                                "cost"
+                            ]
+                        }
+                    }
                 },
                 "required": [
                     "latitude",
