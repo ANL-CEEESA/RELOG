@@ -11,39 +11,33 @@ mutable struct ReverseManufacturingModel
     process_nodes
 end
 
-mutable struct Node
+abstract type Node
+end
+
+mutable struct ProcessNode <: Node
     product_name::String
     plant_name::String
     location_name::String
-    balance::Float64
     incoming_arcs::Array
     outgoing_arcs::Array
-    cost::Float64
+    fixed_cost::Float64
 end
 
-function Node(product_name::String,
-              plant_name::String,
-              location_name::String;
-              balance::Float64 = 0.0,
-              incoming_arcs::Array = [],
-              outgoing_arcs::Array = [],
-              cost::Float64 = 0.0,
-             ) :: Node
-    return Node(product_name,
-                plant_name,
-                location_name,
-                balance,
-                incoming_arcs,
-                outgoing_arcs,
-                cost)
+mutable struct ShippingNode <: Node
+    product_name::String
+    plant_name::String
+    location_name::String
+    incoming_arcs::Array
+    outgoing_arcs::Array
+    balance::Float64
 end
 
-function Base.show(io::IO, node::Node)
-    print(io, "Node($(node.product_name), $(node.plant_name), $(node.location_name)")
-    if node.balance != 0.0
-        print(io, ", $(node.balance)")
-    end
-    print(io, ")")
+function Base.show(io::IO, node::ProcessNode)
+    print(io, "ProcessNode($(node.product_name), $(node.plant_name), $(node.location_name), $(node.fixed_cost))")
+end
+
+function Base.show(io::IO, node::ShippingNode)
+    print(io, "ShippingNode($(node.product_name), $(node.plant_name), $(node.location_name), $(node.balance))")
 end
 
 mutable struct Arc
@@ -92,7 +86,7 @@ function build_model(instance::ReverseManufacturingInstance,
         end
     end
     for n in tqdm(values(process_nodes))
-        add_to_expression!(obj, n.cost, vars.node[n])
+        add_to_expression!(obj, n.fixed_cost, vars.node[n])
     end
     @objective(mip, Min, obj)
     
@@ -138,7 +132,7 @@ function create_nodes_and_arcs(instance)
         if haskey(product, "initial amounts")
             for location_name in keys(product["initial amounts"])
                 amount = product["initial amounts"][location_name]["amount"]
-                n = Node(product_name, "Origin", location_name, balance=amount)
+                n = ShippingNode(product_name, "Origin", location_name, [], [], amount)
                 shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -147,7 +141,7 @@ function create_nodes_and_arcs(instance)
         for plant in product["input plants"]
             for (location_name, location) in plant["locations"]
                 cost = location["opening cost"] + location["fixed operating cost"]
-                n = Node(product_name, plant["name"], location_name, cost=cost)
+                n = ProcessNode(product_name, plant["name"], location_name, [], [], cost)
                 process_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -155,7 +149,7 @@ function create_nodes_and_arcs(instance)
         # Shipping nodes for each plant
         for plant in product["output plants"]
             for location_name in keys(plant["locations"])
-                n = Node(product_name, plant["name"], location_name)
+                n = ShippingNode(product_name, plant["name"], location_name, [], [], 0)
                 shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -288,7 +282,7 @@ function get_solution(instance::ReverseManufacturingInstance,
                 "longitude" => location["longitude"],
             )
 
-            plant_loc_dict["fixed cost"] = round(vals[process_node] * process_node.cost, digits=5)
+            plant_loc_dict["fixed cost"] = round(vals[process_node] * process_node.fixed_cost, digits=5)
             output["costs"]["fixed"] += plant_loc_dict["fixed cost"]
 
             # Inputs
