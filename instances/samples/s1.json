@@ -76,7 +76,7 @@
                 "L1": {
                     "latitude": 0.0,
                     "longitude": 0.0,
-                    "capacity": 500,
+                    "capacity": 5000,
                     "opening cost": 2000,
                     "fixed operating cost": 70.0,
                     "variable operating cost": 70.0,
@@ -95,7 +95,7 @@
                     "latitude": 0.5,
                     "longitude": 0.5,
                     "opening cost": 1000,
-                    "capacity": 750,
+                    "capacity": 7500,
                     "opening cost": 1000,
                     "fixed operating cost": 50.0,
                     "variable operating cost": 50.0

@@ -21,6 +21,7 @@ mutable struct ProcessNode <: Node
     incoming_arcs::Array
     outgoing_arcs::Array
     fixed_cost::Float64
+    capacity::Float64
 end
 
 mutable struct ShippingNode <: Node
@@ -131,8 +132,8 @@ function create_process_node_constraints!(mip, nodes, vars)
         for a in n.outgoing_arcs
             @constraint(mip, vars.flow[a] == a.values["weight"] * input_sum)
         end
-        # If plant is closed, input must be zero
-        @constraint(mip, input_sum <= 1e6 * vars.open_plant[n])
+        # If plant is closed, input must be zero. If plant is opened, input must be below capacity.
+        @constraint(mip, input_sum <= n.capacity * vars.open_plant[n])
     end
 end
 
@@ -166,7 +167,18 @@ function create_nodes_and_arcs(instance)
         for plant in product["input plants"]
             for (location_name, location) in plant["locations"]
                 cost = location["opening cost"] + location["fixed operating cost"]
-                n = ProcessNode(product_name, plant["name"], location_name, [], [], cost)
+                if "capacity" in keys(location)
+                    capacity = location["capacity"]
+                else
+                    capacity = 1e10
+                end
+                n = ProcessNode(product_name,
+                                plant["name"],
+                                location_name,
+                                [], # incoming_arcs
+                                [], # outgoing_arcs
+                                cost,
+                                capacity)
                 process_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
