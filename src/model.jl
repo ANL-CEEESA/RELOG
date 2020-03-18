@@ -7,7 +7,7 @@ mutable struct ReverseManufacturingModel
     mip::JuMP.Model
     vars::DotDict
     arcs
-    decision_nodes
+    shipping_nodes
     process_nodes
 end
 
@@ -49,11 +49,14 @@ end
 mutable struct Arc
     # Origin of the arc
     source::Node
+
     # Destination of the arc
     dest::Node
+
     # Costs dictionary. Each value in this dictionary is multiplied by the arc flow variable 
     # and added to the objective function.
     costs::Dict
+
     # Values dictionary. This dictionary is used to store extra information about the
     # arc. They are not used automatically by the model.
     values::Dict
@@ -69,16 +72,16 @@ function build_model(instance::ReverseManufacturingInstance,
 
     println("Building optimization model...")
     mip = Model(optimizer)
-    decision_nodes, process_nodes, arcs = create_nodes_and_arcs(instance)
+    shipping_nodes, process_nodes, arcs = create_nodes_and_arcs(instance)
     
-    println("        $(length(decision_nodes)) decision nodes")
+    println("        $(length(shipping_nodes)) shipping nodes")
     println("        $(length(process_nodes)) process nodes")
     println("        $(length(arcs)) arcs")
 
     vars = DotDict()
     vars.flow = Dict(a => @variable(mip, lower_bound=0) for a in arcs)
     vars.node = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
-    create_decision_node_constraints!(mip, decision_nodes, vars)
+    create_shipping_node_constraints!(mip, shipping_nodes, vars)
     create_process_node_constraints!(mip, process_nodes, vars)
     
     println("    Creating objective function...")
@@ -96,12 +99,12 @@ function build_model(instance::ReverseManufacturingInstance,
     return ReverseManufacturingModel(mip,
                                      vars,
                                      arcs,
-                                     decision_nodes,
+                                     shipping_nodes,
                                      process_nodes)
 end
 
-function create_decision_node_constraints!(mip, nodes, vars)
-    println("    Creating decision-node constraints...")
+function create_shipping_node_constraints!(mip, nodes, vars)
+    println("    Creating shipping-node constraints...")
     for (id, n) in tqdm(nodes)
         @constraint(mip,
             sum(vars.flow[a] for a in n.incoming_arcs) + n.balance ==
@@ -125,18 +128,18 @@ end
 function create_nodes_and_arcs(instance)
     println("    Creating nodes and arcs...")
     arcs = Arc[]
-    decision_nodes = Dict()
+    shipping_nodes = Dict()
     process_nodes = Dict()
     
     # Create all nodes
     for (product_name, product) in instance.products
         
-        # Decision nodes for initial amounts
+        # Shipping nodes for initial amounts
         if haskey(product, "initial amounts")
             for location_name in keys(product["initial amounts"])
                 amount = product["initial amounts"][location_name]["amount"]
                 n = Node(product_name, "Origin", location_name, balance=amount)
-                decision_nodes[n.product_name, n.plant_name, n.location_name] = n
+                shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
         
@@ -149,11 +152,11 @@ function create_nodes_and_arcs(instance)
             end
         end
         
-        # Decision nodes for each plant
+        # Shipping nodes for each plant
         for plant in product["output plants"]
             for location_name in keys(plant["locations"])
                 n = Node(product_name, plant["name"], location_name)
-                decision_nodes[n.product_name, n.plant_name, n.location_name] = n
+                shipping_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
     end
@@ -168,7 +171,7 @@ function create_nodes_and_arcs(instance)
                 for dest_plant in product["input plants"]
                     for dest_location_name in keys(dest_plant["locations"])
                         dest_location = dest_plant["locations"][dest_location_name]
-                        source = decision_nodes[product_name, "Origin", source_location_name]
+                        source = shipping_nodes[product_name, "Origin", source_location_name]
                         dest = process_nodes[product_name, dest_plant["name"], dest_location_name]
                         distance = calculate_distance(source_location["latitude"],
                                                       source_location["longitude"],
@@ -193,7 +196,7 @@ function create_nodes_and_arcs(instance)
 
                 # Process arcs (conversions within a plant)
                 source = process_nodes[source_plant["input"], source_plant["name"], source_location_name]
-                dest = decision_nodes[product_name, source_plant["name"], source_location_name]
+                dest = shipping_nodes[product_name, source_plant["name"], source_location_name]
                 costs = Dict()
                 values = Dict("weight" => source_plant["outputs"][product_name])
                 a = Arc(source, dest, costs, values)
@@ -205,7 +208,7 @@ function create_nodes_and_arcs(instance)
                 for dest_plant in product["input plants"]
                     for dest_location_name in keys(dest_plant["locations"])
                         dest_location = dest_plant["locations"][dest_location_name]
-                        source = decision_nodes[product_name, source_plant["name"], source_location_name]
+                        source = shipping_nodes[product_name, source_plant["name"], source_location_name]
                         dest = process_nodes[product_name, dest_plant["name"], dest_location_name]
                         distance = calculate_distance(source_location["latitude"],
                                                       source_location["longitude"],
@@ -223,7 +226,7 @@ function create_nodes_and_arcs(instance)
             end
         end
     end
-    return decision_nodes, process_nodes, arcs
+    return shipping_nodes, process_nodes, arcs
 end
 
 function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
@@ -336,8 +339,8 @@ function get_solution(instance::ReverseManufacturingInstance,
             for output_product_name in keys(plant["outputs"])
                 plant_loc_dict["total output"][output_product_name] = 0.0
                 plant_loc_dict["output"][output_product_name] = product_dict = Dict()
-                decision_node = model.decision_nodes[output_product_name, plant_name, location_name]
-                for a in decision_node.outgoing_arcs
+                shipping_node = model.shipping_nodes[output_product_name, plant_name, location_name]
+                for a in shipping_node.outgoing_arcs
                     if vals[a] <= 0
                         continue
                     end
