@@ -189,13 +189,13 @@ function create_nodes_and_arcs(instance)
                 disposal_cost = 0.0
                 disposal_limit = 0.0
 
-                if "disposal" in keys(location) product_name in keys(location["disposal"])
+                if "disposal" in keys(location) && product_name in keys(location["disposal"])
                     dict = location["disposal"][product_name]
                     disposal_cost = dict["cost"]
                     if "limit" in keys(dict)
                         disposal_limit = dict["limit"]
                     else
-                        disposal_limit = 1e30
+                        disposal_limit = 1e10
                     end
                 end
 
@@ -260,7 +260,9 @@ function create_nodes_and_arcs(instance)
                 for dest_plant in product["input plants"]
                     for dest_location_name in keys(dest_plant["locations"])
                         dest_location = dest_plant["locations"][dest_location_name]
-                        source = shipping_nodes[product_name, source_plant["name"], source_location_name]
+                        source = shipping_nodes[product_name,
+                                                source_plant["name"],
+                                                source_location_name]
                         dest = process_nodes[product_name, dest_plant["name"], dest_location_name]
                         distance = calculate_distance(source_location["latitude"],
                                                       source_location["longitude"],
@@ -347,7 +349,7 @@ function get_solution(instance::ReverseManufacturingInstance,
 
             # Inputs
             for a in process_node.incoming_arcs
-                if vals[a] <= 0
+                if vals[a] <= 1e-3
                     continue
                 end
                 skip_plant = skip_location = false
@@ -395,7 +397,7 @@ function get_solution(instance::ReverseManufacturingInstance,
                 end
 
                 for a in shipping_node.outgoing_arcs
-                    if vals[a] <= 0
+                    if vals[a] <= 1e-3
                         continue
                     end
                     skip_plant = skip_location = false
