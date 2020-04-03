@@ -23,9 +23,9 @@ version = "0.5.1"
 
 [[Cbc]]
 deps = ["BinaryProvider", "Libdl", "MathOptInterface", "MathProgBase", "SparseArrays", "Test"]
-git-tree-sha1 = "62d80f448b5d77b3f0a59cecf6197aad2a3aa280"
+git-tree-sha1 = "0d51c2d66fc22e5e3fc64b6092ba0f0b3839c8c1"
 uuid = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
-version = "0.6.7"
+version = "0.6.6"
 
 [[CodeTracking]]
 deps = ["InteractiveUtils", "UUIDs"]
@@ -53,9 +53,9 @@ version = "0.2.0"
 
 [[CompilerSupportLibraries_jll]]
 deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "aa832564f930a7fc9290972526908d01a35aefac"
+git-tree-sha1 = "b57c5d019367c90f234a7bc7e24ff0a84971da5d"
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "0.3.0+0"
+version = "0.2.0+1"
 
 [[CoordinateTransformations]]
 deps = ["LinearAlgebra", "Rotations", "StaticArrays"]
