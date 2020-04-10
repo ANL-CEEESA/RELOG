@@ -13,6 +13,6 @@ using ReverseManufacturing
     
     @test sort(collect(keys(products))) == ["P1", "P2", "P3", "P4"]
     @test products["P1"]["input plants"] == [plants["F1"]]
-    @test products["P1"]["transportation cost"] == 1.5
+    @test products["P1"]["transportation cost"] == 0.015
     @test products["P1"]["initial amounts"]["C1"]["latitude"] == 7.0
 end

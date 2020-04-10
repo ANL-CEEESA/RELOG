@@ -21,7 +21,9 @@ mutable struct ProcessNode <: Node
     incoming_arcs::Array
     outgoing_arcs::Array
     fixed_cost::Float64
-    capacity::Float64
+    expansion_cost::Float64
+    base_capacity::Float64
+    max_capacity::Float64
 end
 
 mutable struct ShippingNode <: Node
@@ -83,6 +85,10 @@ function build_model(instance::ReverseManufacturingInstance,
                                        upper_bound = n.disposal_limit)
                         for n in values(shipping_nodes))
     vars.open_plant = Dict(n => @variable(mip, binary=true) for n in values(process_nodes))
+    vars.capacity = Dict(n => @variable(mip, lower_bound = 0, upper_bound = n.max_capacity)
+                         for n in values(process_nodes))
+    vars.expansion = Dict(n => @variable(mip, lower_bound = 0, upper_bound = (n.max_capacity - n.base_capacity))
+                         for n in values(process_nodes))        
     create_shipping_node_constraints!(mip, shipping_nodes, vars)
     create_process_node_constraints!(mip, process_nodes, vars)
     
@@ -99,6 +105,11 @@ function build_model(instance::ReverseManufacturingInstance,
     # Opening and fixed operating costs
     for n in tqdm(values(process_nodes))
         add_to_expression!(obj, n.fixed_cost, vars.open_plant[n])
+    end
+
+    # Expansion cost
+    for n in tqdm(values(process_nodes))
+        add_to_expression!(obj, n.expansion_cost, vars.expansion[n])
     end
 
     # Disposal costs
@@ -132,8 +143,15 @@ function create_process_node_constraints!(mip, nodes, vars)
         for a in n.outgoing_arcs
             @constraint(mip, vars.flow[a] == a.values["weight"] * input_sum)
         end
-        # If plant is closed, input must be zero. If plant is opened, input must be below capacity.
-        @constraint(mip, input_sum <= n.capacity * vars.open_plant[n])
+
+        # If plant is closed, capacity is zero.
+        @constraint(mip, vars.capacity[n] <= n.max_capacity * vars.open_plant[n])
+
+        # Capacity is linked to expansion
+        @constraint(mip, vars.capacity[n] <= n.base_capacity + vars.expansion[n])
+
+        # Input sum must be smaller than capacity
+        @constraint(mip, input_sum <= vars.capacity[n])
     end
 end
 
@@ -166,19 +184,28 @@ function create_nodes_and_arcs(instance)
         # Process nodes for each plant
         for plant in product["input plants"]
             for (location_name, location) in plant["locations"]
-                cost = location["opening cost"] + location["fixed operating cost"]
-                if "capacity" in keys(location)
-                    capacity = location["capacity"]
-                else
-                    capacity = 1e10
+                base_capacity = 1e8
+                max_capacity = 1e8
+                expansion_cost = 0.0
+                fixed_cost = location["opening cost"] + location["fixed operating cost"]
+                if "base capacity" in keys(location)
+                    base_capacity = location["base capacity"]
+                end
+                if "max capacity" in keys(location)
+                    max_capacity = location["max capacity"]
+                end
+                if "expansion cost" in keys(location)
+                    expansion_cost = location["expansion cost"]
                 end
                 n = ProcessNode(product_name,
                                 plant["name"],
                                 location_name,
                                 [], # incoming_arcs
                                 [], # outgoing_arcs
-                                cost,
-                                capacity)
+                                fixed_cost,
+                                expansion_cost,
+                                base_capacity,
+                                max_capacity)
                 process_nodes[n.product_name, n.plant_name, n.location_name] = n
             end
         end
@@ -320,6 +347,7 @@ function get_solution(instance::ReverseManufacturingInstance,
             "transportation" => 0.0,
             "disposal" => 0.0,
             "total" => 0.0,
+            "expansion" => 0.0,
         )
     )
 
@@ -342,10 +370,13 @@ function get_solution(instance::ReverseManufacturingInstance,
                 "total output" => Dict(),
                 "latitude" => location["latitude"],
                 "longitude" => location["longitude"],
+                "capacity" => round(JuMP.value(model.vars.capacity[process_node]), digits=2)
             )
 
             plant_loc_dict["fixed cost"] = round(vals[process_node] * process_node.fixed_cost, digits=5)
+            plant_loc_dict["expansion cost"] = round(JuMP.value(model.vars.expansion[process_node]) * process_node.expansion_cost, digits=5)
             output["costs"]["fixed"] += plant_loc_dict["fixed cost"]
+            output["costs"]["expansion"] += plant_loc_dict["expansion cost"]
 
             # Inputs
             for a in process_node.incoming_arcs

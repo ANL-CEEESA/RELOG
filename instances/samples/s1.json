@@ -1,7 +1,7 @@
 {
     "products": {
         "P1": {
-            "transportation cost": 1.50,
+            "transportation cost": 0.015,
             "initial amounts": {
                 "C1": {
                     "latitude": 7.0,
@@ -56,13 +56,13 @@
             }
         },
         "P2": {
-            "transportation cost": 2.00
+            "transportation cost": 0.02
         },
         "P3": {
-            "transportation cost": 1.25
+            "transportation cost": 0.0125
         },
         "P4": {
-            "transportation cost": 1.75
+            "transportation cost": 0.0175
         }
     },
     "plants": {
@@ -76,10 +76,12 @@
                 "L1": {
                     "latitude": 0.0,
                     "longitude": 0.0,
-                    "capacity": 5000,
-                    "opening cost": 2000,
-                    "fixed operating cost": 70.0,
-                    "variable operating cost": 70.0,
+                    "opening cost": 500,
+                    "base capacity": 250.0,
+                    "max capacity": 1000.0,
+                    "expansion cost": 1.0,
+                    "fixed operating cost": 30.0,
+                    "variable operating cost": 30.0,
                     "disposal": {
                         "P2": {
                             "cost": -10.0,
@@ -95,8 +97,9 @@
                     "latitude": 0.5,
                     "longitude": 0.5,
                     "opening cost": 1000,
-                    "capacity": 7500,
-                    "opening cost": 1000,
+                    "base capacity": 0.0,
+                    "max capacity": 10000.0,
+                    "expansion cost": 1.0,
                     "fixed operating cost": 50.0,
                     "variable operating cost": 50.0
                 }               

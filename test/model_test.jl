@@ -35,8 +35,8 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON
     arc = p1_orig_c1.outgoing_arcs[1]
     @test arc.dest.location_name == "L1"
     @test arc.values["distance"] == 1095.62
-    @test round(arc.costs["transportation"], digits=2) == 1643.43
-    @test arc.costs["variable"] == 70.0
+    @test round(arc.costs["transportation"], digits=2) == 16.43
+    @test arc.costs["variable"] == 30.0
     
     p2_f1_l1 = model.shipping_nodes["P2", "F1", "L1"]
     p2_f2_l3 = model.process_nodes["P2", "F2", "L3"]
@@ -59,4 +59,6 @@ end
     @test "F4" in keys(solution["plants"])
     @test "L2" in keys(solution["plants"]["F1"])
     @test "total output" in keys(solution["plants"]["F1"]["L2"])
+
+    @test "capacity" in keys(solution["plants"]["F1"]["L1"])
 end

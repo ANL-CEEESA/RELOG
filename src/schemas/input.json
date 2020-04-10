@@ -31,7 +31,9 @@
                     "variable operating cost": { "type": "number" },
                     "fixed operating cost": { "type": "number" },
                     "opening cost": { "type": "number" },
-                    "capacity": { "type": "number" },
+                    "base capacity": { "type": "number" },
+                    "max capacity": { "type": "number" },
+                    "expansion cost": { "type": "number" },
                     "disposal": {
                         "type": "object",
                         "additionalProperties": {

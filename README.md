@@ -38,7 +38,7 @@ The first step when using ReverseManufacturing.jl is describing the reverse manu
 
 The **products** section describes all products and subproducts in the simulation. The field `instance["products"]` is a dictionary mapping the name of the product to a dictionary which describes its characteristics. Each product description contains the following keys:
 
-* `transportation cost`, the cost (in dollars per km) to transport this product.
+* `transportation cost`, the cost (in dollars per km per kg) to transport this product.
 * `initial amounts,` a dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted.
 
 Each product may have some amount available at the beginning of the simulation. In this case, the key `initial amounts` maps to a dictionary with the following keys:
@@ -62,6 +62,15 @@ Each type of plant is associated with a set of potential locations where it can 
 * `opening cost`, the cost (in dollars) to open the plant.
 * `fixed operating cost`, the cost (in dollars) to keep the plant open, even if the plant doesn't process anything.
 * `variable operating cost`, the cost (in dollars per kg) that the plant incurs to process each kg of input.
+* `base capacity`, the amount of input (in kg) the plant can process when zero dollars are spent on expansion. If unlimited, this key may be omitted.
+* `max capacity`, the amount (in kg) the plant can process when the maximum amount of dollars are spent on expansion. If unlimited, this key may be omitted. 
+* `expansion cost`, the cost (in dollars per kg) to increase the plant capacity beyond its base capacity. If zero, this key may be omitted. 
+* `disposal`, a dictionary describing what products can be disposed locally at the plant.
+
+The keys in the disposal dictionary should be the names of the products. The values are dictionaries with the following keys:
+
+* `cost`, the cost (in dollars per kg) to dispose of the product.
+* `limit`, the maximum amount (in kg) that can be disposed of. If an unlimited amount can be disposed, this key may be omitted.
 
 ### Optimizing
 
