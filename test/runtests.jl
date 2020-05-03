@@ -5,5 +5,6 @@ using Test
 
 @testset "ReverseManufacturing" begin
     include("instance_test.jl")
-    #include("model_test.jl")
+    include("graph_test.jl")
+    include("model_test.jl")
 end

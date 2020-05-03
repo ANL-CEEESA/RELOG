@@ -19,15 +19,9 @@ struct CollectionCenter
 end
 
 
-struct DisposalEntry
-    product::Product
-    cost::Float64
-    limit::Float64
-end
-
-
 struct Plant
-    name::String
+    plant_name::String
+    location_name::String
     input::Product
     output::Dict{Product, Float64}
     latitude::Float64
@@ -38,7 +32,8 @@ struct Plant
     base_capacity::Float64
     max_capacity::Float64
     expansion_cost::Float64
-    disposal::Array{DisposalEntry}
+    disposal_limit::Dict{Product, Float64}
+    disposal_cost::Dict{Product, Float64}
 end
 
 
@@ -98,19 +93,19 @@ function load(path::String)::Instance
         end
         
         for (location_name, location_dict) in plant_dict["locations"]
-            disposal = DisposalEntry[]
+            disposal_limit = Dict(p => 0.0 for p in keys(output))
+            disposal_cost = Dict(p => 0.0 for p in keys(output))
             
             # Plant disposal
             if "disposal" in keys(location_dict)
                 for (product_name, disposal_dict) in location_dict["disposal"]
-                    push!(disposal, DisposalEntry(product_name_to_product[product_name],
-                                                  disposal_dict["cost"],
-                                                  disposal_dict["limit"]))
+                    disposal_limit[product_name_to_product[product_name]] = disposal_dict["limit"]
+                    disposal_cost[product_name_to_product[product_name]] = disposal_dict["cost"]
                 end
             end
             
-            base_capacity = Inf
-            max_capacity = Inf
+            base_capacity = 1e8
+            max_capacity = 1e8
             expansion_cost = 0
             
             if "base capacity" in keys(location_dict)
@@ -125,7 +120,8 @@ function load(path::String)::Instance
                 expansion_cost = location_dict["expansion cost"]
             end
             
-            plant = Plant(location_name,
+            plant = Plant(plant_name,
+                          location_name,
                           input,
                           output,
                           location_dict["latitude"],
@@ -136,7 +132,8 @@ function load(path::String)::Instance
                           base_capacity,
                           max_capacity,
                           expansion_cost,
-                          disposal)
+                          disposal_limit,
+                          disposal_cost)
             push!(plants, plant)
         end
     end
