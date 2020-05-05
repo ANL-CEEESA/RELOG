@@ -38,15 +38,21 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON
 
     end
 
-    @testset "build" begin
+    @testset "solve" begin
         solution = ReverseManufacturing.solve("$(pwd())/../instances/samples/s1.json")
-#         println(JSON.print(solution, 2))
+        JSON.print(stdout, solution, 4)
+        
+        @test "costs" in keys(solution)
+        @test "fixed" in keys(solution["costs"])
+        @test "transportation" in keys(solution["costs"])
+        @test "variable" in keys(solution["costs"])
+        @test "total" in keys(solution["costs"])
 
-#         @test "plants" in keys(solution)
-#         @test "F1" in keys(solution["plants"])
-#         @test "F2" in keys(solution["plants"])
-#         @test "F3" in keys(solution["plants"])
-#         @test "F4" in keys(solution["plants"])
+        @test "plants" in keys(solution)
+        @test "F1" in keys(solution["plants"])
+        @test "F2" in keys(solution["plants"])
+        @test "F3" in keys(solution["plants"])
+        @test "F4" in keys(solution["plants"])
 #         @test "L2" in keys(solution["plants"]["F1"])
 #         @test "total output" in keys(solution["plants"]["F1"]["L2"])
 

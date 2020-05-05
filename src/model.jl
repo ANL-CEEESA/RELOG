@@ -100,7 +100,7 @@ function create_shipping_node_constraints!(model::ManufacturingModel)
 end
 
 
-function create_process_node_constraints!(model)
+function create_process_node_constraints!(model::ManufacturingModel)
     mip, vars, graph = model.mip, model.vars, model.graph
 
     for n in graph.process_nodes
@@ -135,137 +135,128 @@ function solve(filename::String; optimizer=Cbc.Optimizer)
     println("Optimizing...")
     JuMP.optimize!(model.mip)
     
-#     println("Extracting solution...")
-#     return get_solution(instance, model)
+    println("Extracting solution...")
+    return get_solution(model)
 end
 
-# function get_solution(instance::ReverseManufacturingInstance,
-#                       model::ReverseManufacturingModel)
-#     vals = Dict()
-#     for a in values(model.arcs)
-#         vals[a] = JuMP.value(model.vars.flow[a])
-#     end
-#     for n in values(model.process_nodes)
-#         vals[n] = JuMP.value(model.vars.open_plant[n])
-#     end
+function get_solution(model::ManufacturingModel)
+    mip, vars, graph, instance = model.mip, model.vars, model.graph, model.instance
+    output = Dict(
+        "plants" => Dict(),
+        "costs" => Dict(
+            "fixed" => 0.0,
+            "variable" => 0.0,
+            "transportation" => 0.0,
+            "disposal" => 0.0,
+            "total" => 0.0,
+            "expansion" => 0.0,
+        )
+    )
     
-#     output = Dict(
-#         "plants" => Dict(),
-#         "costs" => Dict(
-#             "fixed" => 0.0,
-#             "variable" => 0.0,
-#             "transportation" => 0.0,
-#             "disposal" => 0.0,
-#             "total" => 0.0,
-#             "expansion" => 0.0,
-#         )
-#     )
+    plant_to_process_node = Dict(n.plant => n for n in graph.process_nodes)
+    plant_to_shipping_nodes = Dict()
+    for p in instance.plants
+        plant_to_shipping_nodes[p] = []
+        for a in plant_to_process_node[p].outgoing_arcs
+            push!(plant_to_shipping_nodes[p], a.dest)
+        end
+    end
+    
+    for plant in instance.plants
+        skip_plant = true
+        process_node = plant_to_process_node[plant]
+        plant_dict = Dict{Any, Any}(
+            "input" => Dict(),
+            "output" => Dict(
+                "send" => Dict(),
+                "dispose" => Dict(),
+            ),
+            "total input" => 0.0,
+            "total output" => Dict(),
+            "latitude" => plant.latitude,
+            "longitude" => plant.longitude,
+            "capacity" => JuMP.value(vars.capacity[process_node]),
+            "fixed cost" => JuMP.value(vars.open_plant[process_node]) * (plant.opening_cost + plant.fixed_operating_cost),
+            "expansion cost" => JuMP.value(vars.expansion[process_node]) * plant.expansion_cost,
+        )
+        output["costs"]["fixed"] += plant_dict["fixed cost"]
+        output["costs"]["expansion"] += plant_dict["expansion cost"]
 
-#     for (plant_name, plant) in instance.plants
-#         skip_plant = true
-#         plant_dict = Dict{Any, Any}()
-#         input_product_name = plant["input"]
-        
-#         for (location_name, location) in plant["locations"]
-#             skip_location = true
-#             process_node = model.process_nodes[input_product_name, plant_name, location_name]
-
-#             plant_loc_dict = Dict{Any, Any}(
-#                 "input" => Dict(),
-#                 "output" => Dict(
-#                     "send" => Dict(),
-#                     "dispose" => Dict(),
-#                 ),
-#                 "total input" => 0.0,
-#                 "total output" => Dict(),
-#                 "latitude" => location["latitude"],
-#                 "longitude" => location["longitude"],
-#                 "capacity" => round(JuMP.value(model.vars.capacity[process_node]), digits=2)
-#             )
-
-#             plant_loc_dict["fixed cost"] = round(vals[process_node] * process_node.fixed_cost, digits=5)
-#             plant_loc_dict["expansion cost"] = round(JuMP.value(model.vars.expansion[process_node]) * process_node.expansion_cost, digits=5)
-#             output["costs"]["fixed"] += plant_loc_dict["fixed cost"]
-#             output["costs"]["expansion"] += plant_loc_dict["expansion cost"]
-
-#             # Inputs
-#             for a in process_node.incoming_arcs
-#                 if vals[a] <= 1e-3
-#                     continue
-#                 end
-#                 skip_plant = skip_location = false
-#                 val = round(vals[a], digits=5)
-#                 if !(a.source.plant_name in keys(plant_loc_dict["input"]))
-#                     plant_loc_dict["input"][a.source.plant_name] = Dict()
-#                 end
-#                 if a.source.plant_name == "Origin"
-#                     product = instance.products[a.source.product_name]
-#                     source_location = product["initial amounts"][a.source.location_name]
-#                 else
-#                     source_plant = instance.plants[a.source.plant_name]
-#                     source_location = source_plant["locations"][a.source.location_name]
-#                 end
-                
-#                 # Input
-#                 cost_transportation = round(a.costs["transportation"] * val, digits=5)
-#                 plant_loc_dict["input"][a.source.plant_name][a.source.location_name] = dict = Dict()
-#                 cost_variable = round(a.costs["variable"] * val, digits=5)
-#                 dict["amount"] = val
-#                 dict["distance"] = a.values["distance"]
-#                 dict["transportation cost"] = cost_transportation
-#                 dict["variable operating cost"] = cost_variable
-#                 dict["latitude"] = source_location["latitude"]
-#                 dict["longitude"] = source_location["longitude"]
-#                 plant_loc_dict["total input"] += val
-                
-#                 output["costs"]["transportation"] += cost_transportation
-#                 output["costs"]["variable"] += cost_variable
-#             end
-
-#             # Outputs
-#             for output_product_name in keys(plant["outputs"])
-#                 plant_loc_dict["total output"][output_product_name] = 0.0
-#                 plant_loc_dict["output"]["send"][output_product_name] = product_dict = Dict()
-#                 shipping_node = model.shipping_nodes[output_product_name, plant_name, location_name]
-
-#                 disposal_amount = JuMP.value(model.vars.dispose[shipping_node])
-#                 if disposal_amount > 1e-5
-#                     plant_loc_dict["output"]["dispose"][output_product_name] = disposal_dict = Dict()
-#                     disposal_dict["amount"] = JuMP.value(model.vars.dispose[shipping_node])
-#                     disposal_dict["cost"] = disposal_dict["amount"] * shipping_node.disposal_cost
-#                     plant_loc_dict["total output"][output_product_name] += disposal_amount
-#                     output["costs"]["disposal"] += disposal_dict["cost"]
-#                 end
-
-#                 for a in shipping_node.outgoing_arcs
-#                     if vals[a] <= 1e-3
-#                         continue
-#                     end
-#                     skip_plant = skip_location = false
-#                     if !(a.dest.plant_name in keys(product_dict))
-#                         product_dict[a.dest.plant_name] = Dict{Any,Any}()
-#                     end
-#                     dest_location = instance.plants[a.dest.plant_name]["locations"][a.dest.location_name]
-#                     val = round(vals[a], digits=5)
-#                     plant_loc_dict["total output"][output_product_name] += val
-#                     product_dict[a.dest.plant_name][a.dest.location_name] = dict = Dict()
-#                     dict["amount"] = val
-#                     dict["distance"] = a.values["distance"]
-#                     dict["latitude"] = dest_location["latitude"]
-#                     dict["longitude"] = dest_location["longitude"]
-#                 end
-#             end
+        # Inputs
+        for a in process_node.incoming_arcs
+            val = JuMP.value(vars.flow[a])
+            if val <= 1e-3
+                continue
+            end
+            skip_plant = false
+            dict = Dict{Any, Any}(
+                "amount" => val,
+                "distance" => a.values["distance"],
+                "latitude" => a.source.location.latitude,
+                "longitude" => a.source.location.longitude,
+                "transportation cost" => a.source.product.transportation_cost * val,
+                "variable operating cost" => plant.variable_operating_cost * val,
+            )
+            if a.source.location isa CollectionCenter
+                plant_name = "Origin"
+                location_name = a.source.location.name
+            else
+                plant_name = a.source.location.plant_name
+                location_name = a.source.location.location_name
+            end
             
-#             if !skip_location
-#                 plant_dict[location_name] = plant_loc_dict
-#             end
-#         end
-#         if !skip_plant
-#             output["plants"][plant_name] = plant_dict
-#         end
-#     end
+            if plant_name ∉ keys(plant_dict["input"])
+                plant_dict["input"][plant_name] = Dict()
+            end
+            plant_dict["input"][plant_name][location_name] = dict
+            plant_dict["total input"] += val
+            output["costs"]["transportation"] += dict["transportation cost"]
+            output["costs"]["variable"] += dict["variable operating cost"]
+        end
 
-#     output["costs"]["total"] = sum(values(output["costs"]))
-#     return output
-# end
+        # Outputs
+        for shipping_node in plant_to_shipping_nodes[plant]
+            product_name = shipping_node.product.name
+            plant_dict["total output"][product_name] = 0.0
+            plant_dict["output"]["send"][product_name] = product_dict = Dict()
 
+            disposal_amount = JuMP.value(vars.dispose[shipping_node])
+            if disposal_amount > 1e-5
+                plant_dict["output"]["dispose"][product_name] = disposal_dict = Dict()
+                disposal_dict["amount"] = JuMP.value(model.vars.dispose[shipping_node])
+                disposal_dict["cost"] = disposal_dict["amount"] * plant.disposal_cost[shipping_node.product]
+                plant_dict["total output"][product_name] += disposal_amount
+                output["costs"]["disposal"] += disposal_dict["cost"]
+            end
+
+            for a in shipping_node.outgoing_arcs
+                val = JuMP.value(vars.flow[a])
+                if val <= 1e-3
+                    continue
+                end
+                skip_plant = false
+                dict = Dict(
+                    "amount" => val,
+                    "distance" => a.values["distance"],
+                    "latitude" => a.dest.plant.latitude,
+                    "longitude" => a.dest.plant.longitude,
+                )
+                if a.dest.plant.plant_name ∉ keys(product_dict)
+                    product_dict[a.dest.plant.plant_name] = Dict()
+                end
+                product_dict[a.dest.plant.plant_name][a.dest.plant.location_name] = dict
+                plant_dict["total output"][product_name] += val
+            end
+        end
+            
+        if !skip_plant
+            if plant.plant_name ∉ keys(output["plants"])
+                output["plants"][plant.plant_name] = Dict()
+            end
+            output["plants"][plant.plant_name][plant.location_name] = plant_dict
+        end
+    end
+
+    output["costs"]["total"] = sum(values(output["costs"]))
+    return output
+end

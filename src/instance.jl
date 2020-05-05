@@ -4,13 +4,13 @@
 using JSON, JSONSchema
 
 
-struct Product
+mutable struct Product
     name::String
     transportation_cost::Float64
 end
 
 
-struct CollectionCenter
+mutable struct CollectionCenter
     name::String
     latitude::Float64
     longitude::Float64
@@ -19,7 +19,7 @@ struct CollectionCenter
 end
 
 
-struct Plant
+mutable struct Plant
     plant_name::String
     location_name::String
     input::Product
@@ -37,7 +37,7 @@ struct Plant
 end
 
 
-struct Instance
+mutable struct Instance
     products::Array{Product, 1}
     collection_centers::Array{CollectionCenter, 1}
     plants::Array{Plant, 1}
