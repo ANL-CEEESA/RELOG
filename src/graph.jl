@@ -17,7 +17,7 @@ end
 
 mutable struct ProcessNode <: Node
     index::Int
-    plant::Plant
+    location::Plant
     incoming_arcs::Array{Arc}
     outgoing_arcs::Array{Arc}
 end
@@ -79,8 +79,8 @@ function build_graph(instance::Instance)::Graph
         for dest in process_nodes_by_input_product[source.product]
             distance = calculate_distance(source.location.latitude,
                                           source.location.longitude,
-                                          dest.plant.latitude,
-                                          dest.plant.longitude)
+                                          dest.location.latitude,
+                                          dest.location.longitude)
             values = Dict("distance" => distance)
             arc = Arc(source, dest, values)
             push!(source.outgoing_arcs, arc)
@@ -91,7 +91,7 @@ function build_graph(instance::Instance)::Graph
     
     # Build arcs from process nodes to shipping nodes within a plant
     for source in process_nodes
-        plant = source.plant
+        plant = source.location
         for dest in shipping_nodes_by_plant[plant]
             weight = plant.output[dest.product]
             values = Dict("weight" => weight)

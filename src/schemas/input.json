@@ -3,6 +3,21 @@
     "$id": "https://axavier.org/ReverseManufacturing/input/schema",
     "title": "Schema for ReverseManufacturing Input File",
     "definitions": {
+        "TimeSeries": {
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "Parameters": {
+            "type": "object",
+            "properties": {
+                "time": { "type": "number" }
+            },
+            "required": [
+                "time periods"
+            ]
+        },
         "Plant": {
             "type": "object",
             "additionalProperties": {
@@ -28,19 +43,19 @@
                 "properties": {
                     "latitude": { "type": "number" },
                     "longitude": { "type": "number" },
-                    "variable operating cost": { "type": "number" },
-                    "fixed operating cost": { "type": "number" },
-                    "opening cost": { "type": "number" },
+                    "variable operating cost": { "$ref": "#/definitions/TimeSeries" },
+                    "fixed operating cost": { "$ref": "#/definitions/TimeSeries" },
+                    "opening cost": { "$ref": "#/definitions/TimeSeries" },
                     "base capacity": { "type": "number" },
                     "max capacity": { "type": "number" },
-                    "expansion cost": { "type": "number" },
+                    "expansion cost": { "$ref": "#/definitions/TimeSeries" },
                     "disposal": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "cost": { "type": "number" },
-                                "limit": { "type": "number" }
+                                "cost": { "$ref": "#/definitions/TimeSeries" },
+                                "limit": { "$ref": "#/definitions/TimeSeries" }
                             },
                             "required": [
                                 "cost"
@@ -64,7 +79,7 @@
                 "properties": {
                     "latitude": { "type": "number" },
                     "longitude": { "type": "number" },
-                    "amount": { "type": "number" }
+                    "amount": { "$ref": "#/definitions/TimeSeries" }
                 },
                 "required": [
                     "latitude",
@@ -78,7 +93,7 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "transportation cost": { "type": "number" },
+                    "transportation cost": { "$ref": "#/definitions/TimeSeries" },
                     "initial amounts": { "$ref": "#/definitions/InitialAmount" }
                 },
                 "required": [
@@ -89,6 +104,7 @@
     },
     "type": "object",
     "properties": {
+        "parameters": { "$ref": "#/definitions/Parameters" },
         "plants": { "$ref": "#/definitions/Plant" },
         "products": { "$ref": "#/definitions/Product" }
     },

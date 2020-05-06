@@ -6,38 +6,41 @@ using JSON, JSONSchema
 
 mutable struct Product
     name::String
-    transportation_cost::Float64
+    transportation_cost::Array{Float64}
 end
 
 
 mutable struct CollectionCenter
+    index::Int64
     name::String
     latitude::Float64
     longitude::Float64
     product::Product
-    amount::Float64
+    amount::Array{Float64}
 end
 
 
 mutable struct Plant
+    index::Int64
     plant_name::String
     location_name::String
     input::Product
     output::Dict{Product, Float64}
     latitude::Float64
     longitude::Float64
-    variable_operating_cost::Float64
-    fixed_operating_cost::Float64
-    opening_cost::Float64
+    variable_operating_cost::Array{Float64}
+    fixed_operating_cost::Array{Float64}
+    opening_cost::Array{Float64}
     base_capacity::Float64
     max_capacity::Float64
-    expansion_cost::Float64
-    disposal_limit::Dict{Product, Float64}
-    disposal_cost::Dict{Product, Float64}
+    expansion_cost::Array{Float64}
+    disposal_limit::Dict{Product, Array{Float64}}
+    disposal_cost::Dict{Product, Array{Float64}}
 end
 
 
 mutable struct Instance
+    time::Int64
     products::Array{Product, 1}
     collection_centers::Array{CollectionCenter, 1}
     plants::Array{Plant, 1}
@@ -49,16 +52,21 @@ function load(path::String)::Instance
     json = JSON.parsefile(path)
     schema = Schema(JSON.parsefile("$basedir/schemas/input.json"))
     
-    validation_results = JSONSchema.validate(json, schema)
-    if validation_results !== nothing
-        println(validation_results)
-        throw("Invalid input file")
+    result = JSONSchema.validate(json, schema)
+    if result !== nothing
+        if result isa JSONSchema.SingleIssue
+            path = join(result.path, " → ")
+            msg = "$(result.x) $(result.msg) in $(path)"
+        else
+            msg = convert(String, result)
+        end
+        throw(msg)
     end
     
+    T = json["parameters"]["time periods"]
+    plants = Plant[]
     products = Product[]
     collection_centers = CollectionCenter[]
-    plants = Plant[]
-    
     product_name_to_product = Dict{String, Product}()
     
     # Create products
@@ -70,7 +78,8 @@ function load(path::String)::Instance
         # Create collection centers
         if "initial amounts" in keys(product_dict)
             for (center_name, center_dict) in product_dict["initial amounts"]
-                center = CollectionCenter(center_name,
+                center = CollectionCenter(length(collection_centers) + 1,
+                                          center_name,
                                           center_dict["latitude"],
                                           center_dict["longitude"],
                                           product,
@@ -93,8 +102,8 @@ function load(path::String)::Instance
         end
         
         for (location_name, location_dict) in plant_dict["locations"]
-            disposal_limit = Dict(p => 0.0 for p in keys(output))
-            disposal_cost = Dict(p => 0.0 for p in keys(output))
+            disposal_limit = Dict(p => [0.0 for t in 1:T] for p in keys(output))
+            disposal_cost = Dict(p => [0.0 for t in 1:T] for p in keys(output))
             
             # Plant disposal
             if "disposal" in keys(location_dict)
@@ -106,7 +115,7 @@ function load(path::String)::Instance
             
             base_capacity = 1e8
             max_capacity = 1e8
-            expansion_cost = 0
+            expansion_cost = [0.0 for t in 1:T]
             
             if "base capacity" in keys(location_dict)
                 base_capacity = location_dict["base capacity"]
@@ -120,7 +129,8 @@ function load(path::String)::Instance
                 expansion_cost = location_dict["expansion cost"]
             end
             
-            plant = Plant(plant_name,
+            plant = Plant(length(plants) + 1,
+                          plant_name,
                           location_name,
                           input,
                           output,
@@ -138,5 +148,5 @@ function load(path::String)::Instance
         end
     end
     
-    return Instance(products, collection_centers, plants)
+    return Instance(T, products, collection_centers, plants)
 end

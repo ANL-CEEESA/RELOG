@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using ReverseManufacturing, Cbc, JuMP, Printf, JSON
+using ReverseManufacturing, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
 @testset "Model" begin
     @testset "build" begin
@@ -10,42 +10,46 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON
         graph = ReverseManufacturing.build_graph(instance)
         model = ReverseManufacturing.build_model(instance, graph, Cbc.Optimizer)
 
-        process_node_by_location_name = Dict(n.plant.location_name => n
+        process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)
 
         shipping_node_by_location_and_product_names = Dict((n.location.location_name, n.product.name) => n
                                                            for n in graph.plant_shipping_nodes)
         
         
-        @test length(model.vars.flow) == 38
-        @test length(model.vars.dispose) == 8
-        @test length(model.vars.open_plant) == 6
-        @test length(model.vars.capacity) == 6
-        @test length(model.vars.expansion) == 6
+        @test length(model.vars.flow) == 76
+        @test length(model.vars.dispose) == 16
+        @test length(model.vars.open_plant) == 12
+        @test length(model.vars.capacity) == 12
+        @test length(model.vars.expansion) == 12
 
         l1 = process_node_by_location_name["L1"]
-        v = model.vars.capacity[l1]
+        v = model.vars.capacity[l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1000.0
         
-        v = model.vars.expansion[l1]
+        v = model.vars.expansion[l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 750.0
         
-        v = model.vars.dispose[shipping_node_by_location_and_product_names["L1", "P2"]]
+        v = model.vars.dispose[shipping_node_by_location_and_product_names["L1", "P2"], 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
+        
+        dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
+        MOI.copy_to(dest, model.mip)
+        MOI.write_to_file(dest, "model.lp")
 
     end
 
     @testset "solve" begin
         solution = ReverseManufacturing.solve("$(pwd())/../instances/samples/s1.json")
-        JSON.print(stdout, solution, 4)
+        #JSON.print(stdout, solution, 4)
         
         @test "costs" in keys(solution)
-        @test "fixed" in keys(solution["costs"])
+        @test "fixed operating" in keys(solution["costs"])
         @test "transportation" in keys(solution["costs"])
-        @test "variable" in keys(solution["costs"])
+        @test "variable operating" in keys(solution["costs"])
         @test "total" in keys(solution["costs"])
 
         @test "plants" in keys(solution)
@@ -53,10 +57,6 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON
         @test "F2" in keys(solution["plants"])
         @test "F3" in keys(solution["plants"])
         @test "F4" in keys(solution["plants"])
-#         @test "L2" in keys(solution["plants"]["F1"])
-#         @test "total output" in keys(solution["plants"]["F1"]["L2"])
-
-#         @test "capacity" in keys(solution["plants"]["F1"]["L1"])
     end
 end
 

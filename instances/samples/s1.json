@@ -1,68 +1,71 @@
 {
+    "parameters": {
+        "time periods": 2
+    },
     "products": {
         "P1": {
-            "transportation cost": 0.015,
+            "transportation cost": [0.015, 0.015],
             "initial amounts": {
                 "C1": {
                     "latitude": 7.0,
                     "longitude": 7.0,
-                    "amount": 934.56
+                    "amount": [934.56, 934.56]
                 },
                 "C2": {
                     "latitude": 7.0,
                     "longitude": 19.0,
-                    "amount": 198.95
+                    "amount": [198.95, 198.95]
                 },
                 "C3": {
                     "latitude": 84.0,
                     "longitude": 76.0,
-                    "amount": 212.97
+                    "amount": [212.97, 212.97]
                 },
                 "C4": {
                     "latitude": 21.0,
                     "longitude": 16.0,
-                    "amount": 352.19
+                    "amount": [352.19, 352.19]
                 },
                 "C5": {
                     "latitude": 32.0,
                     "longitude": 92.0,
-                    "amount": 510.33
+                    "amount": [510.33, 510.33]
                 },
                 "C6": {
                     "latitude": 14.0,
                     "longitude": 62.0,
-                    "amount": 471.66
+                    "amount": [471.66, 471.66]
                 },
                 "C7": {
                     "latitude": 30.0,
                     "longitude": 83.0,
-                    "amount": 785.21
+                    "amount": [785.21, 785.21]
                 },
                 "C8": {
                     "latitude": 35.0,
                     "longitude": 40.0,
-                    "amount": 706.17
+                    "amount": [706.17, 706.17]
                 },
                 "C9": {
                     "latitude": 74.0,
                     "longitude": 52.0,
-                    "amount": 30.08
+                    "amount": [30.08, 30.08]
                 },
                 "C10": {
                     "latitude": 22.0,
                     "longitude": 54.0,
-                    "amount": 536.52
+                    "amount": [536.52, 536.52]
                 }
             }
         },
         "P2": {
-            "transportation cost": 0.02
+            "transportation cost": [0.02, 0.02]
         },
         "P3": {
-            "transportation cost": 0.0125
+            "transportation cost": [0.0125, 0.0125]
         },
         "P4": {
-            "transportation cost": 0.0175
+            "transportation cost": [0.0175, 0.0175]
         }
     },
     "plants": {
@@ -76,32 +79,32 @@
                 "L1": {
                     "latitude": 0.0,
                     "longitude": 0.0,
-                    "opening cost": 500,
+                    "opening cost": [500, 500],
                     "base capacity": 250.0,
                     "max capacity": 1000.0,
-                    "expansion cost": 1.0,
-                    "fixed operating cost": 30.0,
-                    "variable operating cost": 30.0,
+                    "expansion cost": [1.0, 1.0],
+                    "fixed operating cost": [30.0, 30.0],
+                    "variable operating cost": [30.0, 30.0],
                     "disposal": {
                         "P2": {
-                            "cost": -10.0,
-                            "limit": 1.0
+                            "cost": [-10.0, -10.0],
+                            "limit": [1.0, 1.0]
                         },
                         "P3": {
-                            "cost": -10.0,
-                            "limit": 1.0
+                            "cost": [-10.0, -10.0],
+                            "limit": [1.0, 1.0]
                         }
                     }
                 },
                 "L2": {
                     "latitude": 0.5,
                     "longitude": 0.5,
-                    "opening cost": 1000,
+                    "opening cost": [1000, 1000],
                     "base capacity": 0.0,
                     "max capacity": 10000.0,
-                    "expansion cost": 1.0,
-                    "fixed operating cost": 50.0,
-                    "variable operating cost": 50.0
+                    "expansion cost": [1.0, 1.0],
+                    "fixed operating cost": [50.0, 50.0],
+                    "variable operating cost": [50.0, 50.0]
                 }               
             }
         },
@@ -116,17 +119,17 @@
                     "latitude": 25.0,
                     "longitude": 65.0,
                     "capacity": 1000,
-                    "opening cost": 3000,
-                    "fixed operating cost": 50.0,
-                    "variable operating cost": 50.0
+                    "opening cost": [3000, 3000],
+                    "fixed operating cost": [50.0, 50.0],
+                    "variable operating cost": [50.0, 50.0]
                 },
                 "L4": {
                     "latitude": 0.75,
                     "longitude": 0.20,
                     "processing cost": 250.0,
-                    "opening cost": 3000,
-                    "fixed operating cost": 50.0,
-                    "variable operating cost": 50.0
+                    "opening cost": [3000, 3000],
+                    "fixed operating cost": [50.0, 50.0],
+                    "variable operating cost": [50.0, 50.0]
                 }
             }
         },
@@ -136,9 +139,9 @@
                 "L5": {
                     "latitude": 100.0,
                     "longitude": 100.0,
-                    "opening cost": 0.0,
-                    "fixed operating cost": 0.0,
-                    "variable operating cost": -15.0
+                    "opening cost": [0.0, 0.0],
+                    "fixed operating cost": [0.0, 0.0],
+                    "variable operating cost": [-15.0, -15.0]
                 }           
             }
         },
@@ -148,9 +151,9 @@
                 "L6": {
                     "latitude": 50.0,
                     "longitude": 50.0,
-                    "opening cost": 0.0,
-                    "fixed operating cost": 0.0,
-                    "variable operating cost": -15.0
+                    "opening cost": [0.0, 0.0],
+                    "fixed operating cost": [0.0, 0.0],
+                    "variable operating cost": [-15.0, -15.0]
                 }           
             }
         }
