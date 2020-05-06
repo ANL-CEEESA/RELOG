@@ -51,7 +51,7 @@ The **products** section describes all products and subproducts in the simulatio
 |`transportation cost`    | The cost (in dollars per km per tonnes) to transport this product. Must be a timeseries.
 |`initial amounts`        | A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.
 
-Each product may have some amount available at the beginning of the simulation. In this case, the key `initial amounts` maps to a dictionary with the following keys:
+Each product may have some amount available at the beginning of each time period. In this case, the key `initial amounts` maps to a dictionary with the following keys:
 
 | Key                     | Description
 |:------------------------|---------------|

@@ -126,7 +126,6 @@
                 "L4": {
                     "latitude": 0.75,
                     "longitude": 0.20,
-                    "processing cost": 250.0,
                     "opening cost": [3000, 3000],
                     "fixed operating cost": [50.0, 50.0],
                     "variable operating cost": [50.0, 50.0]
