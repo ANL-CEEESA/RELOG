@@ -54,15 +54,72 @@
     },
     "F1": {
       "L1": {
-        "total output": {},
+        "total output": {
+          "P2": [
+            200.0,
+            200.0
+          ],
+          "P3": [
+            500.0,
+            500.0
+          ]
+        },
         "latitude": 0.0,
         "expansion cost": [
           750.0,
           0.0
         ],
         "output": {
-          "dispose": {},
-          "send": {}
+          "dispose": {
+            "P2": {
+              "amount": [
+                1.0,
+                1.0
+              ],
+              "cost": [
+                -10.0,
+                -10.0
+              ]
+            },
+            "P3": {
+              "amount": [
+                1.0,
+                1.0
+              ],
+              "cost": [
+                -10.0,
+                -10.0
+              ]
+            }
+          },
+          "send": {
+            "P2": {
+              "F2": {
+                "L4": {
+                  "amount": [
+                    199.0,
+                    199.0
+                  ],
+                  "latitude": 0.75,
+                  "distance": 85.87,
+                  "longitude": 0.2
+                }
+              }
+            },
+            "P3": {
+              "F4": {
+                "L6": {
+                  "amount": [
+                    499.0,
+                    499.0
+                  ],
+                  "latitude": 50.0,
+                  "distance": 6893.41,
+                  "longitude": 50.0
+                }
+              }
+            }
+          }
         },
         "longitude": 0.0,
         "total input": [
@@ -155,7 +212,16 @@
         ]
       },
       "L2": {
-        "total output": {},
+        "total output": {
+          "P2": [
+            747.728,
+            747.728
+          ],
+          "P3": [
+            1869.3199999999997,
+            1869.3199999999997
+          ]
+        },
         "latitude": 0.5,
         "expansion cost": [
           3738.6399999999967,
@@ -163,7 +229,34 @@
         ],
         "output": {
           "dispose": {},
-          "send": {}
+          "send": {
+            "P2": {
+              "F2": {
+                "L4": {
+                  "amount": [
+                    747.728,
+                    747.728
+                  ],
+                  "latitude": 0.75,
+                  "distance": 43.35,
+                  "longitude": 0.2
+                }
+              }
+            },
+            "P3": {
+              "F4": {
+                "L6": {
+                  "amount": [
+                    1869.3199999999997,
+                    1869.3199999999997
+                  ],
+                  "latitude": 50.0,
+                  "distance": 6828.89,
+                  "longitude": 50.0
+                }
+              }
+            }
+          }
         },
         "longitude": 0.5,
         "total input": [
@@ -308,38 +401,17 @@
       }
     },
     "F2": {
-      "L3": {
-        "total output": {},
-        "latitude": 25.0,
-        "expansion cost": [
-          0.0,
-          0.0
-        ],
-        "output": {
-          "dispose": {},
-          "send": {}
-        },
-        "longitude": 65.0,
-        "total input": [
-          0.0,
-          0.0
-        ],
-        "fixed operating cost": [
-          -0.0,
-          -0.0
-        ],
-        "input": {},
-        "opening cost": [
-          -0.0,
-          0.0
-        ],
-        "capacity": [
-          0.0,
-          0.0
-        ]
-      },
       "L4": {
-        "total output": {},
+        "total output": {
+          "P4": [
+            757.3824000000001,
+            757.3824000000001
+          ],
+          "P3": [
+            47.336400000000005,
+            47.336400000000005
+          ]
+        },
         "latitude": 0.75,
         "expansion cost": [
           0.0,
@@ -347,7 +419,34 @@
         ],
         "output": {
           "dispose": {},
-          "send": {}
+          "send": {
+            "P4": {
+              "F3": {
+                "L5": {
+                  "amount": [
+                    757.3824000000001,
+                    757.3824000000001
+                  ],
+                  "latitude": 100.0,
+                  "distance": 8811.73,
+                  "longitude": 100.0
+                }
+              }
+            },
+            "P3": {
+              "F4": {
+                "L6": {
+                  "amount": [
+                    47.336400000000005,
+                    47.336400000000005
+                  ],
+                  "latitude": 50.0,
+                  "distance": 6824.63,
+                  "longitude": 50.0
+                }
+              }
+            }
+          }
         },
         "longitude": 0.2,
         "total input": [
@@ -513,16 +612,16 @@
       130.0
     ],
     "total": [
-      225924.922057,
-      216936.282057
+      225904.922057,
+      216916.282057
     ],
     "transportation": [
       133.464057,
       133.464057
     ],
     "disposal": [
-      0.0,
-      0.0
+      -20.0,
+      -20.0
     ]
   }
 }

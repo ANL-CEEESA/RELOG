@@ -197,7 +197,7 @@ function get_solution(model::ManufacturingModel)
     end
     
     for plant in instance.plants
-        skip_plant = false
+        skip_plant = true
         process_node = plant_to_process_node[plant]
         plant_dict = Dict{Any, Any}(
             "input" => Dict(),
@@ -261,40 +261,42 @@ function get_solution(model::ManufacturingModel)
             output["costs"]["variable operating"] += dict["variable operating cost"]
         end
 
-#         # Outputs
-#         for shipping_node in plant_to_shipping_nodes[plant]
-#             product_name = shipping_node.product.name
-#             plant_dict["total output"][product_name] = 0.0
-#             plant_dict["output"]["send"][product_name] = product_dict = Dict()
+        # Outputs
+        for shipping_node in plant_to_shipping_nodes[plant]
+            product_name = shipping_node.product.name
+            plant_dict["total output"][product_name] = zeros(T)
+            plant_dict["output"]["send"][product_name] = product_dict = Dict()
 
-#             disposal_amount = JuMP.value(vars.dispose[shipping_node])
-#             if disposal_amount > 1e-5
-#                 plant_dict["output"]["dispose"][product_name] = disposal_dict = Dict()
-#                 disposal_dict["amount"] = JuMP.value(model.vars.dispose[shipping_node])
-#                 disposal_dict["cost"] = disposal_dict["amount"] * plant.disposal_cost[shipping_node.product]
-#                 plant_dict["total output"][product_name] += disposal_amount
-#                 output["costs"]["disposal"] += disposal_dict["cost"]
-#             end
+            disposal_amount = [JuMP.value(vars.dispose[shipping_node, t]) for t in 1:T]
+            if sum(disposal_amount) > 1e-5
+                skip_plant = false
+                plant_dict["output"]["dispose"][product_name] = disposal_dict = Dict()
+                disposal_dict["amount"] = [JuMP.value(model.vars.dispose[shipping_node, t]) for t in 1:T]
+                disposal_dict["cost"] = [disposal_dict["amount"][t] * plant.disposal_cost[shipping_node.product][t]
+                                         for t in 1:T]
+                plant_dict["total output"][product_name] += disposal_amount
+                output["costs"]["disposal"] += disposal_dict["cost"]
+            end
 
-#             for a in shipping_node.outgoing_arcs
-#                 val = JuMP.value(vars.flow[a])
-#                 if val <= 1e-3
-#                     continue
-#                 end
-#                 skip_plant = false
-#                 dict = Dict(
-#                     "amount" => val,
-#                     "distance" => a.values["distance"],
-#                     "latitude" => a.dest.location.latitude,
-#                     "longitude" => a.dest.location.longitude,
-#                 )
-#                 if a.dest.location.plant_name ∉ keys(product_dict)
-#                     product_dict[a.dest.location.plant_name] = Dict()
-#                 end
-#                 product_dict[a.dest.location.plant_name][a.dest.location.location_name] = dict
-#                 plant_dict["total output"][product_name] += val
-#             end
-#         end
+            for a in shipping_node.outgoing_arcs
+                vals = [JuMP.value(vars.flow[a, t]) for t in 1:T]
+                if sum(vals) <= 1e-3
+                    continue
+                end
+                skip_plant = false
+                dict = Dict(
+                    "amount" => vals,
+                    "distance" => a.values["distance"],
+                    "latitude" => a.dest.location.latitude,
+                    "longitude" => a.dest.location.longitude,
+                )
+                if a.dest.location.plant_name ∉ keys(product_dict)
+                    product_dict[a.dest.location.plant_name] = Dict()
+                end
+                product_dict[a.dest.location.plant_name][a.dest.location.location_name] = dict
+                plant_dict["total output"][product_name] += vals
+            end
+        end
             
         if !skip_plant
             if plant.plant_name ∉ keys(output["plants"])

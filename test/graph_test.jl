@@ -6,7 +6,7 @@ using ReverseManufacturing
 @testset "Graph" begin
     @testset "build_graph" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/samples/s1.json")
+        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
         graph = ReverseManufacturing.build_graph(instance)
         process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)

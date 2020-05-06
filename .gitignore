@@ -4,3 +4,4 @@ instances/Makefile
 instances/run.jl
 notebooks
 .idea
+*.lp

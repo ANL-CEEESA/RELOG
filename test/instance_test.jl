@@ -6,7 +6,7 @@ using ReverseManufacturing
 @testset "Instance" begin
     @testset "load" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/samples/s1.json")
+        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
         
         centers = instance.collection_centers
         plants = instance.plants

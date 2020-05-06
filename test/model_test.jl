@@ -6,7 +6,7 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormat
 @testset "Model" begin
     @testset "build" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/samples/s1.json")
+        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
         graph = ReverseManufacturing.build_graph(instance)
         model = ReverseManufacturing.build_model(instance, graph, Cbc.Optimizer)
 
@@ -43,8 +43,8 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormat
     end
 
     @testset "solve" begin
-        solution = ReverseManufacturing.solve("$(pwd())/../instances/samples/s1.json")
-        #JSON.print(stdout, solution, 4)
+        solution = ReverseManufacturing.solve("$(pwd())/../instances/s1.json")
+        JSON.print(stdout, solution, 4)
         
         @test "costs" in keys(solution)
         @test "fixed operating" in keys(solution["costs"])
