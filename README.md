@@ -10,7 +10,7 @@ Table of Contents
   * [Typical Usage](#typical-usage)
      * [Describing an instance](#describing-an-instance)
      * [Optimizing](#optimizing)
-  * [Current Limitations](#current-limitations)
+  * [Model Assumptions](#model-assumptions)
   * [Authors](#authors)
 
 Installation
@@ -32,7 +32,7 @@ Typical Usage
 
 ### Describing an instance
 
-The first step when using ReverseManufacturing.jl is describing the reverse manufacturing pipeline and the relevant data. Each input file is a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail. For a concrete example, see the file `instances/samples/s2.json`.
+The first step when using ReverseManufacturing.jl is describing the reverse manufacturing pipeline and the relevant data. Each input file is a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail. For a concrete example, see the file `instances/samples/s1.json`.
 
 ### Parameters
 
