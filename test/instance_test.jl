@@ -64,7 +64,7 @@ using ReverseManufacturing
         p4 = product_name_to_product["P4"]
         @test plant.output[p3] == 0.05
         @test plant.output[p4] == 0.8
-        @test plant.disposal_limit[p3] == [0, 0]
+        @test plant.disposal_limit[p3] == [1e8, 1e8]
         @test plant.disposal_limit[p4] == [0, 0]
     end
 end

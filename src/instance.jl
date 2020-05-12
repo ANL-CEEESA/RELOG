@@ -108,7 +108,11 @@ function load(path::String)::Instance
             # Plant disposal
             if "disposal" in keys(location_dict)
                 for (product_name, disposal_dict) in location_dict["disposal"]
-                    disposal_limit[product_name_to_product[product_name]] = disposal_dict["limit"]
+                    limit = [1e8 for t in 1:T]
+                    if "limit" in keys(disposal_dict)
+                       limit = disposal_dict["limit"]
+                    end
+                    disposal_limit[product_name_to_product[product_name]] = limit
                     disposal_cost[product_name_to_product[product_name]] = disposal_dict["cost"]
                 end
             end
