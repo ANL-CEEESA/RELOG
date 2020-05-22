@@ -21,6 +21,14 @@ mutable struct CollectionCenter
 end
 
 
+mutable struct PlantSize
+    capacity::Float64
+    variable_operating_cost::Array{Float64}
+    fixed_operating_cost::Array{Float64}
+    opening_cost::Array{Float64}
+end
+
+
 mutable struct Plant
     index::Int64
     plant_name::String
@@ -29,14 +37,9 @@ mutable struct Plant
     output::Dict{Product, Float64}
     latitude::Float64
     longitude::Float64
-    variable_operating_cost::Array{Float64}
-    fixed_operating_cost::Array{Float64}
-    opening_cost::Array{Float64}
-    base_capacity::Float64
-    max_capacity::Float64
-    expansion_cost::Array{Float64}
     disposal_limit::Dict{Product, Array{Float64}}
     disposal_cost::Dict{Product, Array{Float64}}
+    sizes::Array{PlantSize}
 end
 
 
@@ -68,13 +71,13 @@ function load(path::String)::Instance
     plants = Plant[]
     products = Product[]
     collection_centers = CollectionCenter[]
-    product_name_to_product = Dict{String, Product}()
+    prod_name_to_product = Dict{String, Product}()
     
     # Create products
     for (product_name, product_dict) in json["products"]
         product = Product(product_name, product_dict["transportation cost"])
         push!(products, product)
-        product_name_to_product[product_name] = product
+        prod_name_to_product[product_name] = product
         
         # Create collection centers
         if "initial amounts" in keys(product_dict)
@@ -92,48 +95,51 @@ function load(path::String)::Instance
     
     # Create plants
     for (plant_name, plant_dict) in json["plants"]
-        input = product_name_to_product[plant_dict["input"]]
+        input = prod_name_to_product[plant_dict["input"]]
         output = Dict()
         
         # Plant outputs
         if "outputs" in keys(plant_dict)
-            output = Dict(product_name_to_product[key] => value
+            output = Dict(prod_name_to_product[key] => value
                           for (key, value) in plant_dict["outputs"]
                           if value > 0)
         end
         
         for (location_name, location_dict) in plant_dict["locations"]
+            sizes = PlantSize[]
             disposal_limit = Dict(p => [0.0 for t in 1:T] for p in keys(output))
             disposal_cost = Dict(p => [0.0 for t in 1:T] for p in keys(output))
             
-            # Plant disposal
+            # Disposal
             if "disposal" in keys(location_dict)
                 for (product_name, disposal_dict) in location_dict["disposal"]
                     limit = [1e8 for t in 1:T]
                     if "limit" in keys(disposal_dict)
                        limit = disposal_dict["limit"]
                     end
-                    disposal_limit[product_name_to_product[product_name]] = limit
-                    disposal_cost[product_name_to_product[product_name]] = disposal_dict["cost"]
+                    disposal_limit[prod_name_to_product[product_name]] = limit
+                    disposal_cost[prod_name_to_product[product_name]] = disposal_dict["cost"]
                 end
             end
             
-            base_capacity = 1e8
-            max_capacity = 1e8
-            expansion_cost = [0.0 for t in 1:T]
-            
-            if "base capacity" in keys(location_dict)
-                base_capacity = location_dict["base capacity"]
+            # Capacities
+            for (capacity_name, capacity_dict) in location_dict["capacities"]
+                push!(sizes, PlantSize(parse(Float64, capacity_name),
+                                       capacity_dict["variable operating cost"],
+                                       capacity_dict["fixed operating cost"],
+                                       capacity_dict["opening cost"]))
             end
+            length(sizes) > 1 ||  push!(sizes, sizes[1])
+            sort!(sizes, by = x -> x.capacity)
             
-            if "max capacity" in keys(location_dict)
-                max_capacity = location_dict["max capacity"]
+            # Validation: Capacities
+            if length(sizes) != 2
+                throw("At most two capacities are supported")
             end
-            
-            if "expansion cost" in keys(location_dict)
-                expansion_cost = location_dict["expansion cost"]
+            if sizes[1].variable_operating_cost != sizes[2].variable_operating_cost
+                throw("Variable operating costs must be the same for all capacities")
             end
-            
+
             plant = Plant(length(plants) + 1,
                           plant_name,
                           location_name,
@@ -141,14 +147,10 @@ function load(path::String)::Instance
                           output,
                           location_dict["latitude"],
                           location_dict["longitude"],
-                          location_dict["variable operating cost"],
-                          location_dict["fixed operating cost"],
-                          location_dict["opening cost"],
-                          base_capacity,
-                          max_capacity,
-                          expansion_cost,
                           disposal_limit,
-                          disposal_cost)
+                          disposal_cost,
+                          sizes)
+            
             push!(plants, plant)
         end
     end

@@ -140,12 +140,7 @@ The keys in the `capacities` dictionary should be the amounts (in tonnes). The v
                         "500": {
                             "opening cost": [750, 760],
                             "fixed operating cost": [400.0, 450.0],
-                            "variable operating cost": [4.5, 4.7]
-                        },
-                        "700": {
-                            "opening cost": [1000, 1000],
-                            "fixed operating cost": [500.0, 600.0],
-                            "variable operating cost": [4.0, 4.4]
+                            "variable operating cost": [5.0, 5.2]
                         }
                     }
                 }
@@ -155,9 +150,9 @@ The keys in the `capacities` dictionary should be the amounts (in tonnes). The v
 }
 ```
 
-Model Assumptions
------------------
+## Current limitations
+
 * Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.
 * Plants can be expanded at any time, even long after they are open.
 * All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.
-
+* Up to two plant sizes are currently supported. Variable operating costs must be the same for all plant sizes.

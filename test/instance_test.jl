@@ -15,7 +15,6 @@ using RELOG
         location_name_to_plant = Dict(p.location_name => p for p in plants)
         product_name_to_product = Dict(p.name => p for p in products)
         
-        
         @test length(centers) == 10
         @test centers[1].name == "C1"
         @test centers[1].latitude == 7
@@ -32,12 +31,16 @@ using RELOG
         @test plant.input.name == "P1"
         @test plant.latitude == 0
         @test plant.longitude == 0
-        @test plant.opening_cost == [500, 500]
-        @test plant.fixed_operating_cost == [30, 30]
-        @test plant.variable_operating_cost == [30, 30]
-        @test plant.base_capacity == 250
-        @test plant.max_capacity == 1000
-        @test plant.expansion_cost == [1, 1]
+        
+        @test length(plant.sizes) == 2
+        @test plant.sizes[1].capacity == 250
+        @test plant.sizes[1].opening_cost == [500, 500]
+        @test plant.sizes[1].fixed_operating_cost == [30, 30]
+        @test plant.sizes[1].variable_operating_cost == [30, 30]
+        @test plant.sizes[2].capacity == 1000
+        @test plant.sizes[2].opening_cost == [1250, 1250]
+        @test plant.sizes[2].fixed_operating_cost == [30, 30]
+        @test plant.sizes[2].variable_operating_cost == [30, 30]
         
         p2 = product_name_to_product["P2"]
         p3 = product_name_to_product["P3"]
@@ -54,12 +57,13 @@ using RELOG
         @test plant.input.name == "P2"
         @test plant.latitude == 25
         @test plant.longitude == 65
-        @test plant.opening_cost == [3000, 3000]
-        @test plant.fixed_operating_cost == [50, 50]
-        @test plant.variable_operating_cost == [50, 50]
-        @test plant.base_capacity == 1e8
-        @test plant.max_capacity == 1e8
-        @test plant.expansion_cost == [0, 0]
+        
+        @test length(plant.sizes) == 2
+        @test plant.sizes[1].capacity == 1000.0
+        @test plant.sizes[1].opening_cost == [3000, 3000]
+        @test plant.sizes[1].fixed_operating_cost == [50, 50]
+        @test plant.sizes[1].variable_operating_cost == [50, 50]
+        @test plant.sizes[1] == plant.sizes[2]
         
         p4 = product_name_to_product["P4"]
         @test plant.output[p3] == 0.05

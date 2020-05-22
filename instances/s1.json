@@ -163,7 +163,7 @@
                     "latitude": 100.0,
                     "longitude": 100.0,
                     "capacities": {
-                        "10000": {
+                        "15000": {
                             "opening cost": [0.0, 0.0],
                             "fixed operating cost": [0.0, 0.0],
                             "variable operating cost": [-15.0, -15.0]
