@@ -155,13 +155,13 @@ end
 
 function solve(filename::String; optimizer=Cbc.Optimizer)
     println("Reading $filename...")
-    instance = ReverseManufacturing.load(filename)
+    instance = RELOG.load(filename)
     
     println("Building graph...")
-    graph = ReverseManufacturing.build_graph(instance)
+    graph = RELOG.build_graph(instance)
     
     println("Building optimization model...")
-    model = ReverseManufacturing.build_model(instance, graph, optimizer)
+    model = RELOG.build_model(instance, graph, optimizer)
     
     println("Optimizing...")
     JuMP.optimize!(model.mip)

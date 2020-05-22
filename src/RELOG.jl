@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-module ReverseManufacturing
+module RELOG
     include("dotdict.jl")
     include("instance.jl")
     include("graph.jl")
