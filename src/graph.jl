@@ -1,5 +1,6 @@
-# Copyright (C) 2019 Argonne National Laboratory
-# Written by Alinson Santos Xavier <axavier@anl.gov>
+# RELOG: Reverse Logistics Optimization
+# Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
+# Released under the modified BSD license. See COPYING.md for more details.
 
 using Geodesy
 
