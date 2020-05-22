@@ -1,14 +1,14 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using ReverseManufacturing, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
+using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
 @testset "Model" begin
     @testset "build" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
-        graph = ReverseManufacturing.build_graph(instance)
-        model = ReverseManufacturing.build_model(instance, graph, Cbc.Optimizer)
+        instance = RELOG.load("$basedir/../instances/s1.json")
+        graph = RELOG.build_graph(instance)
+        model = RELOG.build_model(instance, graph, Cbc.Optimizer)
 
         process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)
@@ -43,7 +43,7 @@ using ReverseManufacturing, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormat
     end
 
     @testset "solve" begin
-        solution = ReverseManufacturing.solve("$(pwd())/../instances/s1.json")
+        solution = RELOG.solve("$(pwd())/../instances/s1.json")
         JSON.print(stdout, solution, 4)
         
         @test "costs" in keys(solution)

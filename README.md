@@ -1,7 +1,7 @@
-ReverseManufacturing.jl
-=======================
+RELOG: Reverse Logistics Optimization
+=====================================
 
-**ReverseManufacturing.jl** is an optimization package for logistic decisions related to reverse manufacturing processes. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse manufacturing pipelines, with multiple types of plants, multiple types of product and multiple time periods.
+**RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
 
 Table of Contents
 =================
@@ -18,13 +18,13 @@ Installation
 The package was developed and tested with Julia 1.3 and may not be compatible with newer versions. To install it, launch the Julia console, type `]` to switch to package manager mode and run:
 
 ```
-pkg> add git@github.com:iSoron/ReverseManufacturing.git
+pkg> add git@github.com:iSoron/RELOG.git
 ```
 
 To make sure that the package has been correctly installed:
 
 ```
-pkg> test ReverseManufacturing
+pkg> test RELOG
 ```
 
 Typical Usage
@@ -32,7 +32,7 @@ Typical Usage
 
 ### Describing an instance
 
-The first step when using ReverseManufacturing.jl is describing the reverse manufacturing pipeline and the relevant data. Each input file is a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail. For a concrete example, see the file `instances/samples/s1.json`.
+The first step when using RELOG is describing the reverse manufacturing pipeline and the relevant data. Each input file is a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail. For a concrete example, see the file `instances/samples/s1.json`.
 
 ### Parameters
 
@@ -95,8 +95,8 @@ The keys in the disposal dictionary should be the names of the products. The val
 After creating a JSON file describing the reverse manufacturing process and the input data, the following example illustrates how to use the package to find the optimal set of decisions:
 
 ```julia
-using ReverseManufacturing
-ReverseManufacturing.solve("/home/user/instance.json")
+using RELOG
+RELOG.solve("/home/user/instance.json")
 ```
 
 The optimal logistics plan will be printed to the screen.

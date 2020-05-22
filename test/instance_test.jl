@@ -1,12 +1,12 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using ReverseManufacturing
+using RELOG
 
 @testset "Instance" begin
     @testset "load" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
+        instance = RELOG.load("$basedir/../instances/s1.json")
         
         centers = instance.collection_centers
         plants = instance.plants

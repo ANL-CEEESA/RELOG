@@ -1,13 +1,13 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using ReverseManufacturing
+using RELOG
 
 @testset "Graph" begin
     @testset "build_graph" begin
         basedir = dirname(@__FILE__)
-        instance = ReverseManufacturing.load("$basedir/../instances/s1.json")
-        graph = ReverseManufacturing.build_graph(instance)
+        instance = RELOG.load("$basedir/../instances/s1.json")
+        graph = RELOG.build_graph(instance)
         process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)
         
