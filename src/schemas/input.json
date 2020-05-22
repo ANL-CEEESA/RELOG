@@ -43,12 +43,6 @@
                 "properties": {
                     "latitude": { "type": "number" },
                     "longitude": { "type": "number" },
-                    "variable operating cost": { "$ref": "#/definitions/TimeSeries" },
-                    "fixed operating cost": { "$ref": "#/definitions/TimeSeries" },
-                    "opening cost": { "$ref": "#/definitions/TimeSeries" },
-                    "base capacity": { "type": "number" },
-                    "max capacity": { "type": "number" },
-                    "expansion cost": { "$ref": "#/definitions/TimeSeries" },
                     "disposal": {
                         "type": "object",
                         "additionalProperties": {
@@ -61,14 +55,28 @@
                                 "cost"
                             ]
                         }
-                    }
+                    },
+                    "capacities": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "variable operating cost": { "$ref": "#/definitions/TimeSeries" },
+                                "fixed operating cost": { "$ref": "#/definitions/TimeSeries" },
+                                "opening cost": { "$ref": "#/definitions/TimeSeries" }
+                            },
+                            "required": [
+                                "variable operating cost",
+                                "fixed operating cost",
+                                "opening cost"
+                            ]
+                        }
+                    }                    
                 },
                 "required": [
                     "latitude",
                     "longitude",
-                    "variable operating cost",
-                    "fixed operating cost",
-                    "opening cost"
+                    "capacities"
                 ]
             }
         },

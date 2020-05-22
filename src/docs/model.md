@@ -91,12 +91,6 @@ Each type of plant is associated with a set of potential locations where it can 
 |:------------------------|---------------|
 | `latitude`              | The latitude of the location, in degrees.
 | `longitude`             | The longitude of the location, in degrees.
-| `opening cost`          | The cost (in dollars) to open the plant.
-| `fixed operating cost`  | The cost (in dollars) to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.
-| `variable operating cost` | The cost (in dollars per tonnes) that the plant incurs to process each tonnes of input. Must be a timeseries.
-| `base capacity`         | The amount of input (in tonnes) the plant can process when zero dollars are spent on expansion. If unlimited, this key may be omitted.
-| `max capacity`          | The amount (in tonnes) the plant can process when the maximum amount of dollars are spent on expansion. If unlimited, this key may be omitted. 
-| `expansion cost`        | The cost (in dollars per tonnes) to increase the plant capacity beyond its base capacity. If zero, this key may be omitted. Must be a timeseries.
 | `disposal`              | A dictionary describing what products can be disposed locally at the plant.
 | `capacities`            | A dictionary describing what plant sizes are allowed, and their characteristics.
 
@@ -107,6 +101,14 @@ The keys in the `disposal` dictionary should be the names of the products. The v
 | `cost`                  | The cost (in dollars per tonnes) to dispose of the product. Must be a timeseries.
 | `limit`                 | The maximum amount (in tonnes) that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a timeseries.
 
+
+The keys in the `capacities` dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:
+
+| Key                     | Description
+|:------------------------|---------------|
+| `opening cost`          | The cost (in dollars) to open a plant of this size.
+| `fixed operating cost`  | The cost (in dollars) to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.
+| `variable operating cost` | The cost (in dollars per tonnes) that the plant incurs to process each tonne of input. Must be a timeseries.
 
 ### Example
 
@@ -123,33 +125,30 @@ The keys in the `disposal` dictionary should be the names of the products. The v
                 "L1": {
                     "latitude": 0.0,
                     "longitude": 0.0,
-                    "opening cost": [500, 500],
-                    "base capacity": 250.0,
-                    "max capacity": 1000.0,
-                    "expansion cost": [1.0, 1.0],
-                    "fixed operating cost": [30.0, 30.0],
-                    "variable operating cost": [30.0, 30.0],
                     "disposal": {
                         "P2": {
-                            "cost": [-10.0, -10.0],
-                            "limit": [1.0, 1.0]
-                        },
-                        "P3": {
-                            "cost": [-10.0, -10.0],
+                            "cost": [-10.0, -12.0],
                             "limit": [1.0, 1.0]
                         }
+                    },
+                    "capacities": {
+                        "100": {
+                            "opening cost": [500, 530],
+                            "fixed operating cost": [300.0, 310.0],
+                            "variable operating cost": [5.0, 5.2]
+                        },
+                        "500": {
+                            "opening cost": [750, 760],
+                            "fixed operating cost": [400.0, 450.0],
+                            "variable operating cost": [4.5, 4.7]
+                        },
+                        "700": {
+                            "opening cost": [1000, 1000],
+                            "fixed operating cost": [500.0, 600.0],
+                            "variable operating cost": [4.0, 4.4]
+                        }
                     }
-                },
-                "L2": {
-                    "latitude": 0.5,
-                    "longitude": 0.5,
-                    "opening cost": [1000, 1000],
-                    "base capacity": 0.0,
-                    "max capacity": 10000.0,
-                    "expansion cost": [1.0, 1.0],
-                    "fixed operating cost": [50.0, 50.0],
-                    "variable operating cost": [50.0, 50.0]
-                }               
+                }
             }
         }
     }
@@ -160,6 +159,5 @@ Model Assumptions
 -----------------
 * Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.
 * Plants can be expanded at any time, even long after they are open.
-* Variable and fixed operating costs do not change according to plant size.
 * All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.
 

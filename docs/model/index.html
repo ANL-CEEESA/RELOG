@@ -288,30 +288,6 @@
 <td>The longitude of the location, in degrees.</td>
 </tr>
 <tr>
-<td align="left"><code>opening cost</code></td>
-<td>The cost (in dollars) to open the plant.</td>
-</tr>
-<tr>
-<td align="left"><code>fixed operating cost</code></td>
-<td>The cost (in dollars) to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.</td>
-</tr>
-<tr>
-<td align="left"><code>variable operating cost</code></td>
-<td>The cost (in dollars per tonnes) that the plant incurs to process each tonnes of input. Must be a timeseries.</td>
-</tr>
-<tr>
-<td align="left"><code>base capacity</code></td>
-<td>The amount of input (in tonnes) the plant can process when zero dollars are spent on expansion. If unlimited, this key may be omitted.</td>
-</tr>
-<tr>
-<td align="left"><code>max capacity</code></td>
-<td>The amount (in tonnes) the plant can process when the maximum amount of dollars are spent on expansion. If unlimited, this key may be omitted.</td>
-</tr>
-<tr>
-<td align="left"><code>expansion cost</code></td>
-<td>The cost (in dollars per tonnes) to increase the plant capacity beyond its base capacity. If zero, this key may be omitted. Must be a timeseries.</td>
-</tr>
-<tr>
 <td align="left"><code>disposal</code></td>
 <td>A dictionary describing what products can be disposed locally at the plant.</td>
 </tr>
@@ -340,6 +316,29 @@
 </tr>
 </tbody>
 </table>
+<p>The keys in the <code>capacities</code> dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>opening cost</code></td>
+<td>The cost (in dollars) to open a plant of this size.</td>
+</tr>
+<tr>
+<td align="left"><code>fixed operating cost</code></td>
+<td>The cost (in dollars) to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.</td>
+</tr>
+<tr>
+<td align="left"><code>variable operating cost</code></td>
+<td>The cost (in dollars per tonnes) that the plant incurs to process each tonne of input. Must be a timeseries.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="example_2">Example</h3>
 <pre><code class="json">{
     &quot;plants&quot;: {
@@ -353,33 +352,30 @@
                 &quot;L1&quot;: {
                     &quot;latitude&quot;: 0.0,
                     &quot;longitude&quot;: 0.0,
-                    &quot;opening cost&quot;: [500, 500],
-                    &quot;base capacity&quot;: 250.0,
-                    &quot;max capacity&quot;: 1000.0,
-                    &quot;expansion cost&quot;: [1.0, 1.0],
-                    &quot;fixed operating cost&quot;: [30.0, 30.0],
-                    &quot;variable operating cost&quot;: [30.0, 30.0],
                     &quot;disposal&quot;: {
                         &quot;P2&quot;: {
-                            &quot;cost&quot;: [-10.0, -10.0],
-                            &quot;limit&quot;: [1.0, 1.0]
-                        },
-                        &quot;P3&quot;: {
-                            &quot;cost&quot;: [-10.0, -10.0],
+                            &quot;cost&quot;: [-10.0, -12.0],
                             &quot;limit&quot;: [1.0, 1.0]
                         }
+                    },
+                    &quot;capacities&quot;: {
+                        &quot;100&quot;: {
+                            &quot;opening cost&quot;: [500, 530],
+                            &quot;fixed operating cost&quot;: [300.0, 310.0],
+                            &quot;variable operating cost&quot;: [5.0, 5.2]
+                        },
+                        &quot;500&quot;: {
+                            &quot;opening cost&quot;: [750, 760],
+                            &quot;fixed operating cost&quot;: [400.0, 450.0],
+                            &quot;variable operating cost&quot;: [4.5, 4.7]
+                        },
+                        &quot;700&quot;: {
+                            &quot;opening cost&quot;: [1000, 1000],
+                            &quot;fixed operating cost&quot;: [500.0, 600.0],
+                            &quot;variable operating cost&quot;: [4.0, 4.4]
+                        }
                     }
-                },
-                &quot;L2&quot;: {
-                    &quot;latitude&quot;: 0.5,
-                    &quot;longitude&quot;: 0.5,
-                    &quot;opening cost&quot;: [1000, 1000],
-                    &quot;base capacity&quot;: 0.0,
-                    &quot;max capacity&quot;: 10000.0,
-                    &quot;expansion cost&quot;: [1.0, 1.0],
-                    &quot;fixed operating cost&quot;: [50.0, 50.0],
-                    &quot;variable operating cost&quot;: [50.0, 50.0]
-                }               
+                }
             }
         }
     }

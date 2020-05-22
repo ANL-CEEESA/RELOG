@@ -79,12 +79,6 @@
                 "L1": {
                     "latitude": 0.0,
                     "longitude": 0.0,
-                    "opening cost": [500, 500],
-                    "base capacity": 250.0,
-                    "max capacity": 1000.0,
-                    "expansion cost": [1.0, 1.0],
-                    "fixed operating cost": [30.0, 30.0],
-                    "variable operating cost": [30.0, 30.0],
                     "disposal": {
                         "P2": {
                             "cost": [-10.0, -10.0],
@@ -94,17 +88,35 @@
                             "cost": [-10.0, -10.0],
                             "limit": [1.0, 1.0]
                         }
+                    },
+                    "capacities": {
+                        "250.0": {
+                            "opening cost": [500.0, 500.0],
+                            "fixed operating cost": [30.0, 30.0],
+                            "variable operating cost": [30.0, 30.0]
+                        },
+                        "1000.0": {
+                            "opening cost": [1250.0, 1250.0],
+                            "fixed operating cost": [30.0, 30.0],
+                            "variable operating cost": [30.0, 30.0]
+                        }
                     }
                 },
                 "L2": {
                     "latitude": 0.5,
                     "longitude": 0.5,
-                    "opening cost": [1000, 1000],
-                    "base capacity": 0.0,
-                    "max capacity": 10000.0,
-                    "expansion cost": [1.0, 1.0],
-                    "fixed operating cost": [50.0, 50.0],
-                    "variable operating cost": [50.0, 50.0]
+                    "capacities": {
+                        "0.0": {
+                            "opening cost": [1000, 1000],
+                            "fixed operating cost": [50.0, 50.0],
+                            "variable operating cost": [50.0, 50.0]
+                        },
+                        "10000.0": {
+                            "opening cost": [10000, 10000],
+                            "fixed operating cost": [50.0, 50.0],
+                            "variable operating cost": [50.0, 50.0]
+                        }
+                    }
                 }               
             }
         },
@@ -118,22 +130,29 @@
                 "L3": {
                     "latitude": 25.0,
                     "longitude": 65.0,
-                    "capacity": 1000,
-                    "opening cost": [3000, 3000],
-                    "fixed operating cost": [50.0, 50.0],
-                    "variable operating cost": [50.0, 50.0],
                     "disposal": {
                         "P3": {
                             "cost": [100.0, 100.0]
+                        }
+                    },
+                    "capacities": {
+                        "1000.0": {
+                            "opening cost": [3000, 3000],
+                            "fixed operating cost": [50.0, 50.0],
+                            "variable operating cost": [50.0, 50.0]
                         }
                     }
                 },
                 "L4": {
                     "latitude": 0.75,
                     "longitude": 0.20,
-                    "opening cost": [3000, 3000],
-                    "fixed operating cost": [50.0, 50.0],
-                    "variable operating cost": [50.0, 50.0]
+                    "capacities": {
+                        "10000": {
+                            "opening cost": [3000, 3000],
+                            "fixed operating cost": [50.0, 50.0],
+                            "variable operating cost": [50.0, 50.0]
+                        }
+                    }
                 }
             }
         },
@@ -143,9 +162,13 @@
                 "L5": {
                     "latitude": 100.0,
                     "longitude": 100.0,
-                    "opening cost": [0.0, 0.0],
-                    "fixed operating cost": [0.0, 0.0],
-                    "variable operating cost": [-15.0, -15.0]
+                    "capacities": {
+                        "10000": {
+                            "opening cost": [0.0, 0.0],
+                            "fixed operating cost": [0.0, 0.0],
+                            "variable operating cost": [-15.0, -15.0]
+                        }
+                    }
                 }           
             }
         },
@@ -155,9 +178,13 @@
                 "L6": {
                     "latitude": 50.0,
                     "longitude": 50.0,
-                    "opening cost": [0.0, 0.0],
-                    "fixed operating cost": [0.0, 0.0],
-                    "variable operating cost": [-15.0, -15.0]
+                    "capacities": {
+                        "10000": {
+                            "opening cost": [0.0, 0.0],
+                            "fixed operating cost": [0.0, 0.0],
+                            "variable operating cost": [-15.0, -15.0]
+                        }
+                    }
                 }           
             }
         }
