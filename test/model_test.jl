@@ -39,7 +39,6 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
         MOI.copy_to(dest, model.mip)
         MOI.write_to_file(dest, "model.lp")
-
     end
 
     @testset "solve" begin

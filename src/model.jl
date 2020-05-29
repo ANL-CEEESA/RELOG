@@ -2,19 +2,20 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, ProgressBars
+using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars
 
 
 mutable struct ManufacturingModel
     mip::JuMP.Model
     vars::DotDict
+    eqs::DotDict
     instance::Instance
     graph::Graph
 end
 
 
 function build_model(instance::Instance, graph::Graph, optimizer)::ManufacturingModel
-    model = ManufacturingModel(Model(optimizer), DotDict(), instance, graph)
+    model = ManufacturingModel(Model(optimizer), DotDict(), DotDict(), instance, graph)
     create_vars!(model)
     create_objective_function!(model)
     create_shipping_node_constraints!(model)
@@ -133,11 +134,16 @@ end
 
 function create_shipping_node_constraints!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
+    eqs = model.eqs
+    
+    eqs.balance = Dict()
     
     for t in 1:T
         # Collection centers
         for n in graph.collection_shipping_nodes
-            @constraint(mip, sum(vars.flow[a, t] for a in n.outgoing_arcs) == n.location.amount[t])
+            eqs.balance[n, t] = @constraint(mip,
+                                            sum(vars.flow[a, t] for a in n.outgoing_arcs)
+                                              == n.location.amount[t])
         end
 
         # Plants
@@ -188,7 +194,7 @@ function create_process_node_constraints!(model::ManufacturingModel)
     end
 end
 
-function solve(filename::String; optimizer=Cbc.Optimizer)
+function solve(filename::String; optimizer=Cbc.Optimizer, lp_optimizer=Clp.Optimizer)
     println("Reading $filename...")
     instance = RELOG.load(filename)
     
@@ -198,7 +204,19 @@ function solve(filename::String; optimizer=Cbc.Optimizer)
     println("Building optimization model...")
     model = RELOG.build_model(instance, graph, optimizer)
     
-    println("Optimizing...")
+    println("Optimizing MILP...")
+    JuMP.optimize!(model.mip)
+    
+    println("Re-optimizing with integer variables fixed...")
+    all_vars = JuMP.all_variables(model.mip)
+    vals = Dict(var => JuMP.value(var) for var in all_vars)
+    JuMP.set_optimizer(model.mip, lp_optimizer)
+    for var in all_vars
+        if JuMP.is_binary(var)
+            JuMP.unset_binary(var)
+            JuMP.fix(var, vals[var])
+        end
+    end
     JuMP.optimize!(model.mip)
     
     println("Extracting solution...")
@@ -206,11 +224,12 @@ function solve(filename::String; optimizer=Cbc.Optimizer)
 end
 
 function get_solution(model::ManufacturingModel)
-    mip, vars, graph, instance = model.mip, model.vars, model.graph, model.instance
+    mip, vars, eqs, graph, instance = model.mip, model.vars, model.eqs, model.graph, model.instance
     T = instance.time
     
     output = Dict(
         "plants" => Dict(),
+        "products" => Dict(),
         "costs" => Dict(
             "fixed operating" => zeros(T),
             "variable operating" => zeros(T),
@@ -231,6 +250,19 @@ function get_solution(model::ManufacturingModel)
         end
     end
     
+    # Products
+    for n in graph.collection_shipping_nodes
+        location_dict = Dict{Any, Any}(
+            "marginal cost" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
+                                for t in 1:T],
+        )
+        if n.product.name ∉ keys(output["products"])
+            output["products"][n.product.name] = Dict()
+        end
+        output["products"][n.product.name][n.location.name] = location_dict
+    end
+    
+    # Plants
     for plant in instance.plants
         skip_plant = true
         process_node = plant_to_process_node[plant]

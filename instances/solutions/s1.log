@@ -1,36 +1,56 @@
-Gurobi Optimizer version 9.0.0 build v9.0.0rc2 (linux64)
-Optimize a model with 112 rows, 141 columns and 378 nonzeros
-Model fingerprint: 0xf1c6e6cc
-Variable types: 117 continuous, 24 integer (24 binary)
-Coefficient statistics:
-  Matrix range     [5e-02, 1e+08]
-  Objective range  [1e+00, 3e+03]
-  Bounds range     [1e+00, 1e+08]
-  RHS range        [3e+01, 1e+08]
-Found heuristic solution: objective 2000175.3046
-Presolve removed 89 rows and 110 columns
-Presolve time: 0.00s
-Presolved: 23 rows, 31 columns, 68 nonzeros
-Found heuristic solution: objective 1999822.1568
-Variable types: 25 continuous, 6 integer (6 binary)
+Welcome to the CBC MILP Solver 
+Version: 2.10.3 
+Build Date: Oct  7 2019 
 
-Root relaxation: objective 1.871010e+06, 9 iterations, 0.00 seconds
+command line - Cbc_C_Interface -solve -quit (default strategy 1)
+Continuous objective value is 1.86768e+06 - 0.00 seconds
+Cgl0003I 7 fixed, 0 tightened bounds, 9 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 2 strengthened rows, 0 substitutions
+Cgl0003I 0 fixed, 0 tightened bounds, 1 strengthened rows, 0 substitutions
+Cgl0004I processed model has 35 rows, 55 columns (9 integer (9 of which binary)) and 211 elements
+Cbc0012I Integer solution of 1871179 found by DiveCoefficient after 0 iterations and 0 nodes (0.00 seconds)
+Cbc0038I Full problem 35 rows 55 columns, reduced to 18 rows 37 columns
+Cbc0006I The LP relaxation is infeasible or too expensive
+Cbc0013I At root node, 0 cuts changed objective from 1869627.3 to 1871179 in 1 passes
+Cbc0014I Cut generator 0 (Probing) - 0 row cuts average 0.0 elements, 1 column cuts (1 active)  in 0.000 seconds - new frequency is 1
+Cbc0014I Cut generator 1 (Gomory) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0014I Cut generator 7 (ZeroHalf) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
+Cbc0001I Search completed - best objective 1871178.961662621, took 2 iterations and 0 nodes (0.00 seconds)
+Cbc0035I Maximum depth 0, 5 variables fixed on reduced cost
+Cuts at root node changed objective from 1.86963e+06 to 1.87118e+06
+Probing was tried 1 times and created 1 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+Clique was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+MixedIntegerRounding2 was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+FlowCover was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+TwoMirCuts was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 
-    Nodes    |    Current Node    |     Objective Bounds      |     Work
- Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+Result - Optimal solution found
 
-     0     0 1871009.93    0    2 1999822.16 1871009.93  6.44%     -    0s
-H    0     0                    1871552.8257 1871009.93  0.03%     -    0s
+Objective value:                1871178.96166262
+Enumerated nodes:               0
+Total iterations:               2
+Time (CPU seconds):             0.01
+Time (Wallclock seconds):       0.01
 
-Explored 1 nodes (9 simplex iterations) in 0.00 seconds
-Thread count was 4 (of 16 available processors)
+Total time (CPU seconds):       0.01   (Wallclock seconds):       0.01
 
-Solution count 3: 1.87155e+06 1.99982e+06 2.00018e+06 
-
-Optimal solution found (tolerance 1.00e-02)
-Best objective 1.871552825663e+06, best bound 1.871009926997e+06, gap 0.0290%
+Coin0506I Presolve 24 (-100) rows, 38 (-103) columns and 164 (-236) elements
+Clp0006I 0  Obj 1590708.5 Primal inf 13041.309 (4) Dual inf 429.24088 (24)
+Clp0006I 16  Obj 1871179
+Clp0000I Optimal - objective value 1871179
+Coin0511I After Postsolve, objective 1871179, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective 1871178.962 - 16 iterations time 0.002, Presolve 0.00
 Reading s1.json...
 Building graph...
 Building optimization model...
-Optimizing...
+Optimizing MILP...
+Re-optimizing with integer variables fixed...
 Extracting solution...

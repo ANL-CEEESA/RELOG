@@ -11,15 +11,20 @@ version = "0.5.0"
 
 [[BinaryProvider]]
 deps = ["Libdl", "Logging", "SHA"]
-git-tree-sha1 = "428e9106b1ff27593cbd979afac9b45b82372b8c"
+git-tree-sha1 = "ecdec412a9abc8db54c0efc5548c64dfce072058"
 uuid = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
-version = "0.5.9"
+version = "0.5.10"
 
 [[Bzip2_jll]]
 deps = ["Libdl", "Pkg"]
 git-tree-sha1 = "3663bfffede2ef41358b6fc2e1d8a6d50b3c3904"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.6+2"
+
+[[CEnum]]
+git-tree-sha1 = "1b77a77c3b28e0b3f413f7567c9bb8dd9bdccd14"
+uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+version = "0.3.0"
 
 [[Calculus]]
 deps = ["LinearAlgebra"]
@@ -33,6 +38,18 @@ git-tree-sha1 = "62d80f448b5d77b3f0a59cecf6197aad2a3aa280"
 uuid = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
 version = "0.6.7"
 
+[[Clp]]
+deps = ["BinaryProvider", "CEnum", "Clp_jll", "Libdl", "MathOptInterface", "SparseArrays"]
+git-tree-sha1 = "cb38198edf176b720461273fd4a6c678ef9b2ec5"
+uuid = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
+version = "0.8.0"
+
+[[Clp_jll]]
+deps = ["CoinUtils_jll", "CompilerSupportLibraries_jll", "Libdl", "OpenBLAS32_jll", "Osi_jll", "Pkg"]
+git-tree-sha1 = "70fe9e52fd95fa37f645e3d30f08f436cc5b1457"
+uuid = "06985876-5285-5a41-9fcb-8948a742cc53"
+version = "1.17.6+5"
+
 [[CodeTracking]]
 deps = ["InteractiveUtils", "UUIDs"]
 git-tree-sha1 = "cab4da992adc0a64f63fa30d2db2fd8bec40cab4"
@@ -41,15 +58,21 @@ version = "0.5.11"
 
 [[CodecBzip2]]
 deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
-git-tree-sha1 = "2fee975d68f9a8b22187ae86e33c0829b30cf231"
+git-tree-sha1 = "2e62a725210ce3c3c2e1a3080190e7ca491f18d7"
 uuid = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
-version = "0.7.1"
+version = "0.7.2"
 
 [[CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
 git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
 uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
 version = "0.7.0"
+
+[[CoinUtils_jll]]
+deps = ["CompilerSupportLibraries_jll", "Libdl", "OpenBLAS32_jll", "Pkg"]
+git-tree-sha1 = "ee1f06ab89337b7f194c29377ab174e752cdf60d"
+uuid = "be027038-0da8-5614-b30d-e42594cb92df"
+version = "2.11.3+3"
 
 [[CommonSubexpressions]]
 deps = ["Test"]
@@ -71,9 +94,9 @@ version = "0.6.0"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "7d7578b00789cf16c5f68fad71868e773edd58a2"
+git-tree-sha1 = "af6d9c86e191c917c2276fbede1137e8ea20157f"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.17.16"
+version = "0.17.17"
 
 [[Dates]]
 deps = ["Printf"]
@@ -112,9 +135,9 @@ version = "0.5.0"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
-git-tree-sha1 = "fe31f4ff144392ad8176f5c7c03cca6ba320271c"
+git-tree-sha1 = "ec87d5e2acbe1693789efbbe14f5ea7525758f71"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.14"
+version = "0.8.15"
 
 [[IniFile]]
 deps = ["Test"]
@@ -146,9 +169,9 @@ version = "0.21.2"
 
 [[JuliaInterpreter]]
 deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
-git-tree-sha1 = "4ab65b7deb5af83f022f26ad3351a3bd5d80c6e2"
+git-tree-sha1 = "adfa56c6a1066d3baadb5d2a070d0f966d880a6d"
 uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
-version = "0.7.16"
+version = "0.7.17"
 
 [[LibGit2]]
 deps = ["Printf"]
@@ -212,6 +235,12 @@ git-tree-sha1 = "928b8ca9b2791081dc71a51c55347c27c618760f"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "0.3.3"
 
+[[OpenBLAS32_jll]]
+deps = ["CompilerSupportLibraries_jll", "Libdl", "Pkg"]
+git-tree-sha1 = "793b33911239d2651c356c823492b58d6490d36a"
+uuid = "656ef2d0-ae68-5445-9ca0-591084a874a2"
+version = "0.3.9+4"
+
 [[OpenSpecFun_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl", "Pkg"]
 git-tree-sha1 = "d51c416559217d974a1113522d5919235ae67a87"
@@ -222,6 +251,12 @@ version = "0.5.3+3"
 git-tree-sha1 = "12ce190210d278e12644bcadf5b21cbdcf225cd3"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.2.0"
+
+[[Osi_jll]]
+deps = ["CoinUtils_jll", "CompilerSupportLibraries_jll", "Libdl", "OpenBLAS32_jll", "Pkg"]
+git-tree-sha1 = "bd436a97280df40938e66ae8d18e57aceb072856"
+uuid = "7da25872-d9ce-5375-a4d3-7a845f58efdd"
+version = "0.108.5+3"
 
 [[Parsers]]
 deps = ["Dates", "Test"]
@@ -253,9 +288,9 @@ uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[Revise]]
 deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "UUIDs", "Unicode"]
-git-tree-sha1 = "3185d2ee31756af9e20ce045ddfaedcd0df9e4aa"
+git-tree-sha1 = "adb8b66d5e53151628a9bcf51049ed70c8fa7626"
 uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
-version = "2.6.6"
+version = "2.7.0"
 
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
