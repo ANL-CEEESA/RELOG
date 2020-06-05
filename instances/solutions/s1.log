@@ -20,7 +20,7 @@ Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 0 row cuts average 0.0 elemen
 Cbc0014I Cut generator 5 (FlowCover) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
 Cbc0014I Cut generator 6 (TwoMirCuts) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
 Cbc0014I Cut generator 7 (ZeroHalf) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.000 seconds - new frequency is -100
-Cbc0001I Search completed - best objective 1871178.961662621, took 2 iterations and 0 nodes (0.00 seconds)
+Cbc0001I Search completed - best objective 1871178.961662621, took 2 iterations and 0 nodes (0.01 seconds)
 Cbc0035I Maximum depth 0, 5 variables fixed on reduced cost
 Cuts at root node changed objective from 1.86963e+06 to 1.87118e+06
 Probing was tried 1 times and created 1 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
