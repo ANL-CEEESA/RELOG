@@ -1,7 +1,7 @@
 name = "RELOG"
 uuid = "a2afcdf7-cf04-4913-85f9-c0d81ddf2008"
 authors = ["Alinson S Xavier <axavier@anl.gov>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Cbc = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
@@ -24,4 +24,4 @@ JSON = "0.21"
 JSONSchema = "0.2"
 JuMP = "0.21"
 MathOptInterface = "0.9"
-ProgressBars = "0.7"
+ProgressBars = "0.6"

@@ -45,17 +45,17 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         solution = RELOG.solve("$(pwd())/../instances/s1.json")
         JSON.print(stdout, solution, 4)
         
-        @test "costs" in keys(solution)
-        @test "fixed operating" in keys(solution["costs"])
-        @test "transportation" in keys(solution["costs"])
-        @test "variable operating" in keys(solution["costs"])
-        @test "total" in keys(solution["costs"])
+        @test "Costs" in keys(solution)
+        @test "Fixed operating (\$)" in keys(solution["Costs"])
+        @test "Transportation (\$)" in keys(solution["Costs"])
+        @test "Variable operating (\$)" in keys(solution["Costs"])
+        @test "Total (\$)" in keys(solution["Costs"])
 
-        @test "plants" in keys(solution)
-        @test "F1" in keys(solution["plants"])
-        @test "F2" in keys(solution["plants"])
-        @test "F3" in keys(solution["plants"])
-        @test "F4" in keys(solution["plants"])
+        @test "Plants" in keys(solution)
+        @test "F1" in keys(solution["Plants"])
+        @test "F2" in keys(solution["Plants"])
+        @test "F3" in keys(solution["Plants"])
+        @test "F4" in keys(solution["Plants"])
     end
 end
 

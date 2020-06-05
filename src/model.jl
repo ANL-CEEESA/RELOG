@@ -228,16 +228,16 @@ function get_solution(model::ManufacturingModel)
     T = instance.time
     
     output = Dict(
-        "plants" => Dict(),
-        "products" => Dict(),
-        "costs" => Dict(
-            "fixed operating" => zeros(T),
-            "variable operating" => zeros(T),
-            "opening" => zeros(T),
-            "transportation" => zeros(T),
-            "disposal" => zeros(T),
-            "expansion" => zeros(T),
-            "total" => zeros(T),
+        "Plants" => Dict(),
+        "Products" => Dict(),
+        "Costs" => Dict(
+            "Fixed operating (\$)" => zeros(T),
+            "Variable operating (\$)" => zeros(T),
+            "Opening (\$)" => zeros(T),
+            "Transportation (\$)" => zeros(T),
+            "Disposal (\$)" => zeros(T),
+            "Expansion (\$)" => zeros(T),
+            "Total (\$)" => zeros(T),
         )
     )
     
@@ -253,13 +253,13 @@ function get_solution(model::ManufacturingModel)
     # Products
     for n in graph.collection_shipping_nodes
         location_dict = Dict{Any, Any}(
-            "marginal cost" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
-                                for t in 1:T],
+            "Marginal cost (\$/tonne)" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
+                                           for t in 1:T],
         )
-        if n.product.name ∉ keys(output["products"])
-            output["products"][n.product.name] = Dict()
+        if n.product.name ∉ keys(output["Products"])
+            output["Products"][n.product.name] = Dict()
         end
-        output["products"][n.product.name][n.location.name] = location_dict
+        output["Products"][n.product.name][n.location.name] = location_dict
     end
     
     # Plants
@@ -267,36 +267,36 @@ function get_solution(model::ManufacturingModel)
         skip_plant = true
         process_node = plant_to_process_node[plant]
         plant_dict = Dict{Any, Any}(
-            "input" => Dict(),
-            "output" => Dict(
-                "send" => Dict(),
-                "dispose" => Dict(),
+            "Input" => Dict(),
+            "Output" => Dict(
+                "Send" => Dict(),
+                "Dispose" => Dict(),
             ),
-            "total input" => [0.0 for t in 1:T],
-            "total output" => Dict(),
-            "latitude" => plant.latitude,
-            "longitude" => plant.longitude,
-            "capacity" => [JuMP.value(vars.capacity[process_node, t])
-                           for t in 1:T],
-            "opening cost" => [JuMP.value(vars.open_plant[process_node, t]) *
-                               plant.sizes[1].opening_cost[t]
-                               for t in 1:T],
-            "fixed operating cost" => [JuMP.value(vars.is_open[process_node, t]) *
-                                       plant.sizes[1].fixed_operating_cost[t] +
-                                       JuMP.value(vars.expansion[process_node, t]) *
-                                       slope_fix_oper_cost(plant, t)
-                                       for t in 1:T],
-            "expansion cost" => [JuMP.value(vars.expansion[process_node, t]) *
-                                     (if t < T
-                                         slope_open(plant, t) - slope_open(plant, t + 1)
-                                      else
-                                         slope_open(plant, t)
-                                      end)
-                                 for t in 1:T],
+            "Total input (tonne)" => [0.0 for t in 1:T],
+            "Total output" => Dict(),
+            "Latitude (deg)" => plant.latitude,
+            "Longitude (deg)" => plant.longitude,
+            "Capacity (tonne)" => [JuMP.value(vars.capacity[process_node, t])
+                                   for t in 1:T],
+            "Opening cost (\$)" => [JuMP.value(vars.open_plant[process_node, t]) *
+                                    plant.sizes[1].opening_cost[t]
+                                    for t in 1:T],
+            "Fixed operating cost (\$)" => [JuMP.value(vars.is_open[process_node, t]) *
+                                            plant.sizes[1].fixed_operating_cost[t] +
+                                            JuMP.value(vars.expansion[process_node, t]) *
+                                            slope_fix_oper_cost(plant, t)
+                                            for t in 1:T],
+            "Expansion cost (\$)" => [JuMP.value(vars.expansion[process_node, t]) *
+                                          (if t < T
+                                              slope_open(plant, t) - slope_open(plant, t + 1)
+                                           else
+                                              slope_open(plant, t)
+                                           end)
+                                      for t in 1:T],
         )
-        output["costs"]["fixed operating"] += plant_dict["fixed operating cost"]
-        output["costs"]["opening"] += plant_dict["opening cost"]
-        output["costs"]["expansion"] += plant_dict["expansion cost"]
+        output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]
+        output["Costs"]["Opening (\$)"] += plant_dict["Opening cost (\$)"]
+        output["Costs"]["Expansion (\$)"] += plant_dict["Expansion cost (\$)"]
 
         # Inputs
         for a in process_node.incoming_arcs
@@ -306,14 +306,16 @@ function get_solution(model::ManufacturingModel)
             end
             skip_plant = false
             dict = Dict{Any, Any}(
-                "amount" => vals,
-                "distance" => a.values["distance"],
-                "latitude" => a.source.location.latitude,
-                "longitude" => a.source.location.longitude,
-                "transportation cost" => [a.source.product.transportation_cost[t] * vals[t]
-                                          for t in 1:T],
-                "variable operating cost" => [plant.sizes[1].variable_operating_cost[t] * vals[t]
-                                              for t in 1:T],
+                "Amount (tonne)" => vals,
+                "Distance (km)" => a.values["distance"],
+                "Latitude (deg)" => a.source.location.latitude,
+                "Longitude (deg)" => a.source.location.longitude,
+                "Transportation cost (\$)" => [a.source.product.transportation_cost[t] *
+                                                   vals[t] *
+                                                   a.values["distance"]
+                                               for t in 1:T],
+                "Variable operating cost (\$)" => [plant.sizes[1].variable_operating_cost[t] * vals[t]
+                                                   for t in 1:T],
             )
             if a.source.location isa CollectionCenter
                 plant_name = "Origin"
@@ -323,31 +325,31 @@ function get_solution(model::ManufacturingModel)
                 location_name = a.source.location.location_name
             end
             
-            if plant_name ∉ keys(plant_dict["input"])
-                plant_dict["input"][plant_name] = Dict()
+            if plant_name ∉ keys(plant_dict["Input"])
+                plant_dict["Input"][plant_name] = Dict()
             end
-            plant_dict["input"][plant_name][location_name] = dict
-            plant_dict["total input"] += vals
-            output["costs"]["transportation"] += dict["transportation cost"]
-            output["costs"]["variable operating"] += dict["variable operating cost"]
+            plant_dict["Input"][plant_name][location_name] = dict
+            plant_dict["Total input (tonne)"] += vals
+            output["Costs"]["Transportation (\$)"] += dict["Transportation cost (\$)"]
+            output["Costs"]["Variable operating (\$)"] += dict["Variable operating cost (\$)"]
         end
 
         # Outputs
         for shipping_node in plant_to_shipping_nodes[plant]
             product_name = shipping_node.product.name
-            plant_dict["total output"][product_name] = zeros(T)
-            plant_dict["output"]["send"][product_name] = product_dict = Dict()
+            plant_dict["Total output"][product_name] = zeros(T)
+            plant_dict["Output"]["Send"][product_name] = product_dict = Dict()
 
             disposal_amount = [JuMP.value(vars.dispose[shipping_node, t]) for t in 1:T]
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
-                plant_dict["output"]["dispose"][product_name] = disposal_dict = Dict()
-                disposal_dict["amount"] = [JuMP.value(model.vars.dispose[shipping_node, t]) for t in 1:T]
-                disposal_dict["cost"] = [disposal_dict["amount"][t] *
-                                         plant.disposal_cost[shipping_node.product][t]
-                                         for t in 1:T]
-                plant_dict["total output"][product_name] += disposal_amount
-                output["costs"]["disposal"] += disposal_dict["cost"]
+                plant_dict["Output"]["Dispose"][product_name] = disposal_dict = Dict()
+                disposal_dict["Amount (tonne)"] = [JuMP.value(model.vars.dispose[shipping_node, t]) for t in 1:T]
+                disposal_dict["Cost (\$)"] = [disposal_dict["Amount (tonne)"][t] *
+                                              plant.disposal_cost[shipping_node.product][t]
+                                              for t in 1:T]
+                plant_dict["Total output"][product_name] += disposal_amount
+                output["Costs"]["Disposal (\$)"] += disposal_dict["Cost (\$)"]
             end
 
             for a in shipping_node.outgoing_arcs
@@ -357,27 +359,27 @@ function get_solution(model::ManufacturingModel)
                 end
                 skip_plant = false
                 dict = Dict(
-                    "amount" => vals,
-                    "distance" => a.values["distance"],
-                    "latitude" => a.dest.location.latitude,
-                    "longitude" => a.dest.location.longitude,
+                    "Amount (tonne)" => vals,
+                    "Distance (km)" => a.values["distance"],
+                    "Latitude (deg)" => a.dest.location.latitude,
+                    "Longitude (deg)" => a.dest.location.longitude,
                 )
                 if a.dest.location.plant_name ∉ keys(product_dict)
                     product_dict[a.dest.location.plant_name] = Dict()
                 end
                 product_dict[a.dest.location.plant_name][a.dest.location.location_name] = dict
-                plant_dict["total output"][product_name] += vals
+                plant_dict["Total output"][product_name] += vals
             end
         end
             
         if !skip_plant
-            if plant.plant_name ∉ keys(output["plants"])
-                output["plants"][plant.plant_name] = Dict()
+            if plant.plant_name ∉ keys(output["Plants"])
+                output["Plants"][plant.plant_name] = Dict()
             end
-            output["plants"][plant.plant_name][plant.location_name] = plant_dict
+            output["Plants"][plant.plant_name][plant.location_name] = plant_dict
         end
     end
 
-    output["costs"]["total"] = sum(values(output["costs"]))
+    output["Costs"]["Total (\$)"] = sum(values(output["Costs"]))
     return output
 end

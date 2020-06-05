@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "https://anl-ceeesa.github.io/RELOG/input",
-    "title": "Schema for ReverseManufacturing Input File",
+    "title": "Schema for RELOG Input File",
     "definitions": {
         "TimeSeries": {
             "type": "array",
@@ -12,10 +12,10 @@
         "Parameters": {
             "type": "object",
             "properties": {
-                "time": { "type": "number" }
+                "Time horizon (years)": { "type": "number" }
             },
             "required": [
-                "time periods"
+                "Time horizon (years)"
             ]
         },
         "Plant": {
@@ -23,16 +23,16 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "input": { "type": "string" },
-                    "outputs": {
+                    "Input": { "type": "string" },
+                    "Outputs (tonne)": {
                         "type": "object",
                         "additionalProperties": { "type": "number" }
                     },
-                    "locations": { "$ref": "#/definitions/PlantLocation" }
+                    "Locations": { "$ref": "#/definitions/PlantLocation" }
                 },
                 "required": [
-                    "input",
-                    "locations"
+                    "Input",
+                    "Locations"
                 ]
             }
         },
@@ -41,42 +41,42 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "latitude": { "type": "number" },
-                    "longitude": { "type": "number" },
-                    "disposal": {
+                    "Latitude (deg)": { "type": "number" },
+                    "Longitude (deg)": { "type": "number" },
+                    "Disposal": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "cost": { "$ref": "#/definitions/TimeSeries" },
-                                "limit": { "$ref": "#/definitions/TimeSeries" }
+                                "Cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                                "Limit (tonne)": { "$ref": "#/definitions/TimeSeries" }
                             },
                             "required": [
-                                "cost"
+                                "Cost ($/tonne)"
                             ]
                         }
                     },
-                    "capacities": {
+                    "Capacities (tonne)": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "variable operating cost": { "$ref": "#/definitions/TimeSeries" },
-                                "fixed operating cost": { "$ref": "#/definitions/TimeSeries" },
-                                "opening cost": { "$ref": "#/definitions/TimeSeries" }
+                                "Variable operating cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                                "Fixed operating cost ($)": { "$ref": "#/definitions/TimeSeries" },
+                                "Opening cost ($)": { "$ref": "#/definitions/TimeSeries" }
                             },
                             "required": [
-                                "variable operating cost",
-                                "fixed operating cost",
-                                "opening cost"
+                                "Variable operating cost ($/tonne)",
+                                "Fixed operating cost ($)",
+                                "Opening cost ($)"
                             ]
                         }
                     }                    
                 },
                 "required": [
-                    "latitude",
-                    "longitude",
-                    "capacities"
+                    "Latitude (deg)",
+                    "Longitude (deg)",
+                    "Capacities (tonne)"
                 ]
             }
         },
@@ -85,14 +85,14 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "latitude": { "type": "number" },
-                    "longitude": { "type": "number" },
-                    "amount": { "$ref": "#/definitions/TimeSeries" }
+                    "Latitude (deg)": { "type": "number" },
+                    "Longitude (deg)": { "type": "number" },
+                    "Amount (tonne)": { "$ref": "#/definitions/TimeSeries" }
                 },
                 "required": [
-                    "latitude",
-                    "longitude",
-                    "amount"
+                    "Latitude (deg)",
+                    "Longitude (deg)",
+                    "Amount (tonne)"
                 ]
             }
         },
@@ -101,23 +101,24 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "transportation cost": { "$ref": "#/definitions/TimeSeries" },
-                    "initial amounts": { "$ref": "#/definitions/InitialAmount" }
+                    "Transportation cost ($/km/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                    "Initial amounts": { "$ref": "#/definitions/InitialAmount" }
                 },
                 "required": [
-                    "transportation cost"
+                    "Transportation cost ($/km/tonne)"
                 ]
             }            
         }
     },
     "type": "object",
     "properties": {
-        "parameters": { "$ref": "#/definitions/Parameters" },
-        "plants": { "$ref": "#/definitions/Plant" },
-        "products": { "$ref": "#/definitions/Product" }
+        "Parameters": { "$ref": "#/definitions/Parameters" },
+        "Plants": { "$ref": "#/definitions/Plant" },
+        "Products": { "$ref": "#/definitions/Product" }
     },
     "required": [
-        "plants",
-        "products"
+        "Parameters",
+        "Plants",
+        "Products"
     ]
 }
