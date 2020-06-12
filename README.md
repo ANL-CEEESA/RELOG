@@ -5,7 +5,7 @@ RELOG: Reverse Logistics Optimization
 
 ### Documentation
 
-* [https://axavier.org/projects/RELOG](https://axavier.org/projects/RELOG)
+* [https://anl-ceeesa.github.io/RELOG/](https://anl-ceeesa.github.io/RELOG/)
 
 ### Authors
 
