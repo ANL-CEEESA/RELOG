@@ -14,14 +14,16 @@
     <title>Model - RELOG</title>
     
 
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
-    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
     <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
     <link href="../css/base.min.css" rel="stylesheet">
     <link href="../css/cinder.min.css" rel="stylesheet">
-    <link href="../css/highlight.min.css" rel="stylesheet">
+
+    
     <link href="../css/custom.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,15 +31,6 @@
             <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
         <![endif]-->
-
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
 
     
 
@@ -182,6 +175,14 @@
 <td>The cost to transport this product. Must be a timeseries.</td>
 </tr>
 <tr>
+<td align="left"><code>Transportation energy (J/km/tonne)</code></td>
+<td>The energy required to transport this product. Must be a timeseries. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>Transportation emissions (tonne/km/tonne)</code></td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a timeseries. Optional.</td>
+</tr>
+<tr>
 <td align="left"><code>Initial amounts</code></td>
 <td>A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.</td>
 </tr>
@@ -214,7 +215,6 @@
 <pre><code class="json">{
     &quot;Products&quot;: {
         &quot;P1&quot;: {
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.015, 0.015],
             &quot;Initial amounts&quot;: {
                 &quot;C1&quot;: {
                     &quot;Latitude (deg)&quot;: 7.0,
@@ -231,10 +231,16 @@
                     &quot;Longitude (deg)&quot;: 76.0,
                     &quot;Amount (tonne)&quot;: [212.97, 212.97]
                 }
+            },
+            &quot;Transportation cost ($/km/tonne)&quot;: [0.015, 0.015],
+            &quot;Transportation energy (J/km/tonne)&quot;: [0.12, 0.11],
+            &quot;Transportation emissions (tonne/km/tonne)&quot;: {
+                &quot;CO2&quot;: [0.052, 0.050],
+                &quot;CH4&quot;: [0.003, 0.002]
             }
         },
         &quot;P2&quot;: {
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.02, 0.02]
+            &quot;Transportation cost ($/km/tonne)&quot;: [0.022, 0.020]
         },
         &quot;P3&quot;: {
             &quot;Transportation cost ($/km/tonne)&quot;: [0.0125, 0.0125]
@@ -392,17 +398,17 @@
         
         <hr>
         <p>
-        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.<br></small>
+        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
         
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+        </p>
 
         
         
     </footer>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    
     <script>var base_url = ".."</script>
     
     <script src="../js/base.js"></script>
@@ -414,8 +420,11 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <p>

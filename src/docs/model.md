@@ -26,7 +26,9 @@ The **products** section describes all products and subproducts in the simulatio
 
 | Key                                   | Description
 |:--------------------------------------|---------------|
-|`Transportation cost ($/km/tonne)`    | The cost to transport this product. Must be a timeseries.
+|`Transportation cost ($/km/tonne)`     | The cost to transport this product. Must be a timeseries.
+|`Transportation energy (J/km/tonne)`   | The energy required to transport this product. Must be a timeseries. Optional.
+|`Transportation emissions (tonne/km/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a timeseries. Optional.
 |`Initial amounts`                      | A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.
 
 Each product may have some amount available at the beginning of each time period. In this case, the key `initial amounts` maps to a dictionary with the following keys:
@@ -43,7 +45,6 @@ Each product may have some amount available at the beginning of each time period
 {
     "Products": {
         "P1": {
-            "Transportation cost ($/km/tonne)": [0.015, 0.015],
             "Initial amounts": {
                 "C1": {
                     "Latitude (deg)": 7.0,
@@ -60,10 +61,16 @@ Each product may have some amount available at the beginning of each time period
                     "Longitude (deg)": 76.0,
                     "Amount (tonne)": [212.97, 212.97]
                 }
+            },
+            "Transportation cost ($/km/tonne)": [0.015, 0.015],
+            "Transportation energy (J/km/tonne)": [0.12, 0.11],
+            "Transportation emissions (tonne/km/tonne)": {
+                "CO2": [0.052, 0.050],
+                "CH4": [0.003, 0.002]
             }
         },
         "P2": {
-            "Transportation cost ($/km/tonne)": [0.02, 0.02]
+            "Transportation cost ($/km/tonne)": [0.022, 0.020]
         },
         "P3": {
             "Transportation cost ($/km/tonne)": [0.0125, 0.0125]
