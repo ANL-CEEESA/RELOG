@@ -10,6 +10,6 @@ docs:
 	mkdocs build
 
 docs-push:
-	rsync -avP docs/ andromeda:/www/axavier.org/projects/RELOG/$(VERSION)/
+	rsync -avP docs/ isoron@axavier.org:/www/axavier.org/projects/RELOG/$(VERSION)/
 
 .PHONY: docs test
