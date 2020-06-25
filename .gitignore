@@ -1,7 +1,10 @@
 .ipynb*
 *.ipynb
+instances/Manifest.toml
+instances/Project.toml
 instances/Makefile
-instances/run.jl
+instances/*.jl
+instances/*.py
 notebooks
 .idea
 *.lp
