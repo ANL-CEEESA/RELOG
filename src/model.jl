@@ -241,7 +241,11 @@ function get_solution(model::ManufacturingModel)
         "Energy" => Dict(
             "Plants (GJ)" => zeros(T),
             "Transportation (GJ)" => zeros(T),
-        )
+        ),
+        "Emissions" => Dict(
+            "Plants (tonne)" => Dict(),
+            "Transportation (tonne)" => Dict(),
+        ),
     )
     
     plant_to_process_node = Dict(n.location => n for n in graph.process_nodes)
@@ -315,8 +319,17 @@ function get_solution(model::ManufacturingModel)
                 "Longitude (deg)" => a.source.location.longitude,
                 "Transportation cost (\$)" => a.source.product.transportation_cost .* vals .* a.values["distance"],
                 "Variable operating cost (\$)" => plant.sizes[1].variable_operating_cost .* vals,
-                "Transportation energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,                
+                "Transportation energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,
+                "Emissions (tonne)" => Dict(),
             )
+            emissions_dict = output["Emissions"]["Transportation (tonne)"]
+            for (em_name, em_values) in a.source.product.transportation_emissions
+                dict["Emissions (tonne)"][em_name] = em_values .* dict["Amount (tonne)"]
+                if em_name ∉ keys(emissions_dict)
+                    emissions_dict[em_name] = zeros(T)
+                end
+                emissions_dict[em_name] += dict["Emissions (tonne)"][em_name]
+            end
             if a.source.location isa CollectionCenter
                 plant_name = "Origin"
                 location_name = a.source.location.name
@@ -337,6 +350,16 @@ function get_solution(model::ManufacturingModel)
         
         plant_dict["Energy (GJ)"] = plant_dict["Total input (tonne)"] .* plant.energy
         output["Energy"]["Plants (GJ)"] += plant_dict["Energy (GJ)"]
+        
+        plant_dict["Emissions (tonne)"] = Dict()
+        emissions_dict = output["Emissions"]["Plants (tonne)"]
+        for (em_name, em_values) in plant.emissions
+            plant_dict["Emissions (tonne)"][em_name] = em_values .* plant_dict["Total input (tonne)"]
+            if em_name ∉ keys(emissions_dict)
+                emissions_dict[em_name] = zeros(T)
+            end
+            emissions_dict[em_name] += plant_dict["Emissions (tonne)"][em_name]
+        end
 
         # Outputs
         for shipping_node in plant_to_shipping_nodes[plant]
