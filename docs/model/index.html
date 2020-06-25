@@ -154,15 +154,15 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Time horizon (years)</code></td>
+<td align="left"><code>time horizon (years)</code></td>
 <td>Number of years in the simulation.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="example">Example</h3>
 <pre><code class="json">{
-    &quot;Parameters&quot;: {
-        &quot;Time horizon (years)&quot;: 2
+    &quot;parameters&quot;: {
+        &quot;time horizon (years)&quot;: 2,
     }
 }
 </code></pre>
@@ -178,19 +178,19 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Transportation cost ($/km/tonne)</code></td>
+<td align="left"><code>transportation cost ($/km/tonne)</code></td>
 <td>The cost to transport this product. Must be a timeseries.</td>
 </tr>
 <tr>
-<td align="left"><code>Transportation energy (J/km/tonne)</code></td>
+<td align="left"><code>transportation energy (J/km/tonne)</code></td>
 <td>The energy required to transport this product. Must be a timeseries. Optional.</td>
 </tr>
 <tr>
-<td align="left"><code>Transportation emissions (tonne/km/tonne)</code></td>
+<td align="left"><code>transportation emissions (tonne/km/tonne)</code></td>
 <td>A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a timeseries. Optional.</td>
 </tr>
 <tr>
-<td align="left"><code>Initial amounts</code></td>
+<td align="left"><code>initial amounts</code></td>
 <td>A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.</td>
 </tr>
 </tbody>
@@ -205,55 +205,55 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Latitude (deg)</code></td>
+<td align="left"><code>latitude (deg)</code></td>
 <td>The latitude of the location.</td>
 </tr>
 <tr>
-<td align="left"><code>Longitude (deg)</code></td>
+<td align="left"><code>longitude (deg)</code></td>
 <td>The longitude of the location.</td>
 </tr>
 <tr>
-<td align="left"><code>Amount (tonne)</code></td>
+<td align="left"><code>amount (tonne)</code></td>
 <td>The amount of the product initially available at the location. Must be a timeseries.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="example_1">Example</h3>
 <pre><code class="json">{
-    &quot;Products&quot;: {
+    &quot;products&quot;: {
         &quot;P1&quot;: {
-            &quot;Initial amounts&quot;: {
+            &quot;initial amounts&quot;: {
                 &quot;C1&quot;: {
-                    &quot;Latitude (deg)&quot;: 7.0,
-                    &quot;Longitude (deg)&quot;: 7.0,
-                    &quot;Amount (tonne)&quot;: [934.56, 934.56]
+                    &quot;latitude (deg)&quot;: 7.0,
+                    &quot;longitude (deg)&quot;: 7.0,
+                    &quot;amount (tonne)&quot;: [934.56, 934.56]
                 },
                 &quot;C2&quot;: {
-                    &quot;Latitude (deg)&quot;: 7.0,
-                    &quot;Longitude (deg)&quot;: 19.0,
-                    &quot;Amount (tonne)&quot;: [198.95, 198.95]
+                    &quot;latitude (deg)&quot;: 7.0,
+                    &quot;longitude (deg)&quot;: 19.0,
+                    &quot;amount (tonne)&quot;: [198.95, 198.95]
                 },
                 &quot;C3&quot;: {
-                    &quot;Latitude (deg)&quot;: 84.0,
-                    &quot;Longitude (deg)&quot;: 76.0,
-                    &quot;Amount (tonne)&quot;: [212.97, 212.97]
+                    &quot;latitude (deg)&quot;: 84.0,
+                    &quot;longitude (deg)&quot;: 76.0,
+                    &quot;amount (tonne)&quot;: [212.97, 212.97]
                 }
             },
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.015, 0.015],
-            &quot;Transportation energy (J/km/tonne)&quot;: [0.12, 0.11],
-            &quot;Transportation emissions (tonne/km/tonne)&quot;: {
+            &quot;transportation cost ($/km/tonne)&quot;: [0.015, 0.015],
+            &quot;transportation energy (J/km/tonne)&quot;: [0.12, 0.11],
+            &quot;transportation emissions (tonne/km/tonne)&quot;: {
                 &quot;CO2&quot;: [0.052, 0.050],
                 &quot;CH4&quot;: [0.003, 0.002]
             }
         },
         &quot;P2&quot;: {
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.022, 0.020]
+            &quot;transportation cost ($/km/tonne)&quot;: [0.022, 0.020]
         },
         &quot;P3&quot;: {
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.0125, 0.0125]
+            &quot;transportation cost ($/km/tonne)&quot;: [0.0125, 0.0125]
         },
         &quot;P4&quot;: {
-            &quot;Transportation cost ($/km/tonne)&quot;: [0.0175, 0.0175]
+            &quot;transportation cost ($/km/tonne)&quot;: [0.0175, 0.0175]
         }
     }
 }
@@ -270,15 +270,23 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Input</code></td>
+<td align="left"><code>input</code></td>
 <td>The name of the product that this plant takes as input. Only one input is accepted per plant.</td>
 </tr>
 <tr>
-<td align="left"><code>Outputs (tonne)</code></td>
+<td align="left"><code>outputs (tonne/tonne)</code></td>
 <td>A dictionary specifying how many tonnes of each product is produced for each tonnes of input. For example, if the plant outputs 0.5 tonnes of P2 and 0.25 tonnes of P3 for each tonnes of P1 provided, then this entry should be <code>{"P2": 0.5, "P3": 0.25}</code>. If the plant does not output anything, this key may be omitted.</td>
 </tr>
 <tr>
-<td align="left"><code>Locations</code></td>
+<td align="left"><code>energy (GJ/tonne)</code></td>
+<td>The energy required to process 1 tonne of the input. Must be a timeseries. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>emissions (tonne/tonne)</code></td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a timeseries. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>locations</code></td>
 <td>A dictionary mapping the name of the location to a dictionary which describes the site characteristics (see below).</td>
 </tr>
 </tbody>
@@ -293,19 +301,19 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Latitude (deg)</code></td>
+<td align="left"><code>latitude (deg)</code></td>
 <td>The latitude of the location, in degrees.</td>
 </tr>
 <tr>
-<td align="left"><code>Longitude (deg)</code></td>
+<td align="left"><code>longitude (deg)</code></td>
 <td>The longitude of the location, in degrees.</td>
 </tr>
 <tr>
-<td align="left"><code>Disposal</code></td>
+<td align="left"><code>disposal</code></td>
 <td>A dictionary describing what products can be disposed locally at the plant.</td>
 </tr>
 <tr>
-<td align="left"><code>Capacities (tonne)</code></td>
+<td align="left"><code>capacities (tonne)</code></td>
 <td>A dictionary describing what plant sizes are allowed, and their characteristics.</td>
 </tr>
 </tbody>
@@ -320,16 +328,16 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Cost ($/tonne)</code></td>
+<td align="left"><code>cost ($/tonne)</code></td>
 <td>The cost to dispose of the product. Must be a timeseries.</td>
 </tr>
 <tr>
-<td align="left"><code>Limit (tonne)</code></td>
+<td align="left"><code>limit (tonne)</code></td>
 <td>The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a timeseries.</td>
 </tr>
 </tbody>
 </table>
-<p>The keys in the <code>capacities</code> dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:</p>
+<p>The keys in the <code>capacities (tonne)</code> dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:</p>
 <table>
 <thead>
 <tr>
@@ -339,54 +347,53 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>Opening cost ($)</code></td>
+<td align="left"><code>opening cost ($)</code></td>
 <td>The cost to open a plant of this size.</td>
 </tr>
 <tr>
-<td align="left"><code>Fixed operating cost ($)</code></td>
+<td align="left"><code>fixed operating cost ($)</code></td>
 <td>The cost to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.</td>
 </tr>
 <tr>
-<td align="left"><code>Variable operating cost ($/tonne)</code></td>
+<td align="left"><code>variable operating cost ($/tonne)</code></td>
 <td>The cost that the plant incurs to process each tonne of input. Must be a timeseries.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="example_2">Example</h3>
 <pre><code class="json">{
-    &quot;Plants&quot;: {
+    &quot;plants&quot;: {
         &quot;F1&quot;: {
-            &quot;Input&quot;: &quot;P1&quot;,
-            &quot;Outputs (tonne/tonne)&quot;: {
+            &quot;input&quot;: &quot;P1&quot;,
+            &quot;outputs (tonne/tonne)&quot;: {
                 &quot;P2&quot;: 0.2,
                 &quot;P3&quot;: 0.5
             },
-            &quot;Energy (GJ/tonne)&quot;: [0.12, 0.11],
-            &quot;Emissions (tonne/tonne)&quot;: {
+            &quot;energy (GJ/tonne)&quot;: [0.12, 0.11],
+            &quot;emissions (tonne/tonne)&quot;: {
                 &quot;CO2&quot;: [0.052, 0.050],
                 &quot;CH4&quot;: [0.003, 0.002]
-            }
-
-            &quot;Locations&quot;: {
+            },
+            &quot;locations&quot;: {
                 &quot;L1&quot;: {
-                    &quot;Latitude (deg)&quot;: 0.0,
-                    &quot;Longitude (deg)&quot;: 0.0,
-                    &quot;Disposal&quot;: {
+                    &quot;latitude (deg)&quot;: 0.0,
+                    &quot;longitude (deg)&quot;: 0.0,
+                    &quot;disposal&quot;: {
                         &quot;P2&quot;: {
-                            &quot;Cost ($/tonne)&quot;: [-10.0, -12.0],
-                            &quot;Limit (tonne)&quot;: [1.0, 1.0]
+                            &quot;cost ($/tonne)&quot;: [-10.0, -12.0],
+                            &quot;limit (tonne)&quot;: [1.0, 1.0]
                         }
                     },
-                    &quot;Capacities (tonne)&quot;: {
+                    &quot;capacities (tonne)&quot;: {
                         &quot;100&quot;: {
-                            &quot;Opening cost ($)&quot;: [500, 530],
-                            &quot;Fixed operating cost ($)&quot;: [300.0, 310.0],
-                            &quot;Variable operating cost ($/tonne)&quot;: [5.0, 5.2]
+                            &quot;opening cost ($)&quot;: [500, 530],
+                            &quot;fixed operating cost ($)&quot;: [300.0, 310.0],
+                            &quot;variable operating cost ($/tonne)&quot;: [5.0, 5.2]
                         },
                         &quot;500&quot;: {
-                            &quot;Opening cost ($)&quot;: [750, 760],
-                            &quot;Fixed operating cost ($)&quot;: [400.0, 450.0],
-                            &quot;Variable operating cost ($/tonne)&quot;: [5.0, 5.2]
+                            &quot;opening cost ($)&quot;: [750, 760],
+                            &quot;fixed operating cost ($)&quot;: [400.0, 450.0],
+                            &quot;variable operating cost ($/tonne)&quot;: [5.0, 5.2]
                         }
                     }
                 }
