@@ -237,6 +237,10 @@ function get_solution(model::ManufacturingModel)
             "Disposal (\$)" => zeros(T),
             "Expansion (\$)" => zeros(T),
             "Total (\$)" => zeros(T),
+        ),
+        "Energy" => Dict(
+            "Plants (GJ)" => zeros(T),
+            "Transportation (GJ)" => zeros(T),
         )
     )
     
@@ -309,12 +313,9 @@ function get_solution(model::ManufacturingModel)
                 "Distance (km)" => a.values["distance"],
                 "Latitude (deg)" => a.source.location.latitude,
                 "Longitude (deg)" => a.source.location.longitude,
-                "Transportation cost (\$)" => [a.source.product.transportation_cost[t] *
-                                                   vals[t] *
-                                                   a.values["distance"]
-                                               for t in 1:T],
-                "Variable operating cost (\$)" => [plant.sizes[1].variable_operating_cost[t] * vals[t]
-                                                   for t in 1:T],
+                "Transportation cost (\$)" => a.source.product.transportation_cost .* vals .* a.values["distance"],
+                "Variable operating cost (\$)" => plant.sizes[1].variable_operating_cost .* vals,
+                "Energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,                
             )
             if a.source.location isa CollectionCenter
                 plant_name = "Origin"
@@ -331,7 +332,11 @@ function get_solution(model::ManufacturingModel)
             plant_dict["Total input (tonne)"] += vals
             output["Costs"]["Transportation (\$)"] += dict["Transportation cost (\$)"]
             output["Costs"]["Variable operating (\$)"] += dict["Variable operating cost (\$)"]
+            output["Energy"]["Transportation (GJ)"] += dict["Energy (J)"] / 1e
         end
+        
+        plant_dict["Energy (GJ)"] = plant_dict["Total input (tonne)"] .* plant.energy
+        output["Energy"]["Plants (GJ)"] += plant_dict["Energy (GJ)"]
 
         # Outputs
         for shipping_node in plant_to_shipping_nodes[plant]
@@ -343,7 +348,8 @@ function get_solution(model::ManufacturingModel)
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
                 plant_dict["Output"]["Dispose"][product_name] = disposal_dict = Dict()
-                disposal_dict["Amount (tonne)"] = [JuMP.value(model.vars.dispose[shipping_node, t]) for t in 1:T]
+                disposal_dict["Amount (tonne)"] = [JuMP.value(model.vars.dispose[shipping_node, t])
+                                                   for t in 1:T]
                 disposal_dict["Cost (\$)"] = [disposal_dict["Amount (tonne)"][t] *
                                               plant.disposal_cost[shipping_node.product][t]
                                               for t in 1:T]

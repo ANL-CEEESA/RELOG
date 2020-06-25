@@ -8,6 +8,8 @@ using JSON, JSONSchema
 mutable struct Product
     name::String
     transportation_cost::Array{Float64}
+    transportation_energy::Array{Float64}
+    transportation_emissions::Dict{String, Array{Float64}}
 end
 
 
@@ -40,6 +42,8 @@ mutable struct Plant
     disposal_limit::Dict{Product, Array{Float64}}
     disposal_cost::Dict{Product, Array{Float64}}
     sizes::Array{PlantSize}
+    energy::Array{Float64}
+    emissions::Dict{String, Array{Float64}}
 end
 
 
@@ -78,7 +82,19 @@ function load(path::String)::Instance
     
     # Create products
     for (product_name, product_dict) in json["products"]
-        product = Product(product_name, product_dict["transportation cost (\$/km/tonne)"])
+        cost = product_dict["transportation cost (\$/km/tonne)"]
+        energy = zeros(T)
+        emissions = Dict()
+        
+        if "transportation energy (J/km/tonne)" in keys(product_dict)
+            energy = product_dict["transportation energy (J/km/tonne)"]
+        end
+        
+        if "transportation emissions (tonne/km/tonne)" in keys(product_dict)
+            emissions = product_dict["transportation emissions (tonne/km/tonne)"]
+        end
+        
+        product = Product(product_name, cost, energy, emissions)
         push!(products, product)
         prod_name_to_product[product_name] = product
         
@@ -106,6 +122,17 @@ function load(path::String)::Instance
             output = Dict(prod_name_to_product[key] => value
                           for (key, value) in plant_dict["outputs (tonne/tonne)"]
                           if value > 0)
+        end
+        
+        energy = zeros(T)
+        emissions = Dict()
+        
+        if "energy (GJ/tonne)" in keys(plant_dict)
+            energy = plant_dict["energy (GJ/tonne)"]
+        end
+        
+        if "emissions (tonne/tonne)" in keys(plant_dict)
+            emissions = plant_dict["emissions (tonne/tonne)"]
         end
         
         for (location_name, location_dict) in plant_dict["locations"]
@@ -152,7 +179,9 @@ function load(path::String)::Instance
                           location_dict["longitude (deg)"],
                           disposal_limit,
                           disposal_cost,
-                          sizes)
+                          sizes,
+                          energy,
+                          emissions)
             
             push!(plants, plant)
         end
