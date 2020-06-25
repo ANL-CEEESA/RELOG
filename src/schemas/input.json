@@ -12,10 +12,10 @@
         "Parameters": {
             "type": "object",
             "properties": {
-                "Time horizon (years)": { "type": "number" }
+                "time horizon (years)": { "type": "number" }
             },
             "required": [
-                "Time horizon (years)"
+                "time horizon (years)"
             ]
         },
         "Plant": {
@@ -23,16 +23,21 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "Input": { "type": "string" },
-                    "Outputs (tonne)": {
+                    "input": { "type": "string" },
+                    "outputs (tonne/tonne)": {
                         "type": "object",
                         "additionalProperties": { "type": "number" }
                     },
-                    "Locations": { "$ref": "#/definitions/PlantLocation" }
+                    "energy (GJ/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                    "emissions (tonne/tonne)": {
+                        "type": "object",
+                        "additionalProperties": { "$ref": "#/definitions/TimeSeries" }
+                    },
+                    "locations": { "$ref": "#/definitions/PlantLocation" }
                 },
                 "required": [
-                    "Input",
-                    "Locations"
+                    "input",
+                    "locations"
                 ]
             }
         },
@@ -41,42 +46,42 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "Latitude (deg)": { "type": "number" },
-                    "Longitude (deg)": { "type": "number" },
-                    "Disposal": {
+                    "latitude (deg)": { "type": "number" },
+                    "longitude (deg)": { "type": "number" },
+                    "disposal": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "Cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
-                                "Limit (tonne)": { "$ref": "#/definitions/TimeSeries" }
+                                "cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                                "limit (tonne)": { "$ref": "#/definitions/TimeSeries" }
                             },
                             "required": [
-                                "Cost ($/tonne)"
+                                "cost ($/tonne)"
                             ]
                         }
                     },
-                    "Capacities (tonne)": {
+                    "capacities (tonne)": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "Variable operating cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
-                                "Fixed operating cost ($)": { "$ref": "#/definitions/TimeSeries" },
-                                "Opening cost ($)": { "$ref": "#/definitions/TimeSeries" }
+                                "variable operating cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                                "fixed operating cost ($)": { "$ref": "#/definitions/TimeSeries" },
+                                "opening cost ($)": { "$ref": "#/definitions/TimeSeries" }
                             },
                             "required": [
-                                "Variable operating cost ($/tonne)",
-                                "Fixed operating cost ($)",
-                                "Opening cost ($)"
+                                "variable operating cost ($/tonne)",
+                                "fixed operating cost ($)",
+                                "opening cost ($)"
                             ]
                         }
                     }                    
                 },
                 "required": [
-                    "Latitude (deg)",
-                    "Longitude (deg)",
-                    "Capacities (tonne)"
+                    "latitude (deg)",
+                    "longitude (deg)",
+                    "capacities (tonne)"
                 ]
             }
         },
@@ -85,14 +90,14 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "Latitude (deg)": { "type": "number" },
-                    "Longitude (deg)": { "type": "number" },
-                    "Amount (tonne)": { "$ref": "#/definitions/TimeSeries" }
+                    "latitude (deg)": { "type": "number" },
+                    "longitude (deg)": { "type": "number" },
+                    "amount (tonne)": { "$ref": "#/definitions/TimeSeries" }
                 },
                 "required": [
-                    "Latitude (deg)",
-                    "Longitude (deg)",
-                    "Amount (tonne)"
+                    "latitude (deg)",
+                    "longitude (deg)",
+                    "amount (tonne)"
                 ]
             }
         },
@@ -101,24 +106,29 @@
             "additionalProperties": {
                 "type": "object",
                 "properties": {
-                    "Transportation cost ($/km/tonne)": { "$ref": "#/definitions/TimeSeries" },
-                    "Initial amounts": { "$ref": "#/definitions/InitialAmount" }
+                    "transportation cost ($/km/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                    "transportation energy (J/km/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                    "transportation emissions (tonne/km/tonne)": {
+                        "type": "object",
+                        "additionalProperties": { "$ref": "#/definitions/TimeSeries" }
+                    },
+                    "initial amounts": { "$ref": "#/definitions/InitialAmount" }
                 },
                 "required": [
-                    "Transportation cost ($/km/tonne)"
+                    "transportation cost ($/km/tonne)"
                 ]
             }            
         }
     },
     "type": "object",
     "properties": {
-        "Parameters": { "$ref": "#/definitions/Parameters" },
-        "Plants": { "$ref": "#/definitions/Plant" },
-        "Products": { "$ref": "#/definitions/Product" }
+        "parameters": { "$ref": "#/definitions/Parameters" },
+        "plants": { "$ref": "#/definitions/Plant" },
+        "products": { "$ref": "#/definitions/Product" }
     },
     "required": [
-        "Parameters",
-        "Plants",
-        "Products"
+        "parameters",
+        "plants",
+        "products"
     ]
 }

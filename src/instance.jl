@@ -70,67 +70,67 @@ function load(path::String)::Instance
         throw(msg)
     end
     
-    T = json["Parameters"]["Time horizon (years)"]
+    T = json["parameters"]["time horizon (years)"]
     plants = Plant[]
     products = Product[]
     collection_centers = CollectionCenter[]
     prod_name_to_product = Dict{String, Product}()
     
     # Create products
-    for (product_name, product_dict) in json["Products"]
-        product = Product(product_name, product_dict["Transportation cost (\$/km/tonne)"])
+    for (product_name, product_dict) in json["products"]
+        product = Product(product_name, product_dict["transportation cost (\$/km/tonne)"])
         push!(products, product)
         prod_name_to_product[product_name] = product
         
         # Create collection centers
-        if "Initial amounts" in keys(product_dict)
-            for (center_name, center_dict) in product_dict["Initial amounts"]
+        if "initial amounts" in keys(product_dict)
+            for (center_name, center_dict) in product_dict["initial amounts"]
                 center = CollectionCenter(length(collection_centers) + 1,
                                           center_name,
-                                          center_dict["Latitude (deg)"],
-                                          center_dict["Longitude (deg)"],
+                                          center_dict["latitude (deg)"],
+                                          center_dict["longitude (deg)"],
                                           product,
-                                          center_dict["Amount (tonne)"])
+                                          center_dict["amount (tonne)"])
                 push!(collection_centers, center)
             end
         end
     end
     
     # Create plants
-    for (plant_name, plant_dict) in json["Plants"]
-        input = prod_name_to_product[plant_dict["Input"]]
+    for (plant_name, plant_dict) in json["plants"]
+        input = prod_name_to_product[plant_dict["input"]]
         output = Dict()
         
         # Plant outputs
-        if "Outputs (tonne)" in keys(plant_dict)
+        if "outputs (tonne/tonne)" in keys(plant_dict)
             output = Dict(prod_name_to_product[key] => value
-                          for (key, value) in plant_dict["Outputs (tonne)"]
+                          for (key, value) in plant_dict["outputs (tonne/tonne)"]
                           if value > 0)
         end
         
-        for (location_name, location_dict) in plant_dict["Locations"]
+        for (location_name, location_dict) in plant_dict["locations"]
             sizes = PlantSize[]
             disposal_limit = Dict(p => [0.0 for t in 1:T] for p in keys(output))
             disposal_cost = Dict(p => [0.0 for t in 1:T] for p in keys(output))
             
             # Disposal
-            if "Disposal" in keys(location_dict)
-                for (product_name, disposal_dict) in location_dict["Disposal"]
+            if "disposal" in keys(location_dict)
+                for (product_name, disposal_dict) in location_dict["disposal"]
                     limit = [1e8 for t in 1:T]
-                    if "Limit (tonne)" in keys(disposal_dict)
-                       limit = disposal_dict["Limit (tonne)"]
+                    if "limit (tonne)" in keys(disposal_dict)
+                       limit = disposal_dict["limit (tonne)"]
                     end
                     disposal_limit[prod_name_to_product[product_name]] = limit
-                    disposal_cost[prod_name_to_product[product_name]] = disposal_dict["Cost (\$/tonne)"]
+                    disposal_cost[prod_name_to_product[product_name]] = disposal_dict["cost (\$/tonne)"]
                 end
             end
             
             # Capacities
-            for (capacity_name, capacity_dict) in location_dict["Capacities (tonne)"]
+            for (capacity_name, capacity_dict) in location_dict["capacities (tonne)"]
                 push!(sizes, PlantSize(parse(Float64, capacity_name),
-                                       capacity_dict["Variable operating cost (\$/tonne)"],
-                                       capacity_dict["Fixed operating cost (\$)"],
-                                       capacity_dict["Opening cost (\$)"]))
+                                       capacity_dict["variable operating cost (\$/tonne)"],
+                                       capacity_dict["fixed operating cost (\$)"],
+                                       capacity_dict["opening cost (\$)"]))
             end
             length(sizes) > 1 ||  push!(sizes, sizes[1])
             sort!(sizes, by = x -> x.capacity)
@@ -148,8 +148,8 @@ function load(path::String)::Instance
                           location_name,
                           input,
                           output,
-                          location_dict["Latitude (deg)"],
-                          location_dict["Longitude (deg)"],
+                          location_dict["latitude (deg)"],
+                          location_dict["longitude (deg)"],
                           disposal_limit,
                           disposal_cost,
                           sizes)

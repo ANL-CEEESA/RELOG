@@ -36,9 +36,9 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
         
-        dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
-        MOI.copy_to(dest, model.mip)
-        MOI.write_to_file(dest, "model.lp")
+        #dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
+        #MOI.copy_to(dest, model.mip)
+        #MOI.write_to_file(dest, "model.lp")
     end
 
     @testset "solve" begin

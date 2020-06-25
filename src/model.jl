@@ -20,7 +20,6 @@ function build_model(instance::Instance, graph::Graph, optimizer)::Manufacturing
     create_objective_function!(model)
     create_shipping_node_constraints!(model)
     create_process_node_constraints!(model)
-    JuMP.write_to_file(model.mip, "model.lp")
     return model
 end
 
@@ -194,7 +193,7 @@ function create_process_node_constraints!(model::ManufacturingModel)
     end
 end
 
-function solve(filename::String; optimizer=Cbc.Optimizer, lp_optimizer=Clp.Optimizer)
+function solve(filename::String; milp_optimizer=Cbc.Optimizer, lp_optimizer=Clp.Optimizer)
     println("Reading $filename...")
     instance = RELOG.load(filename)
     
@@ -202,7 +201,7 @@ function solve(filename::String; optimizer=Cbc.Optimizer, lp_optimizer=Clp.Optim
     graph = RELOG.build_graph(instance)
     
     println("Building optimization model...")
-    model = RELOG.build_model(instance, graph, optimizer)
+    model = RELOG.build_model(instance, graph, milp_optimizer)
     
     println("Optimizing MILP...")
     JuMP.optimize!(model.mip)
