@@ -1,20 +1,30 @@
 {
+  "Energy": {
+    "Plants (GJ)": [
+      568.6368,
+      521.2504
+    ],
+    "Transportation (GJ)": [
+      3.120910400232,
+      2.860834533546
+    ]
+  },
   "Costs": {
     "Variable operating ($)": [
       216672.818,
       216672.818
     ],
     "Transportation ($)": [
-      714499.27483131,
-      714499.27483131
+      714499.2748313101,
+      714499.2748313101
     ],
     "Disposal ($)": [
       -20.0,
       -20.0
     ],
     "Total ($)": [
-      935782.09283131,
-      935396.86883131
+      935782.0928313101,
+      935396.8688313101
     ],
     "Fixed operating ($)": [
       130.0,
@@ -32,6 +42,25 @@
   "Plants": {
     "F3": {
       "L5": {
+        "Opening cost ($)": [
+          0.0,
+          0.0
+        ],
+        "Expansion cost ($)": [
+          0.0,
+          0.0
+        ],
+        "Longitude (deg)": 100.0,
+        "Energy (GJ)": [
+          0.0,
+          0.0
+        ],
+        "Total output": {},
+        "Capacity (tonne)": [
+          15000.0,
+          15000.0
+        ],
+        "Latitude (deg)": 100.0,
         "Output": {
           "Send": {},
           "Dispose": {}
@@ -40,22 +69,7 @@
           757.3824000000001,
           757.3824000000001
         ],
-        "Total output": {},
-        "Expansion cost ($)": [
-          0.0,
-          0.0
-        ],
-        "Capacity (tonne)": [
-          15000.0,
-          15000.0
-        ],
         "Fixed operating cost ($)": [
-          0.0,
-          0.0
-        ],
-        "Longitude (deg)": 100.0,
-        "Latitude (deg)": 100.0,
-        "Opening cost ($)": [
           0.0,
           0.0
         ],
@@ -66,6 +80,10 @@
               "Amount (tonne)": [
                 757.3824000000001,
                 757.3824000000001
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
                 116792.36127216002,
@@ -84,6 +102,34 @@
     },
     "F1": {
       "L1": {
+        "Opening cost ($)": [
+          500.0,
+          0.0
+        ],
+        "Expansion cost ($)": [
+          0.0,
+          750.0
+        ],
+        "Longitude (deg)": 0.0,
+        "Energy (GJ)": [
+          120.0,
+          110.0
+        ],
+        "Total output": {
+          "P2": [
+            200.0,
+            200.0
+          ],
+          "P3": [
+            500.0,
+            500.0
+          ]
+        },
+        "Capacity (tonne)": [
+          1000.0,
+          1000.0
+        ],
+        "Latitude (deg)": 0.0,
         "Output": {
           "Send": {
             "P2": {
@@ -140,45 +186,25 @@
           1000.0,
           1000.0
         ],
-        "Total output": {
-          "P2": [
-            200.0,
-            200.0
-          ],
-          "P3": [
-            500.0,
-            500.0
-          ]
-        },
-        "Expansion cost ($)": [
-          0.0,
-          750.0
-        ],
-        "Capacity (tonne)": [
-          1000.0,
-          1000.0
-        ],
         "Fixed operating cost ($)": [
           30.0,
           30.0
-        ],
-        "Longitude (deg)": 0.0,
-        "Latitude (deg)": 0.0,
-        "Opening cost ($)": [
-          500.0,
-          0.0
         ],
         "Input": {
           "Origin": {
             "C3": {
               "Distance (km)": 8889.75,
               "Amount (tonne)": [
-                212.97000000000003,
-                212.97000000000003
+                212.97,
+                212.97
+              ],
+              "Transportation energy (J)": [
+                227190.00689999998,
+                208257.506325
               ],
               "Transportation cost ($)": [
-                28398.750862500005,
-                28398.750862500005
+                28398.7508625,
+                28398.7508625
               ],
               "Longitude (deg)": 76.0,
               "Variable operating cost ($)": [
@@ -190,34 +216,42 @@
             "C7": {
               "Distance (km)": 8526.39,
               "Amount (tonne)": [
-                246.62,
-                246.62
+                246.61999999999998,
+                246.61999999999998
+              ],
+              "Transportation energy (J)": [
+                252333.39621599994,
+                231305.61319799995
               ],
               "Transportation cost ($)": [
-                31541.674527,
-                31541.674527
+                31541.674526999996,
+                31541.674526999996
               ],
               "Longitude (deg)": 83.0,
               "Variable operating cost ($)": [
-                7398.6,
-                7398.6
+                7398.599999999999,
+                7398.599999999999
               ],
               "Latitude (deg)": 30.0
             },
             "C5": {
               "Distance (km)": 9148.52,
               "Amount (tonne)": [
-                510.3299999999999,
-                510.3299999999999
+                510.33,
+                510.33
+              ],
+              "Transportation energy (J)": [
+                560251.705392,
+                513564.06327600003
               ],
               "Transportation cost ($)": [
-                70031.46317399999,
-                70031.46317399999
+                70031.463174,
+                70031.463174
               ],
               "Longitude (deg)": 92.0,
               "Variable operating cost ($)": [
-                15309.899999999998,
-                15309.899999999998
+                15309.9,
+                15309.9
               ],
               "Latitude (deg)": 32.0
             },
@@ -226,6 +260,10 @@
               "Amount (tonne)": [
                 30.08,
                 30.08
+              ],
+              "Transportation energy (J)": [
+                29603.087615999993,
+                27136.163647999994
               ],
               "Transportation cost ($)": [
                 3700.385951999999,
@@ -242,6 +280,34 @@
         }
       },
       "L2": {
+        "Opening cost ($)": [
+          1000.0,
+          0.0
+        ],
+        "Expansion cost ($)": [
+          0.0,
+          3364.776
+        ],
+        "Longitude (deg)": 0.5,
+        "Energy (GJ)": [
+          448.6368,
+          411.2504
+        ],
+        "Total output": {
+          "P2": [
+            747.7280000000001,
+            747.7280000000001
+          ],
+          "P3": [
+            1869.32,
+            1869.32
+          ]
+        },
+        "Capacity (tonne)": [
+          3738.64,
+          3738.64
+        ],
+        "Latitude (deg)": 0.5,
         "Output": {
           "Send": {
             "P2": {
@@ -249,8 +315,8 @@
                 "L4": {
                   "Distance (km)": 43.35,
                   "Amount (tonne)": [
-                    747.728,
-                    747.728
+                    747.7280000000001,
+                    747.7280000000001
                   ],
                   "Longitude (deg)": 0.2,
                   "Latitude (deg)": 0.75
@@ -277,33 +343,9 @@
           3738.64,
           3738.64
         ],
-        "Total output": {
-          "P2": [
-            747.728,
-            747.728
-          ],
-          "P3": [
-            1869.32,
-            1869.32
-          ]
-        },
-        "Expansion cost ($)": [
-          0.0,
-          3364.7759999999994
-        ],
-        "Capacity (tonne)": [
-          3738.6399999999994,
-          3738.6399999999994
-        ],
         "Fixed operating cost ($)": [
           50.0,
           50.0
-        ],
-        "Longitude (deg)": 0.5,
-        "Latitude (deg)": 0.5,
-        "Opening cost ($)": [
-          999.9999999999999,
-          0.0
         ],
         "Input": {
           "Origin": {
@@ -312,6 +354,10 @@
               "Amount (tonne)": [
                 934.56,
                 934.56
+              ],
+              "Transportation energy (J)": [
+                114103.047168,
+                104594.459904
               ],
               "Transportation cost ($)": [
                 14262.880895999999,
@@ -330,6 +376,10 @@
                 198.95,
                 198.95
               ],
+              "Transportation energy (J)": [
+                51698.430779999995,
+                47390.228214999996
+              ],
               "Transportation cost ($)": [
                 6462.303847499999,
                 6462.303847499999
@@ -346,6 +396,10 @@
               "Amount (tonne)": [
                 706.17,
                 706.17
+              ],
+              "Transportation energy (J)": [
+                459386.18243999995,
+                421104.00057
               ],
               "Transportation cost ($)": [
                 57423.272805,
@@ -364,6 +418,10 @@
                 471.66,
                 471.66
               ],
+              "Transportation energy (J)": [
+                373301.15558400005,
+                342192.72595200007
+              ],
               "Transportation cost ($)": [
                 46662.64444800001,
                 46662.64444800001
@@ -380,6 +438,10 @@
               "Amount (tonne)": [
                 536.52,
                 536.52
+              ],
+              "Transportation energy (J)": [
+                387204.123312,
+                354937.113036
               ],
               "Transportation cost ($)": [
                 48400.515413999994,
@@ -398,6 +460,10 @@
                 352.19,
                 352.19
               ],
+              "Transportation energy (J)": [
+                118425.43713599998,
+                108556.65070799999
+              ],
               "Transportation cost ($)": [
                 14803.179642,
                 14803.179642
@@ -414,6 +480,10 @@
               "Amount (tonne)": [
                 538.59,
                 538.59
+              ],
+              "Transportation energy (J)": [
+                547413.827688,
+                501796.008714
               ],
               "Transportation cost ($)": [
                 68426.728461,
@@ -432,6 +502,34 @@
     },
     "F2": {
       "L4": {
+        "Opening cost ($)": [
+          3000.0,
+          0.0
+        ],
+        "Expansion cost ($)": [
+          0.0,
+          0.0
+        ],
+        "Longitude (deg)": 0.2,
+        "Energy (GJ)": [
+          0.0,
+          0.0
+        ],
+        "Total output": {
+          "P4": [
+            757.3824000000001,
+            757.3824000000001
+          ],
+          "P3": [
+            47.336400000000005,
+            47.336400000000005
+          ]
+        },
+        "Capacity (tonne)": [
+          10000.0,
+          10000.0
+        ],
+        "Latitude (deg)": 0.75,
         "Output": {
           "Send": {
             "P4": {
@@ -464,36 +562,12 @@
           "Dispose": {}
         },
         "Total input (tonne)": [
-          946.728,
-          946.728
-        ],
-        "Total output": {
-          "P4": [
-            757.3824000000001,
-            757.3824000000001
-          ],
-          "P3": [
-            47.336400000000005,
-            47.336400000000005
-          ]
-        },
-        "Expansion cost ($)": [
-          0.0,
-          0.0
-        ],
-        "Capacity (tonne)": [
-          10000.0,
-          10000.0
+          946.7280000000001,
+          946.7280000000001
         ],
         "Fixed operating cost ($)": [
           50.0,
           50.0
-        ],
-        "Longitude (deg)": 0.2,
-        "Latitude (deg)": 0.75,
-        "Opening cost ($)": [
-          2999.9999999999995,
-          0.0
         ],
         "Input": {
           "F1": {
@@ -502,6 +576,10 @@
               "Amount (tonne)": [
                 199.0,
                 199.0
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
                 341.7626,
@@ -517,17 +595,21 @@
             "L2": {
               "Distance (km)": 43.35,
               "Amount (tonne)": [
-                747.728,
-                747.728
+                747.7280000000001,
+                747.7280000000001
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
-                648.280176,
-                648.280176
+                648.2801760000001,
+                648.2801760000001
               ],
               "Longitude (deg)": 0.5,
               "Variable operating cost ($)": [
-                37386.399999999994,
-                37386.399999999994
+                37386.4,
+                37386.4
               ],
               "Latitude (deg)": 0.5
             }
@@ -537,6 +619,25 @@
     },
     "F4": {
       "L6": {
+        "Opening cost ($)": [
+          0.0,
+          0.0
+        ],
+        "Expansion cost ($)": [
+          0.0,
+          0.0
+        ],
+        "Longitude (deg)": 50.0,
+        "Energy (GJ)": [
+          0.0,
+          0.0
+        ],
+        "Total output": {},
+        "Capacity (tonne)": [
+          10000.0,
+          10000.0
+        ],
+        "Latitude (deg)": 50.0,
         "Output": {
           "Send": {},
           "Dispose": {}
@@ -545,22 +646,7 @@
           2415.6564,
           2415.6564
         ],
-        "Total output": {},
-        "Expansion cost ($)": [
-          0.0,
-          0.0
-        ],
-        "Capacity (tonne)": [
-          10000.0,
-          10000.0
-        ],
         "Fixed operating cost ($)": [
-          0.0,
-          0.0
-        ],
-        "Longitude (deg)": 50.0,
-        "Latitude (deg)": 50.0,
-        "Opening cost ($)": [
           0.0,
           0.0
         ],
@@ -571,6 +657,10 @@
               "Amount (tonne)": [
                 499.0,
                 499.0
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
                 42997.644875000005,
@@ -588,6 +678,10 @@
               "Amount (tonne)": [
                 1869.32,
                 1869.32
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
                 159567.258185,
@@ -607,6 +701,10 @@
               "Amount (tonne)": [
                 47.336400000000005,
                 47.336400000000005
+              ],
+              "Transportation energy (J)": [
+                0.0,
+                0.0
               ],
               "Transportation cost ($)": [
                 4038.1676941500004,

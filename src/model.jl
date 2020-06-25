@@ -315,7 +315,7 @@ function get_solution(model::ManufacturingModel)
                 "Longitude (deg)" => a.source.location.longitude,
                 "Transportation cost (\$)" => a.source.product.transportation_cost .* vals .* a.values["distance"],
                 "Variable operating cost (\$)" => plant.sizes[1].variable_operating_cost .* vals,
-                "Energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,                
+                "Transportation energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,                
             )
             if a.source.location isa CollectionCenter
                 plant_name = "Origin"
@@ -332,7 +332,7 @@ function get_solution(model::ManufacturingModel)
             plant_dict["Total input (tonne)"] += vals
             output["Costs"]["Transportation (\$)"] += dict["Transportation cost (\$)"]
             output["Costs"]["Variable operating (\$)"] += dict["Variable operating cost (\$)"]
-            output["Energy"]["Transportation (GJ)"] += dict["Energy (J)"] / 1e
+            output["Energy"]["Transportation (GJ)"] += dict["Transportation energy (J)"] / 1e6
         end
         
         plant_dict["Energy (GJ)"] = plant_dict["Total input (tonne)"] .* plant.energy
