@@ -3,4 +3,4 @@
 - Track emissions and energy (transportation and plants)
 - Minor changes to input file format:
     - Make all dictionary keys lowercase
-    - Rename "outputs (tonne)" to "output (tonne/tonne)"
+    - Rename "outputs (tonne)" to "outputs (tonne/tonne)"
