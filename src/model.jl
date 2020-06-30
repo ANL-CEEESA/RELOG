@@ -193,7 +193,9 @@ function create_process_node_constraints!(model::ManufacturingModel)
     end
 end
 
-function solve(filename::String; milp_optimizer=Cbc.Optimizer, lp_optimizer=Clp.Optimizer)
+function solve(filename::String;
+               milp_optimizer=optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0),
+               lp_optimizer=optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0))
     println("Reading $filename...")
     instance = RELOG.load(filename)
     

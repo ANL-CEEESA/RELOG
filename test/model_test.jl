@@ -9,13 +9,13 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         instance = RELOG.load("$basedir/../instances/s1.json")
         graph = RELOG.build_graph(instance)
         model = RELOG.build_model(instance, graph, Cbc.Optimizer)
+        set_optimizer_attribute(model.mip, "logLevel", 0)
 
         process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)
 
         shipping_node_by_location_and_product_names = Dict((n.location.location_name, n.product.name) => n
                                                            for n in graph.plant_shipping_nodes)
-        
         
         @test length(model.vars.flow) == 76
         @test length(model.vars.dispose) == 16
@@ -43,7 +43,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
     @testset "solve" begin
         solution = RELOG.solve("$(pwd())/../instances/s1.json")
-        JSON.print(stdout, solution, 4)
+        #JSON.print(stdout, solution, 4)
         
         @test "Costs" in keys(solution)
         @test "Fixed operating (\$)" in keys(solution["Costs"])
