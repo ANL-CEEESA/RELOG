@@ -54,12 +54,7 @@ mutable struct Instance
     plants::Array{Plant, 1}
 end
 
-
-function load(path::String)::Instance
-    basedir = dirname(@__FILE__)
-    json = JSON.parsefile(path)
-    schema = Schema(JSON.parsefile("$basedir/schemas/input.json"))
-    
+function validate(json, schema)
     result = JSONSchema.validate(json, schema)
     if result !== nothing
         if result isa JSONSchema.SingleIssue
@@ -73,8 +68,20 @@ function load(path::String)::Instance
         end
         throw(msg)
     end
+end
+
+
+function load(path::String)::Instance
+    basedir = dirname(@__FILE__)
+    json = JSON.parsefile(path)
+    json_schema = JSON.parsefile("$basedir/schemas/input.json")
+    validate(json, Schema(json_schema))
     
     T = json["parameters"]["time horizon (years)"]
+    json_schema["definitions"]["TimeSeries"]["minItems"] = T
+    json_schema["definitions"]["TimeSeries"]["maxItems"] = T
+    validate(json, Schema(json_schema))
+    
     plants = Plant[]
     products = Product[]
     collection_centers = CollectionCenter[]

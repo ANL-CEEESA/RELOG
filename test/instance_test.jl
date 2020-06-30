@@ -71,5 +71,9 @@ using RELOG
         @test plant.disposal_limit[p3] == [1e8, 1e8]
         @test plant.disposal_limit[p4] == [0, 0]
     end
+    
+    @testset "validate timeseries" begin
+        @test_throws String RELOG.load("fixtures/s1-wrong-length.json")
+    end
 end
 
