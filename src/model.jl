@@ -2,7 +2,7 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars
+using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf
 
 
 mutable struct ManufacturingModel
@@ -83,7 +83,7 @@ end
 
 function create_objective_function!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
-    obj = @expression(mip, 0 * @variable(mip))
+    obj = AffExpr(0.0)
 
     # Process node costs
     for n in values(graph.process_nodes), t in 1:T
@@ -158,16 +158,19 @@ end
 function create_process_node_constraints!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
 
-    for n in graph.process_nodes, t in 1:T
+    for t in 1:T, n in graph.process_nodes
         # Output amount is implied by input amount
-        input_sum = isempty(n.incoming_arcs) ? 0 : sum(vars.flow[a, t] for a in n.incoming_arcs)
+        input_sum = AffExpr(0.0)
+        for a in n.incoming_arcs
+            add_to_expression!(input_sum, 1.0, vars.flow[a, t])
+        end
         for a in n.outgoing_arcs
             @constraint(mip, vars.flow[a, t] == a.values["weight"] * input_sum)
         end
 
         # If plant is closed, capacity is zero
         @constraint(mip, vars.capacity[n, t] <= n.location.sizes[2].capacity * vars.is_open[n, t])
-        
+
         # If plant is open, capacity is greater than base
         @constraint(mip, vars.capacity[n, t] >= n.location.sizes[1].capacity * vars.is_open[n, t])
 
@@ -176,13 +179,13 @@ function create_process_node_constraints!(model::ManufacturingModel)
 
         # Input sum must be smaller than capacity
         @constraint(mip, input_sum <= vars.capacity[n, t])
-        
+
         if t > 1
             # Plant capacity can only increase over time
             @constraint(mip, vars.capacity[n, t] >= vars.capacity[n, t-1])
             @constraint(mip, vars.expansion[n, t] >= vars.expansion[n, t-1])
         end
-        
+
         # Plant is currently open if it was already open in the previous time period or
         # if it was built just now
         if t > 1
@@ -196,19 +199,25 @@ end
 function solve(filename::String;
                milp_optimizer=optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0),
                lp_optimizer=optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0))
-    println("Reading $filename...")
+    
+    @info "Reading $filename..."
     instance = RELOG.load(filename)
     
-    println("Building graph...")
+    @info "Building graph..."
     graph = RELOG.build_graph(instance)
+    @info @sprintf("    %12d time periods", instance.time)
+    @info @sprintf("    %12d process nodes", length(graph.process_nodes))
+    @info @sprintf("    %12d shipping nodes (plant)", length(graph.plant_shipping_nodes))
+    @info @sprintf("    %12d shipping nodes (collection)", length(graph.collection_shipping_nodes))
+    @info @sprintf("    %12d arcs", length(graph.arcs))
     
-    println("Building optimization model...")
+    @info "Building optimization model..."
     model = RELOG.build_model(instance, graph, milp_optimizer)
     
-    println("Optimizing MILP...")
+    @info "Optimizing MILP..."
     JuMP.optimize!(model.mip)
     
-    println("Re-optimizing with integer variables fixed...")
+    @info "Re-optimizing with integer variables fixed..."
     all_vars = JuMP.all_variables(model.mip)
     vals = Dict(var => JuMP.value(var) for var in all_vars)
     JuMP.set_optimizer(model.mip, lp_optimizer)
@@ -220,7 +229,7 @@ function solve(filename::String;
     end
     JuMP.optimize!(model.mip)
     
-    println("Extracting solution...")
+    @info "Extracting solution..."
     return get_solution(model)
 end
 
