@@ -1,4 +1,8 @@
-# Version 0.3 (June 25, 2020)
+# Vertion 0.3.1 (July 17, 2020)
+
+- Fix expansion cost breakdown
+
+# Version 0.3.0 (June 25, 2020)
 
 - Track emissions and energy (transportation and plants)
 - Minor changes to input file format:

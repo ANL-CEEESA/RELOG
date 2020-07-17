@@ -304,12 +304,14 @@ function get_solution(model::ManufacturingModel)
                                             JuMP.value(vars.expansion[process_node, t]) *
                                             slope_fix_oper_cost(plant, t)
                                             for t in 1:T],
-            "Expansion cost (\$)" => [JuMP.value(vars.expansion[process_node, t]) *
-                                          (if t < T
-                                              slope_open(plant, t) - slope_open(plant, t + 1)
-                                           else
-                                              slope_open(plant, t)
-                                           end)
+            "Expansion cost (\$)" => [(if t == 1
+                                          slope_open(plant, t) * JuMP.value(vars.expansion[process_node, t])
+                                       else
+                                          slope_open(plant, t) * (
+                                              JuMP.value(vars.expansion[process_node, t]) -
+                                              JuMP.value(vars.expansion[process_node, t - 1])
+                                          )
+                                       end)
                                       for t in 1:T],
         )
         output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]

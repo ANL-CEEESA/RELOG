@@ -1,53 +1,11 @@
-Gurobi Optimizer version 9.0.0 build v9.0.0rc2 (linux64)
-Optimize a model with 124 rows, 141 columns and 400 nonzeros
-Model fingerprint: 0x46af87f0
-Variable types: 117 continuous, 24 integer (24 binary)
-Coefficient statistics:
-  Matrix range     [5e-02, 2e+04]
-  Objective range  [9e-01, 3e+03]
-  Bounds range     [1e+00, 1e+08]
-  RHS range        [3e+01, 2e+04]
-Presolve removed 98 rows and 107 columns
-Presolve time: 0.00s
-Presolved: 26 rows, 34 columns, 74 nonzeros
-Variable types: 28 continuous, 6 integer (6 binary)
-
-Root relaxation: objective 1.870636e+06, 10 iterations, 0.00 seconds
-
-    Nodes    |    Current Node    |     Objective Bounds      |     Work
- Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
-
-     0     0 1870636.06    0    2          - 1870636.06      -     -    0s
-H    0     0                    1871178.9617 1870636.06  0.03%     -    0s
-
-Explored 1 nodes (10 simplex iterations) in 0.00 seconds
-Thread count was 8 (of 80 available processors)
-
-Solution count 1: 1.87118e+06 
-
-Optimal solution found (tolerance 1.00e-02)
-Best objective 1.871178961663e+06, best bound 1.870636062997e+06, gap 0.0290%
-Gurobi Optimizer version 9.0.0 build v9.0.0rc2 (linux64)
-Optimize a model with 124 rows, 141 columns and 400 nonzeros
-Model fingerprint: 0x133a97e7
-Coefficient statistics:
-  Matrix range     [5e-02, 2e+04]
-  Objective range  [9e-01, 3e+03]
-  Bounds range     [1e+00, 1e+08]
-  RHS range        [3e+01, 2e+04]
-Presolve removed 115 rows and 110 columns
-Presolve time: 0.00s
-Presolved: 9 rows, 31 columns, 94 nonzeros
-
-Iteration    Objective       Primal Inf.    Dual Inf.      Time
-       0    1.0296026e+06   1.950922e+03   0.000000e+00      0s
-       7    1.8711790e+06   0.000000e+00   0.000000e+00      0s
-
-Solved in 7 iterations and 0.00 seconds
-Optimal objective  1.871178962e+06
-Reading s1.json...
-Building graph...
-Building optimization model...
-Optimizing MILP...
-Re-optimizing with integer variables fixed...
-Extracting solution...
+[ Info: Reading s1.json...
+[ Info: Building graph...
+[ Info:                2 time periods
+[ Info:                6 process nodes
+[ Info:                8 shipping nodes (plant)
+[ Info:               10 shipping nodes (collection)
+[ Info:               38 arcs
+[ Info: Building optimization model...
+[ Info: Optimizing MILP...
+[ Info: Re-optimizing with integer variables fixed...
+[ Info: Extracting solution...
