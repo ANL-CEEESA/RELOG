@@ -27,38 +27,29 @@ end
 function create_vars!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
     
-    vars.flow = Dict((a, t) => @variable(mip,
-                                         lower_bound=0,
-                                         base_name="flow($(a.source.location.index),$(a.dest.location.index),$t)")
+    vars.flow = Dict((a, t) => @variable(mip, lower_bound=0)
                     for a in graph.arcs, t in 1:T)
    
     vars.dispose = Dict((n, t) => @variable(mip,
                                             lower_bound=0,
-                                            upper_bound=n.location.disposal_limit[n.product][t],
-                                            base_name="dispose($(n.location.index),$(n.product.name),$t)")
+                                            upper_bound=n.location.disposal_limit[n.product][t])
                         for n in values(graph.plant_shipping_nodes), t in 1:T)
     
-    vars.open_plant = Dict((n, t) => @variable(mip,
-                                               binary=true,
-                                               base_name="open_plant($(n.location.index),$t)")
+    vars.open_plant = Dict((n, t) => @variable(mip, binary=true)
                            for n in values(graph.process_nodes), t in 1:T)
 
-    vars.is_open = Dict((n, t) => @variable(mip,
-                                            binary=true,
-                                            base_name="is_open($(n.location.index),$t)")
+    vars.is_open = Dict((n, t) => @variable(mip, binary=true)
                         for n in values(graph.process_nodes), t in 1:T)
 
     vars.capacity = Dict((n, t) => @variable(mip,
                                              lower_bound = 0,
-                                             upper_bound = n.location.sizes[2].capacity,
-                                             base_name="capacity($(n.location.index),$t)")
+                                             upper_bound = n.location.sizes[2].capacity)
                          for n in values(graph.process_nodes), t in 1:T)
     
     vars.expansion = Dict((n, t) => @variable(mip,
                                               lower_bound = 0,
                                               upper_bound = n.location.sizes[2].capacity - 
-                                                            n.location.sizes[1].capacity,
-                                              base_name="expansion($(n.location.index),$t)")
+                                                            n.location.sizes[1].capacity)
                          for n in values(graph.process_nodes), t in 1:T)
 end
 
@@ -167,7 +158,7 @@ function create_process_node_constraints!(model::ManufacturingModel)
         for a in n.outgoing_arcs
             @constraint(mip, vars.flow[a, t] == a.values["weight"] * input_sum)
         end
-
+        
         # If plant is closed, capacity is zero
         @constraint(mip, vars.capacity[n, t] <= n.location.sizes[2].capacity * vars.is_open[n, t])
 
@@ -337,7 +328,7 @@ function get_solution(model::ManufacturingModel)
             )
             emissions_dict = output["Emissions"]["Transportation (tonne)"]
             for (em_name, em_values) in a.source.product.transportation_emissions
-                dict["Emissions (tonne)"][em_name] = em_values .* dict["Amount (tonne)"]
+                dict["Emissions (tonne)"][em_name] = em_values .* dict["Amount (tonne)"] .* a.values["distance"]
                 if em_name ∉ keys(emissions_dict)
                     emissions_dict[em_name] = zeros(T)
                 end
@@ -358,7 +349,7 @@ function get_solution(model::ManufacturingModel)
             plant_dict["Total input (tonne)"] += vals
             output["Costs"]["Transportation (\$)"] += dict["Transportation cost (\$)"]
             output["Costs"]["Variable operating (\$)"] += dict["Variable operating cost (\$)"]
-            output["Energy"]["Transportation (GJ)"] += dict["Transportation energy (J)"] / 1e6
+            output["Energy"]["Transportation (GJ)"] += dict["Transportation energy (J)"] / 1e9
         end
         
         plant_dict["Energy (GJ)"] = plant_dict["Total input (tonne)"] .* plant.energy
