@@ -52,6 +52,7 @@ mutable struct Instance
     products::Array{Product, 1}
     collection_centers::Array{CollectionCenter, 1}
     plants::Array{Plant, 1}
+    building_period::Array{Int64}
 end
 
 function validate(json, schema)
@@ -81,6 +82,11 @@ function load(path::String)::Instance
     json_schema["definitions"]["TimeSeries"]["minItems"] = T
     json_schema["definitions"]["TimeSeries"]["maxItems"] = T
     validate(json, Schema(json_schema))
+    
+    building_period = [1]
+    if "building period (years)" in keys(json)
+        building_period = json["building period (years)"]
+    end
     
     plants = Plant[]
     products = Product[]
@@ -194,5 +200,5 @@ function load(path::String)::Instance
         end
     end
     
-    return Instance(T, products, collection_centers, plants)
+    return Instance(T, products, collection_centers, plants, building_period)
 end

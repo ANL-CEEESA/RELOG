@@ -1,4 +1,8 @@
-# Vertion 0.3.1 (July 17, 2020)
+# Version 0.3.2 (Aug 7, 2020)
+
+- Add "building period" parameter
+
+# Version 0.3.1 (July 17, 2020)
 
 - Fix expansion cost breakdown
 

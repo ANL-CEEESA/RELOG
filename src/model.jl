@@ -184,6 +184,11 @@ function create_process_node_constraints!(model::ManufacturingModel)
         else
             @constraint(mip, vars.is_open[n, t] == vars.open_plant[n, t])
         end
+        
+        # Plant can only be opened during building period
+        if t ∉ model.instance.building_period
+            @constraint(mip, vars.open_plant[n, t] == 0)
+        end
     end
 end
 

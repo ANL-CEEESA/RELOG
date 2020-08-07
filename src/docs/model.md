@@ -6,9 +6,10 @@ The first step when using RELOG is to describe the reverse logistics pipeline an
 
 The **parameters** section describes details about the simulation itself.
 
-| Key                     | Description
-|:------------------------|---------------|
-|`time horizon (years)`   | Number of years in the simulation.
+| Key                       | Description
+|:--------------------------|---------------|
+|`time horizon (years)`     | Number of years in the simulation.
+|`building period (years)`  | List of years in which we are allowed to open new plants. For example, if this parameter is set to `[1,2,3]`, we can only open plants during the first three years. By default, this equals `[1]`; that is, plants can only be opened during the first year. |
 
 
 ### Example
@@ -16,6 +17,7 @@ The **parameters** section describes details about the simulation itself.
 {
     "parameters": {
         "time horizon (years)": 2,
+        "building period (years)": [1]
     }
 }
 ```

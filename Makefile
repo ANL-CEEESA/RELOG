@@ -1,4 +1,3 @@
-VERSION := 0.3
 JULIA := julia --color=yes --project=@.
 SRC_FILES := $(wildcard src/*.jl test/*.jl)
 
