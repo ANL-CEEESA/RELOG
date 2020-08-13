@@ -2,7 +2,7 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf
+using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
 
 
 mutable struct ManufacturingModel
@@ -126,7 +126,7 @@ function create_shipping_node_constraints!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
     eqs = model.eqs
     
-    eqs.balance = Dict()
+    eqs.balance = OrderedDict()
     
     for t in 1:T
         # Collection centers
@@ -197,7 +197,8 @@ default_lp_optimizer = optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
 
 function solve(instance::Instance;
                milp_optimizer=default_milp_optimizer,
-               lp_optimizer=default_lp_optimizer)
+               lp_optimizer=default_lp_optimizer,
+               output_filename=nothing)
     
     @info "Building graph..."
     graph = RELOG.build_graph(instance)
@@ -215,12 +216,12 @@ function solve(instance::Instance;
     
     if !has_values(model.mip)
         @warn "No solution available"
-        return Dict()
+        return OrderedDict()
     end
     
     @info "Re-optimizing with integer variables fixed..."
     all_vars = JuMP.all_variables(model.mip)
-    vals = Dict(var => JuMP.value(var) for var in all_vars)
+    vals = OrderedDict(var => JuMP.value(var) for var in all_vars)
     JuMP.set_optimizer(model.mip, lp_optimizer)
     for var in all_vars
         if JuMP.is_binary(var)
@@ -231,29 +232,32 @@ function solve(instance::Instance;
     JuMP.optimize!(model.mip)
     
     @info "Extracting solution..."
-    return get_solution(model)
+    solution = get_solution(model)
+    
+    if output_filename != nothing
+        @info "Writing solution: $output_filename"
+        open(output_filename, "w") do file
+            JSON.print(file, solution, 2)
+        end
+    end
+    
+    return solution
 end
 
-function solve(filename::String;
-               milp_optimizer=default_milp_optimizer,
-               lp_optimizer=default_lp_optimizer)
-    
+function solve(filename::String; kwargs...)
     @info "Reading $filename..."
     instance = RELOG.parsefile(filename)
-    
-    return solve(instance,
-                 milp_optimizer=milp_optimizer,
-                 lp_optimizer=lp_optimizer)
+    return solve(instance; kwargs...)
 end
 
 function get_solution(model::ManufacturingModel)
     mip, vars, eqs, graph, instance = model.mip, model.vars, model.eqs, model.graph, model.instance
     T = instance.time
     
-    output = Dict(
-        "Plants" => Dict(),
-        "Products" => Dict(),
-        "Costs" => Dict(
+    output = OrderedDict(
+        "Plants" => OrderedDict(),
+        "Products" => OrderedDict(),
+        "Costs" => OrderedDict(
             "Fixed operating (\$)" => zeros(T),
             "Variable operating (\$)" => zeros(T),
             "Opening (\$)" => zeros(T),
@@ -262,18 +266,18 @@ function get_solution(model::ManufacturingModel)
             "Expansion (\$)" => zeros(T),
             "Total (\$)" => zeros(T),
         ),
-        "Energy" => Dict(
+        "Energy" => OrderedDict(
             "Plants (GJ)" => zeros(T),
             "Transportation (GJ)" => zeros(T),
         ),
-        "Emissions" => Dict(
-            "Plants (tonne)" => Dict(),
-            "Transportation (tonne)" => Dict(),
+        "Emissions" => OrderedDict(
+            "Plants (tonne)" => OrderedDict(),
+            "Transportation (tonne)" => OrderedDict(),
         ),
     )
     
-    plant_to_process_node = Dict(n.location => n for n in graph.process_nodes)
-    plant_to_shipping_nodes = Dict()
+    plant_to_process_node = OrderedDict(n.location => n for n in graph.process_nodes)
+    plant_to_shipping_nodes = OrderedDict()
     for p in instance.plants
         plant_to_shipping_nodes[p] = []
         for a in plant_to_process_node[p].outgoing_arcs
@@ -283,12 +287,12 @@ function get_solution(model::ManufacturingModel)
     
     # Products
     for n in graph.collection_shipping_nodes
-        location_dict = Dict{Any, Any}(
+        location_dict = OrderedDict{Any, Any}(
             "Marginal cost (\$/tonne)" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
                                            for t in 1:T],
         )
         if n.product.name ∉ keys(output["Products"])
-            output["Products"][n.product.name] = Dict()
+            output["Products"][n.product.name] = OrderedDict()
         end
         output["Products"][n.product.name][n.location.name] = location_dict
     end
@@ -297,14 +301,14 @@ function get_solution(model::ManufacturingModel)
     for plant in instance.plants
         skip_plant = true
         process_node = plant_to_process_node[plant]
-        plant_dict = Dict{Any, Any}(
-            "Input" => Dict(),
-            "Output" => Dict(
-                "Send" => Dict(),
-                "Dispose" => Dict(),
+        plant_dict = OrderedDict{Any, Any}(
+            "Input" => OrderedDict(),
+            "Output" => OrderedDict(
+                "Send" => OrderedDict(),
+                "Dispose" => OrderedDict(),
             ),
             "Total input (tonne)" => [0.0 for t in 1:T],
-            "Total output" => Dict(),
+            "Total output" => OrderedDict(),
             "Latitude (deg)" => plant.latitude,
             "Longitude (deg)" => plant.longitude,
             "Capacity (tonne)" => [JuMP.value(vars.capacity[process_node, t])
@@ -338,7 +342,7 @@ function get_solution(model::ManufacturingModel)
                 continue
             end
             skip_plant = false
-            dict = Dict{Any, Any}(
+            dict = OrderedDict{Any, Any}(
                 "Amount (tonne)" => vals,
                 "Distance (km)" => a.values["distance"],
                 "Latitude (deg)" => a.source.location.latitude,
@@ -346,7 +350,7 @@ function get_solution(model::ManufacturingModel)
                 "Transportation cost (\$)" => a.source.product.transportation_cost .* vals .* a.values["distance"],
                 "Variable operating cost (\$)" => plant.sizes[1].variable_operating_cost .* vals,
                 "Transportation energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,
-                "Emissions (tonne)" => Dict(),
+                "Emissions (tonne)" => OrderedDict(),
             )
             emissions_dict = output["Emissions"]["Transportation (tonne)"]
             for (em_name, em_values) in a.source.product.transportation_emissions
@@ -365,7 +369,7 @@ function get_solution(model::ManufacturingModel)
             end
             
             if plant_name ∉ keys(plant_dict["Input"])
-                plant_dict["Input"][plant_name] = Dict()
+                plant_dict["Input"][plant_name] = OrderedDict()
             end
             plant_dict["Input"][plant_name][location_name] = dict
             plant_dict["Total input (tonne)"] += vals
@@ -377,7 +381,7 @@ function get_solution(model::ManufacturingModel)
         plant_dict["Energy (GJ)"] = plant_dict["Total input (tonne)"] .* plant.energy
         output["Energy"]["Plants (GJ)"] += plant_dict["Energy (GJ)"]
         
-        plant_dict["Emissions (tonne)"] = Dict()
+        plant_dict["Emissions (tonne)"] = OrderedDict()
         emissions_dict = output["Emissions"]["Plants (tonne)"]
         for (em_name, em_values) in plant.emissions
             plant_dict["Emissions (tonne)"][em_name] = em_values .* plant_dict["Total input (tonne)"]
@@ -391,12 +395,12 @@ function get_solution(model::ManufacturingModel)
         for shipping_node in plant_to_shipping_nodes[plant]
             product_name = shipping_node.product.name
             plant_dict["Total output"][product_name] = zeros(T)
-            plant_dict["Output"]["Send"][product_name] = product_dict = Dict()
+            plant_dict["Output"]["Send"][product_name] = product_dict = OrderedDict()
 
             disposal_amount = [JuMP.value(vars.dispose[shipping_node, t]) for t in 1:T]
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
-                plant_dict["Output"]["Dispose"][product_name] = disposal_dict = Dict()
+                plant_dict["Output"]["Dispose"][product_name] = disposal_dict = OrderedDict()
                 disposal_dict["Amount (tonne)"] = [JuMP.value(model.vars.dispose[shipping_node, t])
                                                    for t in 1:T]
                 disposal_dict["Cost (\$)"] = [disposal_dict["Amount (tonne)"][t] *
@@ -412,14 +416,14 @@ function get_solution(model::ManufacturingModel)
                     continue
                 end
                 skip_plant = false
-                dict = Dict(
+                dict = OrderedDict(
                     "Amount (tonne)" => vals,
                     "Distance (km)" => a.values["distance"],
                     "Latitude (deg)" => a.dest.location.latitude,
                     "Longitude (deg)" => a.dest.location.longitude,
                 )
                 if a.dest.location.plant_name ∉ keys(product_dict)
-                    product_dict[a.dest.location.plant_name] = Dict()
+                    product_dict[a.dest.location.plant_name] = OrderedDict()
                 end
                 product_dict[a.dest.location.plant_name][a.dest.location.location_name] = dict
                 plant_dict["Total output"][product_name] += vals
@@ -428,7 +432,7 @@ function get_solution(model::ManufacturingModel)
             
         if !skip_plant
             if plant.plant_name ∉ keys(output["Plants"])
-                output["Plants"][plant.plant_name] = Dict()
+                output["Plants"][plant.plant_name] = OrderedDict()
             end
             output["Plants"][plant.plant_name][plant.location_name] = plant_dict
         end

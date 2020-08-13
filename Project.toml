@@ -6,6 +6,7 @@ version = "0.3.2"
 [deps]
 Cbc = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
 Clp = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Geodesy = "0ef565a4-170c-5f04-8de2-149903a85f3d"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 JSONSchema = "7d188eb4-7ad8-530c-ae41-71a32a6d4692"
