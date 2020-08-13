@@ -192,12 +192,12 @@ function create_process_node_constraints!(model::ManufacturingModel)
     end
 end
 
-function solve(filename::String;
-               milp_optimizer=optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0),
-               lp_optimizer=optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0))
-    
-    @info "Reading $filename..."
-    instance = RELOG.load(filename)
+default_milp_optimizer = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0)
+default_lp_optimizer = optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+
+function solve(instance::Instance;
+               milp_optimizer=default_milp_optimizer,
+               lp_optimizer=default_lp_optimizer)
     
     @info "Building graph..."
     graph = RELOG.build_graph(instance)
@@ -213,6 +213,11 @@ function solve(filename::String;
     @info "Optimizing MILP..."
     JuMP.optimize!(model.mip)
     
+    if !has_values(model.mip)
+        @warn "No solution available"
+        return Dict()
+    end
+    
     @info "Re-optimizing with integer variables fixed..."
     all_vars = JuMP.all_variables(model.mip)
     vals = Dict(var => JuMP.value(var) for var in all_vars)
@@ -227,6 +232,18 @@ function solve(filename::String;
     
     @info "Extracting solution..."
     return get_solution(model)
+end
+
+function solve(filename::String;
+               milp_optimizer=default_milp_optimizer,
+               lp_optimizer=default_lp_optimizer)
+    
+    @info "Reading $filename..."
+    instance = RELOG.parsefile(filename)
+    
+    return solve(instance,
+                 milp_optimizer=milp_optimizer,
+                 lp_optimizer=lp_optimizer)
 end
 
 function get_solution(model::ManufacturingModel)

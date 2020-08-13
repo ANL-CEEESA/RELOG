@@ -6,7 +6,7 @@ using RELOG
 @testset "Instance" begin
     @testset "load" begin
         basedir = dirname(@__FILE__)
-        instance = RELOG.load("$basedir/../instances/s1.json")
+        instance = RELOG.parsefile("$basedir/../instances/s1.json")
         
         centers = instance.collection_centers
         plants = instance.plants
@@ -73,7 +73,7 @@ using RELOG
     end
     
     @testset "validate timeseries" begin
-        @test_throws String RELOG.load("fixtures/s1-wrong-length.json")
+        @test_throws String RELOG.parsefile("fixtures/s1-wrong-length.json")
     end
 end
 

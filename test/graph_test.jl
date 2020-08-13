@@ -6,7 +6,7 @@ using RELOG
 @testset "Graph" begin
     @testset "build_graph" begin
         basedir = dirname(@__FILE__)
-        instance = RELOG.load("$basedir/../instances/s1.json")
+        instance = RELOG.parsefile("$basedir/../instances/s1.json")
         graph = RELOG.build_graph(instance)
         process_node_by_location_name = Dict(n.location.location_name => n
                                              for n in graph.process_nodes)

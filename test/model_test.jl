@@ -6,7 +6,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 @testset "Model" begin
     @testset "build" begin
         basedir = dirname(@__FILE__)
-        instance = RELOG.load("$basedir/../instances/s1.json")
+        instance = RELOG.parsefile("$basedir/../instances/s1.json")
         graph = RELOG.build_graph(instance)
         model = RELOG.build_model(instance, graph, Cbc.Optimizer)
         set_optimizer_attribute(model.mip, "logLevel", 0)
@@ -43,7 +43,6 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
     @testset "solve" begin
         solution = RELOG.solve("$(pwd())/../instances/s1.json")
-        #JSON.print(stdout, solution, 4)
         
         @test "Costs" in keys(solution)
         @test "Fixed operating (\$)" in keys(solution["Costs"])
@@ -57,6 +56,15 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         @test "F3" in keys(solution["Plants"])
         @test "F4" in keys(solution["Plants"])
     end
+
+    @testset "infeasible solve" begin
+        json = JSON.parsefile("$(pwd())/../instances/s1.json")
+        for (location_name, location_dict) in json["products"]["P1"]["initial amounts"]
+            location_dict["amount (tonne)"] *= 1000
+        end
+        RELOG.solve(RELOG.parse(json))
+    end
+
 end
 
 

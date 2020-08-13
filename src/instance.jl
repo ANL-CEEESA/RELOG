@@ -72,9 +72,13 @@ function validate(json, schema)
 end
 
 
-function load(path::String)::Instance
+function parsefile(path::String)::Instance
+    return RELOG.parse(JSON.parsefile(path))
+end
+
+
+function parse(json::Dict)::Instance
     basedir = dirname(@__FILE__)
-    json = JSON.parsefile(path)
     json_schema = JSON.parsefile("$basedir/schemas/input.json")
     validate(json, Schema(json_schema))
     
@@ -167,7 +171,7 @@ function load(path::String)::Instance
             
             # Capacities
             for (capacity_name, capacity_dict) in location_dict["capacities (tonne)"]
-                push!(sizes, PlantSize(parse(Float64, capacity_name),
+                push!(sizes, PlantSize(Base.parse(Float64, capacity_name),
                                        capacity_dict["variable operating cost (\$/tonne)"],
                                        capacity_dict["fixed operating cost (\$)"],
                                        capacity_dict["opening cost (\$)"]))
