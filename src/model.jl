@@ -201,8 +201,8 @@ function solve(instance::Instance;
     
     milp_optimizer = lp_optimizer = optimizer
     if optimizer == nothing
-        milp_optimizer = optimizer
-        lp_optimizer = optimizer
+        milp_optimizer = default_milp_optimizer
+        lp_optimizer = default_lp_optimizer
     end
     
     @info "Building graph..."
