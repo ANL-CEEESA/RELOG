@@ -5,9 +5,9 @@ repo_url: https://github.com/ANL-CEEESA/RELOG
 edit_uri: edit/master/src/docs/
 nav:
     - Home: index.md
-    - Install: install.md
-    - Model: model.md
-    - Optimize: optimize.md
+    - Usage: usage.md
+    - Data Format: format.md
+    - Optimization Model: model.md
 plugins:
   - search
 markdown_extensions:

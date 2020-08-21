@@ -196,9 +196,14 @@ default_milp_optimizer = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 
 default_lp_optimizer = optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
 
 function solve(instance::Instance;
-               milp_optimizer=default_milp_optimizer,
-               lp_optimizer=default_lp_optimizer,
-               output_filename=nothing)
+               optimizer=nothing,
+               output=nothing)
+    
+    milp_optimizer = lp_optimizer = optimizer
+    if optimizer == nothing
+        milp_optimizer = optimizer
+        lp_optimizer = optimizer
+    else
     
     @info "Building graph..."
     graph = RELOG.build_graph(instance)
@@ -234,9 +239,9 @@ function solve(instance::Instance;
     @info "Extracting solution..."
     solution = get_solution(model)
     
-    if output_filename != nothing
-        @info "Writing solution: $output_filename"
-        open(output_filename, "w") do file
+    if output != nothing
+        @info "Writing solution: $output"
+        open(output, "w") do file
             JSON.print(file, solution, 2)
         end
     end

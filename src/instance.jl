@@ -2,7 +2,7 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JSON, JSONSchema
+using JSON, JSONSchema, Printf
 
 
 mutable struct Product
@@ -203,6 +203,9 @@ function parse(json::Dict)::Instance
             push!(plants, plant)
         end
     end
+    
+    @info @sprintf("%12d collection centers", length(collection_centers))
+    @info @sprintf("%12d candidate plant locations", length(plants))
     
     return Instance(T, products, collection_centers, plants, building_period)
 end

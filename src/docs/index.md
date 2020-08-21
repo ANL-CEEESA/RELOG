@@ -1,13 +1,13 @@
 # RELOG: Reverse Logistics Optimization
 
 
-**RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
+**RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. The package uses Mixed-Integer Linear Programming to determine where to build recycling plants, what size should these plants have and which customers should be served by which plants. The package supports custom reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
 
 ### Table of Contents
 
-  * [Installation](install.md)
-  * [Modeling](model.md)
-  * [Optimizing](optimize.md)
+  * [Usage](usage.md)
+  * [Data Format](format.md)
+  * [Optimization model](model.md)
   
 ### Source Code
 
