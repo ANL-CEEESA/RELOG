@@ -122,11 +122,158 @@
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#optimization-model">Optimization Model</a></li>
+            <li class="second-level"><a href="#mathematical-description">Mathematical Description</a></li>
+                
+                <li class="third-level"><a href="#sets">Sets</a></li>
+                <li class="third-level"><a href="#constants">Constants</a></li>
+                <li class="third-level"><a href="#decision-variables">Decision variables</a></li>
+                <li class="third-level"><a href="#objective-function">Objective function</a></li>
+                <li class="third-level"><a href="#constraints">Constraints</a></li>
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
 
-</div>
+<h1 id="optimization-model">Optimization Model</h1>
+<p>In this page, we describe the precise mathematical optimization model used by RELOG to find the optimal logistics plan. This model is a variation of the classical Facility Location Problem, which has been widely studied in the operations research literature. To simplify the exposition, we present the simplified case where there is only one type of plant.</p>
+<h2 id="mathematical-description">Mathematical Description</h2>
+<h3 id="sets">Sets</h3>
+<ul>
+<li>$L$ - Set of locations holding the original material to be recycled</li>
+<li>$M$ - Set of materials recovered during the reverse manufacturing process</li>
+<li>$P$ - Set of potential plants to open</li>
+<li>$T={1, \ldots, t^{max}}$ - Set of time periods</li>
+</ul>
+<h3 id="constants">Constants</h3>
+<p><strong>Plants:</strong></p>
+<ul>
+<li>$c^\text{disp}_{pmt}$ - Cost of disposing one tonne of material $m$ at plant $p$ during time $t$ (<code>$/tonne/km</code>)</li>
+<li>$c^\text{exp}_{pt}$ - Cost of adding one tonne of capacity to plant $p$ at time $t$ (<code>$/tonne</code>)</li>
+<li>$c^\text{open}_{pt}$ - Cost of opening plant $p$ at time $t$, at minimum capacity (<code>$</code>)</li>
+<li>$c^\text{f-base}_{pt}$ - Fixed cost of keeping plant $p$ open during time period $t$ (<code>$</code>)</li>
+<li>$c^\text{f-exp}_{pt}$ - Increase in fixed cost for each additional tonne of capacity (<code>$/tonne</code>)</li>
+<li>$c^\text{var}_{pt}$ - Variable cost of processing one tonne of input at plant $p$ at time $t$ (<code>$/tonne</code>)</li>
+<li>$m^\text{min}_p$ - Minimum capacity of plant $p$ (<code>tonne</code>)</li>
+<li>$m^\text{max}_p$ - Maximum capacity of plant $p$ (<code>tonne</code>)</li>
+<li>$m^\text{disp}_{pmt}$ - Maximum amount of material $m$ that plant $p$ can dispose of during time $t$ (<code>tonne</code>)</li>
+</ul>
+<p><strong>Products:</strong></p>
+<ul>
+<li>$\alpha_{pm}$ - Amount of material $m$ recovered by plant $t$ for each tonne of original material (<code>tonne/tonne</code>)</li>
+<li>$m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (tonne)</li>
+</ul>
+<p><strong>Transportation:</strong></p>
+<ul>
+<li>$c^\text{tr}_{t}$ - Transportation cost during time $t$ (<code>$/tonne/km</code>)</li>
+<li>$d_{lp}$ - Distance between plant $p$ and location $l$ (<code>km</code>)</li>
+</ul>
+<h3 id="decision-variables">Decision variables</h3>
+<ul>
+<li>$q_{mpt}$ - Amount of material $m$ recovered by plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$u_{pt}$ - Binary variable that equals 1 if plant $p$ starts operating at time $t$ (<code>bool</code>)</li>
+<li>$w_{pt}$ - Extra capacity (amount above the minimum) added to plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$x_{pt}$ - Binary variable that equals 1 if plant $p$ is operational at time $t$ (<code>bool</code>)</li>
+<li>$y_{lpt}$ - Amount of product sent from location $l$ to plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$z_{mpt}$ - Amount of material $m$ disposed of by plant $p$ during time $t$ (<code>tonne</code>)</li>
+</ul>
+<h3 id="objective-function">Objective function</h3>
+<p>RELOG minimizes the overall capital, production and transportation costs:</p>
+<p>
+<script type="math/tex; mode=display">\begin{align*}
+    \text{minimize} \;\; &
+        \sum_{t \in T} \sum_{p \in P} \left[
+                c^\text{open}_{pt} u_{pt} +
+                c^\text{f-base}_{pt} x_{pt} +
+                \sum_{i=1}^t c^\text{f-exp}_{pt} w_{pi} +
+                c^{\text{exp}}_{pt} w_{pt}
+            \right] + \\
+    &
+        \sum_{t \in T} \sum_{l \in L} \sum_{p \in P} \left[
+            c^{\text{tr}}_t d_{lp} + c^{\text{var}}_{pt}
+        \right]  y_{lpt} + \\
+    &
+        \sum_{t \in T} \sum_{p \in P} \sum_{m \in M} c^{\text{disp}}_{pmt} z_{pmt}
+\end{align*}</script>
+</p>
+<p>In the first line, we have (i) opening costs, if plant starts operating at time $t$, (ii) fixed operating costs, if plant is operational, (iii) additional fixed operating costs coming from expansion performed in all previous time periods up to the current one, and finally (iv) the expansion costs during the current time period.
+In the second line, we have the transportation costs and the variable operating costs.
+In the third line, we have the disposal costs.</p>
+<h3 id="constraints">Constraints</h3>
+<ul>
+<li>All original materials must be sent to a plant:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{p \in P} y_{lpt} = m^\text{initial}_{lt} 
+        & \forall l \in L, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Plants have a limited capacity:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{l \in L} y_{lpt} \leq m^\text{base}_p x_p + \sum_{i=1}^t w_p
+        & \forall p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Plants can only be expanded up to their maximum capacity. Furthermore, if a plant is closed, it cannot be expanded:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
+        & \forall p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Amount of recovered material is proportional to the plant input: </li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} = \alpha_{pm} \sum_{l \in L} y_{lpt}
+        & \forall m \in M, p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Because we only consider a single type of plant, all recovered material must be immediately disposed of. In RELOG's full model, recovered materials may be sent to another plant for further processing.</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} = z_{mpt}
+        & \forall m \in M, p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>A plant is operation at time $t$ if it was operational at time $t-1$ or it was built at time $t$. This constraint also prevents a plant from being built multiple times.</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & x_{pt} = x_{p,t-1} + u_{pt}
+        & \forall p \in P, t \in T \setminus \{1\} \\
+    & x_{p,1} = u_{p,1}
+        & \forall p \in P
+\end{align}</script>
+</p>
+<ul>
+<li>Variable bounds:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T \\
+    & u_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & w_{pt} \geq 0
+        & \forall p \in P, t \in T \\
+    & x_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & y_{lpt} \geq 0
+        & \forall l \in L, p \in P, t \in T \\
+    & m^\text{disp}_{pmt} \geq z_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T \\
+\end{align}</script>
+</p></div>
         
         
     </div>

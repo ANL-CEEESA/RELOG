@@ -1,4 +1,4 @@
-# Data Format
+# Input Data Format
 
 The first step when using RELOG is to describe the reverse logistics pipeline and the relevant data. RELOG accepts as input a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail.
 
