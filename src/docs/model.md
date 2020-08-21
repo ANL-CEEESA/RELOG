@@ -81,7 +81,7 @@ In the third line, we have the disposal costs.
 * Plants have a limited capacity:
 
 \begin{align}
-    & \sum_{l \in L} y_{lpt} \leq m^\text{base}_p x_p + \sum_{i=1}^t w_p
+    & \sum_{l \in L} y_{lpt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
         & \forall p \in P, t \in T
 \end{align}
 
@@ -151,7 +151,7 @@ In the third line, we have the disposal costs.
         \sum_{t \in T} \sum_{p \in P} \sum_{m \in M} c^{\text{disp}}_{pmt} z_{pmt} \\
     \text{subject to } & \sum_{p \in P} y_{lpt} = m^\text{initial}_{lt} 
         & \forall l \in L, t \in T \\
-    & \sum_{l \in L} y_{lpt} \leq m^\text{base}_p x_p + \sum_{i=1}^t w_p
+    & \sum_{l \in L} y_{lpt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
         & \forall p \in P, t \in T \\
     & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
         & \forall p \in P, t \in T \\

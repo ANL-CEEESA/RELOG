@@ -130,6 +130,7 @@
                 <li class="third-level"><a href="#decision-variables">Decision variables</a></li>
                 <li class="third-level"><a href="#objective-function">Objective function</a></li>
                 <li class="third-level"><a href="#constraints">Constraints</a></li>
+                <li class="third-level"><a href="#complete-optimization-model">Complete optimization model</a></li>
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
@@ -142,7 +143,7 @@
 <li>$L$ - Set of locations holding the original material to be recycled</li>
 <li>$M$ - Set of materials recovered during the reverse manufacturing process</li>
 <li>$P$ - Set of potential plants to open</li>
-<li>$T={1, \ldots, t^{max}}$ - Set of time periods</li>
+<li>$T = { 1, \ldots, t^{max} } $ - Set of time periods</li>
 </ul>
 <h3 id="constants">Constants</h3>
 <p><strong>Plants:</strong></p>
@@ -160,7 +161,7 @@
 <p><strong>Products:</strong></p>
 <ul>
 <li>$\alpha_{pm}$ - Amount of material $m$ recovered by plant $t$ for each tonne of original material (<code>tonne/tonne</code>)</li>
-<li>$m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (tonne)</li>
+<li>$m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (<code>tonne</code>)</li>
 </ul>
 <p><strong>Transportation:</strong></p>
 <ul>
@@ -213,7 +214,7 @@ In the third line, we have the disposal costs.</p>
 </ul>
 <p>
 <script type="math/tex; mode=display">\begin{align}
-    & \sum_{l \in L} y_{lpt} \leq m^\text{base}_p x_p + \sum_{i=1}^t w_p
+    & \sum_{l \in L} y_{lpt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
         & \forall p \in P, t \in T
 \end{align}</script>
 </p>
@@ -270,9 +271,53 @@ In the third line, we have the disposal costs.</p>
         & \forall p \in P, t \in T \\
     & y_{lpt} \geq 0
         & \forall l \in L, p \in P, t \in T \\
-    & m^\text{disp}_{pmt} \geq z_{mpt} \geq 0
-        & \forall m \in M, p \in P, t \in T \\
+    & m^\text{disp}_{mpt} \geq z_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T
 \end{align}</script>
+</p>
+<h3 id="complete-optimization-model">Complete optimization model</h3>
+<p>
+<script type="math/tex; mode=display">\begin{align*}
+    \text{minimize} \;\; &
+        \sum_{t \in T} \sum_{p \in P} \left[
+                c^\text{open}_{pt} u_{pt} +
+                c^\text{f-base}_{pt} x_{pt} +
+                \sum_{i=1}^t c^\text{f-exp}_{pt} w_{pi} +
+                c^{\text{exp}}_{pt} w_{pt}
+            \right] + \\
+    &
+        \sum_{t \in T} \sum_{l \in L} \sum_{p \in P} \left[
+            c^{\text{tr}}_t d_{lp} + c^{\text{var}}_{pt}
+        \right]  y_{lpt} + \\
+    &
+        \sum_{t \in T} \sum_{p \in P} \sum_{m \in M} c^{\text{disp}}_{pmt} z_{pmt} \\
+    \text{subject to } & \sum_{p \in P} y_{lpt} = m^\text{initial}_{lt} 
+        & \forall l \in L, t \in T \\
+    & \sum_{l \in L} y_{lpt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
+        & \forall p \in P, t \in T \\
+    & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
+        & \forall p \in P, t \in T \\
+    & q_{mpt} = \alpha_{pm} \sum_{l \in L} y_{lpt}
+        & \forall m \in M, p \in P, t \in T \\
+    & q_{mpt} = z_{mpt}
+        & \forall m \in M, p \in P, t \in T \\
+    & x_{pt} = x_{p,t-1} + u_{pt}
+        & \forall p \in P, t \in T \setminus \{1\} \\
+    & x_{p,1} = u_{p,1}
+        & \forall p \in P \\
+    & q_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T \\
+    & u_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & w_{pt} \geq 0
+        & \forall p \in P, t \in T \\
+    & x_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & y_{lpt} \geq 0
+        & \forall l \in L, p \in P, t \in T \\
+    & m^\text{disp}_{mpt} \geq z_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T
+\end{align*}</script>
 </p></div>
         
         
