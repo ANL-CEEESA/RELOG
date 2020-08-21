@@ -7,7 +7,7 @@ RELOG: Reverse Logistics Optimization
 
   * [Usage](https://anl-ceeesa.github.io/RELOG/usage)
   * [Data Format](https://anl-ceeesa.github.io/RELOG/format)
-  * [Optimization model](https://anl-ceeesa.github.io/RELOG/model)
+  * [Optimization Model](https://anl-ceeesa.github.io/RELOG/model)
 
 ### Authors
 
