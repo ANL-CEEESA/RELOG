@@ -129,6 +129,50 @@ In the third line, we have the disposal costs.
         & \forall p \in P, t \in T \\
     & y_{lpt} \geq 0
         & \forall l \in L, p \in P, t \in T \\
-    & m^\text{disp}_{pmt} \geq z_{mpt} \geq 0
-        & \forall m \in M, p \in P, t \in T \\
+    & m^\text{disp}_{mpt} \geq z_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T
 \end{align}
+
+### Complete optimization model
+
+\begin{align*}
+    \text{minimize} \;\; &
+        \sum_{t \in T} \sum_{p \in P} \left[
+                c^\text{open}_{pt} u_{pt} +
+                c^\text{f-base}_{pt} x_{pt} +
+                \sum_{i=1}^t c^\text{f-exp}_{pt} w_{pi} +
+                c^{\text{exp}}_{pt} w_{pt}
+            \right] + \\
+    &
+        \sum_{t \in T} \sum_{l \in L} \sum_{p \in P} \left[
+            c^{\text{tr}}_t d_{lp} + c^{\text{var}}_{pt}
+        \right]  y_{lpt} + \\
+    &
+        \sum_{t \in T} \sum_{p \in P} \sum_{m \in M} c^{\text{disp}}_{pmt} z_{pmt} \\
+    \text{subject to } & \sum_{p \in P} y_{lpt} = m^\text{initial}_{lt} 
+        & \forall l \in L, t \in T \\
+    & \sum_{l \in L} y_{lpt} \leq m^\text{base}_p x_p + \sum_{i=1}^t w_p
+        & \forall p \in P, t \in T \\
+    & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
+        & \forall p \in P, t \in T \\
+    & q_{mpt} = \alpha_{pm} \sum_{l \in L} y_{lpt}
+        & \forall m \in M, p \in P, t \in T \\
+    & q_{mpt} = z_{mpt}
+        & \forall m \in M, p \in P, t \in T \\
+    & x_{pt} = x_{p,t-1} + u_{pt}
+        & \forall p \in P, t \in T \setminus \{1\} \\
+    & x_{p,1} = u_{p,1}
+        & \forall p \in P \\
+    & q_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T \\
+    & u_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & w_{pt} \geq 0
+        & \forall p \in P, t \in T \\
+    & x_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & y_{lpt} \geq 0
+        & \forall l \in L, p \in P, t \in T \\
+    & m^\text{disp}_{mpt} \geq z_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T
+\end{align*}
