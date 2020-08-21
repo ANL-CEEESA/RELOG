@@ -203,7 +203,7 @@ function solve(instance::Instance;
     if optimizer == nothing
         milp_optimizer = optimizer
         lp_optimizer = optimizer
-    else
+    end
     
     @info "Building graph..."
     graph = RELOG.build_graph(instance)

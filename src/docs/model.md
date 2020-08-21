@@ -9,7 +9,7 @@ In this page, we describe the precise mathematical optimization model used by RE
 * $L$ - Set of locations holding the original material to be recycled
 * $M$ - Set of materials recovered during the reverse manufacturing process
 * $P$ - Set of potential plants to open
-* $T=\{1, \ldots, t^{max}\}$ - Set of time periods
+* $T = \{ 1, \ldots, t^{max} \} $ - Set of time periods
 
 ### Constants
 
@@ -28,7 +28,7 @@ In this page, we describe the precise mathematical optimization model used by RE
 **Products:**
 
 * $\alpha_{pm}$ - Amount of material $m$ recovered by plant $t$ for each tonne of original material (`tonne/tonne`)
-* $m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (tonne)
+* $m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (`tonne`)
 
 **Transportation:**
 
