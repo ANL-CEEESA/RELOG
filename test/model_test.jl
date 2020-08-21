@@ -43,7 +43,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
     @testset "solve" begin
         solution = RELOG.solve("$(pwd())/../instances/s1.json",
-                               output_filename="$(pwd())/../tmp/sol.json")
+                               output="$(pwd())/../tmp/sol.json")
         
         @test "Costs" in keys(solution)
         @test "Fixed operating (\$)" in keys(solution["Costs"])
