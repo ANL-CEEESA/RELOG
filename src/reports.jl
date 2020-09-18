@@ -5,7 +5,7 @@
 using DataFrames
 using CSV
 
-function plants_report(solution::Dict)::DataFrame
+function plants_report(solution)::DataFrame
     df = DataFrame()
     df."plant type" = String[]
     df."location name" = String[]
@@ -64,7 +64,7 @@ function plants_report(solution::Dict)::DataFrame
     return df
 end
 
-function plant_outputs_report(solution::Dict)::DataFrame
+function plant_outputs_report(solution)::DataFrame
     df = DataFrame()
     df."plant type" = String[]
     df."location name" = String[]
@@ -119,7 +119,7 @@ function plant_outputs_report(solution::Dict)::DataFrame
 end
 
 
-function plant_emissions_report(solution::Dict)::DataFrame
+function plant_emissions_report(solution)::DataFrame
     df = DataFrame()
     df."plant type" = String[]
     df."location name" = String[]
@@ -146,7 +146,7 @@ function plant_emissions_report(solution::Dict)::DataFrame
 end
 
 
-function transportation_report(solution::Dict)::DataFrame
+function transportation_report(solution)::DataFrame
     df = DataFrame()
     df."source type" = String[]
     df."source location name" = String[]
@@ -198,7 +198,7 @@ function transportation_report(solution::Dict)::DataFrame
 end
 
 
-function transportation_emissions_report(solution::Dict)::DataFrame
+function transportation_emissions_report(solution)::DataFrame
     df = DataFrame()
     df."source type" = String[]
     df."source location name" = String[]
