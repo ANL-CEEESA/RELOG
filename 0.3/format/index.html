@@ -186,19 +186,19 @@
 <tbody>
 <tr>
 <td align="left"><code>transportation cost ($/km/tonne)</code></td>
-<td>The cost to transport this product. Must be a timeseries.</td>
+<td>The cost to transport this product. Must be a time series.</td>
 </tr>
 <tr>
 <td align="left"><code>transportation energy (J/km/tonne)</code></td>
-<td>The energy required to transport this product. Must be a timeseries. Optional.</td>
+<td>The energy required to transport this product. Must be a time series. Optional.</td>
 </tr>
 <tr>
 <td align="left"><code>transportation emissions (tonne/km/tonne)</code></td>
-<td>A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a timeseries. Optional.</td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.</td>
 </tr>
 <tr>
 <td align="left"><code>initial amounts</code></td>
-<td>A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.</td>
+<td>A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a time series.</td>
 </tr>
 </tbody>
 </table>
@@ -221,7 +221,7 @@
 </tr>
 <tr>
 <td align="left"><code>amount (tonne)</code></td>
-<td>The amount of the product initially available at the location. Must be a timeseries.</td>
+<td>The amount of the product initially available at the location. Must be a time series.</td>
 </tr>
 </tbody>
 </table>
@@ -286,11 +286,11 @@
 </tr>
 <tr>
 <td align="left"><code>energy (GJ/tonne)</code></td>
-<td>The energy required to process 1 tonne of the input. Must be a timeseries. Optional.</td>
+<td>The energy required to process 1 tonne of the input. Must be a time series. Optional.</td>
 </tr>
 <tr>
 <td align="left"><code>emissions (tonne/tonne)</code></td>
-<td>A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a timeseries. Optional.</td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a time series. Optional.</td>
 </tr>
 <tr>
 <td align="left"><code>locations</code></td>
@@ -336,11 +336,11 @@
 <tbody>
 <tr>
 <td align="left"><code>cost ($/tonne)</code></td>
-<td>The cost to dispose of the product. Must be a timeseries.</td>
+<td>The cost to dispose of the product. Must be a time series.</td>
 </tr>
 <tr>
 <td align="left"><code>limit (tonne)</code></td>
-<td>The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a timeseries.</td>
+<td>The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a time series.</td>
 </tr>
 </tbody>
 </table>
@@ -359,11 +359,11 @@
 </tr>
 <tr>
 <td align="left"><code>fixed operating cost ($)</code></td>
-<td>The cost to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.</td>
+<td>The cost to keep the plant open, even if the plant doesn't process anything. Must be a time series.</td>
 </tr>
 <tr>
 <td align="left"><code>variable operating cost ($/tonne)</code></td>
-<td>The cost that the plant incurs to process each tonne of input. Must be a timeseries.</td>
+<td>The cost that the plant incurs to process each tonne of input. Must be a time series.</td>
 </tr>
 </tbody>
 </table>
