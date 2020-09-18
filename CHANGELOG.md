@@ -1,3 +1,7 @@
+# Version 0.4.0 (Sep 18, 2020)
+
+- Generate simplified solution reports (CSV)
+
 # Version 0.3.3 (Aug 13, 2020)
 
 - Add option to write solution to JSON file in RELOG.solve

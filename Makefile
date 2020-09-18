@@ -1,11 +1,6 @@
 JULIA := julia --color=yes --project=@.
 SRC_FILES := $(wildcard src/*.jl test/*.jl)
-
-VERSION_MAJOR := 0
-VERSION_MINOR := 3
-VERSION_PATCH := 0
-
-VERSION_SHORT := $(VERSION_MAJOR).$(VERSION_MINOR)
+VERSION := 0.4
 
 all: docs test
 
@@ -20,7 +15,7 @@ clean:
 	rm -rf build/*
 
 docs:
-	mkdocs build -d ../docs/$(VERSION_SHORT)/
+	mkdocs build -d ../docs/$(VERSION)/
 
 test: build/test.log
 
