@@ -7,4 +7,5 @@ module RELOG
     include("instance.jl")
     include("graph.jl")
     include("model.jl")
+    include("reports.jl")
 end

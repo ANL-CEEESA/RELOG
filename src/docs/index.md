@@ -3,10 +3,14 @@
 
 **RELOG** is an open-source supply chain optimization package focusing on reverse logistics and reverse manufacturing. The package uses Mixed-Integer Linear Programming to determine where to build recycling plants, what size should these plants have and which customers should be served by which plants. The package supports custom reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
 
+<img src="images/ex_transportation.png" width="1000px"/>
+
+
 ### Table of Contents
 
   * [Usage](usage.md)
-  * [Data Format](format.md)
+  * [Input and Output Data Formats](format.md)
+  * [Simplified Solution Reports](reports.md)
   * [Optimization model](model.md)
   
 ### Source Code

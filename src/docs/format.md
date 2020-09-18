@@ -1,8 +1,12 @@
-# Input Data Format
+# Input and Output Data Formats
 
-The first step when using RELOG is to describe the reverse logistics pipeline and the relevant data. RELOG accepts as input a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail.
+In this page, we describe the input and output JSON formats used by RELOG. In addition to these, RELOG can also produce [simplified reports](reports.md) in tabular data format.
 
-## Parameters
+## Input Data Format (JSON)
+
+RELOG accepts as input a JSON file with three sections: `parameters`, `products` and `plants`. Below, we describe each section in more detail.
+
+### Parameters
 
 The **parameters** section describes details about the simulation itself.
 
@@ -12,7 +16,7 @@ The **parameters** section describes details about the simulation itself.
 |`building period (years)`  | List of years in which we are allowed to open new plants. For example, if this parameter is set to `[1,2,3]`, we can only open plants during the first three years. By default, this equals `[1]`; that is, plants can only be opened during the first year. |
 
 
-### Example
+#### Example
 ```json
 {
     "parameters": {
@@ -22,7 +26,7 @@ The **parameters** section describes details about the simulation itself.
 }
 ```
 
-## Products
+### Products
 
 The **products** section describes all products and subproducts in the simulation. The field `instance["Products"]` is a dictionary mapping the name of the product to a dictionary which describes its characteristics. Each product description contains the following keys:
 
@@ -41,7 +45,7 @@ Each product may have some amount available at the beginning of each time period
 | `longitude (deg)`       | The longitude of the location.
 | `amount (tonne)`       | The amount of the product initially available at the location. Must be a timeseries.
 
-### Example
+#### Example
 
 ```json
 {
@@ -84,7 +88,7 @@ Each product may have some amount available at the beginning of each time period
 }
 ```
 
-## Processing Plants
+### Processing plants
 
 The **plants** section describes the available types of reverse manufacturing plants, their potential locations and associated costs, as well as their inputs and outputs. The field `instance["Plants"]` is a dictionary mapping the name of the plant to a dictionary with the following keys:
 
@@ -121,7 +125,7 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
 | `fixed operating cost ($)`            | The cost to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.
 | `variable operating cost ($/tonne)`  | The cost that the plant incurs to process each tonne of input. Must be a timeseries.
 
-### Example
+#### Example
 
 ```json
 {
@@ -166,9 +170,14 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
 }
 ```
 
-## Current limitations
+### Current limitations
 
 * Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.
 * Plants can be expanded at any time, even long after they are open.
 * All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.
 * Up to two plant sizes are currently supported. Variable operating costs must be the same for all plant sizes.
+
+## Output Data Format (JSON)
+
+To be documented.
+

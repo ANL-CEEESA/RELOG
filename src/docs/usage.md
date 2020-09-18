@@ -46,12 +46,21 @@ All user parameters specified above must be provided to RELOG as a JSON file, wh
 After creating a JSON file describing the reverse manufacturing process and the input data, the following example illustrates how to use the package to find the optimal set of decisions:
 
 ```julia
+# Import package
 using RELOG
-RELOG.solve("/home/user/instance.json",
-            output="/home/user/solution.json")
+
+# Solve optimization problem
+solution = RELOG.solve("/home/user/instance.json")
+
+# Write full solution in JSON format
+RELOG.write(solution, "solution.json")
+
+# Write simplified reports in CSV format
+RELOG.write_plants_report(solution, "plants.csv")
+RELOG.write_transportation_report(solution, "transportation.csv")
 ```
 
-The optimal logistics plan will be stored in the output file specified. See [data format page](format.md) for a description of this output file.
+For a complete description of the file formats above, and for a complete list of available reports, see the [data format page](format.md).
 
 ## 4. Advanced options
 

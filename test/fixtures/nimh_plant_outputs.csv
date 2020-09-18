@@ -1,0 +1,37 @@
+plant type,location name,year,product name,amount produced (tonne),amount sent (tonne),amount disposed (tonne),disposal cost ($)
+Rare Earth Recycling Plant,"Sebastian, Arkansas",1,rare earth cela,18045.12,0.0,18045.12,0.0
+Rare Earth Recycling Plant,"Sebastian, Arkansas",1,rare earth diddy,7624.02,0.0,7624.02,0.0
+Rare Earth Recycling Plant,"Sebastian, Arkansas",1,salt,6434.8,0.0,6434.8,324314.03
+Rare Earth Recycling Plant,"Sebastian, Arkansas",1,rare earth misch,2188.78,0.0,2188.78,0.0
+Rare Earth Recycling Plant,"Stanly, North Carolina",1,rare earth cela,10343.8,0.0,10343.8,0.0
+Rare Earth Recycling Plant,"Stanly, North Carolina",1,rare earth diddy,4370.23,0.0,4370.23,0.0
+Rare Earth Recycling Plant,"Stanly, North Carolina",1,salt,3688.55,0.0,3688.55,185902.85
+Rare Earth Recycling Plant,"Stanly, North Carolina",1,rare earth misch,1254.65,0.0,1254.65,0.0
+Rare Earth Recycling Plant,"Lynn, Texas",1,rare earth cela,23459.88,0.0,23459.88,0.0
+Rare Earth Recycling Plant,"Lynn, Texas",1,rare earth diddy,9911.74,0.0,9911.74,0.0
+Rare Earth Recycling Plant,"Lynn, Texas",1,salt,8365.68,0.0,8365.68,421630.2
+Rare Earth Recycling Plant,"Lynn, Texas",1,rare earth misch,2845.56,0.0,2845.56,0.0
+Mega Plant,"Sebastian, Arkansas",1,iron-nickel scrap,35656.28,0.0,35656.28,0.0
+Mega Plant,"Sebastian, Arkansas",1,mixed-hydroxides,73141.86,0.0,73141.86,0.0
+Mega Plant,"Sebastian, Arkansas",1,leach residue,31470.35,0.0,31470.35,6.38848022e6
+Mega Plant,"Sebastian, Arkansas",1,plastic pack,96503.37,0.0,96503.37,4.86376966e6
+Mega Plant,"Sebastian, Arkansas",1,salt,285304.6,0.0,285304.6,1.437935192e7
+Mega Plant,"Sebastian, Arkansas",1,rare earth mix,44145.84,44145.84,0.0,0.0
+Mega Plant,"Sebastian, Arkansas",1,nickel-iron scrap,178655.26,0.0,178655.26,0.0
+Mega Plant,"Sebastian, Arkansas",1,nickel,37931.36,0.0,37931.36,0.0
+Mega Plant,"District of Columbia, District of Columbia",1,iron-nickel scrap,20438.84,0.0,20438.84,0.0
+Mega Plant,"District of Columbia, District of Columbia",1,mixed-hydroxides,41926.28,0.0,41926.28,0.0
+Mega Plant,"District of Columbia, District of Columbia",1,leach residue,18039.39,0.0,18039.39,3.66199595e6
+Mega Plant,"District of Columbia, District of Columbia",1,plastic pack,55317.53,0.0,55317.53,2.78800343e6
+Mega Plant,"District of Columbia, District of Columbia",1,salt,163541.92,0.0,163541.92,8.24251257e6
+Mega Plant,"District of Columbia, District of Columbia",1,rare earth mix,25305.22,25305.22,0.0,0.0
+Mega Plant,"District of Columbia, District of Columbia",1,nickel-iron scrap,102408.52,0.0,102408.52,0.0
+Mega Plant,"District of Columbia, District of Columbia",1,nickel,21742.96,0.0,21742.96,0.0
+Mega Plant,"Maricopa, Arizona",1,iron-nickel scrap,46355.57,0.0,46355.57,0.0
+Mega Plant,"Maricopa, Arizona",1,mixed-hydroxides,95089.37,0.0,95089.37,0.0
+Mega Plant,"Maricopa, Arizona",1,leach residue,40913.58,0.0,40913.58,8.30545698e6
+Mega Plant,"Maricopa, Arizona",1,plastic pack,125460.91,0.0,125460.91,6.32322998e6
+Mega Plant,"Maricopa, Arizona",1,salt,370915.31,0.0,370915.31,1.869413141e7
+Mega Plant,"Maricopa, Arizona",1,rare earth mix,57392.58,57392.58,0.0,0.0
+Mega Plant,"Maricopa, Arizona",1,nickel-iron scrap,232263.93,0.0,232263.93,0.0
+Mega Plant,"Maricopa, Arizona",1,nickel,49313.34,0.0,49313.34,0.0

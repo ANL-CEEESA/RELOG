@@ -312,6 +312,7 @@ function get_solution(model::ManufacturingModel)
                 "Send" => OrderedDict(),
                 "Dispose" => OrderedDict(),
             ),
+            "Input product" => plant.input.name,
             "Total input (tonne)" => [0.0 for t in 1:T],
             "Total output" => OrderedDict(),
             "Latitude (deg)" => plant.latitude,

@@ -1,5 +1,6 @@
 JULIA := julia --color=yes --project=@.
 SRC_FILES := $(wildcard src/*.jl test/*.jl)
+VERSION := 0.3
 
 all: docs test
 
