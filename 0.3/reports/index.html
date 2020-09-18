@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    
+    <title>Reports - RELOG</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/github.min.css">
+        
+    
+    <link href="../css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href="..">RELOG</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../usage/">Usage</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../format/">Data Format</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Reports</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../model/">Optimization Model</a>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../format/">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="next" href="../model/">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/ANL-CEEESA/RELOG/edit/master/src/docs/reports.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#simplified-solution-reports">Simplified Solution Reports</a></li>
+            <li class="second-level"><a href="#plants-report">Plants report</a></li>
+                
+                <li class="third-level"><a href="#sample-charts">Sample charts</a></li>
+            <li class="second-level"><a href="#plant-outputs-report">Plant outputs report</a></li>
+                
+                <li class="third-level"><a href="#sample-charts_1">Sample charts</a></li>
+            <li class="second-level"><a href="#plant-emissions-report">Plant emissions report</a></li>
+                
+                <li class="third-level"><a href="#sample-charts_2">Sample charts</a></li>
+            <li class="second-level"><a href="#transportation-report">Transportation report</a></li>
+                
+                <li class="third-level"><a href="#sample-charts_3">Sample charts</a></li>
+            <li class="second-level"><a href="#transportation-emissions-report">Transportation emissions report</a></li>
+                
+                <li class="third-level"><a href="#sample-charts_4">Sample charts</a></li>
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="simplified-solution-reports">Simplified Solution Reports</h1>
+<p>In addition to the full output format described in <a href="../format/">data formats</a>, RELOG can also generate a number of simplified reports in tabular data format (CSV), which can be more easily processed by spreadsheet software (such as Microsoft Excel), by data analysis libraries (such as Pandas) or by relational databases (such as SQLite).</p>
+<p>In this page, we also illustrate what types of charts and visualizations can be produced from these tabular data files. The sample charts have been produced using Python, matplotlib, seaborn and geopandas.</p>
+<h2 id="plants-report">Plants report</h2>
+<p>Report showing plant costs, capacities, energy expenditure and utilization factors.</p>
+<p>Generated by <code>RELOG.write_plants_report(solution, filename)</code>. For a concrete example, see <a href="https://github.com/ANL-CEEESA/RELOG/blob/master/test/fixtures/nimh_plants.csv">nimh_plants.csv</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>plant type</code></td>
+<td>Plant type.</td>
+</tr>
+<tr>
+<td align="left"><code>location name</code></td>
+<td>Location name.</td>
+</tr>
+<tr>
+<td align="left"><code>year</code></td>
+<td>What year this row corresponds to. This reports includes one row for each year in the simulation.</td>
+</tr>
+<tr>
+<td align="left"><code>latitude (deg)</code></td>
+<td>Latitude of the plant.</td>
+</tr>
+<tr>
+<td align="left"><code>longitude (deg)</code></td>
+<td>Longitude of the plant.</td>
+</tr>
+<tr>
+<td align="left"><code>capacity (tonne)</code></td>
+<td>Capacity of the plant at this point in time.</td>
+</tr>
+<tr>
+<td align="left"><code>amount processed (tonne)</code></td>
+<td>Amount of input material received by the plant this year.</td>
+</tr>
+<tr>
+<td align="left"><code>utilization factor (%)</code></td>
+<td>Amount processed by the plant this year divided by current plant capacity.</td>
+</tr>
+<tr>
+<td align="left"><code>energy (GJ)</code></td>
+<td>Amount of energy expended by the plant this year.</td>
+</tr>
+<tr>
+<td align="left"><code>opening cost ($)</code></td>
+<td>Amount spent opening the plant. This value is only positive if the plant became operational this year.</td>
+</tr>
+<tr>
+<td align="left"><code>expansion cost ($)</code></td>
+<td>Amount spent this year expanding the plant capacity.</td>
+</tr>
+<tr>
+<td align="left"><code>fixed operating cost ($)</code></td>
+<td>Amount spent for keeping the plant operational this year.</td>
+</tr>
+<tr>
+<td align="left"><code>variable operating cost ($)</code></td>
+<td>Amount spent for processing the input material this year.</td>
+</tr>
+<tr>
+<td align="left"><code>total cost ($)</code></td>
+<td>Sum of all previous plant costs.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-charts">Sample charts</h3>
+<ul>
+<li>Bar plot with total plant costs per year, grouped by plant type (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import seaborn as sns; sns.set()
+
+data = pd.read_csv(&quot;plants_report.csv&quot;)
+sns.barplot(x=&quot;year&quot;,
+            y=&quot;total cost ($)&quot;,
+            hue=&quot;plant type&quot;,
+            data=data.groupby([&quot;plant type&quot;, &quot;year&quot;])
+                     .sum()
+                     .reset_index());
+</code></pre>
+
+<p><img src="../images/ex_plant_cost_per_year.png" width="500px"/></p>
+<ul>
+<li>Map showing plant locations (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import geopandas as gp
+
+# Plot base map
+world = gp.read_file(gp.datasets.get_path('naturalearth_lowres'))
+world = world[world.continent == 'North America']
+ax = world.plot(color='white', edgecolor='50', figsize=(15,15))
+
+# Plot plant locations
+data = pd.read_csv(&quot;plants_report.csv&quot;)
+points = gp.points_from_xy(data[&quot;longitude (deg)&quot;],
+                           data[&quot;latitude (deg)&quot;])
+gp.GeoDataFrame(data, geometry=points).plot(ax=ax);
+</code></pre>
+
+<p><img src="../images/ex_plant_locations.png" width="1000px"/></p>
+<h2 id="plant-outputs-report">Plant outputs report</h2>
+<p>Report showing amount of products produced, sent and disposed of by each plant, as well as disposal costs.</p>
+<p>Generated by <code>RELOG.write_plant_outputs_report(solution, filename)</code>. For a concrete example, see <a href="https://github.com/ANL-CEEESA/RELOG/blob/master/test/fixtures/nimh_plant_outputs.csv">nimh_plant_outputs.csv</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>plant type</code></td>
+<td>Plant type.</td>
+</tr>
+<tr>
+<td align="left"><code>location name</code></td>
+<td>Location name.</td>
+</tr>
+<tr>
+<td align="left"><code>year</code></td>
+<td>What year this row corresponds to. This reports includes one row for each year in the simulation.</td>
+</tr>
+<tr>
+<td align="left"><code>product</code></td>
+<td>Product being produced.</td>
+</tr>
+<tr>
+<td align="left"><code>amount produced (tonne)</code></td>
+<td>Amount of product produced this year.</td>
+</tr>
+<tr>
+<td align="left"><code>amount sent (tonne)</code></td>
+<td>Amount of product produced by this plant and sent to another plant for further processing this year.</td>
+</tr>
+<tr>
+<td align="left"><code>amount disposed (tonne)</code></td>
+<td>Amount produced produced by this plant and immediately disposed of locally this year.</td>
+</tr>
+<tr>
+<td align="left"><code>disposal cost ($)</code></td>
+<td>Disposal cost for this year.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-charts_1">Sample charts</h3>
+<ul>
+<li>Bar plot showing total amount produced for each product, grouped by year (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import seaborn as sns; sns.set()
+
+data = pd.read_csv(&quot;plant_outputs_report.csv&quot;)
+sns.barplot(x=&quot;amount produced (tonne)&quot;,
+            y=&quot;product name&quot;,
+            hue=&quot;year&quot;,
+            data=data.groupby([&quot;product name&quot;, &quot;year&quot;])
+                     .sum()
+                     .reset_index());
+</code></pre>
+
+<p><img src="../images/ex_amount_produced.png" width="500px"/></p>
+<h2 id="plant-emissions-report">Plant emissions report</h2>
+<p>Report showing amount of emissions produced by each plant.</p>
+<p>Generated by <code>RELOG.write_plant_emissions_report(solution, filename)</code>. For a concrete example, see <a href="https://github.com/ANL-CEEESA/RELOG/blob/master/test/fixtures/nimh_plant_emissions.csv">nimh_plant_emissions.csv</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>plant type</code></td>
+<td>Plant type.</td>
+</tr>
+<tr>
+<td align="left"><code>location name</code></td>
+<td>Location name.</td>
+</tr>
+<tr>
+<td align="left"><code>year</code></td>
+<td>Year.</td>
+</tr>
+<tr>
+<td align="left"><code>emission type</code></td>
+<td>Type of emission.</td>
+</tr>
+<tr>
+<td align="left"><code>amount (tonne)</code></td>
+<td>Amount of emission produced by the plant this year.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-charts_2">Sample charts</h3>
+<ul>
+<li>Bar plot showing total emission by plant type, grouped type of emissions (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import seaborn as sns; sns.set()
+
+data = pd.read_csv(&quot;plant_emissions_report.csv&quot;)
+sns.barplot(x=&quot;plant type&quot;,
+            y=&quot;emission amount (tonne)&quot;,
+            hue=&quot;emission type&quot;,
+            data=data.groupby([&quot;plant type&quot;, &quot;emission type&quot;])
+                     .sum()
+                     .reset_index());
+</code></pre>
+
+<p><img src="../images/ex_emissions.png" width="500px"/></p>
+<h2 id="transportation-report">Transportation report</h2>
+<p>Report showing amount of product sent from initial locations to plants, and from one plant to another. Includes the distance between each pair of locations, amount-distance shipped, transportation costs and energy expenditure.</p>
+<p>Generated by <code>RELOG.write_transportation_report(solution, filename)</code>. For a concrete example, see <a href="https://github.com/ANL-CEEESA/RELOG/blob/master/test/fixtures/nimh_transportation.csv">nimh_transportation.csv</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>source type</code></td>
+<td>If product is being shipped from an initial location, equals <code>Origin</code>. If product is being shipped from a plant, equals plant type.</td>
+</tr>
+<tr>
+<td align="left"><code>source location name</code></td>
+<td>Name of the location where the product is being shipped from.</td>
+</tr>
+<tr>
+<td align="left"><code>source latitude (deg)</code></td>
+<td>Latitude of the source location.</td>
+</tr>
+<tr>
+<td align="left"><code>source longitude (deg)</code></td>
+<td>Longitude of the source location.</td>
+</tr>
+<tr>
+<td align="left"><code>destination type</code></td>
+<td>Type of plant the product is being shipped to.</td>
+</tr>
+<tr>
+<td align="left"><code>destination location name</code></td>
+<td>Name of the location where the product is being shipped to.</td>
+</tr>
+<tr>
+<td align="left"><code>destination latitude (deg)</code></td>
+<td>Latitude of the destination location.</td>
+</tr>
+<tr>
+<td align="left"><code>destination longitude (deg)</code></td>
+<td>Longitude of the destination location.</td>
+</tr>
+<tr>
+<td align="left"><code>product</code></td>
+<td>Product being shipped.</td>
+</tr>
+<tr>
+<td align="left"><code>year</code></td>
+<td>Year.</td>
+</tr>
+<tr>
+<td align="left"><code>distance (km)</code></td>
+<td>Distance between source and destination.</td>
+</tr>
+<tr>
+<td align="left"><code>amount (tonne)</code></td>
+<td>Total amount of product being shipped between the two locations this year.</td>
+</tr>
+<tr>
+<td align="left"><code>amount-distance (tonne-km)</code></td>
+<td>Total amount being shipped this year times distance.</td>
+</tr>
+<tr>
+<td align="left"><code>transportation cost ($)</code></td>
+<td>Cost to transport this amount of product between the two locations for this year.</td>
+</tr>
+<tr>
+<td align="left"><code>transportation energy (GJ)</code></td>
+<td>Energy expended transporting this amount of product between the two locations.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-charts_3">Sample charts</h3>
+<ul>
+<li>Bar plot showing total amount-distance for each product type, grouped by year (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import seaborn as sns; sns.set()
+
+data = pd.read_csv(&quot;transportation_report.csv&quot;)
+sns.barplot(x=&quot;product&quot;,
+            y=&quot;amount-distance (tonne-km)&quot;,
+            hue=&quot;year&quot;,
+            data=data.groupby([&quot;product&quot;, &quot;year&quot;])
+                     .sum()
+                     .reset_index());
+</code></pre>
+
+<p><img src="../images/ex_transportation_amount_distance.png" width="500px"/></p>
+<ul>
+<li>Map of transportation lines (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import geopandas as gp
+from shapely.geometry import Point, LineString
+import matplotlib.pyplot as plt
+from matplotlib import collections
+
+# Plot base map
+world = gp.read_file(gp.datasets.get_path('naturalearth_lowres'))
+ax = world.plot(color='white', edgecolor='50', figsize=(14,7))
+ax.set_ylim([23, 50])
+ax.set_xlim([-128, -65])
+
+# Draw transportation lines
+data = pd.read_csv(&quot;transportation_report.csv&quot;)
+lines = [[(row[&quot;source longitude (deg)&quot;], row[&quot;source latitude (deg)&quot;]),
+          (row[&quot;destination longitude (deg)&quot;], row[&quot;destination latitude (deg)&quot;])
+         ] for (index, row) in data.iterrows()]
+ax.add_collection(collections.LineCollection(lines,
+                                             linewidths=0.25,
+                                             zorder=1,
+                                             alpha=0.5,
+                                             color=&quot;50&quot;))
+
+# Draw source points
+points = gp.points_from_xy(data[&quot;source longitude (deg)&quot;],
+                           data[&quot;source latitude (deg)&quot;])
+gp.GeoDataFrame(data, geometry=points).plot(ax=ax,
+                                            color=&quot;0.5&quot;,
+                                            markersize=1);
+
+# Draw destination points
+points = gp.points_from_xy(data[&quot;destination longitude (deg)&quot;],
+                           data[&quot;destination latitude (deg)&quot;])
+gp.GeoDataFrame(data, geometry=points).plot(ax=ax,
+                                            color=&quot;red&quot;,
+                                            markersize=50);
+</code></pre>
+
+<p><img src="../images/ex_transportation.png" width="1000px"/></p>
+<h2 id="transportation-emissions-report">Transportation emissions report</h2>
+<p>Report showing emissions for each trip between initial locations and plants, and between pairs of plants.</p>
+<p>Generated by <code>RELOG.write_transportation_emissions_report(solution, filename)</code>. For a concrete example, see <a href="https://github.com/ANL-CEEESA/RELOG/blob/master/test/fixtures/nimh_transportation_emissions.csv">nimh_transportation_emissions.csv</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>source type</code></td>
+<td>If product is being shipped from an initial location, equals <code>Origin</code>. If product is being shipped from a plant, equals plant type.</td>
+</tr>
+<tr>
+<td align="left"><code>source location name</code></td>
+<td>Name of the location where the product is being shipped from.</td>
+</tr>
+<tr>
+<td align="left"><code>source latitude (deg)</code></td>
+<td>Latitude of the source location.</td>
+</tr>
+<tr>
+<td align="left"><code>source longitude (deg)</code></td>
+<td>Longitude of the source location.</td>
+</tr>
+<tr>
+<td align="left"><code>destination type</code></td>
+<td>Type of plant the product is being shipped to.</td>
+</tr>
+<tr>
+<td align="left"><code>destination location name</code></td>
+<td>Name of the location where the product is being shipped to.</td>
+</tr>
+<tr>
+<td align="left"><code>destination latitude (deg)</code></td>
+<td>Latitude of the destination location.</td>
+</tr>
+<tr>
+<td align="left"><code>destination longitude (deg)</code></td>
+<td>Longitude of the destination location.</td>
+</tr>
+<tr>
+<td align="left"><code>product</code></td>
+<td>Product being shipped.</td>
+</tr>
+<tr>
+<td align="left"><code>year</code></td>
+<td>Year.</td>
+</tr>
+<tr>
+<td align="left"><code>distance (km)</code></td>
+<td>Distance between source and destination.</td>
+</tr>
+<tr>
+<td align="left"><code>shipped amount (tonne)</code></td>
+<td>Total amount of product being shipped between the two locations this year.</td>
+</tr>
+<tr>
+<td align="left"><code>shipped amount-distance (tonne-km)</code></td>
+<td>Total amount being shipped this year times distance.</td>
+</tr>
+<tr>
+<td align="left"><code>emission type</code></td>
+<td>Type of emission.</td>
+</tr>
+<tr>
+<td align="left"><code>emission amount (tonne)</code></td>
+<td>Amount of emission produced by transportation segment this year.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-charts_4">Sample charts</h3>
+<ul>
+<li>Bar plot showing total emission amount by emission type, grouped by type of product being transported (in Python):</li>
+</ul>
+<pre><code class="python">import pandas as pd
+import seaborn as sns; sns.set()
+
+data = pd.read_csv(&quot;transportation_emissions_report.csv&quot;)
+sns.barplot(x=&quot;emission type&quot;,
+            y=&quot;emission amount (tonne)&quot;,
+            hue=&quot;product&quot;,
+            data=data.groupby([&quot;product&quot;, &quot;emission type&quot;])
+                     .sum()
+                     .reset_index());
+</code></pre>
+
+<p><img src="../images/ex_transportation_emissions.png" width="500px"/></p></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+        
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+        </p>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../js/mathjax.js"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
