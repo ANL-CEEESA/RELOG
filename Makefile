@@ -1,6 +1,11 @@
 JULIA := julia --color=yes --project=@.
 SRC_FILES := $(wildcard src/*.jl test/*.jl)
-VERSION := 0.3
+
+VERSION_MAJOR := 0
+VERSION_MINOR := 3
+VERSION_PATCH := 0
+
+VERSION_SHORT := $(VERSION_MAJOR).$(VERSION_MINOR)
 
 all: docs test
 
@@ -15,10 +20,7 @@ clean:
 	rm -rf build/*
 
 docs:
-	mkdocs build
-
-docs-push:
-	rsync -avP docs/ isoron@axavier.org:/www/axavier.org/projects/RELOG/$(VERSION)/
+	mkdocs build -d ../docs/$(VERSION_SHORT)/
 
 test: build/test.log
 

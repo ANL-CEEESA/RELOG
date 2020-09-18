@@ -11,11 +11,11 @@
   * [Usage](usage.md)
   * [Input and Output Data Formats](format.md)
   * [Simplified Solution Reports](reports.md)
-  * [Optimization model](model.md)
+  * [Optimization Model](model.md)
   
 ### Source Code
 
-  * [https://anl-ceeesa.github.io/RELOG/](https://anl-ceeesa.github.io/RELOG/)
+  * [https://github.com/ANL-CEEESA/RELOG](https://github.com/ANL-CEEESA/RELOG)
 
 ### Authors
 * **Alinson S. Xavier,** Argonne National Laboratory <<axavier@anl.gov>>

@@ -32,10 +32,10 @@ The **products** section describes all products and subproducts in the simulatio
 
 | Key                                   | Description
 |:--------------------------------------|---------------|
-|`transportation cost ($/km/tonne)`     | The cost to transport this product. Must be a timeseries.
-|`transportation energy (J/km/tonne)`   | The energy required to transport this product. Must be a timeseries. Optional.
-|`transportation emissions (tonne/km/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a timeseries. Optional.
-|`initial amounts`                      | A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a timeseries.
+|`transportation cost ($/km/tonne)`     | The cost to transport this product. Must be a time series.
+|`transportation energy (J/km/tonne)`   | The energy required to transport this product. Must be a time series. Optional.
+|`transportation emissions (tonne/km/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.
+|`initial amounts`                      | A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a time series.
 
 Each product may have some amount available at the beginning of each time period. In this case, the key `initial amounts` maps to a dictionary with the following keys:
 
@@ -43,7 +43,7 @@ Each product may have some amount available at the beginning of each time period
 |:------------------------|---------------|
 | `latitude (deg)`        | The latitude of the location.
 | `longitude (deg)`       | The longitude of the location.
-| `amount (tonne)`       | The amount of the product initially available at the location. Must be a timeseries.
+| `amount (tonne)`       | The amount of the product initially available at the location. Must be a time series.
 
 #### Example
 
@@ -96,8 +96,8 @@ The **plants** section describes the available types of reverse manufacturing pl
 |:------------------------|---------------|
 | `input`                 | The name of the product that this plant takes as input. Only one input is accepted per plant.
 | `outputs (tonne/tonne)`               | A dictionary specifying how many tonnes of each product is produced for each tonnes of input. For example, if the plant outputs 0.5 tonnes of P2 and 0.25 tonnes of P3 for each tonnes of P1 provided, then this entry should be `{"P2": 0.5, "P3": 0.25}`. If the plant does not output anything, this key may be omitted.
-|`energy (GJ/tonne)`   | The energy required to process 1 tonne of the input. Must be a timeseries. Optional.
-|`emissions (tonne/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a timeseries. Optional.
+|`energy (GJ/tonne)`   | The energy required to process 1 tonne of the input. Must be a time series. Optional.
+|`emissions (tonne/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a time series. Optional.
 | `locations`             | A dictionary mapping the name of the location to a dictionary which describes the site characteristics (see below).
 
 Each type of plant is associated with a set of potential locations where it can be built. Each location is represented by a dictionary with the following keys:
@@ -113,8 +113,8 @@ The keys in the `disposal` dictionary should be the names of the products. The v
 
 | Key                     | Description
 |:------------------------|---------------|
-| `cost ($/tonne)`       | The cost to dispose of the product. Must be a timeseries.
-| `limit (tonne)`        | The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a timeseries.
+| `cost ($/tonne)`       | The cost to dispose of the product. Must be a time series.
+| `limit (tonne)`        | The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a time series.
 
 
 The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:
@@ -122,8 +122,8 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
 | Key                                   | Description
 |:--------------------------------------|---------------|
 | `opening cost ($)`                    | The cost to open a plant of this size.
-| `fixed operating cost ($)`            | The cost to keep the plant open, even if the plant doesn't process anything. Must be a timeseries.
-| `variable operating cost ($/tonne)`  | The cost that the plant incurs to process each tonne of input. Must be a timeseries.
+| `fixed operating cost ($)`            | The cost to keep the plant open, even if the plant doesn't process anything. Must be a time series.
+| `variable operating cost ($/tonne)`  | The cost that the plant incurs to process each tonne of input. Must be a time series.
 
 #### Example
 

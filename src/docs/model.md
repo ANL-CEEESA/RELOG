@@ -106,7 +106,7 @@ In the third line, we have the disposal costs.
         & \forall m \in M, p \in P, t \in T
 \end{align}
 
-* A plant is operation at time $t$ if it was operational at time $t-1$ or it was built at time $t$. This constraint also prevents a plant from being built multiple times.
+* A plant is operational at time $t$ if it was operational at time $t-1$ or it was built at time $t$. This constraint also prevents a plant from being built multiple times.
 
 \begin{align}
     & x_{pt} = x_{p,t-1} + u_{pt}

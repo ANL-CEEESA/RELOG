@@ -53,11 +53,12 @@ import geopandas as gp
 
 # Plot base map
 world = gp.read_file(gp.datasets.get_path('naturalearth_lowres'))
-world = world[world.continent == 'North America']
-ax = world.plot(color='white', edgecolor='50', figsize=(15,15))
+ax = world.plot(color='white', edgecolor='50', figsize=(13,6))
+ax.set_ylim([23, 50])
+ax.set_xlim([-128, -65])
 
 # Plot plant locations
-data = pd.read_csv("plants_report.csv")
+data = pd.read_csv("nimh_plants.csv")
 points = gp.points_from_xy(data["longitude (deg)"],
                            data["latitude (deg)"])
 gp.GeoDataFrame(data, geometry=points).plot(ax=ax);
