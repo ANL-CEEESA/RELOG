@@ -5,11 +5,11 @@ VERSION := 0.4
 all: docs test
 
 build/sysimage.so: src/sysimage.jl Project.toml Manifest.toml
+	mkdir -p build
 	$(JULIA) src/sysimage.jl
 
 build/test.log: $(SRC_FILES) build/sysimage.so
-	@echo Running tests...
-	cd test; $(JULIA) --sysimage ../build/sysimage.so runtests.jl | tee ../build/test.log
+	cd test; $(JULIA) --sysimage ../build/sysimage.so runtests.jl
 
 clean:
 	rm -rf build/*

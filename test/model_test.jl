@@ -41,7 +41,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         #MOI.write_to_file(dest, "model.lp")
     end
 
-    @testset "solve" begin
+    @testset "solve (exact)" begin
         solution_filename = tempname()
         solution = RELOG.solve("$(pwd())/../instances/s1.json",
                                output=solution_filename)
@@ -58,6 +58,12 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         @test "F3" in keys(solution["Plants"])
         @test "F4" in keys(solution["Plants"])
     end
+    
+    
+    @testset "solve (heuristic)" begin
+        # Should not crash
+        solution = RELOG.solve("$(pwd())/../instances/s1.json", heuristic=true)
+    end
 
     @testset "infeasible solve" begin
         json = JSON.parsefile("$(pwd())/../instances/s1.json")
@@ -66,7 +72,6 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         end
         RELOG.solve(RELOG.parse(json))
     end
-
 end
 
 

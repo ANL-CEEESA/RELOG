@@ -79,3 +79,20 @@ RELOG.solve("instance.json",
             output="solution.json",
             optimizer=gurobi)
 ```
+
+### 4.2 Multi-period heuristics
+
+For large-scale instances, it may be too time-consuming to find an exact optimal solution to the multi-period version of the problem. For these situations, RELOG includes a heuristic solution method, which proceeds as follows:
+
+1. First, RELOG creates a single-period version of the problem, in which most values are replaced by their averages. This single-period problem is typically much easier to solve.
+
+2. After solving the simplified problem, RELOG resolves the multi-period version of the problem, but considering only candidate plant locations that were selected by the optimal solution to the single-period version of the problem. All remaining candidate plant locations are removed.
+
+To solve an instance using this heuristic, use the option `heuristic=true`, as shown below.
+
+```julia
+using RELOG
+
+solution = RELOG.solve("/home/user/instance.json",
+                       heuristic=true)
+```

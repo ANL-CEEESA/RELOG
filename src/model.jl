@@ -197,7 +197,9 @@ default_lp_optimizer = optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
 
 function solve(instance::Instance;
                optimizer=nothing,
-               output=nothing)
+               output=nothing,
+               marginal_costs=true,
+              )
     
     milp_optimizer = lp_optimizer = optimizer
     if optimizer == nothing
@@ -224,20 +226,22 @@ function solve(instance::Instance;
         return OrderedDict()
     end
     
-    @info "Re-optimizing with integer variables fixed..."
-    all_vars = JuMP.all_variables(model.mip)
-    vals = OrderedDict(var => JuMP.value(var) for var in all_vars)
-    JuMP.set_optimizer(model.mip, lp_optimizer)
-    for var in all_vars
-        if JuMP.is_binary(var)
-            JuMP.unset_binary(var)
-            JuMP.fix(var, vals[var])
+    if marginal_costs
+        @info "Re-optimizing with integer variables fixed..."
+        all_vars = JuMP.all_variables(model.mip)
+        vals = OrderedDict(var => JuMP.value(var) for var in all_vars)
+        JuMP.set_optimizer(model.mip, lp_optimizer)
+        for var in all_vars
+            if JuMP.is_binary(var)
+                JuMP.unset_binary(var)
+                JuMP.fix(var, vals[var])
+            end
         end
+        JuMP.optimize!(model.mip)
     end
-    JuMP.optimize!(model.mip)
     
     @info "Extracting solution..."
-    solution = get_solution(model)
+    solution = get_solution(model, marginal_costs=marginal_costs)
     
     if output != nothing
         @info "Writing solution: $output"
@@ -249,13 +253,43 @@ function solve(instance::Instance;
     return solution
 end
 
-function solve(filename::String; kwargs...)
+function solve(filename::AbstractString;
+               heuristic=false,
+               kwargs...,
+              )
     @info "Reading $filename..."
     instance = RELOG.parsefile(filename)
-    return solve(instance; kwargs...)
+    if heuristic
+        @info "Solving single-period version..."
+        compressed = _compress(instance)
+        csol = solve(compressed;
+                     output=nothing,
+                     marginal_costs=false,
+                     kwargs...)
+        @info "Filtering candidate locations..."
+        selected_pairs = []
+        for (plant_name, plant_dict) in csol["Plants"]
+            for (location_name, location_dict) in plant_dict
+                push!(selected_pairs, (plant_name, location_name))
+            end
+        end
+        filtered_plants = []
+        for p in instance.plants
+            if (p.plant_name, p.location_name) in selected_pairs
+                push!(filtered_plants, p)
+            end
+        end
+        instance.plants = filtered_plants
+        @info "Solving original version..."
+    end
+    sol = solve(instance; kwargs...)
+    return sol
 end
 
-function get_solution(model::ManufacturingModel)
+
+function get_solution(model::ManufacturingModel;
+                      marginal_costs=true,
+                     )
     mip, vars, eqs, graph, instance = model.mip, model.vars, model.eqs, model.graph, model.instance
     T = instance.time
     
@@ -291,15 +325,17 @@ function get_solution(model::ManufacturingModel)
     end
     
     # Products
-    for n in graph.collection_shipping_nodes
-        location_dict = OrderedDict{Any, Any}(
-            "Marginal cost (\$/tonne)" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
-                                           for t in 1:T],
-        )
-        if n.product.name ∉ keys(output["Products"])
-            output["Products"][n.product.name] = OrderedDict()
+    if marginal_costs
+        for n in graph.collection_shipping_nodes
+            location_dict = OrderedDict{Any, Any}(
+                "Marginal cost (\$/tonne)" => [round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits=2)
+                                               for t in 1:T]
+            )
+            if n.product.name ∉ keys(output["Products"])
+                output["Products"][n.product.name] = OrderedDict()
+            end
+            output["Products"][n.product.name][n.location.name] = location_dict
         end
-        output["Products"][n.product.name][n.location.name] = location_dict
     end
     
     # Plants
