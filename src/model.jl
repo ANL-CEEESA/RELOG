@@ -259,7 +259,7 @@ function solve(filename::AbstractString;
               )
     @info "Reading $filename..."
     instance = RELOG.parsefile(filename)
-    if heuristic
+    if heuristic && instance.time > 1
         @info "Solving single-period version..."
         compressed = _compress(instance)
         csol = solve(compressed;
