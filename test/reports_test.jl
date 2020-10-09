@@ -20,9 +20,21 @@ function check(func, expected_csv_filename::String)
 end
 
 @testset "Reports" begin
-    check(RELOG.write_plants_report, "fixtures/nimh_plants.csv")
-    check(RELOG.write_plant_outputs_report, "fixtures/nimh_plant_outputs.csv")
-    check(RELOG.write_plant_emissions_report, "fixtures/nimh_plant_emissions.csv")
-    check(RELOG.write_transportation_report, "fixtures/nimh_transportation.csv")
-    check(RELOG.write_transportation_emissions_report, "fixtures/nimh_transportation_emissions.csv")
+    @testset "from fixture" begin
+        check(RELOG.write_plants_report, "fixtures/nimh_plants.csv")
+        check(RELOG.write_plant_outputs_report, "fixtures/nimh_plant_outputs.csv")
+        check(RELOG.write_plant_emissions_report, "fixtures/nimh_plant_emissions.csv")
+        check(RELOG.write_transportation_report, "fixtures/nimh_transportation.csv")
+        check(RELOG.write_transportation_emissions_report, "fixtures/nimh_transportation_emissions.csv")
+    end
+    @testset "from solve" begin
+        solution = RELOG.solve("$(pwd())/../instances/s1.json")
+        tmp_filename = tempname()
+        # The following should not crash
+        RELOG.write_plants_report(solution, tmp_filename)
+        RELOG.write_plant_outputs_report(solution, tmp_filename)
+        RELOG.write_plant_emissions_report(solution, tmp_filename)
+        RELOG.write_transportation_report(solution, tmp_filename)
+        RELOG.write_transportation_emissions_report(solution, tmp_filename)
+    end
 end
