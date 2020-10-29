@@ -61,6 +61,17 @@
                             ]
                         }
                     },
+                    "storage": {
+                        "type": "object",
+                        "properties": {
+                            "cost ($/tonne)": { "$ref": "#/definitions/TimeSeries" },
+                            "limit (tonne)": { "type": "number" }
+                        },
+                        "required": [
+                            "cost ($/tonne)",
+                            "limit (tonne)"
+                        ]
+                    },                    
                     "capacities (tonne)": {
                         "type": "object",
                         "additionalProperties": {

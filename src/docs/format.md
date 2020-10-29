@@ -107,7 +107,15 @@ Each type of plant is associated with a set of potential locations where it can 
 | `latitude (deg)`              | The latitude of the location, in degrees.
 | `longitude (deg)`             | The longitude of the location, in degrees.
 | `disposal`                    | A dictionary describing what products can be disposed locally at the plant.
-| `capacities (tonne)`         | A dictionary describing what plant sizes are allowed, and their characteristics.
+| `storage`                     | A dictionary describing the plant's storage.
+| `capacities (tonne)`          | A dictionary describing what plant sizes are allowed, and their characteristics.
+
+The `storage` dictionary should contain the following keys:
+
+| Key                     | Description
+|:------------------------|---------------|
+| `cost ($/tonne)`       | The cost to store a tonne of input product for one time period. Must be a time series.
+| `limit (tonne)`        | The maximum amount of input product this plant can have in storage at any given time.
 
 The keys in the `disposal` dictionary should be the names of the products. The values are dictionaries with the following keys:
 
@@ -151,11 +159,15 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
                             "limit (tonne)": [1.0, 1.0]
                         }
                     },
+                    "storage": {
+                        "cost ($/tonne)": [5.0, 5.3],
+                        "limit (tonne)": 100.0,
+                    },
                     "capacities (tonne)": {
                         "100": {
                             "opening cost ($)": [500, 530],
                             "fixed operating cost ($)": [300.0, 310.0],
-                            "variable operating cost ($/tonne)": [5.0, 5.2]
+                            "variable operating cost ($/tonne)": [5.0, 5.2],
                         },
                         "500": {
                             "opening cost ($)": [750, 760],

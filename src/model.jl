@@ -35,6 +35,15 @@ function create_vars!(model::ManufacturingModel)
                                             upper_bound=n.location.disposal_limit[n.product][t])
                         for n in values(graph.plant_shipping_nodes), t in 1:T)
     
+    vars.store = Dict((n, t) => @variable(mip,
+                                            lower_bound=0,
+                                            upper_bound=n.location.storage_limit)
+                        for n in values(graph.process_nodes), t in 1:T)
+    
+    vars.process = Dict((n, t) => @variable(mip,
+                                            lower_bound = 0)
+                        for n in values(graph.process_nodes), t in 1:T)
+    
     vars.open_plant = Dict((n, t) => @variable(mip, binary=true)
                            for n in values(graph.process_nodes), t in 1:T)
 
@@ -82,7 +91,6 @@ function create_objective_function!(model::ManufacturingModel)
         # Transportation and variable operating costs
         for a in n.incoming_arcs
             c = n.location.input.transportation_cost[t] * a.values["distance"]
-            c += n.location.sizes[1].variable_operating_cost[t]
             add_to_expression!(obj, c, vars.flow[a, t])
         end
         
@@ -101,6 +109,16 @@ function create_objective_function!(model::ManufacturingModel)
                            slope_fix_oper_cost(n.location, t),
                            vars.expansion[n, t])
         
+        # Processing costs
+        add_to_expression!(obj,
+                           n.location.sizes[1].variable_operating_cost[t],
+                           vars.process[n, t])
+        
+        # Storage costs
+        add_to_expression!(obj,
+                           n.location.storage_cost[t],
+                           vars.store[n, t])
+        
         # Expansion costs
         if t < T
             add_to_expression!(obj,
@@ -113,9 +131,13 @@ function create_objective_function!(model::ManufacturingModel)
         end
     end
 
-    # Disposal costs
+    # Shipping node costs
     for n in values(graph.plant_shipping_nodes), t in 1:T
-        add_to_expression!(obj, n.location.disposal_cost[n.product][t], vars.dispose[n, t])
+        
+        # Disposal costs
+        add_to_expression!(obj,
+                           n.location.disposal_cost[n.product][t],
+                           vars.dispose[n, t])
     end
 
     @objective(mip, Min, obj)
@@ -143,6 +165,7 @@ function create_shipping_node_constraints!(model::ManufacturingModel)
                 sum(vars.flow[a, t] for a in n.outgoing_arcs) + vars.dispose[n, t])
         end
     end
+    
 end
 
 
@@ -150,13 +173,14 @@ function create_process_node_constraints!(model::ManufacturingModel)
     mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
 
     for t in 1:T, n in graph.process_nodes
-        # Output amount is implied by input amount
         input_sum = AffExpr(0.0)
         for a in n.incoming_arcs
             add_to_expression!(input_sum, 1.0, vars.flow[a, t])
         end
+        
+        # Output amount is implied by amount processed
         for a in n.outgoing_arcs
-            @constraint(mip, vars.flow[a, t] == a.values["weight"] * input_sum)
+            @constraint(mip, vars.flow[a, t] == a.values["weight"] * vars.process[n, t])
         end
         
         # If plant is closed, capacity is zero
@@ -168,14 +192,26 @@ function create_process_node_constraints!(model::ManufacturingModel)
         # Capacity is linked to expansion
         @constraint(mip, vars.capacity[n, t] <= n.location.sizes[1].capacity + vars.expansion[n, t])
 
-        # Input sum must be smaller than capacity
-        @constraint(mip, input_sum <= vars.capacity[n, t])
+        # Can only process up to capacity
+        @constraint(mip, vars.process[n, t] <= vars.capacity[n, t])
 
         if t > 1
             # Plant capacity can only increase over time
             @constraint(mip, vars.capacity[n, t] >= vars.capacity[n, t-1])
             @constraint(mip, vars.expansion[n, t] >= vars.expansion[n, t-1])
         end
+        
+        # Amount received equals amount processed plus stored
+        store_in = 0
+        if t > 1
+            store_in = vars.store[n, t-1]
+        end
+        if t == T
+            @constraint(mip, vars.store[n, t] == 0)
+        end
+        @constraint(mip,
+                    input_sum + store_in == vars.store[n, t] + vars.process[n, t])
+        
 
         # Plant is currently open if it was already open in the previous time period or
         # if it was built just now
@@ -303,6 +339,7 @@ function get_solution(model::ManufacturingModel;
             "Transportation (\$)" => zeros(T),
             "Disposal (\$)" => zeros(T),
             "Expansion (\$)" => zeros(T),
+            "Storage (\$)" => zeros(T),
             "Total (\$)" => zeros(T),
         ),
         "Energy" => OrderedDict(
@@ -372,10 +409,22 @@ function get_solution(model::ManufacturingModel;
                                           )
                                        end)
                                       for t in 1:T],
+            "Process (tonne)" => [JuMP.value(vars.process[process_node, t])
+                                  for t in 1:T],
+            "Variable operating cost (\$)" => [JuMP.value(vars.process[process_node, t]) *
+                                               plant.sizes[1].variable_operating_cost[t]
+                                               for t in 1:T],
+            "Storage (tonne)" => [JuMP.value(vars.store[process_node, t])
+                                for t in 1:T],
+            "Storage cost (\$)" => [JuMP.value(vars.store[process_node, t]) *
+                                    plant.storage_cost[t]
+                                    for t in 1:T],
         )
         output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]
+        output["Costs"]["Variable operating (\$)"] += plant_dict["Variable operating cost (\$)"]
         output["Costs"]["Opening (\$)"] += plant_dict["Opening cost (\$)"]
         output["Costs"]["Expansion (\$)"] += plant_dict["Expansion cost (\$)"]
+        output["Costs"]["Storage (\$)"] += plant_dict["Storage cost (\$)"]
 
         # Inputs
         for a in process_node.incoming_arcs
@@ -389,14 +438,19 @@ function get_solution(model::ManufacturingModel;
                 "Distance (km)" => a.values["distance"],
                 "Latitude (deg)" => a.source.location.latitude,
                 "Longitude (deg)" => a.source.location.longitude,
-                "Transportation cost (\$)" => a.source.product.transportation_cost .* vals .* a.values["distance"],
-                "Variable operating cost (\$)" => plant.sizes[1].variable_operating_cost .* vals,
-                "Transportation energy (J)" => vals .* a.values["distance"] .* a.source.product.transportation_energy,
+                "Transportation cost (\$)" => a.source.product.transportation_cost .*
+                                              vals .*
+                                              a.values["distance"],
+                "Transportation energy (J)" => vals .*
+                                               a.values["distance"] .*
+                                               a.source.product.transportation_energy,
                 "Emissions (tonne)" => OrderedDict(),
             )
             emissions_dict = output["Emissions"]["Transportation (tonne)"]
             for (em_name, em_values) in a.source.product.transportation_emissions
-                dict["Emissions (tonne)"][em_name] = em_values .* dict["Amount (tonne)"] .* a.values["distance"]
+                dict["Emissions (tonne)"][em_name] = em_values .*
+                                                     dict["Amount (tonne)"] .*
+                                                     a.values["distance"]
                 if em_name ∉ keys(emissions_dict)
                     emissions_dict[em_name] = zeros(T)
                 end
@@ -416,7 +470,6 @@ function get_solution(model::ManufacturingModel;
             plant_dict["Input"][plant_name][location_name] = dict
             plant_dict["Total input (tonne)"] += vals
             output["Costs"]["Transportation (\$)"] += dict["Transportation cost (\$)"]
-            output["Costs"]["Variable operating (\$)"] += dict["Variable operating cost (\$)"]
             output["Energy"]["Transportation (GJ)"] += dict["Transportation energy (J)"] / 1e9
         end
         

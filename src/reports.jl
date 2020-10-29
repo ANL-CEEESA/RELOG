@@ -14,34 +14,35 @@ function plants_report(solution)::DataFrame
     df."longitude (deg)" = Float64[]
     df."capacity (tonne)" = Float64[]
     df."amount processed (tonne)" = Float64[]
+    df."amount received (tonne)" = Float64[]
+    df."amount in storage (tonne)" = Float64[]
     df."utilization factor (%)" = Float64[]
     df."energy (GJ)" = Float64[]
     df."opening cost (\$)" = Float64[]
     df."expansion cost (\$)" = Float64[]
     df."fixed operating cost (\$)" = Float64[]
     df."variable operating cost (\$)" = Float64[]
+    df."storage cost (\$)" = Float64[]
     df."total cost (\$)" = Float64[]
     T = length(solution["Energy"]["Plants (GJ)"])
     for (plant_name, plant_dict) in solution["Plants"]
         for (location_name, location_dict) in plant_dict
-            var_cost = zeros(T)
-            for (src_plant_name, src_plant_dict) in location_dict["Input"]
-                for (src_location_name, src_location_dict) in src_plant_dict
-                    var_cost += src_location_dict["Variable operating cost (\$)"]
-                end
-            end
-            var_cost = round.(var_cost, digits=2)
             for year in 1:T
-                opening_cost = round(location_dict["Opening cost (\$)"][year], digits=2)
-                expansion_cost = round(location_dict["Expansion cost (\$)"][year], digits=2)
-                fixed_cost = round(location_dict["Fixed operating cost (\$)"][year], digits=2)
-                total_cost = round(var_cost[year] + opening_cost + expansion_cost + fixed_cost, digits=2)
                 capacity = round(location_dict["Capacity (tonne)"][year], digits=2)
-                processed = round(location_dict["Total input (tonne)"][year], digits=2)
+                received = round(location_dict["Total input (tonne)"][year], digits=2)
+                processed = round(location_dict["Process (tonne)"][year], digits=2)
+                in_storage = round(location_dict["Storage (tonne)"][year], digits=2)
                 utilization_factor = round(processed / capacity * 100.0, digits=2)
                 energy = round(location_dict["Energy (GJ)"][year], digits=2)
                 latitude = round(location_dict["Latitude (deg)"], digits=6)
                 longitude = round(location_dict["Longitude (deg)"], digits=6)
+                opening_cost = round(location_dict["Opening cost (\$)"][year], digits=2)
+                expansion_cost = round(location_dict["Expansion cost (\$)"][year], digits=2)
+                fixed_cost = round(location_dict["Fixed operating cost (\$)"][year], digits=2)
+                var_cost = round(location_dict["Variable operating cost (\$)"][year], digits=2)
+                storage_cost = round(location_dict["Storage cost (\$)"][year], digits=2)
+                total_cost = round(opening_cost + expansion_cost + fixed_cost +
+                                   var_cost + storage_cost, digits=2)
                 push!(df, [
                     plant_name,
                     location_name,
@@ -50,12 +51,15 @@ function plants_report(solution)::DataFrame
                     longitude,
                     capacity,
                     processed,
+                    received,
+                    in_storage,
                     utilization_factor,
                     energy,
                     opening_cost,
                     expansion_cost,
                     fixed_cost,
-                    var_cost[year],
+                    var_cost,
+                    storage_cost,
                     total_cost,
                 ])
             end

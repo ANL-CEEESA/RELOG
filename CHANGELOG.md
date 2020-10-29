@@ -1,3 +1,7 @@
+# Version 0.5.0 (TBD)
+
+- Allow plants to store input material for processing in later years
+
 # Version 0.4.0 (Sep 18, 2020)
 
 - Generate simplified solution reports (CSV)

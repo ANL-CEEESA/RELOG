@@ -48,6 +48,8 @@ mutable struct Plant
     sizes::Array{PlantSize}
     energy::Array{Float64}
     emissions::Dict{String, Array{Float64}}
+    storage_limit::Float64
+    storage_cost::Array{Float64}
 end
 
 
@@ -184,6 +186,15 @@ function parse(json)::Instance
             length(sizes) > 1 ||  push!(sizes, sizes[1])
             sort!(sizes, by = x -> x.capacity)
             
+            # Storage
+            storage_limit = 0
+            storage_cost = zeros(T)
+            if "storage" in keys(location_dict)
+                storage_dict = location_dict["storage"]
+                storage_limit = storage_dict["limit (tonne)"]
+                storage_cost = storage_dict["cost (\$/tonne)"]
+            end
+            
             # Validation: Capacities
             if length(sizes) != 2
                 throw("At most two capacities are supported")
@@ -203,7 +214,9 @@ function parse(json)::Instance
                           disposal_cost,
                           sizes,
                           energy,
-                          emissions)
+                          emissions,
+                          storage_limit,
+                          storage_cost)
             
             push!(plants, plant)
         end

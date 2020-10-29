@@ -72,6 +72,23 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         end
         RELOG.solve(RELOG.parse(json))
     end
+    
+    @testset "storage" begin
+        basedir = dirname(@__FILE__)
+        filename = "$basedir/fixtures/storage.json"
+        instance = RELOG.parsefile(filename)
+        @test instance.plants[1].storage_limit == 50.0
+        @test instance.plants[1].storage_cost == [2.0, 1.5, 1.0]
+        
+        solution = RELOG.solve(filename)
+        plant_dict = solution["Plants"]["mega plant"]["Chicago"]
+        @test plant_dict["Variable operating cost (\$)"] == [500.0, 0.0, 100.0]
+        @test plant_dict["Process (tonne)"] == [50.0, 0.0, 50.0]
+        @test plant_dict["Storage (tonne)"] == [50.0, 50.0, 0.0]
+        @test plant_dict["Storage cost (\$)"] == [100.0, 75.0, 0.0]
+        
+        @test solution["Costs"]["Variable operating (\$)"] == [500.0, 0.0, 100.0]
+        @test solution["Costs"]["Storage (\$)"] == [100.0, 75.0, 0.0]
+        @test solution["Costs"]["Total (\$)"] == [600.0, 75.0, 100.0]
+    end
 end
-
-
