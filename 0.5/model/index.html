@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    
+    <title>Optimization Model - RELOG</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/github.min.css">
+        
+    
+    <link href="../css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href="..">RELOG</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../usage/">Usage</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../format/">Data Format</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../reports/">Reports</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Optimization Model</a>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../reports/">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="next" >
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/ANL-CEEESA/RELOG/edit/master/src/docs/model.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#optimization-model">Optimization Model</a></li>
+            <li class="second-level"><a href="#mathematical-description">Mathematical Description</a></li>
+                
+                <li class="third-level"><a href="#sets">Sets</a></li>
+                <li class="third-level"><a href="#constants">Constants</a></li>
+                <li class="third-level"><a href="#decision-variables">Decision variables</a></li>
+                <li class="third-level"><a href="#objective-function">Objective function</a></li>
+                <li class="third-level"><a href="#constraints">Constraints</a></li>
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="optimization-model">Optimization Model</h1>
+<p>In this page, we describe the precise mathematical optimization model used by RELOG to find the optimal logistics plan. This model is a variation of the classical Facility Location Problem, which has been widely studied in the operations research literature. To simplify the exposition, we present the simplified case where there is only one type of plant.</p>
+<h2 id="mathematical-description">Mathematical Description</h2>
+<h3 id="sets">Sets</h3>
+<ul>
+<li>$L$ - Set of locations holding the original material to be recycled</li>
+<li>$M$ - Set of materials recovered during the reverse manufacturing process</li>
+<li>$P$ - Set of potential plants to open</li>
+<li>$T = { 1, \ldots, t^{max} } $ - Set of time periods</li>
+</ul>
+<h3 id="constants">Constants</h3>
+<p><strong>Plants:</strong></p>
+<ul>
+<li>$c^\text{disp}_{pmt}$ - Cost of disposing one tonne of material $m$ at plant $p$ during time $t$ (<code>$/tonne/km</code>)</li>
+<li>$c^\text{exp}_{pt}$ - Cost of adding one tonne of capacity to plant $p$ at time $t$ (<code>$/tonne</code>)</li>
+<li>$c^\text{open}_{pt}$ - Cost of opening plant $p$ at time $t$, at minimum capacity (<code>$</code>)</li>
+<li>$c^\text{f-base}_{pt}$ - Fixed cost of keeping plant $p$ open during time period $t$ (<code>$</code>)</li>
+<li>$c^\text{f-exp}_{pt}$ - Increase in fixed cost for each additional tonne of capacity (<code>$/tonne</code>)</li>
+<li>$c^\text{var}_{pt}$ - Variable cost of processing one tonne of input at plant $p$ at time $t$ (<code>$/tonne</code>)</li>
+<li>$c^\text{store}_{pt}$ - Cost of storing one tonne of original material at plant $p$ at time $t$ (<code>$/tonne</code>)</li>
+<li>$m^\text{min}_p$ - Minimum capacity of plant $p$ (<code>tonne</code>)</li>
+<li>$m^\text{max}_p$ - Maximum capacity of plant $p$ (<code>tonne</code>)</li>
+<li>$m^\text{disp}_{pmt}$ - Maximum amount of material $m$ that plant $p$ can dispose of during time $t$ (<code>tonne</code>)</li>
+<li>$m^\text{store}_p$ - Maximum amount of original material that plant $p$ can store for later processing.</li>
+</ul>
+<p><strong>Products:</strong></p>
+<ul>
+<li>$\alpha_{pm}$ - Amount of material $m$ recovered by plant $t$ for each tonne of original material (<code>tonne/tonne</code>)</li>
+<li>$m^\text{initial}_{lt}$ - Amount of original material to be recycled at location $l$ during time $t$ (<code>tonne</code>)</li>
+</ul>
+<p><strong>Transportation:</strong></p>
+<ul>
+<li>$c^\text{tr}_{t}$ - Transportation cost during time $t$ (<code>$/tonne/km</code>)</li>
+<li>$d_{lp}$ - Distance between plant $p$ and location $l$ (<code>km</code>)</li>
+</ul>
+<h3 id="decision-variables">Decision variables</h3>
+<ul>
+<li>$q_{mpt}$ - Amount of material $m$ recovered by plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$u_{pt}$ - Binary variable that equals 1 if plant $p$ starts operating at time $t$ (<code>bool</code>)</li>
+<li>$w_{pt}$ - Extra capacity (amount above the minimum) added to plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$x_{pt}$ - Binary variable that equals 1 if plant $p$ is operational at time $t$ (<code>bool</code>)</li>
+<li>$y_{lpt}$ - Amount of product sent from location $l$ to plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$z^{\text{disp}}_{mpt}$ - Amount of material $m$ disposed of by plant $p$ during time $t$ (<code>tonne</code>)</li>
+<li>$z^{\text{store}}_{pt}$ - Amount of original material in storage at plant $p$ by the end of time period $t$ (<code>tonne</code>)</li>
+<li>$z^{\text{proc}}_{mpt}$ - Amount of original material processed by plant $p$ during time period $t$ (<code>tonne</code>)</li>
+</ul>
+<h3 id="objective-function">Objective function</h3>
+<p>RELOG minimizes the overall capital, production and transportation costs:</p>
+<p>
+<script type="math/tex; mode=display">\begin{align*}
+    \text{minimize} \;\; &
+        \sum_{t \in T} \sum_{p \in P} \left[
+                c^\text{open}_{pt} u_{pt} +
+                c^\text{f-base}_{pt} x_{pt} +
+                \sum_{i=1}^t c^\text{f-exp}_{pt} w_{pi} +
+                c^{\text{exp}}_{pt} w_{pt}
+            \right] + \\
+    & 
+        \sum_{t \in T} \sum_{p \in P} \left[
+                c^{\text{store}}_{pt} z^{\text{store}}_{pt} +
+                c^{\text{proc}}_{pt} z^{\text{proc}}_{pt}
+            \right] + \\
+    &
+        \sum_{t \in T} \sum_{l \in L} \sum_{p \in P}
+            c^{\text{tr}}_t d_{lp} y_{lpt}
+        \\
+    &
+        \sum_{t \in T} \sum_{p \in P} \sum_{m \in M} c^{\text{disp}}_{pmt} z_{pmt}
+\end{align*}</script>
+</p>
+<p>In the first line, we have (i) opening costs, if plant starts operating at time $t$, (ii) fixed operating costs, if plant is operational, (iii) additional fixed operating costs coming from expansion performed in all previous time periods up to the current one, and finally (iv) the expansion costs during the current time period.
+In the second line, we have storage and variable processing costs.
+In the third line, we have transportation costs.
+In the fourth line, we have the disposal costs.</p>
+<h3 id="constraints">Constraints</h3>
+<ul>
+<li>All original materials must be sent to a plant:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{p \in P} y_{lpt} = m^\text{initial}_{lt} 
+        & \forall l \in L, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Amount received equals amount processed plus stored. Furthermore, all original material should be processed by the end of the simulation.</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{l \in L} y_{lpt} + z^{\text{store}}_{p,t-1}
+        = z^{\text{proc}}_{pt} + z^{\text{store}}_{p,t}
+        & \forall p \in P, t \in T \\
+    & z^{\text{store}}_{p,0} = 0
+        & \forall p \in P \\
+    & z^{\text{store}}_{p,t^{\max}} = 0
+        & \forall p \in P
+\end{align}</script>
+</p>
+<ul>
+<li>Plants have a limited processing capacity. Furthermore, if a plant is closed, it has zero processing capacity:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & z^{\text{proc}}_{pt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
+        & \forall p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Plants have limited storage capacity. Furthermore, if a plant is closed, is has zero storage capacity:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & z^{\text{store}}_{pt} \leq m^\text{store}_p x_p
+        & \forall p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Plants can only be expanded up to their maximum capacity. Furthermore, if a plant is closed, it cannot be expanded:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
+        & \forall p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Amount of recovered material is proportional to amount processed: </li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} = \alpha_{pm} z^{\text{proc}}_{pt}
+        & \forall m \in M, p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>Because we only consider a single type of plant, all recovered material must be immediately disposed of. In RELOG's full model, recovered materials may be sent to another plant for further processing.</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} = z_{mpt}
+        & \forall m \in M, p \in P, t \in T
+\end{align}</script>
+</p>
+<ul>
+<li>A plant is operational at time $t$ if it was operational at time $t-1$ or it was built at time $t$. This constraint also prevents a plant from being built multiple times.</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & x_{pt} = x_{p,t-1} + u_{pt}
+        & \forall p \in P, t \in T \setminus \{1\} \\
+    & x_{p,1} = u_{p,1}
+        & \forall p \in P
+\end{align}</script>
+</p>
+<ul>
+<li>Variable bounds:</li>
+</ul>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+    & q_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T \\
+    & u_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & w_{pt} \geq 0
+        & \forall p \in P, t \in T \\
+    & x_{pt} \in \{0,1\}
+        & \forall p \in P, t \in T \\
+    & y_{lpt} \geq 0
+        & \forall l \in L, p \in P, t \in T \\
+    & z^{\text{store}}_{pt} \geq 0
+        & p \in P, t \in T \\
+    & z^{\text{disp}}_{mpt}, z^{\text{proc}}_{mpt} \geq 0
+        & \forall m \in M, p \in P, t \in T
+\end{align}</script>
+</p></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+        
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+        </p>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../js/mathjax.js"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
