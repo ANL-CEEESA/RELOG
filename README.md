@@ -1,7 +1,19 @@
-RELOG: Reverse Logistics Optimization
-=====================================
+<h1 align="center">RELOG: Reverse Logistics Optimization</h1>
+<p align="center">
+  <a href="https://github.com/ANL-CEEESA/RELOG/actions">
+    <img src="https://github.com/ANL-CEEESA/RELOG/workflows/CI/badge.svg">
+  </a>
+  <a href="https://doi.org/10.5281/zenodo.4302341">
+    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4302341.svg">
+  </a>
+  <a href="https://github.com/ANL-CEEESA/RELOG/releases/">
+    <img src="https://img.shields.io/github/v/release/ANL-CEEESA/RELOG?include_prereleases&label=pre-release">
+  </a>
+</p>
 
 **RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
+
+
 
 <img src="https://anl-ceeesa.github.io/RELOG/0.4/images/ex_transportation.png" width="1000px"/>
 
