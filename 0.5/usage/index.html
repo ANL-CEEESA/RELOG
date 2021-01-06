@@ -59,7 +59,9 @@
 
             <!-- Main title -->
 
-            <a class="navbar-brand" href="..">RELOG</a>
+            
+              <a class="navbar-brand" href="..">RELOG</a>
+            
         </div>
 
         <!-- Expanded navigation -->
@@ -146,17 +148,14 @@
 <h1 id="usage">Usage</h1>
 <h2 id="1-installation">1. Installation</h2>
 <p>To use RELOG, the first step is to install the <a href="https://julialang.org/">Julia programming language</a> on your machine. Note that RELOG was developed and tested with Julia 1.5 and may not be compatible with newer versions. After Julia is installed, launch the Julia console, type <code>]</code> to switch to package manger mode, then run:</p>
-<pre><code class="text">(@v1.5) pkg&gt; add https://github.com/ANL-CEEESA/RELOG.git
+<pre><code class="language-text">(@v1.5) pkg&gt; add https://github.com/ANL-CEEESA/RELOG.git
 </code></pre>
-
 <p>After the package and all its dependencies have been installed, please run the RELOG test suite, as shown below, to make sure that the package has been correctly installed:</p>
-<pre><code class="text">(@v1.5) pkg&gt; test RELOG
+<pre><code class="language-text">(@v1.5) pkg&gt; test RELOG
 </code></pre>
-
 <p>To update the package to a newer version, type <code>]</code> to enter the package manager mode, then run:</p>
-<pre><code class="text">(@v1.5) pkg&gt; update RELOG
+<pre><code class="language-text">(@v1.5) pkg&gt; update RELOG
 </code></pre>
-
 <h2 id="2-modeling-the-problem">2. Modeling the problem</h2>
 <p>The two main model components in RELOG are <strong>products</strong> and <strong>plants</strong>.</p>
 <p>A <strong>product</strong> is any material that needs to be recycled, any intermediary product produced during the recycling process, or any product recovered at the end of the process. For example, in a NiMH battery recycling study case, products could include (i) the original batteries to be recycled; (ii) the cathode and anode parts of the battery; (iii) rare-earth elements and (iv) scrap metals.</p>
@@ -189,7 +188,7 @@
 <p>All user parameters specified above must be provided to RELOG as a JSON file, which is fully described in the <a href="../format/">data format page</a>.</p>
 <h2 id="3-running-the-optimization">3. Running the optimization</h2>
 <p>After creating a JSON file describing the reverse manufacturing process and the input data, the following example illustrates how to use the package to find the optimal set of decisions:</p>
-<pre><code class="julia"># Import package
+<pre><code class="language-julia"># Import package
 using RELOG
 
 # Solve optimization problem
@@ -202,12 +201,11 @@ RELOG.write(solution, &quot;solution.json&quot;)
 RELOG.write_plants_report(solution, &quot;plants.csv&quot;)
 RELOG.write_transportation_report(solution, &quot;transportation.csv&quot;)
 </code></pre>
-
 <p>For a complete description of the file formats above, and for a complete list of available reports, see the <a href="../format/">data format page</a>.</p>
 <h2 id="4-advanced-options">4. Advanced options</h2>
 <h3 id="41-changing-the-solver">4.1 Changing the solver</h3>
 <p>By default, RELOG internally uses <a href="https://github.com/coin-or/Cbc">Cbc</a>, an open-source and freely-available Mixed-Integer Linear Programming solver developed by the <a href="https://www.coin-or.org/">COIN-OR Project</a>. For larger-scale test cases, a commercial solver such as Gurobi, CPLEX or XPRESS is recommended. The following snippet shows how to switch from Cbc to Gurobi, for example:</p>
-<pre><code class="julia">using RELOG, Gurobi, JuMP
+<pre><code class="language-julia">using RELOG, Gurobi, JuMP
 
 gurobi = optimizer_with_attributes(Gurobi.Optimizer,
                                    &quot;TimeLimit&quot; =&gt; 3600,
@@ -217,7 +215,6 @@ RELOG.solve(&quot;instance.json&quot;,
             output=&quot;solution.json&quot;,
             optimizer=gurobi)
 </code></pre>
-
 <h3 id="42-multi-period-heuristics">4.2 Multi-period heuristics</h3>
 <p>For large-scale instances, it may be too time-consuming to find an exact optimal solution to the multi-period version of the problem. For these situations, RELOG includes a heuristic solution method, which proceeds as follows:</p>
 <ol>
@@ -229,7 +226,7 @@ RELOG.solve(&quot;instance.json&quot;,
 </li>
 </ol>
 <p>To solve an instance using this heuristic, use the option <code>heuristic=true</code>, as shown below.</p>
-<pre><code class="julia">using RELOG
+<pre><code class="language-julia">using RELOG
 
 solution = RELOG.solve(&quot;/home/user/instance.json&quot;,
                        heuristic=true)
@@ -238,18 +235,22 @@ solution = RELOG.solve(&quot;/home/user/instance.json&quot;,
         
     </div>
 
-    <footer class="col-md-12 text-center">
-        
-        <hr>
-        <p>
-        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
-        
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
-        </p>
+    
+      <footer class="col-md-12 text-center">
+          
+          
+            <hr>
+            <p>
+            <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+            
+            <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+            </p>
+          
 
-        
-        
-    </footer>
+          
+          
+      </footer>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../js/bootstrap-3.0.3.min.js"></script>
 

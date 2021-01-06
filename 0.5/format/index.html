@@ -59,7 +59,9 @@
 
             <!-- Main title -->
 
-            <a class="navbar-brand" href="..">RELOG</a>
+            
+              <a class="navbar-brand" href="..">RELOG</a>
+            
         </div>
 
         <!-- Expanded navigation -->
@@ -166,14 +168,13 @@
 </tbody>
 </table>
 <h4 id="example">Example</h4>
-<pre><code class="json">{
+<pre><code class="language-json">{
     &quot;parameters&quot;: {
         &quot;time horizon (years)&quot;: 2,
         &quot;building period (years)&quot;: [1]
     }
 }
 </code></pre>
-
 <h3 id="products">Products</h3>
 <p>The <strong>products</strong> section describes all products and subproducts in the simulation. The field <code>instance["Products"]</code> is a dictionary mapping the name of the product to a dictionary which describes its characteristics. Each product description contains the following keys:</p>
 <table>
@@ -226,7 +227,7 @@
 </tbody>
 </table>
 <h4 id="example_1">Example</h4>
-<pre><code class="json">{
+<pre><code class="language-json">{
     &quot;products&quot;: {
         &quot;P1&quot;: {
             &quot;initial amounts&quot;: {
@@ -265,7 +266,6 @@
     }
 }
 </code></pre>
-
 <h3 id="processing-plants">Processing plants</h3>
 <p>The <strong>plants</strong> section describes the available types of reverse manufacturing plants, their potential locations and associated costs, as well as their inputs and outputs. The field <code>instance["Plants"]</code> is a dictionary mapping the name of the plant to a dictionary with the following keys:</p>
 <table>
@@ -391,7 +391,7 @@
 </tbody>
 </table>
 <h4 id="example_2">Example</h4>
-<pre><code class="json">{
+<pre><code class="language-json">{
     &quot;plants&quot;: {
         &quot;F1&quot;: {
             &quot;input&quot;: &quot;P1&quot;,
@@ -436,7 +436,6 @@
     }
 }
 </code></pre>
-
 <h3 id="current-limitations">Current limitations</h3>
 <ul>
 <li>Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.</li>
@@ -450,18 +449,22 @@
         
     </div>
 
-    <footer class="col-md-12 text-center">
-        
-        <hr>
-        <p>
-        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
-        
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
-        </p>
+    
+      <footer class="col-md-12 text-center">
+          
+          
+            <hr>
+            <p>
+            <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+            
+            <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+            </p>
+          
 
-        
-        
-    </footer>
+          
+          
+      </footer>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../js/bootstrap-3.0.3.min.js"></script>
 

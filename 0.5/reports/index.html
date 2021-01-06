@@ -59,7 +59,9 @@
 
             <!-- Main title -->
 
-            <a class="navbar-brand" href="..">RELOG</a>
+            
+              <a class="navbar-brand" href="..">RELOG</a>
+            
         </div>
 
         <!-- Expanded navigation -->
@@ -236,7 +238,7 @@
 <ul>
 <li>Bar plot with total plant costs per year, grouped by plant type (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import seaborn as sns; sns.set()
 
 data = pd.read_csv(&quot;plants_report.csv&quot;)
@@ -247,12 +249,11 @@ sns.barplot(x=&quot;year&quot;,
                      .sum()
                      .reset_index());
 </code></pre>
-
 <p><img src="../images/ex_plant_cost_per_year.png" width="500px"/></p>
 <ul>
 <li>Map showing plant locations (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import geopandas as gp
 
 # Plot base map
@@ -267,7 +268,6 @@ points = gp.points_from_xy(data[&quot;longitude (deg)&quot;],
                            data[&quot;latitude (deg)&quot;])
 gp.GeoDataFrame(data, geometry=points).plot(ax=ax);
 </code></pre>
-
 <p><img src="../images/ex_plant_locations.png" width="1000px"/></p>
 <h2 id="plant-outputs-report">Plant outputs report</h2>
 <p>Report showing amount of products produced, sent and disposed of by each plant, as well as disposal costs.</p>
@@ -318,7 +318,7 @@ gp.GeoDataFrame(data, geometry=points).plot(ax=ax);
 <ul>
 <li>Bar plot showing total amount produced for each product, grouped by year (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import seaborn as sns; sns.set()
 
 data = pd.read_csv(&quot;plant_outputs_report.csv&quot;)
@@ -329,7 +329,6 @@ sns.barplot(x=&quot;amount produced (tonne)&quot;,
                      .sum()
                      .reset_index());
 </code></pre>
-
 <p><img src="../images/ex_amount_produced.png" width="500px"/></p>
 <h2 id="plant-emissions-report">Plant emissions report</h2>
 <p>Report showing amount of emissions produced by each plant.</p>
@@ -368,7 +367,7 @@ sns.barplot(x=&quot;amount produced (tonne)&quot;,
 <ul>
 <li>Bar plot showing total emission by plant type, grouped type of emissions (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import seaborn as sns; sns.set()
 
 data = pd.read_csv(&quot;plant_emissions_report.csv&quot;)
@@ -379,7 +378,6 @@ sns.barplot(x=&quot;plant type&quot;,
                      .sum()
                      .reset_index());
 </code></pre>
-
 <p><img src="../images/ex_emissions.png" width="500px"/></p>
 <h2 id="transportation-report">Transportation report</h2>
 <p>Report showing amount of product sent from initial locations to plants, and from one plant to another. Includes the distance between each pair of locations, amount-distance shipped, transportation costs and energy expenditure.</p>
@@ -458,7 +456,7 @@ sns.barplot(x=&quot;plant type&quot;,
 <ul>
 <li>Bar plot showing total amount-distance for each product type, grouped by year (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import seaborn as sns; sns.set()
 
 data = pd.read_csv(&quot;transportation_report.csv&quot;)
@@ -469,12 +467,11 @@ sns.barplot(x=&quot;product&quot;,
                      .sum()
                      .reset_index());
 </code></pre>
-
 <p><img src="../images/ex_transportation_amount_distance.png" width="500px"/></p>
 <ul>
 <li>Map of transportation lines (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import geopandas as gp
 from shapely.geometry import Point, LineString
 import matplotlib.pyplot as plt
@@ -511,7 +508,6 @@ gp.GeoDataFrame(data, geometry=points).plot(ax=ax,
                                             color=&quot;red&quot;,
                                             markersize=50);
 </code></pre>
-
 <p><img src="../images/ex_transportation.png" width="1000px"/></p>
 <h2 id="transportation-emissions-report">Transportation emissions report</h2>
 <p>Report showing emissions for each trip between initial locations and plants, and between pairs of plants.</p>
@@ -590,7 +586,7 @@ gp.GeoDataFrame(data, geometry=points).plot(ax=ax,
 <ul>
 <li>Bar plot showing total emission amount by emission type, grouped by type of product being transported (in Python):</li>
 </ul>
-<pre><code class="python">import pandas as pd
+<pre><code class="language-python">import pandas as pd
 import seaborn as sns; sns.set()
 
 data = pd.read_csv(&quot;transportation_emissions_report.csv&quot;)
@@ -601,24 +597,27 @@ sns.barplot(x=&quot;emission type&quot;,
                      .sum()
                      .reset_index());
 </code></pre>
-
 <p><img src="../images/ex_transportation_emissions.png" width="500px"/></p></div>
         
         
     </div>
 
-    <footer class="col-md-12 text-center">
-        
-        <hr>
-        <p>
-        <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
-        
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
-        </p>
+    
+      <footer class="col-md-12 text-center">
+          
+          
+            <hr>
+            <p>
+            <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+            
+            <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+            </p>
+          
 
-        
-        
-    </footer>
+          
+          
+      </footer>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../js/bootstrap-3.0.3.min.js"></script>
 
