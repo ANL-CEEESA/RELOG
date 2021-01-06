@@ -255,6 +255,12 @@ function transportation_emissions_report(solution)::DataFrame
     return df
 end
 
+function write(solution::AbstractDict, filename::AbstractString)
+    @info "Writing solution: $filename"
+    open(filename, "w") do file
+        JSON.print(file, solution, 2)
+    end
+end
 
 write_plants_report(solution, filename) =
     CSV.write(filename, plants_report(solution))

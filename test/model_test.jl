@@ -36,15 +36,21 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
         
-        #dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
-        #MOI.copy_to(dest, model.mip)
-        #MOI.write_to_file(dest, "model.lp")
+        # dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
+        # MOI.copy_to(dest, model.mip)
+        # MOI.write_to_file(dest, "model.lp")
     end
 
     @testset "solve (exact)" begin
-        solution_filename = tempname()
+        solution_filename_a = tempname()
+        solution_filename_b = tempname()
         solution = RELOG.solve("$(pwd())/../instances/s1.json",
-                               output=solution_filename)
+                               output=solution_filename_a)
+
+        @test isfile(solution_filename_a)
+                               
+        RELOG.write(solution, solution_filename_b)
+        @test isfile(solution_filename_b)
         
         @test "Costs" in keys(solution)
         @test "Fixed operating (\$)" in keys(solution["Costs"])

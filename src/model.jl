@@ -280,10 +280,7 @@ function solve(instance::Instance;
     solution = get_solution(model, marginal_costs=marginal_costs)
     
     if output != nothing
-        @info "Writing solution: $output"
-        open(output, "w") do file
-            JSON.print(file, solution, 2)
-        end
+        write(solution, output)
     end
     
     return solution
