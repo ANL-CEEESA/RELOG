@@ -66,9 +66,45 @@ RELOG.write_transportation_report(solution, "transportation.csv")
 
 For a complete description of the file formats above, and for a complete list of available reports, see the [data format page](format.md).
 
-## 4. Advanced options
+## 4. What-If Analysis
 
-### 4.1 Changing the solver
+Fundamentally, RELOG decides when and where to build plants based on a deterministic optimization problem that minimizes costs for a particular input file provided by the user. In practical situations, it may not be possible to perfectly estimate some (or most) entries in this input file in advance, such as costs, demands and emissions. In this situation, it may be interesting to evaluate how well does the facility location plan produced by RELOG work if costs, demands and emissions turn out to be different.
+
+To simplify this what-if analysis, RELOG provides the `resolve` method, which updates a previous solution based on a new scenario. The method accepts a previous optimal solution, produced by RELOG, and a new input file, which describes the new scenario. The method reoptimizes the supply chain for this new input file, and produces a new solution which still builds the same set of plants as before, in exactly the same locations and with the same capacities, but that may now utilize the plants differently, based on the new data. For example, in the new solution, plants that were previously used at full capacity may now be utilized at half-capacity instead. As another example, regions that were previously served by a certain plant may now be served by a different one.
+
+The following snippet shows how to use the method:
+
+```julia
+# Import package
+using RELOG
+
+# Optimize for the average scenario
+solution_avg = RELOG.solve("input_avg.json")
+
+# Write reports for the average scenario
+RELOG.write_plants_report(solution_avg, "plants_avg.csv")
+RELOG.write_transportation_report(solution_avg, "transportation_avg.csv")
+
+# Re-optimize for the high-demand scenario, keeping plants fixed
+solution_high = RELOG.resolve(solution_avg, "input_high.json")
+
+# Write reports for the high-demand scenario
+RELOG.write_plants_report(solution_high, "plants_high.csv")
+RELOG.write_transportation_report(solution_high, "transportation_high.csv")
+```
+
+To use the `resolve` method, the new input file should be very similar to the original one. Only the following entries are allowed to change:
+
+- **Products:** Transportation costs, energy, emissions and initial amounts (latitude, longitude and amount).
+- **Plants:** Energy and emissions.
+- **Plant's location:** Latitude and longitude.
+- **Plant's storage:** Cost.
+- **Plant's capacity:** Opening cost, fixed operating cost and variable operating cost.
+
+
+## 5. Advanced options
+
+### 5.1 Changing the solver
 
 By default, RELOG internally uses [Cbc](https://github.com/coin-or/Cbc), an open-source and freely-available Mixed-Integer Linear Programming solver developed by the [COIN-OR Project](https://www.coin-or.org/). For larger-scale test cases, a commercial solver such as Gurobi, CPLEX or XPRESS is recommended. The following snippet shows how to switch from Cbc to Gurobi, for example:
 
@@ -84,7 +120,7 @@ RELOG.solve("instance.json",
             optimizer=gurobi)
 ```
 
-### 4.2 Multi-period heuristics
+### 5.2 Multi-period heuristics
 
 For large-scale instances, it may be too time-consuming to find an exact optimal solution to the multi-period version of the problem. For these situations, RELOG includes a heuristic solution method, which proceeds as follows:
 
