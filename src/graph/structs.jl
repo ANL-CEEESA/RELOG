@@ -33,3 +33,11 @@ mutable struct Graph
     collection_shipping_nodes::Vector{ShippingNode}
     arcs::Vector{Arc}
 end
+
+function Base.show(io::IO, instance::Graph)
+    print(io, "RELOG graph with ")
+    print(io, "$(length(instance.process_nodes)) process nodes, ")
+    print(io, "$(length(instance.plant_shipping_nodes)) plant shipping nodes, ")
+    print(io, "$(length(instance.collection_shipping_nodes)) collection shipping nodes, ")
+    print(io, "$(length(instance.arcs)) arcs")
+end
