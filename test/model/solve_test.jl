@@ -38,7 +38,7 @@ end
     for (location_name, location_dict) in json["products"]["P1"]["initial amounts"]
         location_dict["amount (tonne)"] *= 1000
     end
-    RELOG.solve(RELOG.parse(json))
+    @test_throws ErrorException("No solution available") RELOG.solve(RELOG.parse(json))
 end
 
 @testset "solve (with storage)" begin

@@ -38,8 +38,7 @@ function solve(
     JuMP.optimize!(model)
 
     if !has_values(model)
-        @warn "No solution available"
-        return OrderedDict()
+        error("No solution available")
     end
 
     if marginal_costs
