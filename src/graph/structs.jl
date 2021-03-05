@@ -32,6 +32,7 @@ mutable struct Graph
     plant_shipping_nodes::Vector{ShippingNode}
     collection_shipping_nodes::Vector{ShippingNode}
     arcs::Vector{Arc}
+    name_to_process_node_map::Dict{Tuple{AbstractString,AbstractString},ProcessNode}
 end
 
 function Base.show(io::IO, instance::Graph)

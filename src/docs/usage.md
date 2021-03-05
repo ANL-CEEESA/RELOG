@@ -79,14 +79,14 @@ The following snippet shows how to use the method:
 using RELOG
 
 # Optimize for the average scenario
-solution_avg = RELOG.solve("input_avg.json")
+solution_avg, model_avg = RELOG.solve("input_avg.json", return_model=true)
 
 # Write reports for the average scenario
 RELOG.write_plants_report(solution_avg, "plants_avg.csv")
 RELOG.write_transportation_report(solution_avg, "transportation_avg.csv")
 
 # Re-optimize for the high-demand scenario, keeping plants fixed
-solution_high = RELOG.resolve(solution_avg, "input_high.json")
+solution_high = RELOG.resolve(model_avg, "input_high.json")
 
 # Write reports for the high-demand scenario
 RELOG.write_plants_report(solution_high, "plants_high.csv")

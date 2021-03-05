@@ -4,24 +4,16 @@
 
 using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
 
-default_milp_optimizer = optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0)
-default_lp_optimizer = optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+function _get_default_milp_optimizer()
+    return optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0)
+end
 
-function solve(
-    instance::Instance;
-    optimizer = nothing,
-    output = nothing,
-    marginal_costs = true,
-)
+function _get_default_lp_optimizer()
+    return optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+end
 
-    milp_optimizer = lp_optimizer = optimizer
-    if optimizer == nothing
-        milp_optimizer = default_milp_optimizer
-        lp_optimizer = default_lp_optimizer
-    end
 
-    @info "Building graph..."
-    graph = RELOG.build_graph(instance)
+function _print_graph_stats(instance::Instance, graph::Graph)::Nothing
     @info @sprintf("    %12d time periods", instance.time)
     @info @sprintf("    %12d process nodes", length(graph.process_nodes))
     @info @sprintf("    %12d shipping nodes (plant)", length(graph.plant_shipping_nodes))
@@ -30,6 +22,26 @@ function solve(
         length(graph.collection_shipping_nodes)
     )
     @info @sprintf("    %12d arcs", length(graph.arcs))
+    return
+end
+
+function solve(
+    instance::Instance;
+    optimizer = nothing,
+    output = nothing,
+    marginal_costs = true,
+    return_model = false,
+)
+
+    milp_optimizer = lp_optimizer = optimizer
+    if optimizer == nothing
+        milp_optimizer = _get_default_milp_optimizer()
+        lp_optimizer = _get_default_lp_optimizer()
+    end
+
+    @info "Building graph..."
+    graph = RELOG.build_graph(instance)
+    _print_graph_stats(instance, graph)
 
     @info "Building optimization model..."
     model = RELOG.build_model(instance, graph, milp_optimizer)
@@ -62,7 +74,11 @@ function solve(
         write(solution, output)
     end
 
-    return solution
+    if return_model
+        return solution, model
+    else
+        return solution
+    end
 end
 
 function solve(filename::AbstractString; heuristic = false, kwargs...)

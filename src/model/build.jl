@@ -4,7 +4,6 @@
 
 using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
 
-
 function build_model(instance::Instance, graph::Graph, optimizer)::JuMP.Model
     model = Model(optimizer)
     model[:instance] = instance

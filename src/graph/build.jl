@@ -17,6 +17,8 @@ function build_graph(instance::Instance)::Graph
     plant_shipping_nodes = ShippingNode[]
     collection_shipping_nodes = ShippingNode[]
 
+    name_to_process_node_map = Dict{Tuple{AbstractString,AbstractString},ProcessNode}()
+
     process_nodes_by_input_product =
         Dict(product => ProcessNode[] for product in instance.products)
     shipping_nodes_by_plant = Dict(plant => [] for plant in instance.plants)
@@ -34,6 +36,8 @@ function build_graph(instance::Instance)::Graph
         next_index += 1
         push!(process_nodes, pn)
         push!(process_nodes_by_input_product[plant.input], pn)
+
+        name_to_process_node_map[(plant.plant_name, plant.location_name)] = pn
 
         for product in keys(plant.output)
             sn = ShippingNode(next_index, plant, product, [], [])
@@ -73,5 +77,24 @@ function build_graph(instance::Instance)::Graph
         end
     end
 
-    return Graph(process_nodes, plant_shipping_nodes, collection_shipping_nodes, arcs)
+    return Graph(
+        process_nodes,
+        plant_shipping_nodes,
+        collection_shipping_nodes,
+        arcs,
+        name_to_process_node_map,
+    )
+end
+
+
+function print_graph_stats(instance::Instance, graph::Graph)::Nothing
+    @info @sprintf("    %12d time periods", instance.time)
+    @info @sprintf("    %12d process nodes", length(graph.process_nodes))
+    @info @sprintf("    %12d shipping nodes (plant)", length(graph.plant_shipping_nodes))
+    @info @sprintf(
+        "    %12d shipping nodes (collection)",
+        length(graph.collection_shipping_nodes)
+    )
+    @info @sprintf("    %12d arcs", length(graph.arcs))
+    return
 end
