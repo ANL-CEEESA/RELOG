@@ -4,41 +4,11 @@
 
 using Geodesy
 
-
-abstract type Node end
-
-
-mutable struct Arc
-    source::Node
-    dest::Node
-    values::Dict{String,Float64}
+function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
+    x = LLA(source_lat, source_lon, 0.0)
+    y = LLA(dest_lat, dest_lon, 0.0)
+    return round(distance(x, y) / 1000.0, digits = 2)
 end
-
-
-mutable struct ProcessNode <: Node
-    index::Int
-    location::Plant
-    incoming_arcs::Array{Arc}
-    outgoing_arcs::Array{Arc}
-end
-
-
-mutable struct ShippingNode <: Node
-    index::Int
-    location::Union{Plant,CollectionCenter}
-    product::Product
-    incoming_arcs::Array{Arc}
-    outgoing_arcs::Array{Arc}
-end
-
-
-mutable struct Graph
-    process_nodes::Array{ProcessNode}
-    plant_shipping_nodes::Array{ShippingNode}
-    collection_shipping_nodes::Array{ShippingNode}
-    arcs::Array{Arc}
-end
-
 
 function build_graph(instance::Instance)::Graph
     arcs = []
@@ -104,20 +74,4 @@ function build_graph(instance::Instance)::Graph
     end
 
     return Graph(process_nodes, plant_shipping_nodes, collection_shipping_nodes, arcs)
-end
-
-
-function to_csv(graph::Graph)
-    result = ""
-    for a in graph.arcs
-        result *= "$(a.source.index),$(a.dest.index)\n"
-    end
-    return result
-end
-
-
-function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
-    x = LLA(source_lat, source_lon, 0.0)
-    y = LLA(dest_lat, dest_lon, 0.0)
-    return round(distance(x, y) / 1000.0, digits = 2)
 end

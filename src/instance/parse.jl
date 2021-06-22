@@ -8,85 +8,13 @@ using JSONSchema
 using Printf
 using Statistics
 
-
-mutable struct Product
-    name::String
-    transportation_cost::Array{Float64}
-    transportation_energy::Array{Float64}
-    transportation_emissions::Dict{String,Array{Float64}}
-end
-
-
-mutable struct CollectionCenter
-    index::Int64
-    name::String
-    latitude::Float64
-    longitude::Float64
-    product::Product
-    amount::Array{Float64}
-end
-
-
-mutable struct PlantSize
-    capacity::Float64
-    variable_operating_cost::Array{Float64}
-    fixed_operating_cost::Array{Float64}
-    opening_cost::Array{Float64}
-end
-
-
-mutable struct Plant
-    index::Int64
-    plant_name::String
-    location_name::String
-    input::Product
-    output::Dict{Product,Float64}
-    latitude::Float64
-    longitude::Float64
-    disposal_limit::Dict{Product,Array{Float64}}
-    disposal_cost::Dict{Product,Array{Float64}}
-    sizes::Array{PlantSize}
-    energy::Array{Float64}
-    emissions::Dict{String,Array{Float64}}
-    storage_limit::Float64
-    storage_cost::Array{Float64}
-end
-
-
-mutable struct Instance
-    time::Int64
-    products::Array{Product,1}
-    collection_centers::Array{CollectionCenter,1}
-    plants::Array{Plant,1}
-    building_period::Array{Int64}
-end
-
-
-function validate(json, schema)
-    result = JSONSchema.validate(json, schema)
-    if result !== nothing
-        if result isa JSONSchema.SingleIssue
-            path = join(result.path, " → ")
-            if length(path) == 0
-                path = "root"
-            end
-            msg = "$(result.msg) in $(path)"
-        else
-            msg = convert(String, result)
-        end
-        throw(msg)
-    end
-end
-
-
 function parsefile(path::String)::Instance
     return RELOG.parse(JSON.parsefile(path))
 end
 
-
 function parse(json)::Instance
     basedir = dirname(@__FILE__)
-    json_schema = JSON.parsefile("$basedir/schemas/input.json")
+    json_schema = JSON.parsefile("$basedir/../schemas/input.json")
     validate(json, Schema(json_schema))
 
     T = json["parameters"]["time horizon (years)"]
@@ -237,56 +165,4 @@ function parse(json)::Instance
     @info @sprintf("%12d candidate plant locations", length(plants))
 
     return Instance(T, products, collection_centers, plants, building_period)
-end
-
-
-"""
-    _compress(instance::Instance)
-
-Create a single-period instance from a multi-period one. Specifically,
-replaces every time-dependent attribute, such as initial_amounts,
-by a list with a single element, which is either a sum, an average,
-or something else that makes sense to that specific attribute.
-"""
-function _compress(instance::Instance)::Instance
-    T = instance.time
-    compressed = deepcopy(instance)
-    compressed.time = 1
-    compressed.building_period = [1]
-
-    # Compress products
-    for p in compressed.products
-        p.transportation_cost = [mean(p.transportation_cost)]
-        p.transportation_energy = [mean(p.transportation_energy)]
-        for (emission_name, emission_value) in p.transportation_emissions
-            p.transportation_emissions[emission_name] = [mean(emission_value)]
-        end
-    end
-
-    # Compress collection centers
-    for c in compressed.collection_centers
-        c.amount = [maximum(c.amount) * T]
-    end
-
-    # Compress plants
-    for plant in compressed.plants
-        plant.energy = [mean(plant.energy)]
-        for (emission_name, emission_value) in plant.emissions
-            plant.emissions[emission_name] = [mean(emission_value)]
-        end
-        for s in plant.sizes
-            s.capacity *= T
-            s.variable_operating_cost = [mean(s.variable_operating_cost)]
-            s.opening_cost = [s.opening_cost[1]]
-            s.fixed_operating_cost = [sum(s.fixed_operating_cost)]
-        end
-        for (prod_name, disp_limit) in plant.disposal_limit
-            plant.disposal_limit[prod_name] = [sum(disp_limit)]
-        end
-        for (prod_name, disp_cost) in plant.disposal_cost
-            plant.disposal_cost[prod_name] = [mean(disp_cost)]
-        end
-    end
-
-    return compressed
 end

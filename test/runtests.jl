@@ -4,8 +4,16 @@
 using Test
 
 @testset "RELOG" begin
-    include("instance_test.jl")
-    include("graph_test.jl")
-    include("model_test.jl")
+    @testset "Instance" begin
+        include("instance/compress_test.jl")
+        include("instance/parse_test.jl")
+    end
+    @testset "Graph" begin
+        include("graph/build_test.jl")
+    end
+    @testset "Model" begin
+        include("model/build_test.jl")
+        include("model/solve_test.jl")
+    end
     include("reports_test.jl")
 end
