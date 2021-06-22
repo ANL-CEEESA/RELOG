@@ -7,7 +7,6 @@ using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructur
 
 mutable struct ManufacturingModel
     mip::JuMP.Model
-    vars::DotDict
     eqs::DotDict
     instance::Instance
     graph::Graph
@@ -15,7 +14,7 @@ end
 
 
 function build_model(instance::Instance, graph::Graph, optimizer)::ManufacturingModel
-    model = ManufacturingModel(Model(optimizer), DotDict(), DotDict(), instance, graph)
+    model = ManufacturingModel(Model(optimizer), DotDict(), instance, graph)
     create_vars!(model)
     create_objective_function!(model)
     create_shipping_node_constraints!(model)
@@ -25,11 +24,11 @@ end
 
 
 function create_vars!(model::ManufacturingModel)
-    mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
+    mip, graph, T = model.mip, model.graph, model.instance.time
 
-    vars.flow = Dict((a, t) => @variable(mip, lower_bound = 0) for a in graph.arcs, t = 1:T)
+    mip[:flow] = Dict((a, t) => @variable(mip, lower_bound = 0) for a in graph.arcs, t = 1:T)
 
-    vars.dispose = Dict(
+    mip[:dispose] = Dict(
         (n, t) => @variable(
             mip,
             lower_bound = 0,
@@ -37,34 +36,34 @@ function create_vars!(model::ManufacturingModel)
         ) for n in values(graph.plant_shipping_nodes), t = 1:T
     )
 
-    vars.store = Dict(
+    mip[:store] = Dict(
         (n, t) =>
             @variable(mip, lower_bound = 0, upper_bound = n.location.storage_limit) for
         n in values(graph.process_nodes), t = 1:T
     )
 
-    vars.process = Dict(
+    mip[:process] = Dict(
         (n, t) => @variable(mip, lower_bound = 0) for n in values(graph.process_nodes),
         t = 1:T
     )
 
-    vars.open_plant = Dict(
+    mip[:open_plant] = Dict(
         (n, t) => @variable(mip, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
 
-    vars.is_open = Dict(
+    mip[:is_open] = Dict(
         (n, t) => @variable(mip, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
 
-    vars.capacity = Dict(
+    mip[:capacity] = Dict(
         (n, t) =>
             @variable(mip, lower_bound = 0, upper_bound = n.location.sizes[2].capacity)
         for n in values(graph.process_nodes), t = 1:T
     )
 
-    vars.expansion = Dict(
+    mip[:expansion] = Dict(
         (n, t) => @variable(
             mip,
             lower_bound = 0,
@@ -93,7 +92,7 @@ function slope_fix_oper_cost(plant, t)
 end
 
 function create_objective_function!(model::ManufacturingModel)
-    mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
+    mip, graph, T = model.mip, model.graph, model.instance.time
     obj = AffExpr(0.0)
 
     # Process node costs
@@ -102,41 +101,41 @@ function create_objective_function!(model::ManufacturingModel)
         # Transportation and variable operating costs
         for a in n.incoming_arcs
             c = n.location.input.transportation_cost[t] * a.values["distance"]
-            add_to_expression!(obj, c, vars.flow[a, t])
+            add_to_expression!(obj, c, mip[:flow][a, t])
         end
 
         # Opening costs
-        add_to_expression!(obj, n.location.sizes[1].opening_cost[t], vars.open_plant[n, t])
+        add_to_expression!(obj, n.location.sizes[1].opening_cost[t], mip[:open_plant][n, t])
 
         # Fixed operating costs (base)
         add_to_expression!(
             obj,
             n.location.sizes[1].fixed_operating_cost[t],
-            vars.is_open[n, t],
+            mip[:is_open][n, t],
         )
 
         # Fixed operating costs (expansion)
-        add_to_expression!(obj, slope_fix_oper_cost(n.location, t), vars.expansion[n, t])
+        add_to_expression!(obj, slope_fix_oper_cost(n.location, t), mip[:expansion][n, t])
 
         # Processing costs
         add_to_expression!(
             obj,
             n.location.sizes[1].variable_operating_cost[t],
-            vars.process[n, t],
+            mip[:process][n, t],
         )
 
         # Storage costs
-        add_to_expression!(obj, n.location.storage_cost[t], vars.store[n, t])
+        add_to_expression!(obj, n.location.storage_cost[t], mip[:store][n, t])
 
         # Expansion costs
         if t < T
             add_to_expression!(
                 obj,
                 slope_open(n.location, t) - slope_open(n.location, t + 1),
-                vars.expansion[n, t],
+                mip[:expansion][n, t],
             )
         else
-            add_to_expression!(obj, slope_open(n.location, t), vars.expansion[n, t])
+            add_to_expression!(obj, slope_open(n.location, t), mip[:expansion][n, t])
         end
     end
 
@@ -144,7 +143,7 @@ function create_objective_function!(model::ManufacturingModel)
     for n in values(graph.plant_shipping_nodes), t = 1:T
 
         # Disposal costs
-        add_to_expression!(obj, n.location.disposal_cost[n.product][t], vars.dispose[n, t])
+        add_to_expression!(obj, n.location.disposal_cost[n.product][t], mip[:dispose][n, t])
     end
 
     @objective(mip, Min, obj)
@@ -152,7 +151,7 @@ end
 
 
 function create_shipping_node_constraints!(model::ManufacturingModel)
-    mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
+    mip, graph, T = model.mip, model.graph, model.instance.time
     eqs = model.eqs
 
     eqs.balance = OrderedDict()
@@ -162,7 +161,7 @@ function create_shipping_node_constraints!(model::ManufacturingModel)
         for n in graph.collection_shipping_nodes
             eqs.balance[n, t] = @constraint(
                 mip,
-                sum(vars.flow[a, t] for a in n.outgoing_arcs) == n.location.amount[t]
+                sum(mip[:flow][a, t] for a in n.outgoing_arcs) == n.location.amount[t]
             )
         end
 
@@ -170,8 +169,8 @@ function create_shipping_node_constraints!(model::ManufacturingModel)
         for n in graph.plant_shipping_nodes
             @constraint(
                 mip,
-                sum(vars.flow[a, t] for a in n.incoming_arcs) ==
-                sum(vars.flow[a, t] for a in n.outgoing_arcs) + vars.dispose[n, t]
+                sum(mip[:flow][a, t] for a in n.incoming_arcs) ==
+                sum(mip[:flow][a, t] for a in n.outgoing_arcs) + mip[:dispose][n, t]
             )
         end
     end
@@ -180,55 +179,55 @@ end
 
 
 function create_process_node_constraints!(model::ManufacturingModel)
-    mip, vars, graph, T = model.mip, model.vars, model.graph, model.instance.time
+    mip, graph, T = model.mip, model.graph, model.instance.time
 
     for t = 1:T, n in graph.process_nodes
         input_sum = AffExpr(0.0)
         for a in n.incoming_arcs
-            add_to_expression!(input_sum, 1.0, vars.flow[a, t])
+            add_to_expression!(input_sum, 1.0, mip[:flow][a, t])
         end
 
         # Output amount is implied by amount processed
         for a in n.outgoing_arcs
-            @constraint(mip, vars.flow[a, t] == a.values["weight"] * vars.process[n, t])
+            @constraint(mip, mip[:flow][a, t] == a.values["weight"] * mip[:process][n, t])
         end
 
         # If plant is closed, capacity is zero
         @constraint(
             mip,
-            vars.capacity[n, t] <= n.location.sizes[2].capacity * vars.is_open[n, t]
+            mip[:capacity][n, t] <= n.location.sizes[2].capacity * mip[:is_open][n, t]
         )
 
         # If plant is open, capacity is greater than base
         @constraint(
             mip,
-            vars.capacity[n, t] >= n.location.sizes[1].capacity * vars.is_open[n, t]
+            mip[:capacity][n, t] >= n.location.sizes[1].capacity * mip[:is_open][n, t]
         )
 
         # Capacity is linked to expansion
         @constraint(
             mip,
-            vars.capacity[n, t] <= n.location.sizes[1].capacity + vars.expansion[n, t]
+            mip[:capacity][n, t] <= n.location.sizes[1].capacity + mip[:expansion][n, t]
         )
 
         # Can only process up to capacity
-        @constraint(mip, vars.process[n, t] <= vars.capacity[n, t])
+        @constraint(mip, mip[:process][n, t] <= mip[:capacity][n, t])
 
         if t > 1
             # Plant capacity can only increase over time
-            @constraint(mip, vars.capacity[n, t] >= vars.capacity[n, t-1])
-            @constraint(mip, vars.expansion[n, t] >= vars.expansion[n, t-1])
+            @constraint(mip, mip[:capacity][n, t] >= mip[:capacity][n, t-1])
+            @constraint(mip, mip[:expansion][n, t] >= mip[:expansion][n, t-1])
         end
 
         # Amount received equals amount processed plus stored
         store_in = 0
         if t > 1
-            store_in = vars.store[n, t-1]
+            store_in = mip[:store][n, t-1]
         end
         if t == T
-            @constraint(mip, vars.store[n, t] == 0)
+            @constraint(mip, mip[:store][n, t] == 0)
         end
-        @constraint(mip, input_sum + store_in == vars.store[n, t] + vars.process[n, t])
+        @constraint(mip, input_sum + store_in == mip[:store][n, t] + mip[:process][n, t])
 
 
         # Plant is currently open if it was already open in the previous time period or
@@ -236,15 +235,15 @@ function create_process_node_constraints!(model::ManufacturingModel)
         if t > 1
             @constraint(
                 mip,
-                vars.is_open[n, t] == vars.is_open[n, t-1] + vars.open_plant[n, t]
+                mip[:is_open][n, t] == mip[:is_open][n, t-1] + mip[:open_plant][n, t]
             )
         else
-            @constraint(mip, vars.is_open[n, t] == vars.open_plant[n, t])
+            @constraint(mip, mip[:is_open][n, t] == mip[:open_plant][n, t])
         end
 
         # Plant can only be opened during building period
         if t ∉ model.instance.building_period
-            @constraint(mip, vars.open_plant[n, t] == 0)
+            @constraint(mip, mip[:open_plant][n, t] == 0)
         end
     end
 end
@@ -340,8 +339,8 @@ end
 
 
 function get_solution(model::ManufacturingModel; marginal_costs = true)
-    mip, vars, eqs, graph, instance =
-        model.mip, model.vars, model.eqs, model.graph, model.instance
+    mip, eqs, graph, instance =
+        model.mip, model.eqs, model.graph, model.instance
     T = instance.time
 
     output = OrderedDict(
@@ -404,37 +403,37 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
             "Latitude (deg)" => plant.latitude,
             "Longitude (deg)" => plant.longitude,
             "Capacity (tonne)" =>
-                [JuMP.value(vars.capacity[process_node, t]) for t = 1:T],
+                [JuMP.value(mip[:capacity][process_node, t]) for t = 1:T],
             "Opening cost (\$)" => [
-                JuMP.value(vars.open_plant[process_node, t]) *
+                JuMP.value(mip[:open_plant][process_node, t]) *
                 plant.sizes[1].opening_cost[t] for t = 1:T
             ],
             "Fixed operating cost (\$)" => [
-                JuMP.value(vars.is_open[process_node, t]) *
+                JuMP.value(mip[:is_open][process_node, t]) *
                 plant.sizes[1].fixed_operating_cost[t] +
-                JuMP.value(vars.expansion[process_node, t]) * slope_fix_oper_cost(plant, t) for t = 1:T
+                JuMP.value(mip[:expansion][process_node, t]) * slope_fix_oper_cost(plant, t) for t = 1:T
             ],
             "Expansion cost (\$)" => [
                 (
                     if t == 1
-                        slope_open(plant, t) * JuMP.value(vars.expansion[process_node, t])
+                        slope_open(plant, t) * JuMP.value(mip[:expansion][process_node, t])
                     else
                         slope_open(plant, t) * (
-                            JuMP.value(vars.expansion[process_node, t]) -
-                            JuMP.value(vars.expansion[process_node, t-1])
+                            JuMP.value(mip[:expansion][process_node, t]) -
+                            JuMP.value(mip[:expansion][process_node, t-1])
                         )
                     end
                 ) for t = 1:T
             ],
             "Process (tonne)" =>
-                [JuMP.value(vars.process[process_node, t]) for t = 1:T],
+                [JuMP.value(mip[:process][process_node, t]) for t = 1:T],
             "Variable operating cost (\$)" => [
-                JuMP.value(vars.process[process_node, t]) *
+                JuMP.value(mip[:process][process_node, t]) *
                 plant.sizes[1].variable_operating_cost[t] for t = 1:T
             ],
-            "Storage (tonne)" => [JuMP.value(vars.store[process_node, t]) for t = 1:T],
+            "Storage (tonne)" => [JuMP.value(mip[:store][process_node, t]) for t = 1:T],
             "Storage cost (\$)" => [
-                JuMP.value(vars.store[process_node, t]) * plant.storage_cost[t] for t = 1:T
+                JuMP.value(mip[:store][process_node, t]) * plant.storage_cost[t] for t = 1:T
             ],
         )
         output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]
@@ -446,7 +445,7 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
 
         # Inputs
         for a in process_node.incoming_arcs
-            vals = [JuMP.value(vars.flow[a, t]) for t = 1:T]
+            vals = [JuMP.value(mip[:flow][a, t]) for t = 1:T]
             if sum(vals) <= 1e-3
                 continue
             end
@@ -509,13 +508,13 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
             plant_dict["Total output"][product_name] = zeros(T)
             plant_dict["Output"]["Send"][product_name] = product_dict = OrderedDict()
 
-            disposal_amount = [JuMP.value(vars.dispose[shipping_node, t]) for t = 1:T]
+            disposal_amount = [JuMP.value(mip[:dispose][shipping_node, t]) for t = 1:T]
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
                 plant_dict["Output"]["Dispose"][product_name] =
                     disposal_dict = OrderedDict()
                 disposal_dict["Amount (tonne)"] =
-                    [JuMP.value(model.vars.dispose[shipping_node, t]) for t = 1:T]
+                    [JuMP.value(model.mip[:dispose][shipping_node, t]) for t = 1:T]
                 disposal_dict["Cost (\$)"] = [
                     disposal_dict["Amount (tonne)"][t] *
                     plant.disposal_cost[shipping_node.product][t] for t = 1:T
@@ -525,7 +524,7 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
             end
 
             for a in shipping_node.outgoing_arcs
-                vals = [JuMP.value(vars.flow[a, t]) for t = 1:T]
+                vals = [JuMP.value(mip[:flow][a, t]) for t = 1:T]
                 if sum(vals) <= 1e-3
                     continue
                 end

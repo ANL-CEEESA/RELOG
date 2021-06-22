@@ -19,22 +19,22 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
             n in graph.plant_shipping_nodes
         )
 
-        @test length(model.vars.flow) == 76
-        @test length(model.vars.dispose) == 16
-        @test length(model.vars.open_plant) == 12
-        @test length(model.vars.capacity) == 12
-        @test length(model.vars.expansion) == 12
+        @test length(model.mip[:flow]) == 76
+        @test length(model.mip[:dispose]) == 16
+        @test length(model.mip[:open_plant]) == 12
+        @test length(model.mip[:capacity]) == 12
+        @test length(model.mip[:expansion]) == 12
 
         l1 = process_node_by_location_name["L1"]
-        v = model.vars.capacity[l1, 1]
+        v = model.mip[:capacity][l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1000.0
 
-        v = model.vars.expansion[l1, 1]
+        v = model.mip[:expansion][l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 750.0
 
-        v = model.vars.dispose[shipping_node_by_location_and_product_names["L1", "P2"], 1]
+        v = model.mip[:dispose][shipping_node_by_location_and_product_names["L1", "P2"], 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
 
