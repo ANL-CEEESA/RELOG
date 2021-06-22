@@ -7,14 +7,13 @@ using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructur
 
 mutable struct ManufacturingModel
     mip::JuMP.Model
-    eqs::DotDict
     instance::Instance
     graph::Graph
 end
 
 
 function build_model(instance::Instance, graph::Graph, optimizer)::ManufacturingModel
-    model = ManufacturingModel(Model(optimizer), DotDict(), instance, graph)
+    model = ManufacturingModel(Model(optimizer), instance, graph)
     create_vars!(model)
     create_objective_function!(model)
     create_shipping_node_constraints!(model)
@@ -25,9 +24,8 @@ end
 
 function create_vars!(model::ManufacturingModel)
     mip, graph, T = model.mip, model.graph, model.instance.time
-
-    mip[:flow] = Dict((a, t) => @variable(mip, lower_bound = 0) for a in graph.arcs, t = 1:T)
-
+    mip[:flow] =
+        Dict((a, t) => @variable(mip, lower_bound = 0) for a in graph.arcs, t = 1:T)
     mip[:dispose] = Dict(
         (n, t) => @variable(
             mip,
@@ -35,34 +33,28 @@ function create_vars!(model::ManufacturingModel)
             upper_bound = n.location.disposal_limit[n.product][t]
         ) for n in values(graph.plant_shipping_nodes), t = 1:T
     )
-
     mip[:store] = Dict(
         (n, t) =>
             @variable(mip, lower_bound = 0, upper_bound = n.location.storage_limit) for
         n in values(graph.process_nodes), t = 1:T
     )
-
     mip[:process] = Dict(
         (n, t) => @variable(mip, lower_bound = 0) for n in values(graph.process_nodes),
         t = 1:T
     )
-
     mip[:open_plant] = Dict(
         (n, t) => @variable(mip, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
-
     mip[:is_open] = Dict(
         (n, t) => @variable(mip, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
-
     mip[:capacity] = Dict(
         (n, t) =>
             @variable(mip, lower_bound = 0, upper_bound = n.location.sizes[2].capacity)
         for n in values(graph.process_nodes), t = 1:T
     )
-
     mip[:expansion] = Dict(
         (n, t) => @variable(
             mip,
@@ -152,14 +144,11 @@ end
 
 function create_shipping_node_constraints!(model::ManufacturingModel)
     mip, graph, T = model.mip, model.graph, model.instance.time
-    eqs = model.eqs
-
-    eqs.balance = OrderedDict()
-
+    mip[:eq_balance] = OrderedDict()
     for t = 1:T
         # Collection centers
         for n in graph.collection_shipping_nodes
-            eqs.balance[n, t] = @constraint(
+            mip[:eq_balance][n, t] = @constraint(
                 mip,
                 sum(mip[:flow][a, t] for a in n.outgoing_arcs) == n.location.amount[t]
             )
@@ -339,8 +328,7 @@ end
 
 
 function get_solution(model::ManufacturingModel; marginal_costs = true)
-    mip, eqs, graph, instance =
-        model.mip, model.eqs, model.graph, model.instance
+    mip, graph, instance = model.mip, model.graph, model.instance
     T = instance.time
 
     output = OrderedDict(
@@ -378,8 +366,7 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
         for n in graph.collection_shipping_nodes
             location_dict = OrderedDict{Any,Any}(
                 "Marginal cost (\$/tonne)" => [
-                    round(abs(JuMP.shadow_price(eqs.balance[n, t])), digits = 2) for
-                    t = 1:T
+                    round(abs(JuMP.shadow_price(mip[:eq_balance][n, t])), digits = 2) for t = 1:T
                 ],
             )
             if n.product.name ∉ keys(output["Products"])
@@ -411,7 +398,8 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
             "Fixed operating cost (\$)" => [
                 JuMP.value(mip[:is_open][process_node, t]) *
                 plant.sizes[1].fixed_operating_cost[t] +
-                JuMP.value(mip[:expansion][process_node, t]) * slope_fix_oper_cost(plant, t) for t = 1:T
+                JuMP.value(mip[:expansion][process_node, t]) *
+                slope_fix_oper_cost(plant, t) for t = 1:T
             ],
             "Expansion cost (\$)" => [
                 (
@@ -433,7 +421,8 @@ function get_solution(model::ManufacturingModel; marginal_costs = true)
             ],
             "Storage (tonne)" => [JuMP.value(mip[:store][process_node, t]) for t = 1:T],
             "Storage cost (\$)" => [
-                JuMP.value(mip[:store][process_node, t]) * plant.storage_cost[t] for t = 1:T
+                JuMP.value(mip[:store][process_node, t]) * plant.storage_cost[t] for
+                t = 1:T
             ],
         )
         output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]
