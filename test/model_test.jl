@@ -9,7 +9,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
         instance = RELOG.parsefile("$basedir/../instances/s1.json")
         graph = RELOG.build_graph(instance)
         model = RELOG.build_model(instance, graph, Cbc.Optimizer)
-        set_optimizer_attribute(model.mip, "logLevel", 0)
+        set_optimizer_attribute(model, "logLevel", 0)
 
         process_node_by_location_name =
             Dict(n.location.location_name => n for n in graph.process_nodes)
@@ -19,27 +19,27 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
             n in graph.plant_shipping_nodes
         )
 
-        @test length(model.mip[:flow]) == 76
-        @test length(model.mip[:dispose]) == 16
-        @test length(model.mip[:open_plant]) == 12
-        @test length(model.mip[:capacity]) == 12
-        @test length(model.mip[:expansion]) == 12
+        @test length(model[:flow]) == 76
+        @test length(model[:dispose]) == 16
+        @test length(model[:open_plant]) == 12
+        @test length(model[:capacity]) == 12
+        @test length(model[:expansion]) == 12
 
         l1 = process_node_by_location_name["L1"]
-        v = model.mip[:capacity][l1, 1]
+        v = model[:capacity][l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1000.0
 
-        v = model.mip[:expansion][l1, 1]
+        v = model[:expansion][l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 750.0
 
-        v = model.mip[:dispose][shipping_node_by_location_and_product_names["L1", "P2"], 1]
+        v = model[:dispose][shipping_node_by_location_and_product_names["L1", "P2"], 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
 
         # dest = FileFormats.Model(format = FileFormats.FORMAT_LP)
-        # MOI.copy_to(dest, model.mip)
+        # MOI.copy_to(dest, model)
         # MOI.write_to_file(dest, "model.lp")
     end
 
