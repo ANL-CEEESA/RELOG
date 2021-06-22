@@ -3,7 +3,6 @@
 # Released under the modified BSD license. See COPYING.md for more details.
 
 module RELOG
-include("dotdict.jl")
 include("instance.jl")
 include("graph.jl")
 include("model.jl")
