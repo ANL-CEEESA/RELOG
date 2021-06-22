@@ -30,12 +30,12 @@ function create_vars!(model::JuMP.Model)
     )
     model[:store] = Dict(
         (n, t) =>
-            @variable(model, lower_bound = 0, upper_bound = n.location.storage_limit) for
-        n in values(graph.process_nodes), t = 1:T
+            @variable(model, lower_bound = 0, upper_bound = n.location.storage_limit)
+        for n in values(graph.process_nodes), t = 1:T
     )
     model[:process] = Dict(
-        (n, t) => @variable(model, lower_bound = 0) for n in values(graph.process_nodes),
-        t = 1:T
+        (n, t) => @variable(model, lower_bound = 0) for
+        n in values(graph.process_nodes), t = 1:T
     )
     model[:open_plant] = Dict(
         (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
@@ -46,9 +46,11 @@ function create_vars!(model::JuMP.Model)
         t = 1:T
     )
     model[:capacity] = Dict(
-        (n, t) =>
-            @variable(model, lower_bound = 0, upper_bound = n.location.sizes[2].capacity)
-        for n in values(graph.process_nodes), t = 1:T
+        (n, t) => @variable(
+            model,
+            lower_bound = 0,
+            upper_bound = n.location.sizes[2].capacity
+        ) for n in values(graph.process_nodes), t = 1:T
     )
     model[:expansion] = Dict(
         (n, t) => @variable(
@@ -92,7 +94,11 @@ function create_objective_function!(model::JuMP.Model)
         end
 
         # Opening costs
-        add_to_expression!(obj, n.location.sizes[1].opening_cost[t], model[:open_plant][n, t])
+        add_to_expression!(
+            obj,
+            n.location.sizes[1].opening_cost[t],
+            model[:open_plant][n, t],
+        )
 
         # Fixed operating costs (base)
         add_to_expression!(
@@ -130,7 +136,11 @@ function create_objective_function!(model::JuMP.Model)
     for n in values(graph.plant_shipping_nodes), t = 1:T
 
         # Disposal costs
-        add_to_expression!(obj, n.location.disposal_cost[n.product][t], model[:dispose][n, t])
+        add_to_expression!(
+            obj,
+            n.location.disposal_cost[n.product][t],
+            model[:dispose][n, t],
+        )
     end
 
     @objective(model, Min, obj)
@@ -173,7 +183,10 @@ function create_process_node_constraints!(model::JuMP.Model)
 
         # Output amount is implied by amount processed
         for a in n.outgoing_arcs
-            @constraint(model, model[:flow][a, t] == a.values["weight"] * model[:process][n, t])
+            @constraint(
+                model,
+                model[:flow][a, t] == a.values["weight"] * model[:process][n, t]
+            )
         end
 
         # If plant is closed, capacity is zero
@@ -191,7 +204,8 @@ function create_process_node_constraints!(model::JuMP.Model)
         # Capacity is linked to expansion
         @constraint(
             model,
-            model[:capacity][n, t] <= n.location.sizes[1].capacity + model[:expansion][n, t]
+            model[:capacity][n, t] <=
+            n.location.sizes[1].capacity + model[:expansion][n, t]
         )
 
         # Can only process up to capacity
@@ -211,7 +225,10 @@ function create_process_node_constraints!(model::JuMP.Model)
         if t == T
             @constraint(model, model[:store][n, t] == 0)
         end
-        @constraint(model, input_sum + store_in == model[:store][n, t] + model[:process][n, t])
+        @constraint(
+            model,
+            input_sum + store_in == model[:store][n, t] + model[:process][n, t]
+        )
 
 
         # Plant is currently open if it was already open in the previous time period or
@@ -414,10 +431,11 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
                 JuMP.value(model[:process][process_node, t]) *
                 plant.sizes[1].variable_operating_cost[t] for t = 1:T
             ],
-            "Storage (tonne)" => [JuMP.value(model[:store][process_node, t]) for t = 1:T],
+            "Storage (tonne)" =>
+                [JuMP.value(model[:store][process_node, t]) for t = 1:T],
             "Storage cost (\$)" => [
-                JuMP.value(model[:store][process_node, t]) * plant.storage_cost[t] for
-                t = 1:T
+                JuMP.value(model[:store][process_node, t]) * plant.storage_cost[t]
+                for t = 1:T
             ],
         )
         output["Costs"]["Fixed operating (\$)"] += plant_dict["Fixed operating cost (\$)"]
