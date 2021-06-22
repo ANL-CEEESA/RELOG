@@ -17,6 +17,9 @@ clean:
 docs:
 	mkdocs build -d ../docs/$(VERSION)/
 
+format:
+	julia -e 'using JuliaFormatter; format(["src", "test"], verbose=true);'
+
 test: build/test.log
 
 test-watch:

@@ -9,14 +9,7 @@ using JuMP
 using MathOptInterface
 using ProgressBars
 
-pkg = [:Cbc,
-       :Clp,
-       :Geodesy,
-       :JSON,
-       :JSONSchema,
-       :JuMP,
-       :MathOptInterface,
-       :ProgressBars]
+pkg = [:Cbc, :Clp, :Geodesy, :JSON, :JSONSchema, :JuMP, :MathOptInterface, :ProgressBars]
 
 @info "Building system image..."
-create_sysimage(pkg, sysimage_path="build/sysimage.so")
+create_sysimage(pkg, sysimage_path = "build/sysimage.so")

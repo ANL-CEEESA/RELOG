@@ -5,14 +5,13 @@
 using Geodesy
 
 
-abstract type Node
-end
+abstract type Node end
 
 
 mutable struct Arc
     source::Node
     dest::Node
-    values::Dict{String, Float64}
+    values::Dict{String,Float64}
 end
 
 
@@ -26,7 +25,7 @@ end
 
 mutable struct ShippingNode <: Node
     index::Int
-    location::Union{Plant, CollectionCenter}
+    location::Union{Plant,CollectionCenter}
     product::Product
     incoming_arcs::Array{Arc}
     outgoing_arcs::Array{Arc}
@@ -47,26 +46,25 @@ function build_graph(instance::Instance)::Graph
     process_nodes = ProcessNode[]
     plant_shipping_nodes = ShippingNode[]
     collection_shipping_nodes = ShippingNode[]
-    
-    process_nodes_by_input_product = Dict(product => ProcessNode[]
-                                          for product in instance.products)
-    shipping_nodes_by_plant = Dict(plant => []
-                                   for plant in instance.plants)
-    
+
+    process_nodes_by_input_product =
+        Dict(product => ProcessNode[] for product in instance.products)
+    shipping_nodes_by_plant = Dict(plant => [] for plant in instance.plants)
+
     # Build collection center shipping nodes
     for center in instance.collection_centers
         node = ShippingNode(next_index, center, center.product, [], [])
         next_index += 1
         push!(collection_shipping_nodes, node)
     end
-    
+
     # Build process and shipping nodes for plants
     for plant in instance.plants
         pn = ProcessNode(next_index, plant, [], [])
         next_index += 1
         push!(process_nodes, pn)
         push!(process_nodes_by_input_product[plant.input], pn)
-        
+
         for product in keys(plant.output)
             sn = ShippingNode(next_index, plant, product, [], [])
             next_index += 1
@@ -74,14 +72,16 @@ function build_graph(instance::Instance)::Graph
             push!(shipping_nodes_by_plant[plant], sn)
         end
     end
-    
+
     # Build arcs from collection centers to plants, and from one plant to another
     for source in [collection_shipping_nodes; plant_shipping_nodes]
         for dest in process_nodes_by_input_product[source.product]
-            distance = calculate_distance(source.location.latitude,
-                                          source.location.longitude,
-                                          dest.location.latitude,
-                                          dest.location.longitude)
+            distance = calculate_distance(
+                source.location.latitude,
+                source.location.longitude,
+                dest.location.latitude,
+                dest.location.longitude,
+            )
             values = Dict("distance" => distance)
             arc = Arc(source, dest, values)
             push!(source.outgoing_arcs, arc)
@@ -89,7 +89,7 @@ function build_graph(instance::Instance)::Graph
             push!(arcs, arc)
         end
     end
-    
+
     # Build arcs from process nodes to shipping nodes within a plant
     for source in process_nodes
         plant = source.location
@@ -102,11 +102,8 @@ function build_graph(instance::Instance)::Graph
             push!(arcs, arc)
         end
     end
-    
-    return Graph(process_nodes, 
-                 plant_shipping_nodes,
-                 collection_shipping_nodes,
-                 arcs)
+
+    return Graph(process_nodes, plant_shipping_nodes, collection_shipping_nodes, arcs)
 end
 
 
@@ -122,5 +119,5 @@ end
 function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
     x = LLA(source_lat, source_lon, 0.0)
     y = LLA(dest_lat, dest_lon, 0.0)
-    return round(distance(x, y) / 1000.0, digits=2)
+    return round(distance(x, y) / 1000.0, digits = 2)
 end

@@ -58,7 +58,7 @@ function Base.show(io::IO, d::DotDict)
 end
 
 function recursive_to_dot_dict(el)
-    if typeof(el) == Dict{String, Any}
+    if typeof(el) == Dict{String,Any}
         return DotDict(Dict(Symbol(k) => recursive_to_dot_dict(el[k]) for k in keys(el)))
     else
         return el
