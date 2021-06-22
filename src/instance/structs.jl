@@ -10,9 +10,9 @@ using Statistics
 
 mutable struct Product
     name::String
-    transportation_cost::Array{Float64}
-    transportation_energy::Array{Float64}
-    transportation_emissions::Dict{String,Array{Float64}}
+    transportation_cost::Vector{Float64}
+    transportation_energy::Vector{Float64}
+    transportation_emissions::Dict{String,Vector{Float64}}
 end
 
 mutable struct CollectionCenter
@@ -21,14 +21,14 @@ mutable struct CollectionCenter
     latitude::Float64
     longitude::Float64
     product::Product
-    amount::Array{Float64}
+    amount::Vector{Float64}
 end
 
 mutable struct PlantSize
     capacity::Float64
-    variable_operating_cost::Array{Float64}
-    fixed_operating_cost::Array{Float64}
-    opening_cost::Array{Float64}
+    variable_operating_cost::Vector{Float64}
+    fixed_operating_cost::Vector{Float64}
+    opening_cost::Vector{Float64}
 end
 
 mutable struct Plant
@@ -39,19 +39,19 @@ mutable struct Plant
     output::Dict{Product,Float64}
     latitude::Float64
     longitude::Float64
-    disposal_limit::Dict{Product,Array{Float64}}
-    disposal_cost::Dict{Product,Array{Float64}}
-    sizes::Array{PlantSize}
-    energy::Array{Float64}
-    emissions::Dict{String,Array{Float64}}
+    disposal_limit::Dict{Product,Vector{Float64}}
+    disposal_cost::Dict{Product,Vector{Float64}}
+    sizes::Vector{PlantSize}
+    energy::Vector{Float64}
+    emissions::Dict{String,Vector{Float64}}
     storage_limit::Float64
-    storage_cost::Array{Float64}
+    storage_cost::Vector{Float64}
 end
 
 mutable struct Instance
     time::Int64
-    products::Array{Product,1}
-    collection_centers::Array{CollectionCenter,1}
-    plants::Array{Plant,1}
-    building_period::Array{Int64}
+    products::Vector{Product}
+    collection_centers::Vector{CollectionCenter}
+    plants::Vector{Plant}
+    building_period::Vector{Int64}
 end
