@@ -8,3 +8,4 @@ instances/*.py
 notebooks
 .idea
 *.lp
+Manifest.toml
