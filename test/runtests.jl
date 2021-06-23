@@ -6,6 +6,7 @@ using Test
 @testset "RELOG" begin
     @testset "Instance" begin
         include("instance/compress_test.jl")
+        include("instance/geodb_test.jl")
         include("instance/parse_test.jl")
     end
     @testset "Graph" begin

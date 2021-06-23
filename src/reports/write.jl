@@ -4,6 +4,7 @@
 
 using DataFrames
 using CSV
+import Base: write
 
 function write(solution::AbstractDict, filename::AbstractString)
     @info "Writing solution: $filename"

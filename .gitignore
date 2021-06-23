@@ -9,3 +9,6 @@ notebooks
 .idea
 *.lp
 Manifest.toml
+data
+build
+benchmark
