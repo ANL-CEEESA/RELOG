@@ -8,6 +8,7 @@ using DataFrames
 using Shapefile
 using Statistics
 using ZipFile
+using ProgressBars
 
 crc32 = crc(CRC_32)
 
@@ -51,26 +52,27 @@ function download_census_gov(url, outputdir, expected_crc32)::Nothing
     return
 end
 
-function load_2018_us_county()::Dict{String,GeoPoint}
-    db_name = "2018-us-county"
+function load_census_gov(;
+    db_name,
+    url,
+    expected_crc32,
+    shp_filename,
+    extract_id,
+)::Dict{String,GeoPoint}
     basedir = joinpath(dirname(@__FILE__), "..", "..", "data", db_name)
     csv_filename = "$basedir/locations.csv"
     if !isfile(csv_filename)
-        download_census_gov(
-            "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_county_500k.zip",
-            basedir,
-            0x83eaec6d,
-        )
-        table = Shapefile.Table("$basedir/cb_2018_us_county_500k.shp")
+        download_census_gov(url, basedir, expected_crc32)
+        @info "Processing: $shp_filename"
+        table = Shapefile.Table(joinpath(basedir, shp_filename))
         geoms = Shapefile.shapes(table)
         df = DataFrame(id = String[], latitude = Float64[], longitude = Float64[])
-        for (i, geom) in enumerate(geoms)
+        for (i, geom) in tqdm(enumerate(geoms))
             c = centroid(geom)
-            id = table.STATEFP[i] * table.COUNTYFP[i]
+            id = extract_id(table, i)
             push!(df, [id, c.lat, c.lon])
         end
         sort!(df)
-        @info "Writing: $csv_filename"
         CSV.write(csv_filename, df)
     end
     if db_name ∉ keys(DB_CACHE)
@@ -81,8 +83,52 @@ function load_2018_us_county()::Dict{String,GeoPoint}
     return DB_CACHE[db_name]
 end
 
+function _id_2018_us_county(table::Shapefile.Table, i::Int)::String
+    return table.STATEFP[i] * table.COUNTYFP[i]
+end
+
+function load_2018_us_county()::Dict{String,GeoPoint}
+    return load_census_gov(
+        db_name = "2018-us-county",
+        url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_county_500k.zip",
+        expected_crc32 = 0x83eaec6d,
+        shp_filename = "cb_2018_us_county_500k.shp",
+        extract_id = _id_2018_us_county,
+    )
+end
+
+function _id_2018_us_zcta(table::Shapefile.Table, i::Int)::String
+    return table.ZCTA5CE10[i]
+end
+
+function load_2018_us_zcta()::Dict{String,GeoPoint}
+    return load_census_gov(
+        db_name = "2018-us-zcta",
+        url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip",
+        expected_crc32 = 0x6391f5fc,
+        shp_filename = "cb_2018_us_zcta510_500k.shp",
+        extract_id = _id_2018_us_zcta,
+    )
+end
+
+function _id_us_state(table::Shapefile.Table, i::Int)::String
+    return table.STUSPS[i]
+end
+
+function load_us_state()::Dict{String,GeoPoint}
+    return load_census_gov(
+        db_name = "us-state",
+        url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_500k.zip",
+        expected_crc32 = 0x9469e5ca,
+        shp_filename = "cb_2018_us_state_500k.shp",
+        extract_id = _id_us_state,
+    )
+end
+
 function load_latlon_database(db_name)
     db_name == "2018-us-county" && return load_2018_us_county()
+    db_name == "2018-us-zcta" && return load_2018_us_zcta()
+    db_name == "us-state" && return load_us_state()
     error("Unknown database: $db_name")
 end
 
