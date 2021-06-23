@@ -70,6 +70,16 @@ using RELOG
     @test plant.disposal_limit[p4] == [0, 0]
 end
 
+@testset "parse (geodb)" begin
+    basedir = dirname(@__FILE__)
+    instance = RELOG.parsefile("$basedir/../../instances/s2.json")
+
+    centers = instance.collection_centers
+    @test centers[1].name == "C1"
+    @test centers[1].latitude == 41.83956
+    @test centers[1].longitude == -88.08857
+end
+
 @testset "parse (invalid)" begin
     basedir = dirname(@__FILE__)
     @test_throws String RELOG.parsefile("$basedir/../fixtures/s1-wrong-length.json")
