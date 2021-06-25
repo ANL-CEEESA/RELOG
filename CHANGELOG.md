@@ -1,4 +1,4 @@
-# Version 0.5.0 (TBD)
+# Version 0.5.0 (Jan 6, 2021)
 
 - Allow plants to store input material for processing in later years
 
