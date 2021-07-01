@@ -9,6 +9,10 @@ using Shapefile
 using Statistics
 using ZipFile
 using ProgressBars
+using OrderedCollections
+
+import Downloads: download
+import Base: parse
 
 crc32 = crc(CRC_32)
 
@@ -38,15 +42,28 @@ function centroid(geom::Shapefile.Polygon)::GeoPoint
     return GeoPoint(round(y_center, digits = 5), round(x_center, digits = 5))
 end
 
-function download_zip(url, outputdir, shp_crc32)::Nothing
+function _download(url, output, expected_crc32)::Nothing
+    if isfile(output)
+        return
+    end
+    mkpath(dirname(output))
+    @info "Downloading: $url"
+    fname = download(url)
+    actual_crc32 = open(crc32, fname)
+    expected_crc32 == actual_crc32 || error("CRC32 mismatch")
+    cp(fname, output)
+    return
+end
+
+function _download_zip(url, outputdir, expected_crc32)::Nothing
     if isdir(outputdir)
         return
     end
     mkpath(outputdir)
     @info "Downloading: $url"
-    zip_filename = download(url)
+    zip_filename = _download(url)
     actual_crc32 = open(crc32, zip_filename)
-    shp_crc32 == actual_crc32 || error("CRC32 mismatch")
+    expected_crc32 == actual_crc32 || error("CRC32 mismatch")
     open(zip_filename) do zip_file
         zr = ZipFile.Reader(zip_file)
         for file in zr.files
@@ -58,33 +75,59 @@ function download_zip(url, outputdir, shp_crc32)::Nothing
     return
 end
 
-function geodb_load_gov_census(;
+function _geodb_load_gov_census(;
     db_name,
-    extract_id,
+    extract_cols,
     shp_crc32,
     shp_filename,
     shp_url,
+    population_url,
+    population_crc32,
+    population_col = "POPESTIMATE2019",
+    population_join_key = "STATE",
 )::Dict{String,GeoRegion}
     basedir = joinpath(dirname(@__FILE__), "..", "..", "data", db_name)
     csv_filename = "$basedir/locations.csv"
     if !isfile(csv_filename)
-        download_zip(shp_url, basedir, shp_crc32)
+        # Download required files
+        _download(population_url, "$basedir/population.csv", population_crc32)
+        _download_zip(shp_url, basedir, shp_crc32)
+
+        # Read shapefile
         @info "Processing: $shp_filename"
         table = Shapefile.Table(joinpath(basedir, shp_filename))
         geoms = Shapefile.shapes(table)
-        df = DataFrame(id = String[], latitude = Float64[], longitude = Float64[])
+
+        # Build empty dataframe
+        df = DataFrame()
+        cols = extract_cols(table, 1)
+        for k in keys(cols)
+            df[!, k] = []
+        end
+        df[!, "latitude"] = Float64[]
+        df[!, "longitude"] = Float64[]
+
+        # Add regions to dataframe
         for (i, geom) in tqdm(enumerate(geoms))
             c = centroid(geom)
-            id = extract_id(table, i)
-            push!(df, [id, c.lat, c.lon])
+            cols = extract_cols(table, i)
+            push!(df, [values(cols)..., c.lat, c.lon])
         end
         sort!(df)
+
+        # Join with population data
+        population = DataFrame(CSV.File("$basedir/population.csv"))
+        population = population[:, [population_join_key, population_col]]
+        rename!(population, population_col => "population")
+        df = leftjoin(df, population, on = population_join_key)
+
+        # Write output
         CSV.write(csv_filename, df)
     end
     if db_name ∉ keys(DB_CACHE)
-        csv = CSV.File(csv_filename; types = [String, Float64, Float64])
+        csv = CSV.File(csv_filename)
         DB_CACHE[db_name] = Dict(
-            row.id => GeoRegion(
+            string(row.id) => GeoRegion(
                 centroid = GeoPoint(row.latitude, row.longitude),
                 population = 0,
             ) for row in csv
@@ -93,52 +136,62 @@ function geodb_load_gov_census(;
     return DB_CACHE[db_name]
 end
 
-function _id_2018_us_county(table::Shapefile.Table, i::Int)::String
-    return table.STATEFP[i] * table.COUNTYFP[i]
+function _cols_2018_us_county(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+    return OrderedDict("id" => table.STATEFP[i] * table.COUNTYFP[i])
 end
 
-function geodb_load_2018_us_county()::Dict{String,GeoRegion}
-    return geodb_load_gov_census(
+function _geodb_load_2018_us_county()::Dict{String,GeoRegion}
+    return _geodb_load_gov_census(
         db_name = "2018-us-county",
-        extract_id = _id_2018_us_county,
+        extract_cols = _cols_2018_us_county,
         shp_crc32 = 0x83eaec6d,
         shp_filename = "cb_2018_us_county_500k.shp",
         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_county_500k.zip",
+        population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
+        population_crc32 = 0x191cc64c,
     )
 end
 
-function _id_2018_us_zcta(table::Shapefile.Table, i::Int)::String
-    return table.ZCTA5CE10[i]
+function _cols_2018_us_zcta(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+    return OrderedDict("id" => table.ZCTA5CE10[i])
 end
 
-function geodb_load_2018_us_zcta()::Dict{String,GeoRegion}
-    return geodb_load_gov_census(
+function _geodb_load_2018_us_zcta()::Dict{String,GeoRegion}
+    return _geodb_load_gov_census(
         db_name = "2018-us-zcta",
-        extract_id = _id_2018_us_zcta,
+        extract_cols = _cols_2018_us_zcta,
         shp_crc32 = 0x6391f5fc,
         shp_filename = "cb_2018_us_zcta510_500k.shp",
         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip",
+        population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
+        population_crc32 = 0x191cc64c,
     )
 end
 
-function _id_us_state(table::Shapefile.Table, i::Int)::String
-    return table.STUSPS[i]
+function _cols_us_state(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+    return OrderedDict(
+        "id" => table.STUSPS[i],
+        "STATE" => parse(Int, table.STATEFP[i]),
+        "name" => table.NAME[i],
+    )
 end
 
-function geodb_load_us_state()::Dict{String,GeoRegion}
-    return geodb_load_gov_census(
+function _geodb_load_us_state()::Dict{String,GeoRegion}
+    return _geodb_load_gov_census(
         db_name = "us-state",
-        extract_id = _id_us_state,
+        extract_cols = _cols_us_state,
         shp_crc32 = 0x9469e5ca,
         shp_filename = "cb_2018_us_state_500k.shp",
         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_500k.zip",
+        population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
+        population_crc32 = 0x191cc64c,
     )
 end
 
 function geodb_load(db_name::AbstractString)::Dict{String,GeoRegion}
-    db_name == "2018-us-county" && return geodb_load_2018_us_county()
-    db_name == "2018-us-zcta" && return geodb_load_2018_us_zcta()
-    db_name == "us-state" && return geodb_load_us_state()
+    db_name == "2018-us-county" && return _geodb_load_2018_us_county()
+    db_name == "2018-us-zcta" && return _geodb_load_2018_us_zcta()
+    db_name == "us-state" && return _geodb_load_us_state()
     error("Unknown database: $db_name")
 end
 
