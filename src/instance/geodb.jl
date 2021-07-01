@@ -83,8 +83,9 @@ function _geodb_load_gov_census(;
     shp_url,
     population_url,
     population_crc32,
-    population_col = "POPESTIMATE2019",
-    population_join_key = "STATE",
+    population_col,
+    population_preprocess,
+    population_join,
 )::Dict{String,GeoRegion}
     basedir = joinpath(dirname(@__FILE__), "..", "..", "data", db_name)
     csv_filename = "$basedir/locations.csv"
@@ -117,9 +118,10 @@ function _geodb_load_gov_census(;
 
         # Join with population data
         population = DataFrame(CSV.File("$basedir/population.csv"))
-        population = population[:, [population_join_key, population_col]]
+        population_preprocess(population)
+        population = population[:, [population_join, population_col]]
         rename!(population, population_col => "population")
-        df = leftjoin(df, population, on = population_join_key)
+        df = leftjoin(df, population, on = population_join)
 
         # Write output
         CSV.write(csv_filename, df)
@@ -129,62 +131,88 @@ function _geodb_load_gov_census(;
         DB_CACHE[db_name] = Dict(
             string(row.id) => GeoRegion(
                 centroid = GeoPoint(row.latitude, row.longitude),
-                population = 0,
+                population = (row.population === missing ? 0 : row.population),
             ) for row in csv
         )
     end
     return DB_CACHE[db_name]
 end
 
-function _cols_2018_us_county(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
-    return OrderedDict("id" => table.STATEFP[i] * table.COUNTYFP[i])
+# 2018 US counties
+# -----------------------------------------------------------------------------
+function _extract_cols_2018_us_county(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+    return OrderedDict(
+        "id" => table.STATEFP[i] * table.COUNTYFP[i],
+        "statefp" => table.STATEFP[i],
+        "countyfp" => table.COUNTYFP[i],
+        "name" => table.NAME[i]
+    )
+end
+
+function _population_preprocess_2018_us_county(df)
+    df[!, "id"] = [@sprintf("%02d%03d", row.STATE, row.COUNTY) for row in eachrow(df)]
 end
 
 function _geodb_load_2018_us_county()::Dict{String,GeoRegion}
     return _geodb_load_gov_census(
         db_name = "2018-us-county",
-        extract_cols = _cols_2018_us_county,
+        extract_cols = _extract_cols_2018_us_county,
         shp_crc32 = 0x83eaec6d,
         shp_filename = "cb_2018_us_county_500k.shp",
         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_county_500k.zip",
-        population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
-        population_crc32 = 0x191cc64c,
+        population_url = "https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/co-est2019-alldata.csv",
+        population_crc32 = 0xf85b0405,
+        population_col = "POPESTIMATE2019",
+        population_join = "id",
+        population_preprocess = _population_preprocess_2018_us_county,
     )
 end
 
-function _cols_2018_us_zcta(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
-    return OrderedDict("id" => table.ZCTA5CE10[i])
-end
+# # 2018 US ZIP codes
+# # -----------------------------------------------------------------------------
+# function _extract_cols_2018_us_zcta(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+#     return OrderedDict("id" => table.ZCTA5CE10[i])
+# end
 
-function _geodb_load_2018_us_zcta()::Dict{String,GeoRegion}
-    return _geodb_load_gov_census(
-        db_name = "2018-us-zcta",
-        extract_cols = _cols_2018_us_zcta,
-        shp_crc32 = 0x6391f5fc,
-        shp_filename = "cb_2018_us_zcta510_500k.shp",
-        shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip",
-        population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
-        population_crc32 = 0x191cc64c,
-    )
-end
+# function _geodb_load_2018_us_zcta()::Dict{String,GeoRegion}
+#     return _geodb_load_gov_census(
+#         db_name = "2018-us-zcta",
+#         extract_cols = _extract_cols_2018_us_zcta,
+#         shp_crc32 = 0x6391f5fc,
+#         shp_filename = "cb_2018_us_zcta510_500k.shp",
+#         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip",
+#         population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
+#         population_crc32 = 0x191cc64c,
+#         population_col = "POPESTIMATE2019",
+#     )
+# end
 
-function _cols_us_state(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+# US States
+# -----------------------------------------------------------------------------
+function _extract_cols_us_state(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
     return OrderedDict(
         "id" => table.STUSPS[i],
-        "STATE" => parse(Int, table.STATEFP[i]),
+        "statefp" => parse(Int, table.STATEFP[i]),
         "name" => table.NAME[i],
     )
+end
+
+function _population_preprocess_us_state(df)
+    rename!(df, "STATE" => "statefp")
 end
 
 function _geodb_load_us_state()::Dict{String,GeoRegion}
     return _geodb_load_gov_census(
         db_name = "us-state",
-        extract_cols = _cols_us_state,
+        extract_cols = _extract_cols_us_state,
         shp_crc32 = 0x9469e5ca,
         shp_filename = "cb_2018_us_state_500k.shp",
         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_state_500k.zip",
         population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
         population_crc32 = 0x191cc64c,
+        population_col = "POPESTIMATE2019",
+        population_join = "statefp",
+        population_preprocess = _population_preprocess_us_state,
     )
 end
 
