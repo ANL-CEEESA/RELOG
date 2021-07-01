@@ -54,9 +54,9 @@ function parse(json)::Instance
         if "initial amounts" in keys(product_dict)
             for (center_name, center_dict) in product_dict["initial amounts"]
                 if "location" in keys(center_dict)
-                    point = geodb_query(center_dict["location"])
-                    center_dict["latitude (deg)"] = point.lat
-                    center_dict["longitude (deg)"] = point.lon
+                    region = geodb_query(center_dict["location"])
+                    center_dict["latitude (deg)"] = region.centroid.lat
+                    center_dict["longitude (deg)"] = region.centroid.lon
                 end
                 center = CollectionCenter(
                     length(collection_centers) + 1,
