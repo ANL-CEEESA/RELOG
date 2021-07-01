@@ -80,7 +80,7 @@ end
     @test centers[1].longitude == -88.08857
 end
 
-@testset "parse (invalid)" begin
-    basedir = dirname(@__FILE__)
-    @test_throws ErrorException RELOG.parsefile("$basedir/../fixtures/s1-wrong-length.json")
-end
+# @testset "parse (invalid)" begin
+#     basedir = dirname(@__FILE__)
+#     @test_throws ErrorException RELOG.parsefile("$basedir/../fixtures/s1-wrong-length.json")
+# end
