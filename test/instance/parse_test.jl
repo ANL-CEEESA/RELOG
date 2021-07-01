@@ -82,5 +82,5 @@ end
 
 @testset "parse (invalid)" begin
     basedir = dirname(@__FILE__)
-    @test_throws String RELOG.parsefile("$basedir/../fixtures/s1-wrong-length.json")
+    @test_throws ErrorException RELOG.parsefile("$basedir/../fixtures/s1-wrong-length.json")
 end
