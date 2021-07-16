@@ -42,7 +42,7 @@ function centroid(geom::Shapefile.Polygon)::GeoPoint
     return GeoPoint(round(y_center, digits = 5), round(x_center, digits = 5))
 end
 
-function _download(url, output, expected_crc32)::Nothing
+function _download_file(url, output, expected_crc32)::Nothing
     if isfile(output)
         return
     end
@@ -55,13 +55,13 @@ function _download(url, output, expected_crc32)::Nothing
     return
 end
 
-function _download_zip(url, outputdir, expected_crc32)::Nothing
-    if isdir(outputdir)
+function _download_zip(url, outputdir, expected_output_file, expected_crc32)::Nothing
+    if isfile(expected_output_file)
         return
     end
     mkpath(outputdir)
     @info "Downloading: $url"
-    zip_filename = _download(url)
+    zip_filename = download(url)
     actual_crc32 = open(crc32, zip_filename)
     expected_crc32 == actual_crc32 || error("CRC32 mismatch")
     open(zip_filename) do zip_file
@@ -91,8 +91,8 @@ function _geodb_load_gov_census(;
     csv_filename = "$basedir/locations.csv"
     if !isfile(csv_filename)
         # Download required files
-        _download(population_url, "$basedir/population.csv", population_crc32)
-        _download_zip(shp_url, basedir, shp_crc32)
+        _download_zip(shp_url, basedir, joinpath(basedir, shp_filename), shp_crc32)
+        _download_file(population_url, "$basedir/population.csv", population_crc32)
 
         # Read shapefile
         @info "Processing: $shp_filename"
