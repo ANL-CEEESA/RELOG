@@ -168,25 +168,6 @@ function _geodb_load_2018_us_county()::Dict{String,GeoRegion}
     )
 end
 
-# # 2018 US ZIP codes
-# # -----------------------------------------------------------------------------
-# function _extract_cols_2018_us_zcta(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
-#     return OrderedDict("id" => table.ZCTA5CE10[i])
-# end
-
-# function _geodb_load_2018_us_zcta()::Dict{String,GeoRegion}
-#     return _geodb_load_gov_census(
-#         db_name = "2018-us-zcta",
-#         extract_cols = _extract_cols_2018_us_zcta,
-#         shp_crc32 = 0x6391f5fc,
-#         shp_filename = "cb_2018_us_zcta510_500k.shp",
-#         shp_url = "https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip",
-#         population_url = "http://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv",
-#         population_crc32 = 0x191cc64c,
-#         population_col = "POPESTIMATE2019",
-#     )
-# end
-
 # US States
 # -----------------------------------------------------------------------------
 function _extract_cols_us_state(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
@@ -218,7 +199,6 @@ end
 
 function geodb_load(db_name::AbstractString)::Dict{String,GeoRegion}
     db_name == "2018-us-county" && return _geodb_load_2018_us_county()
-    db_name == "2018-us-zcta" && return _geodb_load_2018_us_zcta()
     db_name == "us-state" && return _geodb_load_us_state()
     error("Unknown database: $db_name")
 end

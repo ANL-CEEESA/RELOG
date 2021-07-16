@@ -182,6 +182,38 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
 }
 ```
 
+### Geographic database
+
+Instead of specifying locations using latitudes and longitudes, it is also possible to specify them using unique identifiers, such as the name of a US state, or the county FIPS code. This works anywhere `latitude (deg)` and `longitude (deg)` are expected. For example, instead of:
+```json
+{
+    "initial amounts": {
+        "C1": {
+            "latitude (deg)": 37.27182,
+            "longitude (deg)": -119.2704,
+            "amount (tonne)": [934.56, 934.56]
+        },
+    }
+}
+```
+is is possible to write:
+```json
+{
+    "initial amounts": {
+        "C1": {
+            "location": "us-state:CA",
+            "amount (tonne)": [934.56, 934.56]
+        },
+    }
+}
+```
+Location names follow the format `db:id`, where `db` is the name of the database and `id` is the identifier for a specific location. RELOG currently includes the following databases:
+
+Database | Description | Examples
+---------|-------------|----------
+`us-state`| List of states of the United States. | `us-state:IL` (State of Illinois)
+`2018-us-county` | List of United States counties, as of 2018. IDs are 5-digit FIPS codes. | `2018-us-county:17043` (DuPage county in Illinois)
+
 ### Current limitations
 
 * Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.
@@ -192,4 +224,3 @@ The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes
 ## Output Data Format (JSON)
 
 To be documented.
-

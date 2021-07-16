@@ -1,7 +1,7 @@
 name = "RELOG"
 uuid = "a2afcdf7-cf04-4913-85f9-c0d81ddf2008"
 authors = ["Alinson S Xavier <axavier@anl.gov>"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 CRC = "44b605c4-b955-5f2b-9b6d-d2bd01d3d205"

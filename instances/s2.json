@@ -202,8 +202,7 @@
                     }
                 },
                 "L2": {
-                    "latitude (deg)": 0.5,
-                    "longitude (deg)": 0.5,
+                    "location": "2018-us-county:17043",
                     "capacities (tonne)": {
                         "0.0": {
                             "opening cost ($)": [

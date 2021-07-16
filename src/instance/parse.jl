@@ -100,6 +100,13 @@ function parse(json)::Instance
             disposal_limit = Dict(p => [0.0 for t = 1:T] for p in keys(output))
             disposal_cost = Dict(p => [0.0 for t = 1:T] for p in keys(output))
 
+            # GeoDB
+            if "location" in keys(location_dict)
+                region = geodb_query(location_dict["location"])
+                location_dict["latitude (deg)"] = region.centroid.lat
+                location_dict["longitude (deg)"] = region.centroid.lon
+            end
+
             # Disposal
             if "disposal" in keys(location_dict)
                 for (product_name, disposal_dict) in location_dict["disposal"]
