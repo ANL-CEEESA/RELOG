@@ -140,12 +140,15 @@ end
 
 # 2018 US counties
 # -----------------------------------------------------------------------------
-function _extract_cols_2018_us_county(table::Shapefile.Table, i::Int)::OrderedDict{String,Any}
+function _extract_cols_2018_us_county(
+    table::Shapefile.Table,
+    i::Int,
+)::OrderedDict{String,Any}
     return OrderedDict(
         "id" => table.STATEFP[i] * table.COUNTYFP[i],
         "statefp" => table.STATEFP[i],
         "countyfp" => table.COUNTYFP[i],
-        "name" => table.NAME[i]
+        "name" => table.NAME[i],
     )
 end
 
