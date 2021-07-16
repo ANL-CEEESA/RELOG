@@ -9,10 +9,11 @@ using RELOG, JSON, GZip
         solution = RELOG.solve("$(pwd())/../instances/s1.json")
         tmp_filename = tempname()
         # The following should not crash
-        RELOG.write_plants_report(solution, tmp_filename)
-        RELOG.write_plant_outputs_report(solution, tmp_filename)
         RELOG.write_plant_emissions_report(solution, tmp_filename)
-        RELOG.write_transportation_report(solution, tmp_filename)
+        RELOG.write_plant_outputs_report(solution, tmp_filename)
+        RELOG.write_plants_report(solution, tmp_filename)
+        RELOG.write_products_report(solution, tmp_filename)
         RELOG.write_transportation_emissions_report(solution, tmp_filename)
+        RELOG.write_transportation_report(solution, tmp_filename)
     end
 end

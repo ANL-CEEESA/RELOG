@@ -45,6 +45,9 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
                 "Marginal cost (\$/tonne)" => [
                     round(abs(JuMP.shadow_price(model[:eq_balance][n, t])), digits = 2) for t = 1:T
                 ],
+                "Latitude (deg)" => n.location.latitude,
+                "Longitude (deg)" => n.location.longitude,
+                "Amount (tonne)" => n.location.amount,
             )
             if n.product.name ∉ keys(output["Products"])
                 output["Products"][n.product.name] = OrderedDict()

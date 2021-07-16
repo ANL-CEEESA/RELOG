@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ## Added
 - Allow user to specify locations as unique identifiers, instead of latitude and longitude (e.g. `us-state:IL` or `2018-us-county:17043`)
+- Add products report.
 
 ## [0.5.0] -- 2021-01-06
 ## Added
