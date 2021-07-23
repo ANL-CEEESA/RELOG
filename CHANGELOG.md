@@ -11,9 +11,10 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
-## [0.5.1] -- 2021-07-21
+## [0.5.1] -- 2021-07-23
 ## Added
 - Allow user to specify locations as unique identifiers, instead of latitude and longitude (e.g. `us-state:IL` or `2018-us-county:17043`)
+- Add what-if scenarios.
 - Add products report.
 
 ## [0.5.0] -- 2021-01-06
