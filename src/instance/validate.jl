@@ -12,14 +12,10 @@ function validate(json, schema)
     result = JSONSchema.validate(json, schema)
     if result !== nothing
         if result isa JSONSchema.SingleIssue
-            path = join(result.path, " → ")
-            if length(path) == 0
-                path = "root"
-            end
-            msg = "$(result.msg) in $(path)"
+            msg = "$(result.reason) in $(result.path)"
         else
             msg = convert(String, result)
         end
-        throw(msg)
+        throw("Error parsing input file: $(msg)")
     end
 end
