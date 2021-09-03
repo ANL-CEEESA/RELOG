@@ -26,8 +26,10 @@
 
 ### Authors
 
-* **Alinson S. Xavier,** Argonne National Laboratory <<axavier@anl.gov>>
-* **Nwike Iloeje,** Argonne National Laboratory <<ciloeje@anl.gov>>
+* **Alinson S. Xavier** <<axavier@anl.gov>>
+* **Nwike Iloeje** <<ciloeje@anl.gov>>
+* **John Atkins**
+* **Kyle Sun**
 
 ### License
 
