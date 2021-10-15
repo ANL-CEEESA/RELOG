@@ -46,6 +46,8 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
             "Amount (tonne)" => n.location.amount,
             "Dispose (tonne)" =>
                 [JuMP.value(model[:collection_dispose][n, t]) for t = 1:T],
+            "Disposal cost (\$)" =>
+                [JuMP.value(model[:collection_dispose][n, t]) * n.location.product.disposal_cost[t] for t = 1:T]
         )
         if marginal_costs
             location_dict["Marginal cost (\$/tonne)"] = [

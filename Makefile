@@ -5,7 +5,7 @@ VERSION := 0.5
 all: docs test
 
 build/sysimage.so: src/sysimage.jl Project.toml Manifest.toml
-	@$(JULIA) src/sysimage.jl
+	@$(JULIA) src/sysimage.jl test/runtests.jl
 
 clean:
 	rm -rf build/*

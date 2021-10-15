@@ -5,7 +5,7 @@
 using DataFrames
 using CSV
 
-function products_report(solution; marginal_costs = true)::DataFrame
+function products_report(solution)::DataFrame
     df = DataFrame()
     df."product name" = String[]
     df."location name" = String[]
@@ -13,17 +13,22 @@ function products_report(solution; marginal_costs = true)::DataFrame
     df."longitude (deg)" = Float64[]
     df."year" = Int[]
     df."amount (tonne)" = Float64[]
-    df."amount disposed (tonne)" = Float64[]
     df."marginal cost (\$/tonne)" = Float64[]
+    df."amount disposed (tonne)" = Float64[]
+    df."disposal cost (\$)" = Float64[]
     T = length(solution["Energy"]["Plants (GJ)"])
     for (prod_name, prod_dict) in solution["Products"]
         for (location_name, location_dict) in prod_dict
             for year = 1:T
-                marginal_cost = location_dict["Marginal cost (\$/tonne)"][year]
+                marginal_cost = NaN
+                if "Marginal cost (\$/tonne)" in keys(location_dict)
+                    marginal_cost = location_dict["Marginal cost (\$/tonne)"][year]
+                end
                 latitude = round(location_dict["Latitude (deg)"], digits = 6)
                 longitude = round(location_dict["Longitude (deg)"], digits = 6)
                 amount = location_dict["Amount (tonne)"][year]
                 amount_disposed = location_dict["Dispose (tonne)"][year]
+                disposal_cost = location_dict["Disposal cost (\$)"][year]
                 push!(
                     df,
                     [
@@ -35,6 +40,7 @@ function products_report(solution; marginal_costs = true)::DataFrame
                         amount,
                         marginal_cost,
                         amount_disposed,
+                        disposal_cost,
                     ],
                 )
             end
