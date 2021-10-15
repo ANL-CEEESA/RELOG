@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    
+    <title>Data Format - RELOG</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/github.min.css">
+        
+    
+    <link href="../css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            
+              <a class="navbar-brand" href="..">RELOG</a>
+            
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../usage/">Usage</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Data Format</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../reports/">Reports</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../model/">Optimization Model</a>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../usage/">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="next" href="../reports/">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/ANL-CEEESA/RELOG/edit/master/src/docs/format.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#input-and-output-data-formats">Input and Output Data Formats</a></li>
+            <li class="second-level"><a href="#input-data-format-json">Input Data Format (JSON)</a></li>
+                
+                <li class="third-level"><a href="#parameters">Parameters</a></li>
+                <li class="third-level"><a href="#products">Products</a></li>
+                <li class="third-level"><a href="#processing-plants">Processing plants</a></li>
+                <li class="third-level"><a href="#geographic-database">Geographic database</a></li>
+                <li class="third-level"><a href="#current-limitations">Current limitations</a></li>
+            <li class="second-level"><a href="#output-data-format-json">Output Data Format (JSON)</a></li>
+                
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="input-and-output-data-formats">Input and Output Data Formats</h1>
+<p>In this page, we describe the input and output JSON formats used by RELOG. In addition to these, RELOG can also produce <a href="../reports/">simplified reports</a> in tabular data format.</p>
+<h2 id="input-data-format-json">Input Data Format (JSON)</h2>
+<p>RELOG accepts as input a JSON file with three sections: <code>parameters</code>, <code>products</code> and <code>plants</code>. Below, we describe each section in more detail.</p>
+<h3 id="parameters">Parameters</h3>
+<p>The <strong>parameters</strong> section describes details about the simulation itself.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>time horizon (years)</code></td>
+<td>Number of years in the simulation.</td>
+</tr>
+<tr>
+<td align="left"><code>building period (years)</code></td>
+<td>List of years in which we are allowed to open new plants. For example, if this parameter is set to <code>[1,2,3]</code>, we can only open plants during the first three years. By default, this equals <code>[1]</code>; that is, plants can only be opened during the first year.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="example">Example</h4>
+<pre><code class="language-json">{
+    &quot;parameters&quot;: {
+        &quot;time horizon (years)&quot;: 2,
+        &quot;building period (years)&quot;: [1]
+    }
+}
+</code></pre>
+<h3 id="products">Products</h3>
+<p>The <strong>products</strong> section describes all products and subproducts in the simulation. The field <code>instance["Products"]</code> is a dictionary mapping the name of the product to a dictionary which describes its characteristics. Each product description contains the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>transportation cost ($/km/tonne)</code></td>
+<td>The cost to transport this product. Must be a time series.</td>
+</tr>
+<tr>
+<td align="left"><code>transportation energy (J/km/tonne)</code></td>
+<td>The energy required to transport this product. Must be a time series. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>transportation emissions (tonne/km/tonne)</code></td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>initial amounts</code></td>
+<td>A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a time series.</td>
+</tr>
+<tr>
+<td align="left"><code>disposal limit (tonne)</code></td>
+<td>Total amount of product that can be disposed of across all collection centers. If omitted, all product must be processed. This parameter has no effect on product disposal at plants.</td>
+</tr>
+<tr>
+<td align="left"><code>disposal cost ($/tonne)</code></td>
+<td>Cost of disposing one tonne of this product at a collection center. If omitted, defaults to zero. This parameter has no effect on product disposal costs at plants.</td>
+</tr>
+</tbody>
+</table>
+<p>Each product may have some amount available at the beginning of each time period. In this case, the key <code>initial amounts</code> maps to a dictionary with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>latitude (deg)</code></td>
+<td>The latitude of the location.</td>
+</tr>
+<tr>
+<td align="left"><code>longitude (deg)</code></td>
+<td>The longitude of the location.</td>
+</tr>
+<tr>
+<td align="left"><code>amount (tonne)</code></td>
+<td>The amount of the product initially available at the location. Must be a time series.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="example_1">Example</h4>
+<pre><code class="language-json">{
+    &quot;products&quot;: {
+        &quot;P1&quot;: {
+            &quot;initial amounts&quot;: {
+                &quot;C1&quot;: {
+                    &quot;latitude (deg)&quot;: 7.0,
+                    &quot;longitude (deg)&quot;: 7.0,
+                    &quot;amount (tonne)&quot;: [934.56, 934.56]
+                },
+                &quot;C2&quot;: {
+                    &quot;latitude (deg)&quot;: 7.0,
+                    &quot;longitude (deg)&quot;: 19.0,
+                    &quot;amount (tonne)&quot;: [198.95, 198.95]
+                },
+                &quot;C3&quot;: {
+                    &quot;latitude (deg)&quot;: 84.0,
+                    &quot;longitude (deg)&quot;: 76.0,
+                    &quot;amount (tonne)&quot;: [212.97, 212.97]
+                }
+            },
+            &quot;transportation cost ($/km/tonne)&quot;: [0.015, 0.015],
+            &quot;transportation energy (J/km/tonne)&quot;: [0.12, 0.11],
+            &quot;transportation emissions (tonne/km/tonne)&quot;: {
+                &quot;CO2&quot;: [0.052, 0.050],
+                &quot;CH4&quot;: [0.003, 0.002]
+            },
+            &quot;disposal cost ($/tonne)&quot;: [-10.0, -12.0],
+            &quot;disposal limit (tonne)&quot;: [1.0, 1.0],
+        },
+        &quot;P2&quot;: {
+            &quot;transportation cost ($/km/tonne)&quot;: [0.022, 0.020]
+        },
+        &quot;P3&quot;: {
+            &quot;transportation cost ($/km/tonne)&quot;: [0.0125, 0.0125]
+        },
+        &quot;P4&quot;: {
+            &quot;transportation cost ($/km/tonne)&quot;: [0.0175, 0.0175]
+        }
+    }
+}
+</code></pre>
+<h3 id="processing-plants">Processing plants</h3>
+<p>The <strong>plants</strong> section describes the available types of reverse manufacturing plants, their potential locations and associated costs, as well as their inputs and outputs. The field <code>instance["Plants"]</code> is a dictionary mapping the name of the plant to a dictionary with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>input</code></td>
+<td>The name of the product that this plant takes as input. Only one input is accepted per plant.</td>
+</tr>
+<tr>
+<td align="left"><code>outputs (tonne/tonne)</code></td>
+<td>A dictionary specifying how many tonnes of each product is produced for each tonnes of input. For example, if the plant outputs 0.5 tonnes of P2 and 0.25 tonnes of P3 for each tonnes of P1 provided, then this entry should be <code>{"P2": 0.5, "P3": 0.25}</code>. If the plant does not output anything, this key may be omitted.</td>
+</tr>
+<tr>
+<td align="left"><code>energy (GJ/tonne)</code></td>
+<td>The energy required to process 1 tonne of the input. Must be a time series. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>emissions (tonne/tonne)</code></td>
+<td>A dictionary mapping the name of each greenhouse gas, produced to process each tonne of input, to the amount of gas produced (in tonne). Must be a time series. Optional.</td>
+</tr>
+<tr>
+<td align="left"><code>locations</code></td>
+<td>A dictionary mapping the name of the location to a dictionary which describes the site characteristics (see below).</td>
+</tr>
+</tbody>
+</table>
+<p>Each type of plant is associated with a set of potential locations where it can be built. Each location is represented by a dictionary with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>latitude (deg)</code></td>
+<td>The latitude of the location, in degrees.</td>
+</tr>
+<tr>
+<td align="left"><code>longitude (deg)</code></td>
+<td>The longitude of the location, in degrees.</td>
+</tr>
+<tr>
+<td align="left"><code>disposal</code></td>
+<td>A dictionary describing what products can be disposed locally at the plant.</td>
+</tr>
+<tr>
+<td align="left"><code>storage</code></td>
+<td>A dictionary describing the plant's storage.</td>
+</tr>
+<tr>
+<td align="left"><code>capacities (tonne)</code></td>
+<td>A dictionary describing what plant sizes are allowed, and their characteristics.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>storage</code> dictionary should contain the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>cost ($/tonne)</code></td>
+<td>The cost to store a tonne of input product for one time period. Must be a time series.</td>
+</tr>
+<tr>
+<td align="left"><code>limit (tonne)</code></td>
+<td>The maximum amount of input product this plant can have in storage at any given time.</td>
+</tr>
+</tbody>
+</table>
+<p>The keys in the <code>disposal</code> dictionary should be the names of the products. The values are dictionaries with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>cost ($/tonne)</code></td>
+<td>The cost to dispose of the product. Must be a time series.</td>
+</tr>
+<tr>
+<td align="left"><code>limit (tonne)</code></td>
+<td>The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a time series.</td>
+</tr>
+</tbody>
+</table>
+<p>The keys in the <code>capacities (tonne)</code> dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>opening cost ($)</code></td>
+<td>The cost to open a plant of this size.</td>
+</tr>
+<tr>
+<td align="left"><code>fixed operating cost ($)</code></td>
+<td>The cost to keep the plant open, even if the plant doesn't process anything. Must be a time series.</td>
+</tr>
+<tr>
+<td align="left"><code>variable operating cost ($/tonne)</code></td>
+<td>The cost that the plant incurs to process each tonne of input. Must be a time series.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="example_2">Example</h4>
+<pre><code class="language-json">{
+    &quot;plants&quot;: {
+        &quot;F1&quot;: {
+            &quot;input&quot;: &quot;P1&quot;,
+            &quot;outputs (tonne/tonne)&quot;: {
+                &quot;P2&quot;: 0.2,
+                &quot;P3&quot;: 0.5
+            },
+            &quot;energy (GJ/tonne)&quot;: [0.12, 0.11],
+            &quot;emissions (tonne/tonne)&quot;: {
+                &quot;CO2&quot;: [0.052, 0.050],
+                &quot;CH4&quot;: [0.003, 0.002]
+            },
+            &quot;locations&quot;: {
+                &quot;L1&quot;: {
+                    &quot;latitude (deg)&quot;: 0.0,
+                    &quot;longitude (deg)&quot;: 0.0,
+                    &quot;disposal&quot;: {
+                        &quot;P2&quot;: {
+                            &quot;cost ($/tonne)&quot;: [-10.0, -12.0],
+                            &quot;limit (tonne)&quot;: [1.0, 1.0]
+                        }
+                    },
+                    &quot;storage&quot;: {
+                        &quot;cost ($/tonne)&quot;: [5.0, 5.3],
+                        &quot;limit (tonne)&quot;: 100.0,
+                    },
+                    &quot;capacities (tonne)&quot;: {
+                        &quot;100&quot;: {
+                            &quot;opening cost ($)&quot;: [500, 530],
+                            &quot;fixed operating cost ($)&quot;: [300.0, 310.0],
+                            &quot;variable operating cost ($/tonne)&quot;: [5.0, 5.2],
+                        },
+                        &quot;500&quot;: {
+                            &quot;opening cost ($)&quot;: [750, 760],
+                            &quot;fixed operating cost ($)&quot;: [400.0, 450.0],
+                            &quot;variable operating cost ($/tonne)&quot;: [5.0, 5.2]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="geographic-database">Geographic database</h3>
+<p>Instead of specifying locations using latitudes and longitudes, it is also possible to specify them using unique identifiers, such as the name of a US state, or the county FIPS code. This works anywhere <code>latitude (deg)</code> and <code>longitude (deg)</code> are expected. For example, instead of:</p>
+<pre><code class="language-json">{
+    &quot;initial amounts&quot;: {
+        &quot;C1&quot;: {
+            &quot;latitude (deg)&quot;: 37.27182,
+            &quot;longitude (deg)&quot;: -119.2704,
+            &quot;amount (tonne)&quot;: [934.56, 934.56]
+        },
+    }
+}
+</code></pre>
+<p>is is possible to write:</p>
+<pre><code class="language-json">{
+    &quot;initial amounts&quot;: {
+        &quot;C1&quot;: {
+            &quot;location&quot;: &quot;us-state:CA&quot;,
+            &quot;amount (tonne)&quot;: [934.56, 934.56]
+        },
+    }
+}
+</code></pre>
+<p>Location names follow the format <code>db:id</code>, where <code>db</code> is the name of the database and <code>id</code> is the identifier for a specific location. RELOG currently includes the following databases:</p>
+<table>
+<thead>
+<tr>
+<th>Database</th>
+<th>Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>us-state</code></td>
+<td>List of states of the United States.</td>
+<td><code>us-state:IL</code> (State of Illinois)</td>
+</tr>
+<tr>
+<td><code>2018-us-county</code></td>
+<td>List of United States counties, as of 2018. IDs are 5-digit FIPS codes.</td>
+<td><code>2018-us-county:17043</code> (DuPage county in Illinois)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-limitations">Current limitations</h3>
+<ul>
+<li>Each plant can only be opened exactly once. After open, the plant remains open until the end of the simulation.</li>
+<li>Plants can be expanded at any time, even long after they are open.</li>
+<li>All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.</li>
+<li>Up to two plant sizes are currently supported. Variable operating costs must be the same for all plant sizes.</li>
+</ul>
+<h2 id="output-data-format-json">Output Data Format (JSON)</h2>
+<p>To be documented.</p></div>
+        
+        
+    </div>
+
+    
+      <footer class="col-md-12 text-center">
+          
+          
+            <hr>
+            <p>
+            <small>Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.</small><br>
+            
+            <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+            </p>
+          
+
+          
+          
+      </footer>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../js/mathjax.js"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
