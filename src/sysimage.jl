@@ -1,15 +1,30 @@
 using PackageCompiler
+using TOML
+using Logging
 
-using Cbc
-using Clp
-using Geodesy
-using JSON
-using JSONSchema
-using JuMP
-using MathOptInterface
-using ProgressBars
+Logging.disable_logging(Logging.Info)
 
-pkg = [:Cbc, :Clp, :Geodesy, :JSON, :JSONSchema, :JuMP, :MathOptInterface, :ProgressBars]
+mkpath("build")
 
-@info "Building system image..."
-create_sysimage(pkg, sysimage_path = "build/sysimage.so")
+printstyled("Generating precompilation statements...\n", color=:light_green)
+run(`julia --project=. --trace-compile=build/precompile.jl $ARGS`)
+
+printstyled("Finding dependencies...\n", color=:light_green)
+project = TOML.parsefile("Project.toml")
+manifest = TOML.parsefile("Manifest.toml")
+deps = Symbol[]
+for dep in keys(project["deps"])
+    if "path" in keys(manifest[dep][1])
+        printstyled("    skip $(dep)\n", color=:light_black)
+    else
+        println("     add $(dep)")
+        push!(deps, Symbol(dep))
+    end
+end
+
+printstyled("Building system image...\n", color=:light_green)
+create_sysimage(
+    deps,
+    precompile_statements_file = "build/precompile.jl",
+    sysimage_path = "build/sysimage.so",
+)

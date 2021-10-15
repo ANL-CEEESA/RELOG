@@ -4,9 +4,11 @@
 
 using RELOG, JSON, GZip
 
+basedir = @__DIR__
+
 @testset "Reports" begin
     @testset "from solve" begin
-        solution = RELOG.solve("$(pwd())/../instances/s1.json")
+        solution = RELOG.solve("$basedir/../instances/s1.json")
         tmp_filename = tempname()
         # The following should not crash
         RELOG.write_plant_emissions_report(solution, tmp_filename)
