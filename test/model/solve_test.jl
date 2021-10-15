@@ -26,6 +26,15 @@ basedir = dirname(@__FILE__)
     @test "F2" in keys(solution["Plants"])
     @test "F3" in keys(solution["Plants"])
     @test "F4" in keys(solution["Plants"])
+
+    @test "Products" in keys(solution)
+    @test "P1" in keys(solution["Products"])
+    @test "C1" in keys(solution["Products"]["P1"])
+    @test "Dispose (tonne)" in keys(solution["Products"]["P1"]["C1"])
+
+    total_disposal =
+        sum([loc["Dispose (tonne)"] for loc in values(solution["Products"]["P1"])])
+    @test total_disposal == [1.0, 1.0]
 end
 
 @testset "solve (heuristic)" begin

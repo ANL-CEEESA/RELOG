@@ -18,6 +18,7 @@ function build_graph(instance::Instance)::Graph
     collection_shipping_nodes = ShippingNode[]
 
     name_to_process_node_map = Dict{Tuple{AbstractString,AbstractString},ProcessNode}()
+    collection_center_to_node = Dict()
 
     process_nodes_by_input_product =
         Dict(product => ProcessNode[] for product in instance.products)
@@ -27,6 +28,7 @@ function build_graph(instance::Instance)::Graph
     for center in instance.collection_centers
         node = ShippingNode(next_index, center, center.product, [], [])
         next_index += 1
+        collection_center_to_node[center] = node
         push!(collection_shipping_nodes, node)
     end
 
@@ -83,6 +85,7 @@ function build_graph(instance::Instance)::Graph
         collection_shipping_nodes,
         arcs,
         name_to_process_node_map,
+        collection_center_to_node,
     )
 end
 

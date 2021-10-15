@@ -39,21 +39,24 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
     end
 
     # Products
-    if marginal_costs
-        for n in graph.collection_shipping_nodes
-            location_dict = OrderedDict{Any,Any}(
-                "Marginal cost (\$/tonne)" => [
-                    round(abs(JuMP.shadow_price(model[:eq_balance][n, t])), digits = 2) for t = 1:T
-                ],
-                "Latitude (deg)" => n.location.latitude,
-                "Longitude (deg)" => n.location.longitude,
-                "Amount (tonne)" => n.location.amount,
-            )
-            if n.product.name ∉ keys(output["Products"])
-                output["Products"][n.product.name] = OrderedDict()
-            end
-            output["Products"][n.product.name][n.location.name] = location_dict
+    for n in graph.collection_shipping_nodes
+        location_dict = OrderedDict{Any,Any}(
+            "Latitude (deg)" => n.location.latitude,
+            "Longitude (deg)" => n.location.longitude,
+            "Amount (tonne)" => n.location.amount,
+            "Dispose (tonne)" =>
+                [JuMP.value(model[:collection_dispose][n, t]) for t = 1:T],
+        )
+        if marginal_costs
+            location_dict["Marginal cost (\$/tonne)"] = [
+                round(abs(JuMP.shadow_price(model[:eq_balance][n, t])), digits = 2) for
+                t = 1:T
+            ]
         end
+        if n.product.name ∉ keys(output["Products"])
+            output["Products"][n.product.name] = OrderedDict()
+        end
+        output["Products"][n.product.name][n.location.name] = location_dict
     end
 
     # Plants
@@ -178,13 +181,14 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
             plant_dict["Total output"][product_name] = zeros(T)
             plant_dict["Output"]["Send"][product_name] = product_dict = OrderedDict()
 
-            disposal_amount = [JuMP.value(model[:dispose][shipping_node, t]) for t = 1:T]
+            disposal_amount =
+                [JuMP.value(model[:plant_dispose][shipping_node, t]) for t = 1:T]
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
                 plant_dict["Output"]["Dispose"][product_name] =
                     disposal_dict = OrderedDict()
                 disposal_dict["Amount (tonne)"] =
-                    [JuMP.value(model[:dispose][shipping_node, t]) for t = 1:T]
+                    [JuMP.value(model[:plant_dispose][shipping_node, t]) for t = 1:T]
                 disposal_dict["Cost (\$)"] = [
                     disposal_dict["Amount (tonne)"][t] *
                     plant.disposal_cost[shipping_node.product][t] for t = 1:T

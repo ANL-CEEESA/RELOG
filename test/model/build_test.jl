@@ -18,7 +18,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
     )
 
     @test length(model[:flow]) == 76
-    @test length(model[:dispose]) == 16
+    @test length(model[:plant_dispose]) == 16
     @test length(model[:open_plant]) == 12
     @test length(model[:capacity]) == 12
     @test length(model[:expansion]) == 12
@@ -32,7 +32,7 @@ using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
     @test lower_bound(v) == 0.0
     @test upper_bound(v) == 750.0
 
-    v = model[:dispose][shipping_node_by_loc_and_prod_names["L1", "P2"], 1]
+    v = model[:plant_dispose][shipping_node_by_loc_and_prod_names["L1", "P2"], 1]
     @test lower_bound(v) == 0.0
     @test upper_bound(v) == 1.0
 end

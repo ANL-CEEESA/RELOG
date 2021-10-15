@@ -36,6 +36,8 @@ The **products** section describes all products and subproducts in the simulatio
 |`transportation energy (J/km/tonne)`   | The energy required to transport this product. Must be a time series. Optional.
 |`transportation emissions (tonne/km/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.
 |`initial amounts`                      | A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted. Must be a time series.
+| `disposal limit (tonne)`              | Total amount of product that can be disposed of across all collection centers. If omitted, all product must be processed. This parameter has no effect on product disposal at plants.
+| `disposal cost ($/tonne)`              | Cost of disposing one tonne of this product at a collection center. If omitted, defaults to zero. This parameter has no effect on product disposal costs at plants.
 
 Each product may have some amount available at the beginning of each time period. In this case, the key `initial amounts` maps to a dictionary with the following keys:
 
@@ -73,7 +75,9 @@ Each product may have some amount available at the beginning of each time period
             "transportation emissions (tonne/km/tonne)": {
                 "CO2": [0.052, 0.050],
                 "CH4": [0.003, 0.002]
-            }
+            },
+            "disposal cost ($/tonne)": [-10.0, -12.0],
+            "disposal limit (tonne)": [1.0, 1.0],
         },
         "P2": {
             "transportation cost ($/km/tonne)": [0.022, 0.020]

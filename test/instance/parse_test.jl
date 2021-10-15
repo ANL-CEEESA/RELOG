@@ -40,7 +40,14 @@ using RELOG
     @test plant.sizes[2].fixed_operating_cost == [30, 30]
     @test plant.sizes[2].variable_operating_cost == [30, 30]
 
+    p1 = product_name_to_product["P1"]
+    @test p1.disposal_limit == [1.0, 1.0]
+    @test p1.disposal_cost == [-1000.0, -1000.0]
+
     p2 = product_name_to_product["P2"]
+    @test p2.disposal_limit == [0.0, 0.0]
+    @test p2.disposal_cost == [0.0, 0.0]
+
     p3 = product_name_to_product["P3"]
     @test length(plant.output) == 2
     @test plant.output[p2] == 0.2

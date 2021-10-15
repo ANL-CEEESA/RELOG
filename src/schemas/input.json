@@ -169,6 +169,12 @@
                     },
                     "initial amounts": {
                         "$ref": "#/definitions/InitialAmount"
+                    },
+                    "disposal limit (tonne)": {
+                        "$ref": "#/definitions/TimeSeries"
+                    },
+                    "disposal cost ($/tonne)": {
+                        "$ref": "#/definitions/TimeSeries"
                     }
                 },
                 "required": [
