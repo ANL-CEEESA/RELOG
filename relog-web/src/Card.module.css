@@ -1,0 +1,22 @@
+.Card {
+    border: var(--box-border);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    background-color: white;
+    padding: 12px;
+    min-height: 24px;
+}
+
+.Card h1 {
+    margin: 12px -12px 0px -12px;
+    padding: 6px 12px 0px 12px;
+    font-size: 14px;
+    line-height: 35px;
+    border-top: 1px solid #ddd;
+}
+
+.Card h1:first-child {
+    margin: -12px -12px 0px -12px;    
+    border-top: none;
+    background: none;
+}

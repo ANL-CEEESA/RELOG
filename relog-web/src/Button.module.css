@@ -1,0 +1,65 @@
+.Button {
+    padding: 6px 36px;
+    margin: 12px 6px;
+    line-height: 24px;
+    border: var(--box-border);
+    /* background-color: white; */
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    background: linear-gradient(
+        rgb(255, 255, 255) 25%,
+        rgb(245, 245, 245) 100%
+    )
+}
+
+.Button:hover {
+    background: rgb(245, 245, 245);
+}
+
+.Button:active {
+    background: rgba(220, 220, 220);
+}
+
+.inline {
+    padding: 0 12px;
+    margin: 2px 4px 2px 0;
+    height: 32px;
+    font-size: 11px;
+}
+
+/* .inline:last-child {
+    margin: 2px 1px;
+} */
+
+.tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: white;
+    opacity: 0%;
+    width: 180px;
+    margin-top: 36px;
+    margin-left: -180px;
+    position: absolute;
+    z-index: 100;
+    text-transform: none;
+    font-size: 13px;
+    border-radius: 4px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+    line-height: 18px;
+    padding: 6px;
+    transition: opacity .5s;
+    font-weight: normal;
+    text-align: left;
+    padding: 6px 12px;
+}
+
+.Button:hover .tooltip {
+    visibility: visible;
+    opacity: 100%;
+    transition: opacity .5s;
+}

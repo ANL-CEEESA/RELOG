@@ -1,0 +1,21 @@
+.PipelineBlock {
+    height: 600px;
+}
+
+.PlantNode, .ProductNode {
+    border-color: rgba(0, 0, 0, 0.8);
+    color: black;
+    font-size: 13px;
+    border-width: 1px;
+    border-radius: 6px;
+    box-shadow: 0px 2px 4px -3px black;
+    width: 100px;
+}
+
+.PlantNode {
+    background-color: #0df;
+}
+
+.ProductNode {
+    background-color: #f6f6f6;
+}
