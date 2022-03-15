@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import form_styles from './Form.module.css';
 import Button from './Button';
+import { validate } from './Form';
 
 const DictInputRow = (props) => {
     const dict = { ...props.value };
     if (!props.disableKeys) {
-        dict[""] = "";
+        dict[""] = "0";
     }
 
     let unit = "";
@@ -36,6 +36,15 @@ const DictInputRow = (props) => {
         if (index > 0) {
             label = "";
         }
+
+        let isValid = true;
+        if (props.validate !== undefined) {
+            isValid = validate(props.validate, dict[key]);
+        }
+
+        let className = "";
+        if (!isValid) className = form_styles.invalid;
+
         form.push(
             <div className={form_styles.FormRow} key={index}>
                 <label>{label}</label>
@@ -52,6 +61,7 @@ const DictInputRow = (props) => {
                     data-index={index}
                     value={dict[key]}
                     placeholder={props.valuePlaceholder}
+                    className={className}
                     onChange={e => onChangeValue(key, e.target.value)}
                 />
                 {tooltip}

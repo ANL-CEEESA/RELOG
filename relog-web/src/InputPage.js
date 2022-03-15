@@ -12,7 +12,7 @@ const defaultData = {
     parameters: {
         "time horizon (years)": "1",
         "building period (years)": "[1]",
-        "annual inflation rate (%)": "0.0",
+        "annual inflation rate (%)": "0",
     },
     products: {
     },
@@ -21,15 +21,13 @@ const defaultData = {
 };
 
 const defaultProduct = {
-    "acquisition cost ($/tonne)": "0.00",
-    "disposal cost ($/tonne)": "0.00",
+    "initial amounts": {},
+    "acquisition cost ($/tonne)": "0",
+    "disposal cost ($/tonne)": "0",
     "disposal limit (tonne)": "0",
-    "transportation cost ($/km/tonne)": "0.00",
+    "transportation cost ($/km/tonne)": "0",
     "transportation energy (J/km/tonne)": "0",
-    "transportation emissions (J/km/tonne)": {
-        "CO2": 0,
-        "NH2": 0,
-    }
+    "transportation emissions (J/km/tonne)": {}
 };
 
 const randomPosition = () => {

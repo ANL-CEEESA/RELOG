@@ -13,6 +13,8 @@ const ProductBlock = (props) => {
         props.onChange(newProduct);
     };
 
+    const nCenters = Object.keys(props.value["initial amounts"]).length;
+
     return (
         <>
             <Section title={props.name} />
@@ -20,6 +22,7 @@ const ProductBlock = (props) => {
                 <Form>
                     <h1>General information</h1>
                     <FileInputRow
+                        value={`${nCenters} collection centers`}
                         label="Initial amounts"
                         tooltip="A dictionary mapping the name of each location to its description (see below). If this product is not initially available, this key may be omitted."
                     />
@@ -29,6 +32,7 @@ const ProductBlock = (props) => {
                         tooltip="The cost to acquire one tonne of this product from collection centers. Does not apply to plant outputs."
                         value={props.value["acquisition cost ($/tonne)"]}
                         onChange={v => onChange("acquisition cost ($/tonne)", v)}
+                        validate="float"
                     />
 
                     <h1>Disposal</h1>
@@ -38,6 +42,7 @@ const ProductBlock = (props) => {
                         tooltip="The cost to dispose of one tonne of this product at a collection center, without further processing. Does not apply to plant outputs."
                         value={props.value["disposal cost ($/tonne)"]}
                         onChange={v => onChange("disposal cost ($/tonne)", v)}
+                        validate="float"
                     />
                     <TextInputRow
                         label="Disposal limit"
@@ -45,6 +50,7 @@ const ProductBlock = (props) => {
                         tooltip="The maximum amount of this product that can be disposed of across all collection centers, without further processing."
                         value={props.value["disposal limit (tonne)"]}
                         onChange={v => onChange("disposal limit (tonne)", v)}
+                        validate="float"
                     />
 
                     <h1>Transportation</h1>
@@ -54,6 +60,7 @@ const ProductBlock = (props) => {
                         tooltip="The cost to transport this product."
                         value={props.value["transportation cost ($/km/tonne)"]}
                         onChange={v => onChange("transportation cost ($/km/tonne)", v)}
+                        validate="float"
                     />
                     <TextInputRow
                         label="Transportation energy"
@@ -61,15 +68,16 @@ const ProductBlock = (props) => {
                         tooltip="The energy required to transport this product."
                         value={props.value["transportation energy (J/km/tonne)"]}
                         onChange={v => onChange("transportation energy (J/km/tonne)", v)}
+                        validate="float"
                     />
                     <DictInputRow
                         label="Transportation emissions"
                         unit="J/km/tonne"
                         tooltip="A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes)."
                         keyPlaceholder="Emission name"
-                        valuePlaceholder="0"
                         value={props.value["transportation emissions (J/km/tonne)"]}
                         onChange={v => onChange("transportation emissions (J/km/tonne)", v)}
+                        validate="float"
                     />
                 </Form>
             </Card>
