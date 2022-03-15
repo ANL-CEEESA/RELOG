@@ -1,7 +1,7 @@
-import styles from './Section.module.css'
+import styles from './Section.module.css';
 
 const Section = (props) => {
-    return <h2 className={styles.Section}>{props.title}</h2>
-}
+    return <h2 className={styles.Section}>{props.title}</h2>;
+};
 
 export default Section;

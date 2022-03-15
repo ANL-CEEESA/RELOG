@@ -39,6 +39,10 @@ body {
     border: 1px solid black !important;
 }
 
+.react-flow__handle:hover {
+    background-color: black !important;
+}
+
 .react-flow__handle-right {
     right: -5px !important;
 }

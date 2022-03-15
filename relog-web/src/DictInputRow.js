@@ -1,27 +1,37 @@
-import form_styles from './Form.module.css'
-import Button from './Button'
+import { useState } from 'react';
+import form_styles from './Form.module.css';
+import Button from './Button';
 
 const DictInputRow = (props) => {
+    const dict = { ...props.value };
+    if (!props.disableKeys) {
+        dict[""] = "";
+    }
+
     let unit = "";
     if (props.unit) {
-        unit = <span className={form_styles.FormRow_unit}>({props.unit})</span>
+        unit = <span className={form_styles.FormRow_unit}>({props.unit})</span>;
     }
 
     let tooltip = "";
     if (props.tooltip != undefined) {
-        tooltip = <Button label="?" kind="inline" tooltip={props.tooltip} />
+        tooltip = <Button label="?" kind="inline" tooltip={props.tooltip} />;
     }
 
-    let value = {}
-    if (props.value != undefined) {
-        value = props.value;
-    }
-    if (props.disableKeys === undefined) {
-        value[""] = "";
-    }
+    const onChangeValue = (key, v) => {
+        const newDict = { ...dict };
+        newDict[key] = v;
+        props.onChange(newDict);
+    };
 
-    const form = []
-    Object.keys(value).forEach((key, index) => {
+    const onChangeKey = (prevKey, newKey) => {
+        const newDict = renameKey(dict, prevKey, newKey);
+        if (!("" in newDict)) newDict[""] = "";
+        props.onChange(newDict);
+    };
+
+    const form = [];
+    Object.keys(dict).forEach((key, index) => {
         let label = <span>{props.label} {unit}</span>;
         if (index > 0) {
             label = "";
@@ -35,21 +45,33 @@ const DictInputRow = (props) => {
                     value={key}
                     placeholder={props.keyPlaceholder}
                     disabled={props.disableKeys}
+                    onChange={e => onChangeKey(key, e.target.value)}
                 />
                 <input
                     type="text"
                     data-index={index}
-                    value={value[key]}
+                    value={dict[key]}
                     placeholder={props.valuePlaceholder}
+                    onChange={e => onChangeValue(key, e.target.value)}
                 />
                 {tooltip}
             </div>
         );
     });
 
-    return <>
-        {form}
-    </>;
+    return <>{form}</>;
+};
+
+function renameKey(obj, prevKey, newKey) {
+    const keys = Object.keys(obj);
+    return keys.reduce((acc, val) => {
+        if (val === prevKey) {
+            acc[newKey] = obj[prevKey];
+        } else {
+            acc[val] = obj[val];
+        }
+        return acc;
+    }, {});
 }
 
 export default DictInputRow;

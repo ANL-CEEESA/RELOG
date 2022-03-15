@@ -1,11 +1,11 @@
-import form_styles from './Form.module.css'
-import Button from './Button'
+import form_styles from './Form.module.css';
+import Button from './Button';
 
 const FileInputRow = (props) => {
 
     let tooltip = "";
     if (props.tooltip != undefined) {
-        tooltip = <Button label="?" kind="inline" tooltip={props.tooltip} />
+        tooltip = <Button label="?" kind="inline" tooltip={props.tooltip} />;
     }
 
     return <div className={form_styles.FormRow}>
@@ -16,6 +16,6 @@ const FileInputRow = (props) => {
         <Button label="Template" kind="inline" />
         {tooltip}
     </div>;
-}
+};
 
 export default FileInputRow;

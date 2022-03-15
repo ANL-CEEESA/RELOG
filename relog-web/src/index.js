@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Header from './Header';
 import InputPage from './InputPage';
-import Footer from './Footer'
+import Footer from './Footer';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,5 +1,8 @@
 .PipelineBlock {
     height: 600px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    margin-bottom: 12px;
 }
 
 .PlantNode, .ProductNode {

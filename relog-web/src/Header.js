@@ -1,4 +1,4 @@
-import styles from './Header.module.css'
+import styles from './Header.module.css';
 
 const Header = () => {
     return (
@@ -7,7 +7,7 @@ const Header = () => {
                 <h1>RELOG</h1>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Header;

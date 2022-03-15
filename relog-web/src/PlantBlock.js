@@ -1,20 +1,20 @@
-import Section from './Section'
-import Card from './Card'
-import Form from './Form'
-import TextInputRow from './TextInputRow'
-import FileInputRow from './FileInputRow'
-import DictInputRow from './DictInputRow'
+import Section from './Section';
+import Card from './Card';
+import Form from './Form';
+import TextInputRow from './TextInputRow';
+import FileInputRow from './FileInputRow';
+import DictInputRow from './DictInputRow';
 
 const PlantBlock = (props) => {
     const emissions = {
         "CO2": "0.05",
         "CH4": "0.01",
         "N2O": "0.04",
-    }
+    };
     const output = {
         "Nickel": "0.5",
         "Metal casing": "0.35",
-    }
+    };
     return (
         <>
             <Section title={props.name} />
@@ -136,7 +136,7 @@ const PlantBlock = (props) => {
                 </Form>
             </Card>
         </>
-    )
-}
+    );
+};
 
 export default PlantBlock;
