@@ -1,17 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Header from './Header';
-import InputPage from './InputPage';
-import Footer from './Footer';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import InputPage from "./InputPage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Header />
-    <div id="content">
-      <InputPage />
-    </div>
-    <Footer />
+    <InputPage />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );

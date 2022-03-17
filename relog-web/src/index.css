@@ -1,52 +1,52 @@
 :root {
-    --site-width: 1200px;
-    --box-border: 1px solid rgba(0, 0, 0, 0.2);
-    --box-shadow: 0px 2px 4px -3px rgba(0, 0, 0, 0.2);
-    --border-radius: 4px;
+  --site-width: 1200px;
+  --box-border: 1px solid rgba(0, 0, 0, 0.2);
+  --box-shadow: 0px 2px 4px -3px rgba(0, 0, 0, 0.2);
+  --border-radius: 4px;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    border: 0;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 body {
-    background-color: #f6f6f6;
-    color: rgba(0, 0, 0, 0.95);
+  background-color: #f6f6f6;
+  color: rgba(0, 0, 0, 0.95);
 }
 
 #content {
-    max-width: var(--site-width);
-    min-width: 900px;
-    margin: 0 auto;
-    padding: 0 6px;
+  max-width: var(--site-width);
+  min-width: 900px;
+  margin: 0 auto;
+  padding: 0 6px;
 }
 
 .react-flow__node.selected {
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
-    border-width: 2px !important;
-    margin-top: -1px !important;
-    margin-left: -1px !important;
-    border-radius: 8px !important;
-    font-weight: bold;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+  border-width: 2px !important;
+  margin-top: -1px !important;
+  margin-left: -1px !important;
+  border-radius: 8px !important;
 }
 
 .react-flow__handle {
-    width: 8px !important;
-    height: 8px !important;
-    background-color: white !important;
-    border: 1px solid black !important;
+  width: 6px !important;
+  height: 6px !important;
+  background-color: white !important;
+  border: 1px solid black !important;
 }
 
 .react-flow__handle:hover {
-    background-color: black !important;
+  background-color: black !important;
 }
 
 .react-flow__handle-right {
-    right: -5px !important;
+  right: -4px !important;
 }
 
 .react-flow__handle-left {
-    left: -5px !important;
+  left: -4px !important;
 }
