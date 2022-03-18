@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ReactFlow, { Background, isNode } from "react-flow-renderer";
+import ReactFlow, { Background, isNode, Controls } from "react-flow-renderer";
 import Section from "./Section";
 import Card from "./Card";
 import Button from "./Button";
@@ -169,12 +169,13 @@ const PipelineBlock = (props) => {
             onConnect={onConnect}
             onElementsRemove={onElementsRemove}
             deleteKeyCode={46}
-            maxZoom={1}
-            minZoom={1}
+            maxZoom={3}
+            minZoom={0.5}
             snapToGrid={true}
             preventScrolling={false}
           >
             <Background />
+            <Controls />
           </ReactFlow>
         </div>
         <div style={{ textAlign: "center" }}>
