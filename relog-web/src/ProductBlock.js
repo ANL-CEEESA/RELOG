@@ -111,34 +111,38 @@ const ProductBlock = (props) => {
             onTemplate={onInitialAmountsTemplate}
           />
 
-          <h1>Disposal</h1>
-          <TextInputRow
-            label="Disposal cost"
-            unit="$/tonne"
-            tooltip="The cost to dispose of one tonne of this product at a collection center, without further processing."
-            value={props.value["disposal cost ($/tonne)"]}
-            onChange={(v) => onChange("disposal cost ($/tonne)", v)}
-            validate="floatList"
-          />
-          <TextInputRow
-            label="Disposal limit"
-            unit="tonne"
-            tooltip="The maximum amount (in tonnes) of this product that can be disposed of across all collection centers, without further processing."
-            value={props.value["disposal limit (tonne)"]}
-            onChange={(v) => onChange("disposal limit (tonne)", v)}
-            validate="floatList"
-            disabled={String(props.value["disposal limit (%)"]).length > 0}
-          />
+          <h1 style={{ display: nCenters == 0 ? "none" : "block" }}>
+            Disposal
+          </h1>
+          <div style={{ display: nCenters == 0 ? "none" : "block" }}>
+            <TextInputRow
+              label="Disposal cost"
+              unit="$/tonne"
+              tooltip="The cost to dispose of one tonne of this product at a collection center, without further processing."
+              value={props.value["disposal cost ($/tonne)"]}
+              onChange={(v) => onChange("disposal cost ($/tonne)", v)}
+              validate="floatList"
+            />
+            <TextInputRow
+              label="Disposal limit"
+              unit="tonne"
+              tooltip="The maximum amount (in tonnes) of this product that can be disposed of across all collection centers, without further processing."
+              value={props.value["disposal limit (tonne)"]}
+              onChange={(v) => onChange("disposal limit (tonne)", v)}
+              validate="floatList"
+              disabled={String(props.value["disposal limit (%)"]).length > 0}
+            />
 
-          <TextInputRow
-            label="Disposal limit"
-            unit="%"
-            tooltip="The maximum amount of this product that can be disposed of across all collection centers, without further processing, as a percentage of the total amount available."
-            value={props.value["disposal limit (%)"]}
-            onChange={(v) => onChange("disposal limit (%)", v)}
-            validate="floatList"
-            disabled={props.value["disposal limit (tonne)"].length > 0}
-          />
+            <TextInputRow
+              label="Disposal limit"
+              unit="%"
+              tooltip="The maximum amount of this product that can be disposed of across all collection centers, without further processing, as a percentage of the total amount available."
+              value={props.value["disposal limit (%)"]}
+              onChange={(v) => onChange("disposal limit (%)", v)}
+              validate="floatList"
+              disabled={props.value["disposal limit (tonne)"].length > 0}
+            />
+          </div>
 
           <h1>Transportation</h1>
           <TextInputRow
