@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { openDB, deleteDB, wrap, unwrap } from "idb";
 
 import "./index.css";
 import PipelineBlock from "./PipelineBlock";
@@ -56,17 +57,29 @@ const fixLists = (dict, blacklist, stringify) => {
   }
 };
 
+const openRelogDB = async () => {
+  const dbPromise = await openDB("RELOG", 1, {
+    upgrade(db) {
+      db.createObjectStore("casebuilder");
+    },
+  });
+  return dbPromise;
+};
+
 const InputPage = () => {
   const fileElem = useRef();
+  let [data, setData] = useState(defaultData);
 
-  let savedData = JSON.parse(localStorage.getItem("data"));
-  if (!savedData) savedData = defaultData;
-
-  let [data, setData] = useState(savedData);
-
-  const save = (data) => {
-    localStorage.setItem("data", JSON.stringify(data));
+  const save = async (data) => {
+    const db = await openRelogDB();
+    await db.put("casebuilder", data, "data");
   };
+
+  useEffect(async () => {
+    const db = await openRelogDB();
+    const data = await db.get("casebuilder", "data");
+    if (data) setData(data);
+  }, []);
 
   const promptName = (prevData) => {
     const name = prompt("Name");
