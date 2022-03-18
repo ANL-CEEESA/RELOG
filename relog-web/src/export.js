@@ -10,12 +10,15 @@ const keysToList = (obj) => {
   return result;
 };
 
-export const exportValue = (original, T) => {
+export const exportValue = (original, T, R = 1) => {
   if (isNumeric(original)) {
     if (T) {
-      const v = parseFloat(original);
+      let v = parseFloat(original);
       const result = [];
-      for (let i = 0; i < T; i++) result.push(v);
+      for (let i = 0; i < T; i++) {
+        result.push(v);
+        v *= R;
+      }
       return result;
     } else {
       return parseFloat(original);
@@ -58,12 +61,12 @@ const computeTotalInitialAmount = (prod) => {
   return total;
 };
 
-export const importList = (args) => {
+export const importList = (args, R = 1) => {
   if (!args) return "";
   if (Array.isArray(args) && args.length > 0) {
     let isConstant = true;
     for (let i = 1; i < args.length; i++) {
-      if (args[i - 1] !== args[i]) {
+      if (Math.abs(args[i - 1] - args[i] / R) > 1e-3) {
         isConstant = false;
         break;
       }
@@ -97,20 +100,51 @@ const computeAbsDisposal = (prod) => {
   return disposalAbs;
 };
 
-export const exportProduct = (original, T) => {
+const computeInflationAndTimeHorizon = (obj, keys) => {
+  for (let i = 0; i < keys.length; i++) {
+    const list = obj[keys[i]];
+    if (
+      Array.isArray(list) &&
+      list.length > 1 &&
+      isNumeric(list[0]) &&
+      isNumeric(list[1]) &&
+      Math.abs(list[0]) > 0
+    ) {
+      return [list[1] / list[0], list.length];
+    }
+  }
+  return [1, 1];
+};
+
+export const exportProduct = (original, parameters) => {
   const result = {};
 
-  // Copy time series values
+  // Read time horizon
+  let T = parameters["time horizon (years)"];
+  if (isNumeric(T)) T = parseInt(T);
+  else T = 1;
+
+  // Read inflation
+  let R = parameters["inflation rate (%)"];
+  if (isNumeric(R)) R = parseFloat(R) / 100 + 1;
+  else R = 1;
+
+  // Copy constant time series
   result["initial amounts"] = original["initial amounts"];
-  [
-    "disposal cost ($/tonne)",
-    "disposal limit (tonne)",
-    "transportation cost ($/km/tonne)",
-    "transportation energy (J/km/tonne)",
-  ].forEach((key) => {
-    const v = exportValue(original[key], T);
-    if (v.length > 0) result[key] = v;
-  });
+  ["disposal limit (tonne)", "transportation energy (J/km/tonne)"].forEach(
+    (key) => {
+      const v = exportValue(original[key], T);
+      if (v.length > 0) result[key] = v;
+    }
+  );
+
+  // Copy cost time series (with inflation)
+  ["disposal cost ($/tonne)", "transportation cost ($/km/tonne)"].forEach(
+    (key) => {
+      const v = exportValue(original[key], T, R);
+      if (v.length > 0) result[key] = v;
+    }
+  );
 
   // Copy dictionaries
   ["transportation emissions (tonne/km/tonne)"].forEach((key) => {
@@ -125,8 +159,18 @@ export const exportProduct = (original, T) => {
   return result;
 };
 
-export const exportPlant = (original, T) => {
+export const exportPlant = (original, parameters) => {
   const result = {};
+
+  // Read time horizon
+  let T = parameters["time horizon (years)"];
+  if (isNumeric(T)) T = parseInt(T);
+  else T = 1;
+
+  // Read inflation
+  let R = parameters["inflation rate (%)"];
+  if (isNumeric(R)) R = parseFloat(R) / 100 + 1;
+  else R = 1;
 
   // Copy scalar values
   ["input"].forEach((key) => {
@@ -160,8 +204,8 @@ export const exportPlant = (original, T) => {
 
     const acf = origDict["area cost factor"];
 
-    const exportValueAcf = (obj, T) => {
-      const v = exportValue(obj, T);
+    const exportValueAcf = (obj) => {
+      const v = exportValue(obj, T, R);
       if (Array.isArray(v)) {
         return v.map((v) => v * acf);
       }
@@ -180,7 +224,7 @@ export const exportPlant = (original, T) => {
       "fixed operating cost ($)": "fixed operating cost (min capacity) ($)",
       "variable operating cost ($/tonne)": "variable operating cost ($/tonne)",
     })) {
-      capDict[minCap][resKeyName] = exportValueAcf(original[origKeyName], T);
+      capDict[minCap][resKeyName] = exportValueAcf(original[origKeyName]);
     }
 
     if (maxCap !== minCap) {
@@ -192,7 +236,7 @@ export const exportPlant = (original, T) => {
         "variable operating cost ($/tonne)":
           "variable operating cost ($/tonne)",
       })) {
-        capDict[maxCap][resKeyName] = exportValueAcf(original[origKeyName], T);
+        capDict[maxCap][resKeyName] = exportValueAcf(original[origKeyName]);
       }
     }
 
@@ -214,10 +258,7 @@ export const exportPlant = (original, T) => {
 
     // Copy storage
     resDict.storage = {
-      "cost ($/tonne)": exportValueAcf(
-        original["storage"]["cost ($/tonne)"],
-        T
-      ),
+      "cost ($/tonne)": exportValueAcf(original["storage"]["cost ($/tonne)"]),
     };
     const storLimit = original["storage"]["limit (tonne)"];
     if (isNumeric(storLimit)) {
@@ -246,12 +287,12 @@ export const exportData = (original) => {
 
   // Export products
   for (const [prodName, prodDict] of Object.entries(original.products)) {
-    result.products[prodName] = exportProduct(prodDict, T);
+    result.products[prodName] = exportProduct(prodDict, original.parameters);
   }
 
   // Export plants
   for (const [plantName, plantDict] of Object.entries(original.plants)) {
-    result.plants[plantName] = exportPlant(plantDict, T);
+    result.plants[plantName] = exportPlant(plantDict, original.parameters);
   }
   return result;
 };
@@ -273,67 +314,83 @@ const compressDisposalLimits = (original, result) => {
 };
 
 export const importProduct = (original) => {
-  const result = {};
+  const prod = {};
+  const parameters = {};
 
-  result["initial amounts"] = { ...original["initial amounts"] };
+  prod["initial amounts"] = { ...original["initial amounts"] };
 
   // Initialize null values
   ["x", "y"].forEach((key) => {
-    result[key] = null;
+    prod[key] = null;
   });
 
   // Initialize empty values
   ["disposal limit (%)"].forEach((key) => {
-    result[key] = "";
+    prod[key] = "";
   });
 
-  // Import lists
-  [
-    "transportation energy (J/km/tonne)",
+  // Import constant lists
+  ["transportation energy (J/km/tonne)", "disposal limit (tonne)"].forEach(
+    (key) => {
+      prod[key] = importList(original[key]);
+    }
+  );
+
+  // Compute inflation and time horizon
+  const [R, T] = computeInflationAndTimeHorizon(original, [
     "transportation cost ($/km/tonne)",
     "disposal cost ($/tonne)",
-    "disposal limit (tonne)",
-  ].forEach((key) => {
-    result[key] = importList(original[key]);
-  });
+  ]);
+  parameters["inflation rate (%)"] = String((R - 1) * 100);
+  parameters["time horizon (years)"] = String(T);
+
+  // Import cost lists
+  ["transportation cost ($/km/tonne)", "disposal cost ($/tonne)"].forEach(
+    (key) => {
+      prod[key] = importList(original[key], R);
+    }
+  );
 
   // Import dicts
   ["transportation emissions (tonne/km/tonne)"].forEach((key) => {
-    result[key] = importDict(original[key]);
+    prod[key] = importDict(original[key]);
   });
 
   // Attempt to convert absolute disposal limits to relative
-  compressDisposalLimits(original, result);
+  compressDisposalLimits(original, prod);
 
-  return result;
+  return [prod, parameters];
 };
 
 export const importPlant = (original) => {
-  const result = {};
+  const plant = {};
+  const parameters = {};
 
   // Initialize null values
   ["x", "y"].forEach((key) => {
-    result[key] = null;
+    plant[key] = null;
   });
 
   // Import scalar values
   ["input"].forEach((key) => {
-    result[key] = original[key];
+    plant[key] = original[key];
   });
 
   // Import timeseries values
   ["energy (GJ/tonne)"].forEach((key) => {
-    result[key] = importList(original[key]);
+    plant[key] = importList(original[key]);
   });
 
   // Import dicts
   ["outputs (tonne/tonne)", "emissions (tonne/tonne)"].forEach((key) => {
-    result[key] = importDict(original[key]);
+    plant[key] = importDict(original[key]);
   });
 
-  // Read locations
   let costsInitialized = false;
-  const resLocDict = (result.locations = {});
+  let R = null;
+
+  // Read locations
+  const resLocDict = (plant.locations = {});
   for (const [locName, origLocDict] of Object.entries(original["locations"])) {
     resLocDict[locName] = {};
 
@@ -350,29 +407,41 @@ export const importPlant = (original) => {
     const maxCapDict = origLocDict["capacities (tonne)"][maxCap];
 
     // Import min/max capacity
-    if ("minimum capacity (tonne)" in result) {
+    if ("minimum capacity (tonne)" in plant) {
       if (
-        result["minimum capacity (tonne)"] !== minCap ||
-        result["maximum capacity (tonne)"] !== maxCap
+        plant["minimum capacity (tonne)"] !== minCap ||
+        plant["maximum capacity (tonne)"] !== maxCap
       ) {
         throw "Data loss";
       }
     } else {
-      result["minimum capacity (tonne)"] = minCap;
-      result["maximum capacity (tonne)"] = maxCap;
+      plant["minimum capacity (tonne)"] = minCap;
+      plant["maximum capacity (tonne)"] = maxCap;
     }
 
     // Compute area cost factor
     let acf = 1;
     if (costsInitialized) {
-      acf = result["opening cost (min capacity) ($)"];
+      acf = plant["opening cost (min capacity) ($)"];
       if (Array.isArray(acf)) acf = acf[0];
       acf = minCapDict["opening cost ($)"][0] / acf;
     }
     resLocDict[locName]["area cost factor"] = acf;
 
+    const [R, T] = computeInflationAndTimeHorizon(maxCapDict, [
+      "opening cost ($)",
+      "fixed operating cost ($)",
+      "variable operating cost ($/tonne)",
+    ]);
+    parameters["inflation rate (%)"] = String((R - 1) * 100);
+    parameters["time horizon (years)"] = String(T);
+
     // Read adjusted costs
-    const importListAcf = (obj) => importList(obj.map((v) => v / acf));
+    const importListAcf = (obj) =>
+      importList(
+        obj.map((v) => v / acf),
+        R
+      );
     const openCostMax = importListAcf(maxCapDict["opening cost ($)"]);
     const openCostMin = importListAcf(minCapDict["opening cost ($)"]);
     const fixCostMax = importListAcf(maxCapDict["fixed operating cost ($)"]);
@@ -410,32 +479,33 @@ export const importPlant = (original) => {
 
     if (costsInitialized) {
       // Verify that location costs match the previously initialized ones
-      check(result["opening cost (max capacity) ($)"], openCostMax);
-      check(result["opening cost (min capacity) ($)"], openCostMin);
-      check(result["fixed operating cost (max capacity) ($)"], fixCostMax);
-      check(result["fixed operating cost (min capacity) ($)"], fixCostMin);
-      check(result["variable operating cost ($/tonne)"], varCost);
-      check(result["storage"]["cost ($/tonne)"], storCost);
-      check(result["storage"]["limit (tonne)"], storLimit);
-      check(String(result["disposal cost ($/tonne)"]), String(dispCost));
-      check(String(result["disposal limit (tonne)"]), String(dispLimit));
+      check(plant["opening cost (max capacity) ($)"], openCostMax);
+      check(plant["opening cost (min capacity) ($)"], openCostMin);
+      check(plant["fixed operating cost (max capacity) ($)"], fixCostMax);
+      check(plant["fixed operating cost (min capacity) ($)"], fixCostMin);
+      check(plant["variable operating cost ($/tonne)"], varCost);
+      check(plant["storage"]["cost ($/tonne)"], storCost);
+      check(plant["storage"]["limit (tonne)"], storLimit);
+      check(String(plant["disposal cost ($/tonne)"]), String(dispCost));
+      check(String(plant["disposal limit (tonne)"]), String(dispLimit));
     } else {
       // Initialize plant costs
       costsInitialized = true;
-      result["opening cost (max capacity) ($)"] = openCostMax;
-      result["opening cost (min capacity) ($)"] = openCostMin;
-      result["fixed operating cost (max capacity) ($)"] = fixCostMax;
-      result["fixed operating cost (min capacity) ($)"] = fixCostMin;
-      result["variable operating cost ($/tonne)"] = varCost;
-      result["storage"] = {};
-      result["storage"]["cost ($/tonne)"] = storCost;
-      result["storage"]["limit (tonne)"] = storLimit;
-      result["disposal cost ($/tonne)"] = dispCost;
-      result["disposal limit (tonne)"] = dispLimit;
+      plant["opening cost (max capacity) ($)"] = openCostMax;
+      plant["opening cost (min capacity) ($)"] = openCostMin;
+      plant["fixed operating cost (max capacity) ($)"] = fixCostMax;
+      plant["fixed operating cost (min capacity) ($)"] = fixCostMin;
+      plant["variable operating cost ($/tonne)"] = varCost;
+      plant["storage"] = {};
+      plant["storage"]["cost ($/tonne)"] = storCost;
+      plant["storage"]["limit (tonne)"] = storLimit;
+      plant["disposal cost ($/tonne)"] = dispCost;
+      plant["disposal limit (tonne)"] = dispLimit;
+      parameters["inflation rate (%)"] = String((R - 1) * 100);
     }
   }
 
-  return result;
+  return [plant, parameters];
 };
 
 export const importData = (original) => {
@@ -447,17 +517,25 @@ export const importData = (original) => {
 
   const result = {};
   result.parameters = importDict(original.parameters);
+  ["building period (years)"].forEach((k) => {
+    result.parameters[k] = JSON.stringify(original.parameters[k]);
+  });
+  result.parameters["inflation rate (%)"] = "0";
 
   // Import products
   result.products = {};
   for (const [prodName, origProdDict] of Object.entries(original.products)) {
-    result.products[prodName] = importProduct(origProdDict);
+    const [recoveredProd, recoveredParams] = importProduct(origProdDict);
+    result.products[prodName] = recoveredProd;
+    result.parameters = { ...result.parameters, ...recoveredParams };
   }
 
   // Import plants
   result.plants = {};
   for (const [plantName, origPlantDict] of Object.entries(original.plants)) {
-    result.plants[plantName] = importPlant(origPlantDict);
+    const [recoveredPlant, recoveredParams] = importPlant(origPlantDict);
+    result.plants[plantName] = recoveredPlant;
+    result.parameters = { ...result.parameters, ...recoveredParams };
   }
 
   return result;

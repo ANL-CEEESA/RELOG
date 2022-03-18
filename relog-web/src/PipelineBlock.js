@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactFlow, { Background, isNode } from "react-flow-renderer";
 import Section from "./Section";
 import Card from "./Card";
@@ -47,7 +47,10 @@ const getLayoutedElements = (elements) => {
 const PipelineBlock = (props) => {
   let elements = [];
   let mapNameToType = {};
+  let hasNullPositions = false;
+
   for (const [productName, product] of Object.entries(props.products)) {
+    if (!product.x || !product.y) hasNullPositions = true;
     mapNameToType[productName] = "product";
     elements.push({
       id: productName,
@@ -60,6 +63,7 @@ const PipelineBlock = (props) => {
   }
 
   for (const [plantName, plant] of Object.entries(props.plants)) {
+    if (!plant.x || !plant.y) hasNullPositions = true;
     mapNameToType[plantName] = "plant";
     elements.push({
       id: plantName,
@@ -148,6 +152,10 @@ const PipelineBlock = (props) => {
       }
     });
   };
+
+  useEffect(() => {
+    if (hasNullPositions) onLayout();
+  }, [hasNullPositions]);
 
   return (
     <>

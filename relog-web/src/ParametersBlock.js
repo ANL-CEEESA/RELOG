@@ -29,14 +29,14 @@ const ParametersBlock = (props) => {
             onChange={(v) => onChangeField("building period (years)", v)}
             validate="intList"
           />
-          {/* <TextInputRow
-            label="Annual inflation rate"
+          <TextInputRow
+            label="Inflation rate"
             unit="%"
-            tooltip="Rate of inflation applied to all costs."
-            value={props.value["annual inflation rate (%)"]}
-            onChange={(v) => onChangeField("annual inflation rate (%)", v)}
+            tooltip="Rate at which costs change from one time period to the next. This is applied uniformly to all costs."
+            value={props.value["inflation rate (%)"]}
+            onChange={(v) => onChangeField("inflation rate (%)", v)}
             validate="float"
-          /> */}
+          />
         </Form>
       </Card>
     </>

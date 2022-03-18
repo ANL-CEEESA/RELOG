@@ -30,7 +30,7 @@ const sampleProductsOriginal = [
     "disposal cost ($/tonne)": "50",
     "disposal limit (tonne)": "30",
     "disposal limit (%)": "",
-    "transportation cost ($/km/tonne)": "5",
+    "transportation cost ($/km/tonne)": "0",
     "transportation energy (J/km/tonne)": "10",
     "transportation emissions (tonne/km/tonne)": {
       CO2: "0.5",
@@ -118,9 +118,9 @@ const sampleProductsExported = [
         "amount (tonne)": [100, 200, 300],
       },
     },
-    "disposal cost ($/tonne)": [50, 50, 50],
+    "disposal cost ($/tonne)": [50, 100, 200],
     "disposal limit (tonne)": [30, 30, 30],
-    "transportation cost ($/km/tonne)": [5, 5, 5],
+    "transportation cost ($/km/tonne)": [0, 0, 0],
     "transportation energy (J/km/tonne)": [10, 10, 10],
     "transportation emissions (tonne/km/tonne)": {
       CO2: [0.5, 0.5, 0.5],
@@ -347,23 +347,23 @@ const samplePlantsExported = [
             "cost ($/tonne)": [0, 0, 0],
           },
           Tar: {
-            "cost ($/tonne)": [200.0, 200.0, 200.0],
+            "cost ($/tonne)": [200, 400, 800],
           },
         },
         storage: {
-          "cost ($/tonne)": [5, 5, 5],
+          "cost ($/tonne)": [5, 10, 20],
           "limit (tonne)": 10000,
         },
         "capacities (tonne)": {
           182500: {
-            "opening cost ($)": [200000, 200000, 200000],
-            "fixed operating cost ($)": [5000, 5000, 5000],
-            "variable operating cost ($/tonne)": [10, 10, 10],
+            "opening cost ($)": [200000, 400000, 800000],
+            "fixed operating cost ($)": [5000, 10000, 20000],
+            "variable operating cost ($/tonne)": [10, 20, 40],
           },
           730000: {
-            "opening cost ($)": [300000, 300000, 300000],
-            "fixed operating cost ($)": [7000, 7000, 7000],
-            "variable operating cost ($/tonne)": [10, 10, 10],
+            "opening cost ($)": [300000, 600000, 1200000],
+            "fixed operating cost ($)": [7000, 14000, 28000],
+            "variable operating cost ($/tonne)": [10, 20, 40],
           },
         },
       },
@@ -379,23 +379,23 @@ const samplePlantsExported = [
             "cost ($/tonne)": [0, 0, 0],
           },
           Tar: {
-            "cost ($/tonne)": [100.0, 100.0, 100.0],
+            "cost ($/tonne)": [100, 200.0, 400],
           },
         },
         storage: {
-          "cost ($/tonne)": [2.5, 2.5, 2.5],
+          "cost ($/tonne)": [2.5, 5, 10],
           "limit (tonne)": 10000,
         },
         "capacities (tonne)": {
           182500: {
-            "opening cost ($)": [100000, 100000, 100000],
-            "fixed operating cost ($)": [2500, 2500, 2500],
-            "variable operating cost ($/tonne)": [5, 5, 5],
+            "opening cost ($)": [100000, 200000, 400000],
+            "fixed operating cost ($)": [2500, 5000, 10000],
+            "variable operating cost ($/tonne)": [5, 10, 20],
           },
           730000: {
-            "opening cost ($)": [150000, 150000, 150000],
-            "fixed operating cost ($)": [3500, 3500, 3500],
-            "variable operating cost ($/tonne)": [5, 5, 5],
+            "opening cost ($)": [150000, 300000, 600000],
+            "fixed operating cost ($)": [3500, 7000, 14000],
+            "variable operating cost ($/tonne)": [5, 10, 20],
           },
         },
       },
@@ -532,12 +532,30 @@ const samplePlantsExported = [
   },
 ];
 
+const sampleParameters = [
+  {
+    "time horizon (years)": "3",
+    "inflation rate (%)": "100",
+  },
+  {
+    "time horizon (years)": "3",
+    "inflation rate (%)": "0",
+  },
+  {
+    "time horizon (years)": "3",
+    "inflation rate (%)": "0",
+  },
+];
+
 test("export products", () => {
   for (let i = 0; i < sampleProductsOriginal.length; i++) {
     const original = sampleProductsOriginal[i];
     const exported = sampleProductsExported[i];
-    expect(exportProduct(original, 3)).toEqual(exported);
-    expect(importProduct(exported)).toEqual(original);
+    expect(exportProduct(original, sampleParameters[i])).toEqual(exported);
+
+    const [recoveredProd, recoveredParams] = importProduct(exported);
+    expect(recoveredProd).toEqual(original);
+    expect(recoveredParams).toEqual(sampleParameters[i]);
   }
 });
 
@@ -545,8 +563,11 @@ test("export plants", () => {
   for (let i = 0; i < samplePlantsOriginal.length; i++) {
     const original = samplePlantsOriginal[i];
     const exported = samplePlantsExported[i];
-    expect(exportPlant(original, 3)).toEqual(exported);
-    expect(importPlant(exported)).toEqual(original);
+    expect(exportPlant(original, sampleParameters[i])).toEqual(exported);
+
+    const [recoveredPlant, recoveredParams] = importPlant(exported);
+    expect(recoveredPlant).toEqual(original);
+    expect(recoveredParams).toEqual(sampleParameters[i]);
   }
 });
 

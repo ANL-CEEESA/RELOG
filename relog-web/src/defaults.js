@@ -42,7 +42,7 @@ export const defaultData = {
   parameters: {
     "time horizon (years)": "1",
     "building period (years)": "[1]",
-    // "annual inflation rate (%)": "0",
+    "inflation rate (%)": "0",
   },
   products: {},
   plants: {},
