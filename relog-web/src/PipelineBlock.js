@@ -169,13 +169,13 @@ const PipelineBlock = (props) => {
             onConnect={onConnect}
             onElementsRemove={onElementsRemove}
             deleteKeyCode={46}
-            maxZoom={3}
+            maxZoom={1.25}
             minZoom={0.5}
             snapToGrid={true}
             preventScrolling={false}
           >
             <Background />
-            <Controls />
+            <Controls showInteractive={false} />
           </ReactFlow>
         </div>
         <div style={{ textAlign: "center" }}>
@@ -185,11 +185,11 @@ const PipelineBlock = (props) => {
             onClick={props.onAddProduct}
           />
           <Button label="Add plant" kind="inline" onClick={props.onAddPlant} />
-          <Button label="Auto-Layout" kind="inline" onClick={onLayout} />
+          <Button label="Auto Layout" kind="inline" onClick={onLayout} />
           <Button
             label="?"
             kind="inline"
-            tooltip="Drag from one connector to another to create links between products and plants. Double click to rename an element. Press [Delete] to remove an element."
+            tooltip="Drag from one connector to another to create links between products and plants. Double click to rename an element. Click an element to select and move it. Press the [Delete] key to remove it."
           />
         </div>
       </Card>

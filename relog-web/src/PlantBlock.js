@@ -219,6 +219,7 @@ const PlantBlock = (props) => {
             tooltip="The cost to store a tonne of input product for one time period."
             value={props.value["storage"]["cost ($/tonne)"]}
             onChange={(v) => onChange(v, "storage", "cost ($/tonne)")}
+            validate="float"
           />
           <TextInputRow
             label="Storage limit"
@@ -226,6 +227,7 @@ const PlantBlock = (props) => {
             tooltip="The maximum amount of input product this plant can have in storage at any given time."
             value={props.value["storage"]["limit (tonne)"]}
             onChange={(v) => onChange(v, "storage", "limit (tonne)")}
+            validate="float"
           />
 
           <h1>Disposal</h1>
@@ -236,6 +238,7 @@ const PlantBlock = (props) => {
             value={props.value["disposal cost ($/tonne)"]}
             onChange={(v) => onChange(v, "disposal cost ($/tonne)")}
             disableKeys={true}
+            validate="float"
           />
           <DictInputRow
             label="Disposal limit"
@@ -245,6 +248,7 @@ const PlantBlock = (props) => {
             onChange={(v) => onChange(v, "disposal limit (tonne)")}
             disableKeys={true}
             valuePlaceholder="Unlimited"
+            validate="float"
           />
 
           <h1>Emissions</h1>
@@ -256,6 +260,7 @@ const PlantBlock = (props) => {
             onChange={(v) => onChange(v, "emissions (tonne/tonne)")}
             keyPlaceholder="Emission name"
             valuePlaceholder="0"
+            validate="float"
           />
         </Form>
       </Card>
