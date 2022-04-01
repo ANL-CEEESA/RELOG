@@ -62,7 +62,7 @@ const computeTotalInitialAmount = (prod) => {
 };
 
 export const importList = (args, R = 1) => {
-  if (!args) return "";
+  if (args === undefined) return "";
   if (Array.isArray(args) && args.length > 0) {
     let isConstant = true;
     for (let i = 1; i < args.length; i++) {
@@ -180,6 +180,9 @@ export const exportPlant = (original, parameters) => {
   // Copy time series values
   ["energy (GJ/tonne)"].forEach((key) => {
     result[key] = exportValue(original[key], T);
+    if (result[key] === undefined) {
+      delete result[key];
+    }
   });
 
   // Copy scalar dicts
@@ -379,6 +382,9 @@ export const importPlant = (original) => {
   // Import timeseries values
   ["energy (GJ/tonne)"].forEach((key) => {
     plant[key] = importList(original[key]);
+    if (plant[key] === "") {
+      delete plant[key];
+    }
   });
 
   // Import dicts

@@ -184,9 +184,8 @@ const samplePlantsOriginal = [
     "outputs (tonne/tonne)": {
       "Hydrogen gas": 0.095,
       "Carbon dioxide": 1.164,
-      Tar: 0.06,
+      Tar: 0,
     },
-    "energy (GJ/tonne)": "50",
     locations: {
       "Washakie County": {
         "latitude (deg)": 43.8356,
@@ -331,9 +330,8 @@ const samplePlantsExported = [
     "outputs (tonne/tonne)": {
       "Hydrogen gas": 0.095,
       "Carbon dioxide": 1.164,
-      Tar: 0.06,
+      Tar: 0,
     },
-    "energy (GJ/tonne)": [50, 50, 50],
     locations: {
       "Washakie County": {
         "latitude (deg)": 43.8356,
