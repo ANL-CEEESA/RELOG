@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/RELOG/0.6/casebuilder/static/css/main.3ee3ec09.css",
-    "main.js": "/RELOG/0.6/casebuilder/static/js/main.0c857b19.js",
+    "main.js": "/RELOG/0.6/casebuilder/static/js/main.835db474.js",
     "index.html": "/RELOG/0.6/casebuilder/index.html",
     "main.3ee3ec09.css.map": "/RELOG/0.6/casebuilder/static/css/main.3ee3ec09.css.map",
-    "main.0c857b19.js.map": "/RELOG/0.6/casebuilder/static/js/main.0c857b19.js.map"
+    "main.835db474.js.map": "/RELOG/0.6/casebuilder/static/js/main.835db474.js.map"
   },
   "entrypoints": [
     "static/css/main.3ee3ec09.css",
-    "static/js/main.0c857b19.js"
+    "static/js/main.835db474.js"
   ]
 }
