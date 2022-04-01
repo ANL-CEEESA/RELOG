@@ -120,7 +120,7 @@ const PlantBlock = (props) => {
             label="Input"
             tooltip="The name of the product that this plant takes as input."
             disabled="disabled"
-            value="Battery"
+            value={props.value["input"]}
           />
           <DictInputRow
             label="Outputs"
