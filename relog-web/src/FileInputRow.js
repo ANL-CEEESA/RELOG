@@ -31,8 +31,18 @@ const FileInputRow = (props) => {
       <label>{props.label}</label>
       <input type="text" value={props.value} disabled="disabled" />
       <Button label="Upload" kind="inline" onClick={onClickUpload} />
-      <Button label="Download" kind="inline" onClick={props.onDownload} />
-      <Button label="Clear" kind="inline" onClick={props.onClear} />
+      <Button
+        label="Download"
+        kind="inline"
+        onClick={props.onDownload}
+        disabled={props.disableDownload}
+      />
+      <Button
+        label="Clear"
+        kind="inline"
+        onClick={props.onClear}
+        disabled={props.disableClear}
+      />
       <Button label="Template" kind="inline" onClick={props.onTemplate} />
       {tooltip}
       <input

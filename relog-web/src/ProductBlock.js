@@ -91,8 +91,12 @@ const ProductBlock = (props) => {
   };
 
   let description = "Not initially available";
+  let notInitiallyAvailable = true;
   const nCenters = Object.keys(props.value["initial amounts"]).length;
-  if (nCenters > 0) description = `${nCenters} collection centers`;
+  if (nCenters > 0) {
+    description = `${nCenters} collection centers`;
+    notInitiallyAvailable = false;
+  }
 
   return (
     <>
@@ -109,6 +113,8 @@ const ProductBlock = (props) => {
             onDownload={onInitialAmountsDownload}
             onClear={onInitialAmountsClear}
             onTemplate={onInitialAmountsTemplate}
+            disableDownload={notInitiallyAvailable}
+            disableClear={notInitiallyAvailable}
           />
 
           <h1 style={{ display: nCenters == 0 ? "none" : "block" }}>
