@@ -10,6 +10,7 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
+  font-family: sans-serif;
 }
 
 body {
@@ -49,4 +50,48 @@ body {
 
 .react-flow__handle-left {
   left: -4px !important;
+}
+
+#messageTray {
+  max-width: var(--site-width);
+  margin: 0 auto;
+  position: fixed;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+#messageTray .message {
+  background-color: rgb(221, 69, 69);
+  color: #eee;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  margin-top: 12px;
+}
+
+#messageTray .message p {
+  flex: 1;
+  margin: 0;
+  padding: 12px 0;
+}
+
+#messageTray .message button {
+  margin: 0;
+  background: transparent;
+  border: 1px solid #eee;
+  color: #eee;
+  float: right;
+  padding: 0 24px;
+  line-height: 6px;
+}
+
+#messageTray .message button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#messageTray .message button:active {
+  background: rgba(255, 255, 255, 0.1);
 }

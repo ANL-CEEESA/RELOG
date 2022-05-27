@@ -1,0 +1,182 @@
+const Ajv = require("ajv");
+const ajv = new Ajv();
+
+const schema = {
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "https://anl-ceeesa.github.io/RELOG/input",
+  title: "Schema for RELOG Input File",
+  definitions: {
+    TimeSeries: {
+      type: "array",
+      items: {
+        type: "number",
+      },
+    },
+    Parameters: {
+      type: "object",
+      properties: {
+        "time horizon (years)": {
+          type: "number",
+        },
+      },
+      required: ["time horizon (years)"],
+    },
+    Plant: {
+      type: "object",
+      additionalProperties: {
+        type: "object",
+        properties: {
+          input: {
+            type: "string",
+          },
+          "outputs (tonne/tonne)": {
+            type: "object",
+            additionalProperties: {
+              type: "number",
+            },
+          },
+          "energy (GJ/tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+          "emissions (tonne/tonne)": {
+            type: "object",
+            additionalProperties: {
+              $ref: "#/definitions/TimeSeries",
+            },
+          },
+          locations: {
+            $ref: "#/definitions/PlantLocation",
+          },
+        },
+        required: ["input", "locations"],
+      },
+    },
+    PlantLocation: {
+      type: "object",
+      additionalProperties: {
+        type: "object",
+        properties: {
+          location: {
+            type: "string",
+          },
+          "latitude (deg)": {
+            type: "number",
+          },
+          "longitude (deg)": {
+            type: "number",
+          },
+          disposal: {
+            type: "object",
+            additionalProperties: {
+              type: "object",
+              properties: {
+                "cost ($/tonne)": {
+                  $ref: "#/definitions/TimeSeries",
+                },
+                "limit (tonne)": {
+                  $ref: "#/definitions/TimeSeries",
+                },
+              },
+              required: ["cost ($/tonne)"],
+            },
+          },
+          storage: {
+            type: "object",
+            properties: {
+              "cost ($/tonne)": {
+                $ref: "#/definitions/TimeSeries",
+              },
+              "limit (tonne)": {
+                type: "number",
+              },
+            },
+            required: ["cost ($/tonne)", "limit (tonne)"],
+          },
+          "capacities (tonne)": {
+            type: "object",
+            additionalProperties: {
+              type: "object",
+              properties: {
+                "variable operating cost ($/tonne)": {
+                  $ref: "#/definitions/TimeSeries",
+                },
+                "fixed operating cost ($)": {
+                  $ref: "#/definitions/TimeSeries",
+                },
+                "opening cost ($)": {
+                  $ref: "#/definitions/TimeSeries",
+                },
+              },
+              required: [
+                "variable operating cost ($/tonne)",
+                "fixed operating cost ($)",
+                "opening cost ($)",
+              ],
+            },
+          },
+        },
+        required: ["capacities (tonne)"],
+      },
+    },
+    InitialAmount: {
+      type: "object",
+      additionalProperties: {
+        type: "object",
+        properties: {
+          location: {
+            type: "string",
+          },
+          "latitude (deg)": {
+            type: "number",
+          },
+          "longitude (deg)": {
+            type: "number",
+          },
+          "amount (tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+        },
+        required: ["amount (tonne)"],
+      },
+    },
+    Product: {
+      type: "object",
+      additionalProperties: {
+        type: "object",
+        properties: {
+          "transportation cost ($/km/tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+          "transportation energy (J/km/tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+          "transportation emissions (tonne/km/tonne)": {
+            type: "object",
+            additionalProperties: {
+              $ref: "#/definitions/TimeSeries",
+            },
+          },
+          "initial amounts": {
+            $ref: "#/definitions/InitialAmount",
+          },
+        },
+        required: ["transportation cost ($/km/tonne)"],
+      },
+    },
+  },
+  type: "object",
+  properties: {
+    parameters: {
+      $ref: "#/definitions/Parameters",
+    },
+    plants: {
+      $ref: "#/definitions/Plant",
+    },
+    products: {
+      $ref: "#/definitions/Product",
+    },
+  },
+  required: ["parameters", "plants", "products"],
+};
+
+export const validate = ajv.compile(schema);

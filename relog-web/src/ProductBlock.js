@@ -169,7 +169,7 @@ const ProductBlock = (props) => {
           />
           <DictInputRow
             label="Transportation emissions"
-            unit="J/km/tonne"
+            unit="tonne/km/tonne"
             tooltip="A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced."
             keyPlaceholder="Emission name"
             value={props.value["transportation emissions (tonne/km/tonne)"]}

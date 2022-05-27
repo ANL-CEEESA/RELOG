@@ -13,6 +13,7 @@ import { defaultData, defaultPlant, defaultProduct } from "./defaults";
 import { randomPosition } from "./PipelineBlock";
 import { exportData, importData } from "./export";
 import { generateFile } from "./csv";
+import { validate } from "./validate";
 
 const setDefaults = (actualDict, defaultDict) => {
   for (const [key, defaultValue] of Object.entries(defaultDict)) {
@@ -69,6 +70,7 @@ const openRelogDB = async () => {
 const InputPage = () => {
   const fileElem = useRef();
   let [data, setData] = useState(defaultData);
+  let [messages, setMessages] = useState([]);
 
   const save = async (data) => {
     const db = await openRelogDB();
@@ -238,7 +240,18 @@ const InputPage = () => {
   };
 
   const onSave = () => {
-    generateFile("case.json", JSON.stringify(exportData(data), null, 2));
+    const exported = exportData(data);
+    const valid = validate(exported);
+    console.log(exported);
+    console.log(validate.errors);
+    if (valid) {
+      generateFile("case.json", JSON.stringify(exported, null, 2));
+    } else {
+      setMessages([
+        ...messages,
+        "Data has validation errors and could not be saved.",
+      ]);
+    }
   };
 
   const onClear = () => {
@@ -248,9 +261,20 @@ const InputPage = () => {
   };
 
   const onLoad = (contents) => {
-    const newData = importData(JSON.parse(contents));
-    setData(newData);
-    save(newData);
+    const parsed = JSON.parse(contents);
+    const valid = validate(parsed);
+    if (valid) {
+      const newData = importData(parsed);
+      setData(newData);
+      save(newData);
+    } else {
+      console.log(validate.errors);
+      setMessages([...messages, "File is corrupted and could not be loaded."]);
+    }
+  };
+
+  const onDismissMessage = (idx) => {
+    setMessages([...messages.slice(0, idx), ...messages.slice(idx + 1)]);
   };
 
   const onChange = (val, field1, field2) => {
@@ -286,6 +310,16 @@ const InputPage = () => {
         value={plant}
         onChange={(v) => onChange(v, "plants", plantName)}
       />
+    );
+  }
+
+  let messageComps = [];
+  for (let i = 0; i < messages.length; i++) {
+    messageComps.push(
+      <div className="message error" key={i}>
+        <p>{messages[i]}</p>
+        <Button label="Dismiss" onClick={() => onDismissMessage(i)} />
+      </div>
     );
   }
 
@@ -337,6 +371,7 @@ const InputPage = () => {
         {productComps}
         {plantComps}
       </div>
+      <div id="messageTray">{messageComps}</div>
       <Footer />
     </>
   );

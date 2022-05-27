@@ -305,6 +305,7 @@ const compressDisposalLimits = (original, result) => {
     return;
   }
   const total = computeTotalInitialAmount(original);
+  if (!total) return;
   const limit = original["disposal limit (tonne)"];
   let perc = Math.round((limit[0] / total[0]) * 1e6) / 1e6;
   for (let i = 1; i < limit.length; i++) {
@@ -369,6 +370,12 @@ export const importPlant = (original) => {
   const plant = {};
   const parameters = {};
 
+  plant["storage"] = {};
+  plant["storage"]["cost ($/tonne)"] = 0;
+  plant["storage"]["limit (tonne)"] = 0;
+  plant["disposal cost ($/tonne)"] = 0;
+  plant["disposal limit (tonne)"] = 0;
+
   // Initialize null values
   ["x", "y"].forEach((key) => {
     plant[key] = null;
@@ -428,9 +435,9 @@ export const importPlant = (original) => {
     // Compute area cost factor
     let acf = 1;
     if (costsInitialized) {
-      acf = plant["opening cost (min capacity) ($)"];
+      acf = plant["opening cost (max capacity) ($)"];
       if (Array.isArray(acf)) acf = acf[0];
-      acf = minCapDict["opening cost ($)"][0] / acf;
+      acf = maxCapDict["opening cost ($)"][0] / acf;
     }
     resLocDict[locName]["area cost factor"] = acf;
 

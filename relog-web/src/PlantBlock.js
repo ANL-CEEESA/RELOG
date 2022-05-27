@@ -197,7 +197,7 @@ const PlantBlock = (props) => {
           />
           <TextInputRow
             label="Variable operating cost"
-            unit="$"
+            unit="$/tonne"
             tooltip="The cost that the plant incurs to process each tonne of input."
             value={props.value["variable operating cost ($/tonne)"]}
             onChange={(v) => onChange(v, "variable operating cost ($/tonne)")}
