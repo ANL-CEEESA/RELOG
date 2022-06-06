@@ -1,9 +1,9 @@
-import Section from "./Section";
-import Card from "./Card";
-import Form from "./Form";
-import TextInputRow from "./TextInputRow";
-import FileInputRow from "./FileInputRow";
-import DictInputRow from "./DictInputRow";
+import Section from "../common/Section";
+import Card from "../common/Card";
+import Form from "../common/Form";
+import TextInputRow from "../common/TextInputRow";
+import FileInputRow from "../common/FileInputRow";
+import DictInputRow from "../common/DictInputRow";
 import { csvFormat, csvParse, generateFile } from "./csv";
 
 const PlantBlock = (props) => {

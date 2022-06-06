@@ -1,0 +1,8 @@
+.log {
+  max-height: 500px;
+  min-height: 500px;
+  border: 0;
+  margin: 0;
+  overflow: auto;
+  line-height: 1.4em;
+}

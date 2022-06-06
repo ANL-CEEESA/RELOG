@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import ReactFlow, { Background, isNode, Controls } from "react-flow-renderer";
-import Section from "./Section";
-import Card from "./Card";
-import Button from "./Button";
+import Section from "../common/Section";
+import Card from "../common/Card";
+import Button from "../common/Button";
 import styles from "./PipelineBlock.module.css";
 import dagre from "dagre";
 

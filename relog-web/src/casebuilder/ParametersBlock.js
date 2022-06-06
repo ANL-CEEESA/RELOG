@@ -1,7 +1,7 @@
-import Section from "./Section";
-import Card from "./Card";
-import Form from "./Form";
-import TextInputRow from "./TextInputRow";
+import Section from "../common/Section";
+import Card from "../common/Card";
+import Form from "../common/Form";
+import TextInputRow from "../common/TextInputRow";
 
 const ParametersBlock = (props) => {
   const onChangeField = (field, val) => {

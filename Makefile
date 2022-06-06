@@ -17,6 +17,9 @@ clean:
 docs:
 	mkdocs build -d ../docs/$(VERSION)/
 
+docker-build:
+	docker build --tag relog:0.6 .
+
 format:
 	julia -e 'using JuliaFormatter; format(["src", "test"], verbose=true);'
 
@@ -26,3 +29,4 @@ test-watch:
 	bash -c "while true; do make test --quiet; sleep 1; done"
 
 .PHONY: docs test
+

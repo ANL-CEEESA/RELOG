@@ -1,19 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
-import { openDB, deleteDB, wrap, unwrap } from "idb";
-
-import "./index.css";
-import PipelineBlock from "./PipelineBlock";
-import ParametersBlock from "./ParametersBlock";
-import ProductBlock from "./ProductBlock";
-import PlantBlock from "./PlantBlock";
-import Button from "./Button";
-import Header from "./Header";
-import Footer from "./Footer";
-import { defaultData, defaultPlant, defaultProduct } from "./defaults";
-import { randomPosition } from "./PipelineBlock";
-import { exportData, importData } from "./export";
+import { openDB } from "idb";
+import React, { useEffect, useRef, useState } from "react";
+import Button from "../common/Button";
+import Footer from "../common/Footer";
+import Header from "../common/Header";
+import "../index.css";
 import { generateFile } from "./csv";
+import { defaultData, defaultPlant, defaultProduct } from "./defaults";
+import { exportData, importData } from "./export";
+import ParametersBlock from "./ParametersBlock";
+import PipelineBlock, { randomPosition } from "./PipelineBlock";
+import PlantBlock from "./PlantBlock";
+import ProductBlock from "./ProductBlock";
 import { validate } from "./validate";
+import { useHistory } from "react-router-dom";
 
 const setDefaults = (actualDict, defaultDict) => {
   for (const [key, defaultValue] of Object.entries(defaultDict)) {
@@ -82,6 +81,8 @@ const InputPage = () => {
     const data = await db.get("casebuilder", "data");
     if (data) setData(data);
   }, []);
+
+  const history = useHistory();
 
   const promptName = (prevData) => {
     const name = prompt("Name");
@@ -301,6 +302,24 @@ const InputPage = () => {
     );
   }
 
+  const onSubmit = () => {
+    const exported = exportData(data);
+    const valid = validate(exported);
+    if (valid) {
+      fetch("/submit", {
+        method: "POST",
+        body: JSON.stringify(exported),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          history.push(`/solver/${data.job_id}`);
+        });
+    }
+  };
+
   let plantComps = [];
   for (const [plantName, plant] of Object.entries(data.plants)) {
     plantComps.push(
@@ -341,6 +360,7 @@ const InputPage = () => {
         <Button label="Clear" onClick={onClear} />
         <Button label="Load" onClick={(e) => fileElem.current.click()} />
         <Button label="Save" onClick={onSave} />
+        <Button label="Submit" onClick={onSubmit} />
         <input
           type="file"
           ref={fileElem}
@@ -349,27 +369,29 @@ const InputPage = () => {
           onChange={onFileSelected}
         />
       </Header>
-      <div id="content">
-        <PipelineBlock
-          onAddPlant={onAddPlant}
-          onAddPlantOutput={onAddPlantOutput}
-          onAddProduct={onAddProduct}
-          onMovePlant={onMovePlant}
-          onMoveProduct={onMoveProduct}
-          onRenamePlant={onRenamePlant}
-          onRenameProduct={onRenameProduct}
-          onSetPlantInput={onSetPlantInput}
-          onRemovePlant={onRemovePlant}
-          onRemoveProduct={onRemoveProduct}
-          plants={data.plants}
-          products={data.products}
-        />
-        <ParametersBlock
-          value={data.parameters}
-          onChange={(v) => onChange(v, "parameters")}
-        />
-        {productComps}
-        {plantComps}
+      <div id="contentBackground">
+        <div id="content">
+          <PipelineBlock
+            onAddPlant={onAddPlant}
+            onAddPlantOutput={onAddPlantOutput}
+            onAddProduct={onAddProduct}
+            onMovePlant={onMovePlant}
+            onMoveProduct={onMoveProduct}
+            onRenamePlant={onRenamePlant}
+            onRenameProduct={onRenameProduct}
+            onSetPlantInput={onSetPlantInput}
+            onRemovePlant={onRemovePlant}
+            onRemoveProduct={onRemoveProduct}
+            plants={data.plants}
+            products={data.products}
+          />
+          <ParametersBlock
+            value={data.parameters}
+            onChange={(v) => onChange(v, "parameters")}
+          />
+          {productComps}
+          {plantComps}
+        </div>
       </div>
       <div id="messageTray">{messageComps}</div>
       <Footer />
