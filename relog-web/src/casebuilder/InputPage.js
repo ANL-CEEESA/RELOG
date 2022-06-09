@@ -70,6 +70,7 @@ const InputPage = () => {
   const fileElem = useRef();
   let [data, setData] = useState(defaultData);
   let [messages, setMessages] = useState([]);
+  let [processing, setProcessing] = useState(false);
 
   const save = async (data) => {
     const db = await openRelogDB();
@@ -302,21 +303,30 @@ const InputPage = () => {
     );
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const exported = exportData(data);
     const valid = validate(exported);
     if (valid) {
-      fetch("/submit", {
-        method: "POST",
-        body: JSON.stringify(exported),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          history.push(`/solver/${data.job_id}`);
+      setProcessing(true);
+      try {
+        const response = await fetch("/submit", {
+          method: "POST",
+          body: JSON.stringify(exported),
         });
+        if (response.ok) {
+          const data = await response.json();
+          history.push(`/solver/${data.job_id}`);
+        } else {
+          throw "Error";
+        }
+      } catch {
+        setMessages([
+          ...messages,
+          "Failed to submit job. Please try again later.",
+        ]);
+      } finally {
+        setProcessing(false);
+      }
     }
   };
 
@@ -357,10 +367,14 @@ const InputPage = () => {
   return (
     <>
       <Header title="Case Builder">
-        <Button label="Clear" onClick={onClear} />
-        <Button label="Load" onClick={(e) => fileElem.current.click()} />
-        <Button label="Save" onClick={onSave} />
-        <Button label="Submit" onClick={onSubmit} />
+        <Button label="Clear" disabled={processing} onClick={onClear} />
+        <Button
+          label="Load"
+          disabled={processing}
+          onClick={(e) => fileElem.current.click()}
+        />
+        <Button label="Save" disabled={processing} onClick={onSave} />
+        <Button label="Submit" disabled={processing} onClick={onSubmit} />
         <input
           type="file"
           ref={fileElem}
