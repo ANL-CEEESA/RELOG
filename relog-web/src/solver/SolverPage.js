@@ -4,6 +4,7 @@ import Footer from "../common/Footer";
 import Header from "../common/Header";
 import LogBlock from "./LogBlock";
 import FilesBlock from "./FilesBlock";
+import MapBlock from "./MapBlock";
 
 const SolverPage = () => {
   const params = useParams();
@@ -16,6 +17,7 @@ const SolverPage = () => {
         <div id="content">
           <LogBlock job={params.job_id} />
           <FilesBlock job={params.job_id} />
+          <MapBlock job={params.job_id} />
         </div>
       </div>
       <Footer />

@@ -4,13 +4,14 @@ import Section from "../common/Section";
 import Card from "../common/Card";
 import styles from "./LogBlock.module.css";
 import { useRef } from "react";
+import { SERVER_URL } from "..";
 
 const LogBlock = (props) => {
   const [log, setLog] = useState();
   const preRef = useRef(null);
 
   const fetchLog = async () => {
-    const response = await fetch(`/jobs/${props.job}/solve.log`);
+    const response = await fetch(`${SERVER_URL}/jobs/${props.job}/solve.log`);
     const data = await response.text();
     if (log !== data) {
       setLog(data);

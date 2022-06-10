@@ -13,6 +13,7 @@ import PlantBlock from "./PlantBlock";
 import ProductBlock from "./ProductBlock";
 import { validate } from "./validate";
 import { useHistory } from "react-router-dom";
+import { SERVER_URL } from "..";
 
 const setDefaults = (actualDict, defaultDict) => {
   for (const [key, defaultValue] of Object.entries(defaultDict)) {
@@ -309,13 +310,13 @@ const InputPage = () => {
     if (valid) {
       setProcessing(true);
       try {
-        const response = await fetch("/submit", {
+        const response = await fetch(`${SERVER_URL}/submit`, {
           method: "POST",
           body: JSON.stringify(exported),
         });
         if (response.ok) {
           const data = await response.json();
-          history.push(`/solver/${data.job_id}`);
+          history.push(`solver/${data.job_id}`);
         } else {
           throw "Error";
         }

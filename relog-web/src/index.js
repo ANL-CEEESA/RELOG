@@ -5,6 +5,8 @@ import InputPage from "./casebuilder/InputPage";
 import SolverPage from "./solver/SolverPage";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 
+export const SERVER_URL = "";
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>

@@ -100,3 +100,10 @@ body {
 #messageTray .message button:active {
   background: rgba(255, 255, 255, 0.1);
 }
+
+.nodata {
+  text-align: center;
+  padding: 24px 0;
+  color: #888;
+  margin: 0;
+}

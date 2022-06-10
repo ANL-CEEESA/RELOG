@@ -91,8 +91,10 @@ function solve(root, filename)
 end
 
 function solve_recursive(path)
+    cd(path)
+
     # Solve instances
-    for (root, dirs, files) in walkdir(path)
+    for (root, dirs, files) in walkdir(".")
         if occursin(r"scenarios"i, root)
             continue
         end
@@ -104,7 +106,7 @@ function solve_recursive(path)
 
     # Collect results
     results = []
-    for (root, dirs, files) in walkdir(path)
+    for (root, dirs, files) in walkdir(".")
         for filename in files
             endswith(filename, "_plants.csv") || continue
             push!(
@@ -116,11 +118,11 @@ function solve_recursive(path)
             )
         end
     end
-    open("$path/output.json", "w") do file
+    open("output.json", "w") do file
         JSON.print(file, results)
     end
 
-    run(`zip -r $path/output.zip $path`)
+    run(`zip -r output.zip .`)
 end
 
 solve_recursive(ARGS[1])
