@@ -29,29 +29,32 @@ function solve(
     instance::Instance;
     optimizer = nothing,
     output = nothing,
+    graph = nothing,
     marginal_costs = true,
     return_model = false,
 )
 
     milp_optimizer = lp_optimizer = optimizer
-    if optimizer == nothing
+    if optimizer === nothing
         milp_optimizer = _get_default_milp_optimizer()
         lp_optimizer = _get_default_lp_optimizer()
     end
 
-    @info "Building graph..."
-    graph = RELOG.build_graph(instance)
-    _print_graph_stats(instance, graph)
+    if graph === nothing
+        @info "Building graph..."
+        graph = RELOG.build_graph(instance)
+        _print_graph_stats(instance, graph)
+    end
 
     @info "Building optimization model..."
     model = RELOG.build_model(instance, graph, milp_optimizer)
 
     @info "Optimizing MILP..."
     JuMP.optimize!(model)
-
     if !has_values(model)
         error("No solution available")
     end
+    solution = get_solution(model, marginal_costs = false)
 
     if marginal_costs
         @info "Re-optimizing with integer variables fixed..."
@@ -65,12 +68,15 @@ function solve(
             end
         end
         JuMP.optimize!(model)
+        if has_values(model)
+            @info "Extracting solution..."
+            solution = get_solution(model, marginal_costs = true)
+        else
+            @warn "Error computing marginal costs. Ignoring."
+        end
     end
 
-    @info "Extracting solution..."
-    solution = get_solution(model, marginal_costs = marginal_costs)
-
-    if output != nothing
+    if output !== nothing
         write(solution, output)
     end
 
@@ -87,7 +93,7 @@ function solve(filename::AbstractString; heuristic = false, kwargs...)
     if heuristic && instance.time > 1
         @info "Solving single-period version..."
         compressed = _compress(instance)
-        csol = solve(compressed; output = nothing, marginal_costs = false, kwargs...)
+        csol, model = solve(compressed; output = nothing, marginal_costs = false, return_model = true, kwargs...)
         @info "Filtering candidate locations..."
         selected_pairs = []
         for (plant_name, plant_dict) in csol["Plants"]

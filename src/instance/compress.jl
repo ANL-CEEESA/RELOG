@@ -29,6 +29,8 @@ function _compress(instance::Instance)::Instance
         for (emission_name, emission_value) in p.transportation_emissions
             p.transportation_emissions[emission_name] = [mean(emission_value)]
         end
+        p.disposal_limit = [maximum(p.disposal_limit) * T]
+        p.disposal_cost = [mean(p.disposal_cost)]
     end
 
     # Compress collection centers
@@ -57,4 +59,43 @@ function _compress(instance::Instance)::Instance
     end
 
     return compressed
+end
+
+function _slice(instance::Instance, T::UnitRange)::Instance
+    sliced = deepcopy(instance)
+    sliced.time = length(T)
+
+    for p in sliced.products
+        p.transportation_cost = p.transportation_cost[T]
+        p.transportation_energy = p.transportation_energy[T]
+        for (emission_name, emission_value) in p.transportation_emissions
+            p.transportation_emissions[emission_name] = emission_value[T]
+        end
+        p.disposal_limit = p.disposal_limit[T]
+        p.disposal_cost = p.disposal_cost[T]
+    end
+
+    for c in sliced.collection_centers
+        c.amount = c.amount[T]
+    end
+
+    for plant in sliced.plants
+        plant.energy = plant.energy[T]
+        for (emission_name, emission_value) in plant.emissions
+            plant.emissions[emission_name] = emission_value[T]
+        end
+        for s in plant.sizes
+            s.variable_operating_cost = s.variable_operating_cost[T]
+            s.opening_cost = s.opening_cost[T]
+            s.fixed_operating_cost = s.fixed_operating_cost[T]
+        end
+        for (prod_name, disp_limit) in plant.disposal_limit
+            plant.disposal_limit[prod_name] = disp_limit[T]
+        end
+        for (prod_name, disp_cost) in plant.disposal_cost
+            plant.disposal_cost[prod_name] = disp_cost[T]
+        end
+    end
+
+    return sliced
 end

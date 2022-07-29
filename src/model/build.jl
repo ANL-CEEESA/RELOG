@@ -24,11 +24,15 @@ function create_vars!(model::JuMP.Model)
         (n, t) => @variable(
             model,
             lower_bound = 0,
-            upper_bound = n.location.disposal_limit[n.product][t]
+            upper_bound = n.location.disposal_limit[n.product][t],
         ) for n in values(graph.plant_shipping_nodes), t = 1:T
     )
     model[:collection_dispose] = Dict(
-        (n, t) => @variable(model, lower_bound = 0,) for
+        (n, t) => @variable(
+            model,
+            lower_bound = 0,
+            upper_bound = n.location.amount[t],
+        ) for
         n in values(graph.collection_shipping_nodes), t = 1:T
     )
     model[:store] = Dict(
@@ -90,7 +94,7 @@ function create_objective_function!(model::JuMP.Model)
     # Process node costs
     for n in values(graph.process_nodes), t = 1:T
 
-        # Transportation and variable operating costs
+        # Transportation costs
         for a in n.incoming_arcs
             c = n.location.input.transportation_cost[t] * a.values["distance"]
             add_to_expression!(obj, c, model[:flow][a, t])
@@ -137,7 +141,6 @@ function create_objective_function!(model::JuMP.Model)
 
     # Plant shipping node costs
     for n in values(graph.plant_shipping_nodes), t = 1:T
-
         # Disposal costs
         add_to_expression!(
             obj,
@@ -148,7 +151,6 @@ function create_objective_function!(model::JuMP.Model)
 
     # Collection shipping node costs
     for n in values(graph.collection_shipping_nodes), t = 1:T
-
         # Disposal costs
         add_to_expression!(
             obj,
@@ -170,7 +172,7 @@ function create_shipping_node_constraints!(model::JuMP.Model)
             model[:eq_balance][n, t] = @constraint(
                 model,
                 sum(model[:flow][a, t] for a in n.outgoing_arcs) ==
-                n.location.amount[t] + model[:collection_dispose][n, t]
+                n.location.amount[t] - model[:collection_dispose][n, t],
             )
         end
         for prod in model[:instance].products
