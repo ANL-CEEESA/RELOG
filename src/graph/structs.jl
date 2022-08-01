@@ -7,6 +7,7 @@ using Geodesy
 abstract type Node end
 
 mutable struct Arc
+    index::Int
     source::Node
     dest::Node
     values::Dict{String,Float64}

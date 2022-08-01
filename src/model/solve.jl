@@ -2,14 +2,14 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
+using JuMP, LinearAlgebra, Geodesy, HiGHS, ProgressBars, Printf, DataStructures
 
 function _get_default_milp_optimizer()
-    return optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0)
+    return optimizer_with_attributes(HiGHS.Optimizer)
 end
 
 function _get_default_lp_optimizer()
-    return optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+    return optimizer_with_attributes(HiGHS.Optimizer)
 end
 
 
@@ -25,59 +25,79 @@ function _print_graph_stats(instance::Instance, graph::Graph)::Nothing
     return
 end
 
+function solve_stochastic(;
+    scenarios::Vector{String},
+    probs::Vector{Float64},
+    optimizer,
+)
+    @info "Reading instance files..."
+    instances = [parsefile(sc) for sc in scenarios]
+
+    @info "Building graphs..."
+    graphs = [build_graph(inst) for inst in instances]
+
+    @info "Building stochastic model..."
+    sp = RELOG.build_model(instances[1], graphs, probs; optimizer)
+
+    @info "Optimizing stochastic model..."
+    optimize!(sp)
+
+    @info "Extracting solution..."
+    solutions = [
+        get_solution(instances[i], graphs[i], sp, i)
+        for i in 1:length(instances)
+    ]
+
+    return solutions
+end
+
 function solve(
     instance::Instance;
-    optimizer = nothing,
-    output = nothing,
-    graph = nothing,
-    marginal_costs = true,
-    return_model = false,
+    optimizer=nothing,
+    marginal_costs=true,
+    return_model=false
 )
+    @info "Building graph..."
+    graph = RELOG.build_graph(instance)
+    _print_graph_stats(instance, graph)
 
-    milp_optimizer = lp_optimizer = optimizer
-    if optimizer === nothing
-        milp_optimizer = _get_default_milp_optimizer()
-        lp_optimizer = _get_default_lp_optimizer()
-    end
+    @info "Building model..."
+    model = RELOG.build_model(instance, [graph], [1.0]; optimizer)
 
-    if graph === nothing
-        @info "Building graph..."
-        graph = RELOG.build_graph(instance)
-        _print_graph_stats(instance, graph)
-    end
-
-    @info "Building optimization model..."
-    model = RELOG.build_model(instance, graph, milp_optimizer)
-
-    @info "Optimizing MILP..."
-    JuMP.optimize!(model)
+    @info "Optimizing model..."
+    optimize!(model)
     if !has_values(model)
         error("No solution available")
     end
-    solution = get_solution(model, marginal_costs = false)
+
+    @info "Extracting solution..."
+    solution = get_solution(instance, graph, model, 1)
 
     if marginal_costs
         @info "Re-optimizing with integer variables fixed..."
-        all_vars = JuMP.all_variables(model)
-        vals = OrderedDict(var => JuMP.value(var) for var in all_vars)
-        JuMP.set_optimizer(model, lp_optimizer)
-        for var in all_vars
-            if JuMP.is_binary(var)
-                JuMP.unset_binary(var)
-                JuMP.fix(var, vals[var])
-            end
+        open_plant_vals = value.(model[1, :open_plant])
+        is_open_vals = value.(model[1, :is_open])
+
+        for n in 1:length(graph.process_nodes), t in 1:instance.time
+            unset_binary(model[1, :open_plant][n, t])
+            unset_binary(model[1, :is_open][n, t])
+            fix(
+                model[1, :open_plant][n, t],
+                open_plant_vals[n, t]
+            )
+            fix(
+                model[1, :is_open][n, t],
+                is_open_vals[n, t]
+            )
+            
         end
-        JuMP.optimize!(model)
+        optimize!(model)
         if has_values(model)
             @info "Extracting solution..."
-            solution = get_solution(model, marginal_costs = true)
+            solution = get_solution(instance, graph, model, 1, marginal_costs=true)
         else
             @warn "Error computing marginal costs. Ignoring."
         end
-    end
-
-    if output !== nothing
-        write(solution, output)
     end
 
     if return_model
@@ -87,13 +107,13 @@ function solve(
     end
 end
 
-function solve(filename::AbstractString; heuristic = false, kwargs...)
+function solve(filename::AbstractString; heuristic=false, kwargs...)
     @info "Reading $filename..."
     instance = RELOG.parsefile(filename)
     if heuristic && instance.time > 1
         @info "Solving single-period version..."
         compressed = _compress(instance)
-        csol, model = solve(compressed; output = nothing, marginal_costs = false, return_model = true, kwargs...)
+        csol, model = solve(compressed; marginal_costs=false, return_model=true, kwargs...)
         @info "Filtering candidate locations..."
         selected_pairs = []
         for (plant_name, plant_dict) in csol["Plants"]

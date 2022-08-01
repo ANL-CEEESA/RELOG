@@ -2,11 +2,30 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
+using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures
 
-function get_solution(model::JuMP.Model; marginal_costs = true)
-    graph, instance = model[:graph], model[:instance]
+function get_solution(
+    instance,
+    graph,
+    model,
+    scenario_index::Int;
+    marginal_costs=false,
+)
+    value(x) = StochasticPrograms.value(x, scenario_index)
+    shadow_price(x) = StochasticPrograms.shadow_price(x, scenario_index)
+
     T = instance.time
+
+    pn = graph.process_nodes
+    psn = graph.plant_shipping_nodes
+    csn = graph.collection_shipping_nodes
+    arcs = graph.arcs
+
+    A = length(arcs)
+    PN = length(pn)
+    CSN = length(csn)
+    PSN = length(psn)
+
 
     output = OrderedDict(
         "Plants" => OrderedDict(),
@@ -29,42 +48,52 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
         ),
     )
 
-    plant_to_process_node = OrderedDict(n.location => n for n in graph.process_nodes)
-    plant_to_shipping_nodes = OrderedDict()
-    for p in instance.plants
-        plant_to_shipping_nodes[p] = []
-        for a in plant_to_process_node[p].outgoing_arcs
-            push!(plant_to_shipping_nodes[p], a.dest)
-        end
+    pn = graph.process_nodes
+    psn = graph.plant_shipping_nodes
+
+    plant_to_process_node_index = OrderedDict(
+        pn[n].location => n
+        for n in 1:length(pn)
+    )
+
+    plant_to_shipping_node_indices = OrderedDict(p => [] for p in instance.plants)
+    for n in 1:length(psn)
+        push!(plant_to_shipping_node_indices[psn[n].location], n)
     end
 
     # Products
-    for n in graph.collection_shipping_nodes
+    for n in 1:CSN
+        node = csn[n]
         location_dict = OrderedDict{Any,Any}(
-            "Latitude (deg)" => n.location.latitude,
-            "Longitude (deg)" => n.location.longitude,
-            "Amount (tonne)" => n.location.amount,
-            "Dispose (tonne)" =>
-                [JuMP.value(model[:collection_dispose][n, t]) for t = 1:T],
-            "Disposal cost (\$)" =>
-                [JuMP.value(model[:collection_dispose][n, t]) * n.location.product.disposal_cost[t] for t = 1:T]
+            "Latitude (deg)" => node.location.latitude,
+            "Longitude (deg)" => node.location.longitude,
+            "Amount (tonne)" => node.location.amount,
+            "Dispose (tonne)" => [
+                value(model[2, :collection_dispose][n, t])
+                for t = 1:T
+            ],
+            "Disposal cost (\$)" => [
+                value(model[2, :collection_dispose][n, t]) *
+                    node.location.product.disposal_cost[t]
+                for t = 1:T
+            ]
         )
         if marginal_costs
             location_dict["Marginal cost (\$/tonne)"] = [
-                round(abs(JuMP.shadow_price(model[:eq_balance][n, t])), digits = 2) for
-                t = 1:T
+                round(abs(shadow_price(model[2, :eq_balance_centers][n, t])), digits=2) for t = 1:T
             ]
         end
-        if n.product.name ∉ keys(output["Products"])
-            output["Products"][n.product.name] = OrderedDict()
+        if node.product.name ∉ keys(output["Products"])
+            output["Products"][node.product.name] = OrderedDict()
         end
-        output["Products"][n.product.name][n.location.name] = location_dict
+        output["Products"][node.product.name][node.location.name] = location_dict
     end
 
     # Plants
     for plant in instance.plants
         skip_plant = true
-        process_node = plant_to_process_node[plant]
+        n = plant_to_process_node_index[plant]
+        process_node = pn[n]
         plant_dict = OrderedDict{Any,Any}(
             "Input" => OrderedDict(),
             "Output" =>
@@ -75,39 +104,39 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
             "Latitude (deg)" => plant.latitude,
             "Longitude (deg)" => plant.longitude,
             "Capacity (tonne)" =>
-                [JuMP.value(model[:capacity][process_node, t]) for t = 1:T],
+                [value(model[2, :capacity][n, t]) for t = 1:T],
             "Opening cost (\$)" => [
-                JuMP.value(model[:open_plant][process_node, t]) *
+                value(model[2, :open_plant][n, t]) *
                 plant.sizes[1].opening_cost[t] for t = 1:T
             ],
             "Fixed operating cost (\$)" => [
-                JuMP.value(model[:is_open][process_node, t]) *
+                value(model[2, :is_open][n, t]) *
                 plant.sizes[1].fixed_operating_cost[t] +
-                JuMP.value(model[:expansion][process_node, t]) *
+                value(model[2, :expansion][n, t]) *
                 slope_fix_oper_cost(plant, t) for t = 1:T
             ],
             "Expansion cost (\$)" => [
                 (
                     if t == 1
-                        slope_open(plant, t) * JuMP.value(model[:expansion][process_node, t])
+                        slope_open(plant, t) * value(model[2, :expansion][n, t])
                     else
                         slope_open(plant, t) * (
-                            JuMP.value(model[:expansion][process_node, t]) -
-                            JuMP.value(model[:expansion][process_node, t-1])
+                            value(model[2, :expansion][n, t]) -
+                            value(model[2, :expansion][n, t-1])
                         )
                     end
                 ) for t = 1:T
             ],
             "Process (tonne)" =>
-                [JuMP.value(model[:process][process_node, t]) for t = 1:T],
+                [value(model[2, :process][n, t]) for t = 1:T],
             "Variable operating cost (\$)" => [
-                JuMP.value(model[:process][process_node, t]) *
+                value(model[2, :process][n, t]) *
                 plant.sizes[1].variable_operating_cost[t] for t = 1:T
             ],
             "Storage (tonne)" =>
-                [JuMP.value(model[:store][process_node, t]) for t = 1:T],
+                [value(model[2, :store][n, t]) for t = 1:T],
             "Storage cost (\$)" => [
-                JuMP.value(model[:store][process_node, t]) * plant.storage_cost[t]
+                value(model[2, :store][n, t]) * plant.storage_cost[t]
                 for t = 1:T
             ],
         )
@@ -120,7 +149,7 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
 
         # Inputs
         for a in process_node.incoming_arcs
-            vals = [JuMP.value(model[:flow][a, t]) for t = 1:T]
+            vals = [value(model[2, :flow][a.index, t]) for t = 1:T]
             if sum(vals) <= 1e-3
                 continue
             end
@@ -178,19 +207,20 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
         end
 
         # Outputs
-        for shipping_node in plant_to_shipping_nodes[plant]
+        for n2 in plant_to_shipping_node_indices[plant]
+            shipping_node = psn[n2]
             product_name = shipping_node.product.name
             plant_dict["Total output"][product_name] = zeros(T)
             plant_dict["Output"]["Send"][product_name] = product_dict = OrderedDict()
 
             disposal_amount =
-                [JuMP.value(model[:plant_dispose][shipping_node, t]) for t = 1:T]
+                [value(model[2, :plant_dispose][n2, t]) for t = 1:T]
             if sum(disposal_amount) > 1e-5
                 skip_plant = false
                 plant_dict["Output"]["Dispose"][product_name] =
                     disposal_dict = OrderedDict()
                 disposal_dict["Amount (tonne)"] =
-                    [JuMP.value(model[:plant_dispose][shipping_node, t]) for t = 1:T]
+                    [value(model[2, :plant_dispose][n2, t]) for t = 1:T]
                 disposal_dict["Cost (\$)"] = [
                     disposal_dict["Amount (tonne)"][t] *
                     plant.disposal_cost[shipping_node.product][t] for t = 1:T
@@ -200,7 +230,7 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
             end
 
             for a in shipping_node.outgoing_arcs
-                vals = [JuMP.value(model[:flow][a, t]) for t = 1:T]
+                vals = [value(model[2, :flow][a.index, t]) for t = 1:T]
                 if sum(vals) <= 1e-3
                     continue
                 end

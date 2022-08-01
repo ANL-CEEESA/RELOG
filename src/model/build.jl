@@ -2,70 +2,309 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
+using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures, StochasticPrograms
 
-function build_model(instance::Instance, graph::Graph, optimizer)::JuMP.Model
-    model = Model(optimizer)
-    model[:instance] = instance
-    model[:graph] = graph
-    create_vars!(model)
-    create_objective_function!(model)
-    create_shipping_node_constraints!(model)
-    create_process_node_constraints!(model)
-    return model
-end
+function build_model(
+    instance::Instance,
+    graphs::Vector{Graph},
+    probs::Vector{Float64};
+    optimizer,
+)
+    T = instance.time
 
+    @stochastic_model model begin
+        # Stage 1: Build plants
+        # =====================================================================
+        @stage 1 begin
+            pn = graphs[1].process_nodes
+            PN = length(pn)
 
-function create_vars!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    model[:flow] =
-        Dict((a, t) => @variable(model, lower_bound = 0) for a in graph.arcs, t = 1:T)
-    model[:plant_dispose] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.disposal_limit[n.product][t],
-        ) for n in values(graph.plant_shipping_nodes), t = 1:T
-    )
-    model[:collection_dispose] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.amount[t],
-        ) for
-        n in values(graph.collection_shipping_nodes), t = 1:T
-    )
-    model[:store] = Dict(
-        (n, t) =>
-            @variable(model, lower_bound = 0, upper_bound = n.location.storage_limit)
-        for n in values(graph.process_nodes), t = 1:T
-    )
-    model[:process] = Dict(
-        (n, t) => @variable(model, lower_bound = 0) for
-        n in values(graph.process_nodes), t = 1:T
-    )
-    model[:open_plant] = Dict(
-        (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
-        t = 1:T
-    )
-    model[:is_open] = Dict(
-        (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
-        t = 1:T
-    )
-    model[:capacity] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.sizes[2].capacity
-        ) for n in values(graph.process_nodes), t = 1:T
-    )
-    model[:expansion] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.sizes[2].capacity - n.location.sizes[1].capacity
-        ) for n in values(graph.process_nodes), t = 1:T
-    )
+            # Var: open_plant
+            @decision(
+                model,
+                open_plant[n in 1:PN, t in 1:T],
+                binary = true,
+            )
+
+            # Var: is_open
+            @decision(
+                model,
+                is_open[n in 1:PN, t in 1:T],
+                binary = true,
+            )
+
+            # Objective function
+            @objective(
+                model,
+                Min,
+
+                # Opening, fixed operating costs
+                sum(
+                    pn[n].location.sizes[1].opening_cost[t] * open_plant[n, t] +
+                    pn[n].location.sizes[1].fixed_operating_cost[t] * is_open[n, t]                  
+                    for n in 1:PN
+                    for t in 1:T
+                ),
+            )
+
+            for t = 1:T, n in 1:PN
+                # Plant is currently open if it was already open in the previous time period or
+                # if it was built just now
+                if t > 1
+                    @constraint(
+                        model,
+                        is_open[n, t] == is_open[n, t-1] + open_plant[n, t]
+                    )
+                else
+                    @constraint(model, is_open[n, t] == open_plant[n, t])
+                end
+        
+                # Plant can only be opened during building period
+                if t ∉ instance.building_period
+                    @constraint(model, open_plant[n, t] == 0)
+                end
+            end
+        end
+
+        # Stage 2: Flows, disposal, capacity & storage
+        # =====================================================================
+        @stage 2 begin
+            @uncertain graph
+            pn = graph.process_nodes
+            psn = graph.plant_shipping_nodes
+            csn = graph.collection_shipping_nodes
+            arcs = graph.arcs
+        
+            A = length(arcs)
+            PN = length(pn)
+            CSN = length(csn)
+            PSN = length(psn)
+
+            # Var: flow
+            @recourse(
+                model,
+                flow[a in 1:A, t in 1:T],
+                lower_bound = 0,
+            )
+
+            # Var: plant_dispose
+            @recourse(
+                model,
+                plant_dispose[n in 1:PSN, t in 1:T],
+                lower_bound = 0,
+                upper_bound = psn[n].location.disposal_limit[psn[n].product][t],
+            )
+
+            # Var: collection_dispose/
+            @recourse(
+                model,
+                collection_dispose[n in 1:CSN, t in 1:T],
+                lower_bound = 0,
+                upper_bound = graph.collection_shipping_nodes[n].location.amount[t],
+            )
+
+            # Var: store
+            @recourse(
+                model,
+                store[
+                    n in 1:PN,
+                    t in 1:T,
+                ],
+                lower_bound = 0,
+                upper_bound = pn[n].location.storage_limit,
+            )
+
+            # Var: process
+            @recourse(
+                model,
+                process[
+                    n in 1:PN,
+                    t in 1:T,
+                ],
+                lower_bound = 0,
+            )
+
+            # Var: capacity
+            @recourse(
+                model,
+                capacity[
+                    n in 1:PN,
+                    t in 1:T,
+                ],
+                lower_bound = 0,
+                upper_bound = pn[n].location.sizes[2].capacity,
+            )
+
+            # Var: expansion
+            @recourse(
+                model,
+                expansion[
+                    n in 1:PN,
+                    t in 1:T,
+                ],
+                lower_bound = 0,
+                upper_bound = (
+                    pn[n].location.sizes[2].capacity -
+                    pn[n].location.sizes[1].capacity
+                ),
+            )
+
+            # Objective function
+            @objective(
+                model,
+                Min,
+                sum(
+                    # Transportation costs
+                    pn[n].location.input.transportation_cost[t] * 
+                        a.values["distance"] *
+                        flow[a.index,t]
+
+                    for n in 1:PN
+                    for a in pn[n].incoming_arcs
+                    for t in 1:T
+                ) + sum(
+                    # Fixed operating costs (expansion)
+                    slope_fix_oper_cost(pn[n].location, t) * expansion[n, t] +
+
+                    # Processing costs
+                    pn[n].location.sizes[1].variable_operating_cost[t] * process[n, t] +
+
+                    # Storage costs
+                    pn[n].location.storage_cost[t] * store[n, t] +
+
+                    # Expansion costs
+                    (
+                        t < T ? (
+                            (
+                                slope_open(pn[n].location, t) -
+                                slope_open(pn[n].location, t + 1)
+                            ) * expansion[n, t]
+                        ) : slope_open(pn[n].location, t) * expansion[n, t]
+                    )
+
+                    for n in 1:PN
+                    for t in 1:T
+                ) + sum(
+                    # Disposal costs (plants)
+                    psn[n].location.disposal_cost[psn[n].product][t] * plant_dispose[n, t]
+                    for n in 1:PSN
+                    for t in 1:T
+                ) + sum(
+                    # Disposal costs (collection centers)
+                    csn[n].location.product.disposal_cost[t] * collection_dispose[n, t]
+                    for n in 1:CSN
+                    for t in 1:T
+                )
+            )
+
+            # Process node constraints
+            for t = 1:T, n in 1:PN
+                node = pn[n]
+
+                # Output amount is implied by amount processed
+                for arc in node.outgoing_arcs
+                    @constraint(
+                        model,
+                        flow[arc.index, t] == arc.values["weight"] * process[n, t]
+                    )
+                end
+        
+                # If plant is closed, capacity is zero
+                @constraint(
+                    model,
+                    capacity[n, t] <= node.location.sizes[2].capacity * is_open[n, t]
+                )
+        
+                # If plant is open, capacity is greater than base
+                @constraint(
+                    model,
+                    capacity[n, t] >= node.location.sizes[1].capacity * is_open[n, t]
+                )
+        
+                # Capacity is linked to expansion
+                @constraint(
+                    model,
+                    capacity[n, t] <=
+                        node.location.sizes[1].capacity + expansion[n, t]
+                )
+        
+                # Can only process up to capacity
+                @constraint(model, process[n, t] <= capacity[n, t])
+        
+                if t > 1
+                    # Plant capacity can only increase over time
+                    @constraint(model, capacity[n, t] >= capacity[n, t-1])
+                    @constraint(model, expansion[n, t] >= expansion[n, t-1])
+                end
+        
+                # Amount received equals amount processed plus stored
+                store_in = 0
+                if t > 1
+                    store_in = store[n, t-1]
+                end
+                if t == T
+                    @constraint(model, store[n, t] == 0)
+                end
+                @constraint(
+                    model,
+                    sum(
+                        flow[arc.index, t]
+                        for arc in node.incoming_arcs
+                    ) + store_in == store[n, t] + process[n, t]
+                )
+
+            end
+
+            # Material flow at collection shipping nodes
+            @constraint(
+                model,
+                eq_balance_centers[
+                    n in 1:CSN,
+                    t in 1:T,
+                ],
+                sum(
+                    flow[arc.index, t]
+                    for arc in csn[n].outgoing_arcs
+                ) == csn[n].location.amount[t] - collection_dispose[n, t]
+            )
+
+            # Material flow at plant shipping nodes
+            @constraint(
+                model,
+                eq_balance_plant[
+                    n in 1:PSN,
+                    t in 1:T,
+                ],
+                sum(flow[a.index, t] for a in psn[n].incoming_arcs) ==
+                sum(flow[a.index, t] for a in psn[n].outgoing_arcs) +
+                plant_dispose[n, t]
+            )
+
+            # Enforce product disposal limit at collection centers
+            for t in 1:T, prod in instance.products
+                if isempty(prod.collection_centers)
+                    continue
+                end
+                @constraint(
+                    model,
+                    sum(
+                        collection_dispose[n, t]
+                        for n in 1:CSN
+                        if csn[n].product == prod
+                    ) <= prod.disposal_limit[t]
+                )
+            end
+        end
+    end
+
+    ξ = [
+        @scenario graph = graphs[i] probability = probs[i]
+        for i in 1:length(graphs)
+    ]
+
+    sp = instantiate(model, ξ; optimizer)
+
+    return sp
 end
 
 
@@ -84,196 +323,5 @@ function slope_fix_oper_cost(plant, t)
     else
         (plant.sizes[2].fixed_operating_cost[t] - plant.sizes[1].fixed_operating_cost[t]) /
         (plant.sizes[2].capacity - plant.sizes[1].capacity)
-    end
-end
-
-function create_objective_function!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    obj = AffExpr(0.0)
-
-    # Process node costs
-    for n in values(graph.process_nodes), t = 1:T
-
-        # Transportation costs
-        for a in n.incoming_arcs
-            c = n.location.input.transportation_cost[t] * a.values["distance"]
-            add_to_expression!(obj, c, model[:flow][a, t])
-        end
-
-        # Opening costs
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].opening_cost[t],
-            model[:open_plant][n, t],
-        )
-
-        # Fixed operating costs (base)
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].fixed_operating_cost[t],
-            model[:is_open][n, t],
-        )
-
-        # Fixed operating costs (expansion)
-        add_to_expression!(obj, slope_fix_oper_cost(n.location, t), model[:expansion][n, t])
-
-        # Processing costs
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].variable_operating_cost[t],
-            model[:process][n, t],
-        )
-
-        # Storage costs
-        add_to_expression!(obj, n.location.storage_cost[t], model[:store][n, t])
-
-        # Expansion costs
-        if t < T
-            add_to_expression!(
-                obj,
-                slope_open(n.location, t) - slope_open(n.location, t + 1),
-                model[:expansion][n, t],
-            )
-        else
-            add_to_expression!(obj, slope_open(n.location, t), model[:expansion][n, t])
-        end
-    end
-
-    # Plant shipping node costs
-    for n in values(graph.plant_shipping_nodes), t = 1:T
-        # Disposal costs
-        add_to_expression!(
-            obj,
-            n.location.disposal_cost[n.product][t],
-            model[:plant_dispose][n, t],
-        )
-    end
-
-    # Collection shipping node costs
-    for n in values(graph.collection_shipping_nodes), t = 1:T
-        # Disposal costs
-        add_to_expression!(
-            obj,
-            n.location.product.disposal_cost[t],
-            model[:collection_dispose][n, t],
-        )
-    end
-
-    @objective(model, Min, obj)
-end
-
-
-function create_shipping_node_constraints!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    model[:eq_balance] = OrderedDict()
-    for t = 1:T
-        # Collection centers
-        for n in graph.collection_shipping_nodes
-            model[:eq_balance][n, t] = @constraint(
-                model,
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) ==
-                n.location.amount[t] - model[:collection_dispose][n, t],
-            )
-        end
-        for prod in model[:instance].products
-            if isempty(prod.collection_centers)
-                continue
-            end
-            expr = AffExpr()
-            for center in prod.collection_centers
-                n = graph.collection_center_to_node[center]
-                add_to_expression!(expr, model[:collection_dispose][n, t])
-            end
-            @constraint(model, expr <= prod.disposal_limit[t])
-        end
-
-        # Plants
-        for n in graph.plant_shipping_nodes
-            @constraint(
-                model,
-                sum(model[:flow][a, t] for a in n.incoming_arcs) ==
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) +
-                model[:plant_dispose][n, t]
-            )
-        end
-    end
-
-end
-
-
-function create_process_node_constraints!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-
-    for t = 1:T, n in graph.process_nodes
-        input_sum = AffExpr(0.0)
-        for a in n.incoming_arcs
-            add_to_expression!(input_sum, 1.0, model[:flow][a, t])
-        end
-
-        # Output amount is implied by amount processed
-        for a in n.outgoing_arcs
-            @constraint(
-                model,
-                model[:flow][a, t] == a.values["weight"] * model[:process][n, t]
-            )
-        end
-
-        # If plant is closed, capacity is zero
-        @constraint(
-            model,
-            model[:capacity][n, t] <= n.location.sizes[2].capacity * model[:is_open][n, t]
-        )
-
-        # If plant is open, capacity is greater than base
-        @constraint(
-            model,
-            model[:capacity][n, t] >= n.location.sizes[1].capacity * model[:is_open][n, t]
-        )
-
-        # Capacity is linked to expansion
-        @constraint(
-            model,
-            model[:capacity][n, t] <=
-            n.location.sizes[1].capacity + model[:expansion][n, t]
-        )
-
-        # Can only process up to capacity
-        @constraint(model, model[:process][n, t] <= model[:capacity][n, t])
-
-        if t > 1
-            # Plant capacity can only increase over time
-            @constraint(model, model[:capacity][n, t] >= model[:capacity][n, t-1])
-            @constraint(model, model[:expansion][n, t] >= model[:expansion][n, t-1])
-        end
-
-        # Amount received equals amount processed plus stored
-        store_in = 0
-        if t > 1
-            store_in = model[:store][n, t-1]
-        end
-        if t == T
-            @constraint(model, model[:store][n, t] == 0)
-        end
-        @constraint(
-            model,
-            input_sum + store_in == model[:store][n, t] + model[:process][n, t]
-        )
-
-
-        # Plant is currently open if it was already open in the previous time period or
-        # if it was built just now
-        if t > 1
-            @constraint(
-                model,
-                model[:is_open][n, t] == model[:is_open][n, t-1] + model[:open_plant][n, t]
-            )
-        else
-            @constraint(model, model[:is_open][n, t] == model[:open_plant][n, t])
-        end
-
-        # Plant can only be opened during building period
-        if t ∉ model[:instance].building_period
-            @constraint(model, model[:open_plant][n, t] == 0)
-        end
     end
 end

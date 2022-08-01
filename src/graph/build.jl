@@ -59,7 +59,7 @@ function build_graph(instance::Instance)::Graph
                 dest.location.longitude,
             )
             values = Dict("distance" => distance)
-            arc = Arc(source, dest, values)
+            arc = Arc(length(arcs) + 1, source, dest, values)
             push!(source.outgoing_arcs, arc)
             push!(dest.incoming_arcs, arc)
             push!(arcs, arc)
@@ -72,7 +72,7 @@ function build_graph(instance::Instance)::Graph
         for dest in shipping_nodes_by_plant[plant]
             weight = plant.output[dest.product]
             values = Dict("weight" => weight)
-            arc = Arc(source, dest, values)
+            arc = Arc(length(arcs) + 1, source, dest, values)
             push!(source.outgoing_arcs, arc)
             push!(dest.incoming_arcs, arc)
             push!(arcs, arc)
