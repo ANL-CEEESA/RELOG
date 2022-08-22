@@ -2,6 +2,7 @@ println("Initializing...")
 
 using Logging
 using Cbc
+using Clp
 using JSON
 using JuMP
 using RELOG
@@ -15,8 +16,9 @@ function solve(root, filename)
     ref_solution, ref_model = RELOG.solve(
         ref_file,
         optimizer=optimizer,
+        lp_optimizer=Clp.Optimizer,
         return_model=true,
-        marginal_costs=false,
+        marginal_costs=true,
     )
     Libc.flush_cstdio()
     flush(stdout)
@@ -59,6 +61,7 @@ function solve(root, filename)
             ref_model,
             scenario,
             optimizer=optimizer,
+            lp_optimizer=Clp.Optimizer,
         )
         if length(sc_solution) == 0
             return

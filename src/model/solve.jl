@@ -28,23 +28,34 @@ end
 function solve(
     instance::Instance;
     optimizer = nothing,
+    lp_optimizer = nothing,
     output = nothing,
     marginal_costs = true,
     return_model = false,
 )
 
-    milp_optimizer = lp_optimizer = optimizer
-    if optimizer == nothing
-        milp_optimizer = _get_default_milp_optimizer()
-        lp_optimizer = _get_default_lp_optimizer()
+    if lp_optimizer == nothing
+        if optimizer == nothing
+            # If neither is provided, use default LP optimizer.
+            lp_optimizer = _get_default_lp_optimizer()
+        else
+            # If only MIP optimizer is provided, use it as
+            # LP solver too.
+            lp_optimizer = optimizer 
+        end
     end
+
+    if optimizer == nothing
+        optimizer = _get_default_milp_optimizer()
+    end
+
 
     @info "Building graph..."
     graph = RELOG.build_graph(instance)
     _print_graph_stats(instance, graph)
 
     @info "Building optimization model..."
-    model = RELOG.build_model(instance, graph, milp_optimizer)
+    model = RELOG.build_model(instance, graph, optimizer)
 
     @info "Optimizing MILP..."
     JuMP.optimize!(model)
