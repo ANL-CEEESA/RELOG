@@ -15,7 +15,7 @@
 
 
 
-<img src="https://anl-ceeesa.github.io/RELOG/0.5/images/ex_transportation.png" width="1000px"/>
+<img src="https://anl-ceeesa.github.io/RELOG/0.5/assets/ex_transportation.png" width="1000px"/>
 
 ### Documentation
 
