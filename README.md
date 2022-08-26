@@ -13,7 +13,7 @@
 
 **RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
 
-<img src="https://anl-ceeesa.github.io/RELOG/0.5/images/ex_transportation.png" width="1000px"/>
+<img src="https://anl-ceeesa.github.io/RELOG/0.5/assets/ex_transportation.png" width="1000px"/>
 
 ### Documentation
 

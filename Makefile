@@ -1,32 +1,22 @@
-JULIA := julia --color=yes --project=@.
-SRC_FILES := $(wildcard src/*.jl test/*.jl)
 VERSION := 0.5
 
-all: docs test
-
-build/sysimage.so: src/sysimage.jl Project.toml Manifest.toml
-	mkdir -p build
-	$(JULIA) src/sysimage.jl
-
-build/test.log: $(SRC_FILES) build/sysimage.so
-	cd test; $(JULIA) --sysimage ../build/sysimage.so runtests.jl
-
 clean:
-	rm -rf build/*
+	rm -rfv build Manifest.toml test/Manifest.toml deps/formatter/build deps/formatter/Manifest.toml
 
 docs:
-	mkdocs build -d ../docs/$(VERSION)/
-
+	cd docs; julia --project=. make.jl; cd ..
+	rsync -avP --delete-after docs/build/ ../docs/$(VERSION)/
+	
 docker-build:
-	docker build --tag relog:0.6 .
+	docker build --tag relog-web:$(VERSION) .
 
 format:
-	julia -e 'using JuliaFormatter; format(["src", "test"], verbose=true);'
+	cd deps/formatter; ../../juliaw format.jl
 
-test: build/test.log
+test: test/Manifest.toml
+	./juliaw test/runtests.jl
 
-test-watch:
-	bash -c "while true; do make test --quiet; sleep 1; done"
+test/Manifest.toml: test/Project.toml
+	julia --project=test -e "using Pkg; Pkg.instantiate()"
 
-.PHONY: docs test
-
+.PHONY: docs test format
