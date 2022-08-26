@@ -4,7 +4,7 @@
 
 ```@raw html
 <center>
-   <img src="../assets/ex_transportation.png" width="1000px"/>
+   <img src="assets/ex_transportation.png" width="1000px"/>
 </center>
 ```
 
