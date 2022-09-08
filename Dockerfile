@@ -1,5 +1,7 @@
 FROM julia:1.7-buster
 
+ENV RELOG_TIME_LIMIT_SEC=3600
+
 # Install Node.js & zip
 RUN apt-get update -yq && \
     apt-get -yq install curl gnupg ca-certificates && \

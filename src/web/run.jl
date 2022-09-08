@@ -11,7 +11,7 @@ function solve(root, filename)
     ref_file = "$root/$filename"
     optimizer = optimizer_with_attributes(
         Cbc.Optimizer,
-        "seconds" => 900,
+        "seconds" => parse(Int, ENV["RELOG_TIME_LIMIT_SEC"]),
     )
     ref_solution, ref_model = RELOG.solve(
         ref_file,
