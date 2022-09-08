@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
+using RELOG, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
 
 function model_solve_test()
