@@ -1,22 +1,22 @@
 println("Initializing...")
 
 using Logging
-using Cbc
-using Clp
 using JSON
 using JuMP
+using HiGHS
 using RELOG
 
 function solve(root, filename)
     ref_file = "$root/$filename"
     optimizer = optimizer_with_attributes(
-        Cbc.Optimizer,
-        "seconds" => parse(Int, ENV["RELOG_TIME_LIMIT_SEC"]),
+        HiGHS.Optimizer,
+        "time_limit" => parse(Float64, ENV["RELOG_TIME_LIMIT_SEC"]),
     )
     ref_solution, ref_model = RELOG.solve(
         ref_file,
+        heuristic=true,
         optimizer=optimizer,
-        lp_optimizer=Clp.Optimizer,
+        lp_optimizer=HiGHS.Optimizer,
         return_model=true,
         marginal_costs=true,
     )
@@ -61,7 +61,7 @@ function solve(root, filename)
             ref_model,
             scenario,
             optimizer=optimizer,
-            lp_optimizer=Clp.Optimizer,
+            lp_optimizer=HiGHS.Optimizer,
         )
         if length(sc_solution) == 0
             return

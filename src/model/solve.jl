@@ -2,14 +2,14 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
+using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures, HiGHS
 
 function _get_default_milp_optimizer()
-    return optimizer_with_attributes(Cbc.Optimizer, "logLevel" => 0)
+    return optimizer_with_attributes(HiGHS.Optimizer)
 end
 
 function _get_default_lp_optimizer()
-    return optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+    return optimizer_with_attributes(HiGHS.Optimizer)
 end
 
 
@@ -98,7 +98,13 @@ function solve(filename::AbstractString; heuristic = false, kwargs...)
     if heuristic && instance.time > 1
         @info "Solving single-period version..."
         compressed = _compress(instance)
-        csol = solve(compressed; output = nothing, marginal_costs = false, kwargs...)
+        csol, _ = solve(
+            compressed;
+            return_model = true,
+            output = nothing,
+            marginal_costs = false,
+            kwargs...
+        )
         @info "Filtering candidate locations..."
         selected_pairs = []
         for (plant_name, plant_dict) in csol["Plants"]

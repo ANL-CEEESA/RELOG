@@ -1,14 +1,13 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
+using RELOG, HiGHS, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
 @testset "build" begin
     basedir = dirname(@__FILE__)
     instance = RELOG.parsefile("$basedir/../../instances/s1.json")
     graph = RELOG.build_graph(instance)
-    model = RELOG.build_model(instance, graph, Cbc.Optimizer)
-    set_optimizer_attribute(model, "logLevel", 0)
+    model = RELOG.build_model(instance, graph, HiGHS.Optimizer)
 
     process_node_by_location_name =
         Dict(n.location.location_name => n for n in graph.process_nodes)

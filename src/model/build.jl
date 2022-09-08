@@ -2,7 +2,7 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using JuMP, LinearAlgebra, Geodesy, Cbc, Clp, ProgressBars, Printf, DataStructures
+using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures
 
 function build_model(instance::Instance, graph::Graph, optimizer)::JuMP.Model
     model = Model(optimizer)

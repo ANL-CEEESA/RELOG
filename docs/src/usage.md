@@ -101,7 +101,7 @@ To use the `resolve` method, the new input file should be very similar to the or
 
 ### 5.1 Changing the solver
 
-By default, RELOG internally uses [Cbc](https://github.com/coin-or/Cbc), an open-source and freely-available Mixed-Integer Linear Programming solver developed by the [COIN-OR Project](https://www.coin-or.org/). For larger-scale test cases, a commercial solver such as Gurobi, CPLEX or XPRESS is recommended. The following snippet shows how to switch from Cbc to Gurobi, for example:
+By default, RELOG internally uses [HiGHS](https://github.com/ERGO-Code/HiGHS), an open-source and freely-available Mixed-Integer Linear Programming solver. For larger-scale test cases, a commercial solver such as Gurobi, CPLEX or XPRESS is recommended. The following snippet shows how to switch to Gurobi, for example:
 
 ```julia
 using RELOG, Gurobi, JuMP
