@@ -9,6 +9,7 @@ function build_model(
     graphs::Vector{Graph},
     probs::Vector{Float64};
     optimizer,
+    method=:ef,
 )
     T = instance.time
 
@@ -95,7 +96,7 @@ function build_model(
                 upper_bound = psn[n].location.disposal_limit[psn[n].product][t],
             )
 
-            # Var: collection_dispose/
+            # Var: collection_dispose
             @recourse(
                 model,
                 collection_dispose[n in 1:CSN, t in 1:T],
@@ -290,7 +291,7 @@ function build_model(
                     sum(
                         collection_dispose[n, t]
                         for n in 1:CSN
-                        if csn[n].product == prod
+                        if csn[n].product.name == prod.name
                     ) <= prod.disposal_limit[t]
                 )
             end
@@ -302,7 +303,16 @@ function build_model(
         for i in 1:length(graphs)
     ]
 
-    sp = instantiate(model, ξ; optimizer)
+    if method == :ef
+        sp = instantiate(model, ξ; optimizer=optimizer)
+    elseif method == :lshaped
+        sp = instantiate(model, ξ; optimizer=LShaped.Optimizer)
+        set_optimizer_attribute(sp, MasterOptimizer(), optimizer)
+        set_optimizer_attribute(sp, SubProblemOptimizer(), optimizer)
+        set_optimizer_attribute(sp, FeasibilityStrategy(), FeasibilityCuts())
+    else
+        error("unknown method: $method")
+    end
 
     return sp
 end

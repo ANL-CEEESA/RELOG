@@ -12,6 +12,7 @@ function get_solution(
     marginal_costs=false,
 )
     value(x) = StochasticPrograms.value(x, scenario_index)
+    ivalue(x) = StochasticPrograms.value(x)
     shadow_price(x) = StochasticPrograms.shadow_price(x, scenario_index)
 
     T = instance.time
@@ -26,6 +27,7 @@ function get_solution(
     CSN = length(csn)
     PSN = length(psn)
 
+    flow = model[2, :flow]
 
     output = OrderedDict(
         "Plants" => OrderedDict(),
@@ -106,11 +108,11 @@ function get_solution(
             "Capacity (tonne)" =>
                 [value(model[2, :capacity][n, t]) for t = 1:T],
             "Opening cost (\$)" => [
-                value(model[2, :open_plant][n, t]) *
+                ivalue(model[1, :open_plant][n, t]) *
                 plant.sizes[1].opening_cost[t] for t = 1:T
             ],
             "Fixed operating cost (\$)" => [
-                value(model[2, :is_open][n, t]) *
+                ivalue(model[1, :is_open][n, t]) *
                 plant.sizes[1].fixed_operating_cost[t] +
                 value(model[2, :expansion][n, t]) *
                 slope_fix_oper_cost(plant, t) for t = 1:T
@@ -149,7 +151,7 @@ function get_solution(
 
         # Inputs
         for a in process_node.incoming_arcs
-            vals = [value(model[2, :flow][a.index, t]) for t = 1:T]
+            vals = [value(flow[a.index, t]) for t = 1:T]
             if sum(vals) <= 1e-3
                 continue
             end
@@ -230,7 +232,7 @@ function get_solution(
             end
 
             for a in shipping_node.outgoing_arcs
-                vals = [value(model[2, :flow][a.index, t]) for t = 1:T]
+                vals = [value(flow[a.index, t]) for t = 1:T]
                 if sum(vals) <= 1e-3
                     continue
                 end
