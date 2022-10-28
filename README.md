@@ -30,6 +30,7 @@
 * **Nwike Iloeje** <<ciloeje@anl.gov>>
 * **John Atkins**
 * **Kyle Sun**
+* **Audrey Gallier**
 
 ### License
 
