@@ -15,7 +15,7 @@
 
 
 
-<img src="https://anl-ceeesa.github.io/RELOG/0.5/images/ex_transportation.png" width="1000px"/>
+<img src="https://anl-ceeesa.github.io/RELOG/0.5/assets/ex_transportation.png" width="1000px"/>
 
 ### Documentation
 
@@ -26,8 +26,10 @@
 
 ### Authors
 
-* **Alinson S. Xavier,** Argonne National Laboratory <<axavier@anl.gov>>
-* **Nwike Iloeje,** Argonne National Laboratory <<ciloeje@anl.gov>>
+* **Alinson S. Xavier** <<axavier@anl.gov>>
+* **Nwike Iloeje** <<ciloeje@anl.gov>>
+* **John Atkins**
+* **Kyle Sun**
 
 ### License
 

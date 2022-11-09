@@ -7,7 +7,7 @@ using Geodesy
 function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
     x = LLA(source_lat, source_lon, 0.0)
     y = LLA(dest_lat, dest_lon, 0.0)
-    return round(distance(x, y) / 1000.0, digits = 2)
+    return round(euclidean_distance(x, y) / 1000.0, digits = 2)
 end
 
 function build_graph(instance::Instance)::Graph

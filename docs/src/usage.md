@@ -3,22 +3,17 @@ Usage
 
 ## 1. Installation
 
-To use RELOG, the first step is to install the [Julia programming language](https://julialang.org/) on your machine. Note that RELOG was developed and tested with Julia 1.5 and may not be compatible with newer versions. After Julia is installed, launch the Julia console, type `]` to switch to package manger mode, then run:
+To use RELOG, the first step is to install the [Julia programming language](https://julialang.org/) on your machine. Note that RELOG was developed and tested with Julia 1.8 and may not be compatible with newer versions. After Julia is installed, launch the Julia console, then run:
 
-```text
-(@v1.5) pkg> add https://github.com/ANL-CEEESA/RELOG.git
+```julia
+using Pkg
+Pkg.add(name="RELOG", version="0.5")
 ```
 
 After the package and all its dependencies have been installed, please run the RELOG test suite, as shown below, to make sure that the package has been correctly installed:
 
-```text
-(@v1.5) pkg> test RELOG
-```
-
-To update the package to a newer version, type `]` to enter the package manager mode, then run:
-
-```text
-(@v1.5) pkg> update RELOG
+```julia
+Pkg.test("RELOG")
 ```
 
 ## 2. Modeling the problem
@@ -111,13 +106,17 @@ By default, RELOG internally uses [Cbc](https://github.com/coin-or/Cbc), an open
 ```julia
 using RELOG, Gurobi, JuMP
 
-gurobi = optimizer_with_attributes(Gurobi.Optimizer,
-                                   "TimeLimit" => 3600,
-                                   "MIPGap" => 0.001)
+gurobi = optimizer_with_attributes(
+    Gurobi.Optimizer,
+    "TimeLimit" => 3600,
+    "MIPGap" => 0.001,
+)
 
-RELOG.solve("instance.json",
-            output="solution.json",
-            optimizer=gurobi)
+RELOG.solve(
+    "instance.json",
+    output="solution.json",
+    optimizer=gurobi,
+)
 ```
 
 ### 5.2 Multi-period heuristics
@@ -133,6 +132,8 @@ To solve an instance using this heuristic, use the option `heuristic=true`, as s
 ```julia
 using RELOG
 
-solution = RELOG.solve("/home/user/instance.json",
-                       heuristic=true)
+solution = RELOG.solve(
+    "/home/user/instance.json",
+    heuristic=true,
+)
 ```

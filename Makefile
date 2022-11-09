@@ -1,25 +1,19 @@
-JULIA := julia --project=.
-SRC_FILES := $(wildcard src/*.jl test/*.jl)
-VERSION := dev
-
-all: docs test
-
-build/sysimage.so: src/sysimage.jl Project.toml Manifest.toml
-	@$(JULIA) src/sysimage.jl test/runtests.jl
+VERSION := 0.5
 
 clean:
-	rm -rf build/*
+	rm -rfv build Manifest.toml test/Manifest.toml deps/formatter/build deps/formatter/Manifest.toml
 
 docs:
-	mkdocs build -d ../docs/$(VERSION)/
-
+	cd docs; julia --project=. make.jl; cd ..
+	rsync -avP --delete-after docs/build/ ../docs/$(VERSION)/
+	
 format:
-	julia -e 'using JuliaFormatter; format(["src", "test"], verbose=true);'
+	cd deps/formatter; ../../juliaw format.jl
 
-test:
-	@$(JULIA) --sysimage build/sysimage.so test/runtests.jl
+test: test/Manifest.toml
+	./juliaw test/runtests.jl
 
-test-watch:
-	bash -c "while true; do make test --quiet; sleep 1; done"
+test/Manifest.toml: test/Project.toml
+	julia --project=test -e "using Pkg; Pkg.instantiate()"
 
-.PHONY: docs test
+.PHONY: docs test format
