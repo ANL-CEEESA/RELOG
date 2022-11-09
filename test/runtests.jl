@@ -15,7 +15,6 @@ using Test
     @testset "Model" begin
         include("model/build_test.jl")
         include("model/solve_test.jl")
-        include("model/resolve_test.jl")
     end
     include("reports_test.jl")
 end

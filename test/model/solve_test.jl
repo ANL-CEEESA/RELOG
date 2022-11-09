@@ -1,19 +1,16 @@
 # Copyright (C) 2020 Argonne National Laboratory
 # Written by Alinson Santos Xavier <axavier@anl.gov>
 
-using RELOG, Cbc, JuMP, Printf, JSON, MathOptInterface.FileFormats
+using RELOG, JuMP, Printf, JSON, MathOptInterface.FileFormats
 
 basedir = dirname(@__FILE__)
 
 @testset "solve (exact)" begin
-    solution_filename_a = tempname()
-    solution_filename_b = tempname()
-    solution = RELOG.solve("$basedir/../../instances/s1.json", output = solution_filename_a)
+    solution = RELOG.solve("$basedir/../../instances/s1.json")
 
-    @test isfile(solution_filename_a)
-
-    RELOG.write(solution, solution_filename_b)
-    @test isfile(solution_filename_b)
+    solution_filename = tempname()
+    RELOG.write(solution, solution_filename)
+    @test isfile(solution_filename)
 
     @test "Costs" in keys(solution)
     @test "Fixed operating (\$)" in keys(solution["Costs"])

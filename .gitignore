@@ -12,3 +12,4 @@ Manifest.toml
 data
 build
 benchmark
+**/*.log

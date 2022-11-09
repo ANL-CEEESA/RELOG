@@ -53,7 +53,7 @@ end
 
 function solve(
     instance::Instance;
-    optimizer=nothing,
+    optimizer=HiGHS.Optimizer,
     marginal_costs=true,
     return_model=false
 )

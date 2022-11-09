@@ -8,7 +8,7 @@ function get_solution(
     instance,
     graph,
     model,
-    scenario_index::Int;
+    scenario_index::Int=1;
     marginal_costs=false,
 )
     value(x) = StochasticPrograms.value(x, scenario_index)

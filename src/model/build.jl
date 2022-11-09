@@ -6,6 +6,20 @@ using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures, Stocha
 
 function build_model(
     instance::Instance,
+    graph::Graph,
+    optimizer,
+)
+    return build_model(
+        instance,
+        [graph],
+        [1.0],
+        optimizer=optimizer,
+        method=:ef,
+    )
+end
+
+function build_model(
+    instance::Instance,
     graphs::Vector{Graph},
     probs::Vector{Float64};
     optimizer,
