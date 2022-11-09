@@ -66,4 +66,16 @@ function model_solve_test()
         @test solution["Costs"]["Storage (\$)"] == [100.0, 75.0, 0.0]
         @test solution["Costs"]["Total (\$)"] == [600.0, 75.0, 100.0]
     end
+
+    @testset "solve (stochastic)" begin
+        # Should not crash
+        solutions = RELOG.solve_stochastic(
+            scenarios=[
+                fixture("instances/case3_p010_s1.00.json"),
+                fixture("instances/case3_p010_s1.25.json"),
+            ],
+            probs=[0.5, 0.5],
+            optimizer=HiGHS.Optimizer,
+        )
+    end
 end

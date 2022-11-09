@@ -1,0 +1,4406 @@
+{
+  "parameters": {
+    "time horizon (years)": 1,
+    "building period (years)": [
+      1
+    ]
+  },
+  "products": {
+    "battery": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      },
+      "initial amounts": {
+        "Minot, ND": {
+          "latitude (deg)": 48.2325095,
+          "longitude (deg)": -101.2962732,
+          "amount (tonne)": [
+            76.3
+          ]
+        },
+        "Grand Forks, ND": {
+          "latitude (deg)": 47.9252568,
+          "longitude (deg)": -97.0328547,
+          "amount (tonne)": [
+            98.69999999999999
+          ]
+        },
+        "Jamestown, ND": {
+          "latitude (deg)": 46.9105438,
+          "longitude (deg)": -98.7084357,
+          "amount (tonne)": [
+            28.7
+          ]
+        },
+        "Fargo, ND": {
+          "latitude (deg)": 46.8771863,
+          "longitude (deg)": -96.7898034,
+          "amount (tonne)": [
+            196.7
+          ]
+        },
+        "Dickinson, ND": {
+          "latitude (deg)": 46.8791756,
+          "longitude (deg)": -102.7896242,
+          "amount (tonne)": [
+            32.9
+          ]
+        },
+        "Mandan, ND": {
+          "latitude (deg)": 46.8266603,
+          "longitude (deg)": -100.8895762,
+          "amount (tonne)": [
+            34.3
+          ]
+        },
+        "Bangor, ME": {
+          "latitude (deg)": 44.8011821,
+          "longitude (deg)": -68.7778138,
+          "amount (tonne)": [
+            441.7
+          ]
+        },
+        "Plattsburgh, NY": {
+          "latitude (deg)": 44.6994873,
+          "longitude (deg)": -73.4529124,
+          "amount (tonne)": [
+            57.4
+          ]
+        },
+        "Ogdensburg, NY": {
+          "latitude (deg)": 44.6942291,
+          "longitude (deg)": -75.4863364,
+          "amount (tonne)": [
+            31.499999999999996
+          ]
+        },
+        "Augusta, ME": {
+          "latitude (deg)": 44.3106241,
+          "longitude (deg)": -69.7794897,
+          "amount (tonne)": [
+            256.2
+          ]
+        }
+      }
+    },
+    "anode": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "cathode": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "nickel": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "nickel-iron scrap": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "iron-nickel scrap": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "mixed-hydroxides": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "rare earth mix": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "rare earth diddy": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "rare earth cela": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "rare earth misch": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "leach residue": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "salt": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    },
+    "plastic pack": {
+      "transportation cost ($/km/tonne)": [
+        0.05915580863278107
+      ],
+      "transportation energy (J/km/tonne)": [
+        2720000.0
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.00016700000000000002
+        ]
+      }
+    }
+  },
+  "plants": {
+    "Disassembly Plant": {
+      "input": "battery",
+      "outputs (tonne/tonne)": {
+        "anode": 0.4852252971117361,
+        "cathode": 0.30127557871571925,
+        "nickel": 0.0,
+        "nickel-iron scrap": 0.0,
+        "iron-nickel scrap": 0.06438274071326791,
+        "mixed-hydroxides": 0.0,
+        "rare earth mix": 0.0,
+        "rare earth diddy": 0.0,
+        "rare earth cela": 0.0,
+        "rare earth misch": 0.0,
+        "leach residue": 0.0,
+        "salt": 0.0,
+        "plastic pack": 0.17425126715631323
+      },
+      "energy (GJ/tonne)": [
+        1.1143545264
+      ],
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.04002
+        ]
+      },
+      "locations": {
+        "Sharp, Arkansas": {
+          "latitude (deg)": 36.250692000152256,
+          "longitude (deg)": -91.2818820000747,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                998590.6
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                4138466.7
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Richland, Wisconsin": {
+          "latitude (deg)": 43.21959399969752,
+          "longitude (deg)": -90.4639160001305,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1319125.9
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                5466863.4
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Mason, West Virginia": {
+          "latitude (deg)": 38.80656499959917,
+          "longitude (deg)": -82.09380299961092,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1171186.5
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                4853757.2
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "King, Washington": {
+          "latitude (deg)": 47.39535799950611,
+          "longitude (deg)": -122.23256700004765,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1306797.6
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                5415771.2
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Los Angeles, California": {
+          "latitude (deg)": 34.11262850024355,
+          "longitude (deg)": -118.33495949925755,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1504050.1
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                6233246.1
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Lewis, Washington": {
+          "latitude (deg)": 46.53533000042736,
+          "longitude (deg)": -121.95938900055003,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1306797.6
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                5415771.2
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Riverside, California": {
+          "latitude (deg)": 33.73880599987396,
+          "longitude (deg)": -116.22713600017467,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1504050.1
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                6233246.1
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "El Paso, Colorado": {
+          "latitude (deg)": 38.80966000034033,
+          "longitude (deg)": -104.80838600013597,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1331454.2
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                5517955.6
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Richland, South Carolina": {
+          "latitude (deg)": 33.87860599982569,
+          "longitude (deg)": -80.90173400024374,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1047903.8
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                4342835.4
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        },
+        "Carbon, Wyoming": {
+          "latitude (deg)": 41.39060200023617,
+          "longitude (deg)": -107.76794300001319,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                1257484.5
+              ],
+              "fixed operating cost ($)": [
+                680938.0
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                5211402.5
+              ],
+              "fixed operating cost ($)": [
+                2822016.7
+              ],
+              "variable operating cost ($/tonne)": [
+                105.2
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Anode Material Recycling Plant": {
+      "input": "anode",
+      "outputs (tonne/tonne)": {
+        "anode": 0.0,
+        "cathode": 0.0,
+        "nickel": 0.0,
+        "nickel-iron scrap": 0.40980271257604867,
+        "iron-nickel scrap": 0.0,
+        "mixed-hydroxides": 0.23708239299041944,
+        "rare earth mix": 0.1642781663943097,
+        "rare earth diddy": 0.0,
+        "rare earth cela": 0.0,
+        "rare earth misch": 0.0,
+        "leach residue": 0.004139421339152038,
+        "salt": 0.6413163680244696,
+        "plastic pack": 0.0
+      },
+      "energy (GJ/tonne)": [
+        5.555107310069791
+      ],
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.19950149551345964
+        ]
+      },
+      "locations": {
+        "Sharp, Arkansas": {
+          "latitude (deg)": 36.250692000152256,
+          "longitude (deg)": -91.2818820000747,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                7915879.7
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                32805840.0
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Richland, Wisconsin": {
+          "latitude (deg)": 43.21959399969752,
+          "longitude (deg)": -90.4639160001305,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                10456779.4
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                43336109.6
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Mason, West Virginia": {
+          "latitude (deg)": 38.80656499959917,
+          "longitude (deg)": -82.09380299961092,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                9284056.5
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                38475985.2
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "King, Washington": {
+          "latitude (deg)": 47.39535799950611,
+          "longitude (deg)": -122.23256700004765,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                10359052.5
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                42931099.2
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Los Angeles, California": {
+          "latitude (deg)": 34.11262850024355,
+          "longitude (deg)": -118.33495949925755,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                11922683.0
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                49411265.2
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Lewis, Washington": {
+          "latitude (deg)": 46.53533000042736,
+          "longitude (deg)": -121.95938900055003,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                10359052.5
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                42931099.2
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Riverside, California": {
+          "latitude (deg)": 33.73880599987396,
+          "longitude (deg)": -116.22713600017467,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                11922683.0
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                49411265.2
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "El Paso, Colorado": {
+          "latitude (deg)": 38.80966000034033,
+          "longitude (deg)": -104.80838600013597,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                10554506.3
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                43741120.0
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Richland, South Carolina": {
+          "latitude (deg)": 33.87860599982569,
+          "longitude (deg)": -80.90173400024374,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                8306787.4
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                34425881.5
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        },
+        "Carbon, Wyoming": {
+          "latitude (deg)": 41.39060200023617,
+          "longitude (deg)": -107.76794300001319,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "17468.1106960225": {
+              "opening cost ($)": [
+                9968144.8
+              ],
+              "fixed operating cost ($)": [
+                5326593.7
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            },
+            "349362.21392045": {
+              "opening cost ($)": [
+                41311057.8
+              ],
+              "fixed operating cost ($)": [
+                22075042.4
+              ],
+              "variable operating cost ($/tonne)": [
+                939.9
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Cathode Material Recycling Plant": {
+      "input": "cathode",
+      "outputs (tonne/tonne)": {
+        "anode": 0.0,
+        "cathode": 0.0,
+        "nickel": 0.2273358713187755,
+        "nickel-iron scrap": 0.4107274656316309,
+        "iron-nickel scrap": 0.0,
+        "mixed-hydroxides": 0.0565269568778489,
+        "rare earth mix": 0.0,
+        "rare earth diddy": 0.0,
+        "rare earth cela": 0.0,
+        "rare earth misch": 0.0,
+        "leach residue": 0.18194593333681103,
+        "salt": 0.6770453236017251,
+        "plastic pack": 0.0
+      },
+      "energy (GJ/tonne)": [
+        9.113138096172717
+      ],
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.3272816486751718
+        ]
+      },
+      "locations": {
+        "Sharp, Arkansas": {
+          "latitude (deg)": 36.250692000152256,
+          "longitude (deg)": -91.2818820000747,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                9182155.3
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                38053675.4
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Richland, Wisconsin": {
+          "latitude (deg)": 43.21959399969752,
+          "longitude (deg)": -90.4639160001305,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                12129513.8
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                50268435.4
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Mason, West Virginia": {
+          "latitude (deg)": 38.80656499959917,
+          "longitude (deg)": -82.09380299961092,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                10769194.5
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                44630853.9
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "King, Washington": {
+          "latitude (deg)": 47.39535799950611,
+          "longitude (deg)": -122.23256700004765,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                12016153.9
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                49798637.0
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Los Angeles, California": {
+          "latitude (deg)": 34.11262850024355,
+          "longitude (deg)": -118.33495949925755,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                13829912.9
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                57315412.3
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Lewis, Washington": {
+          "latitude (deg)": 46.53533000042736,
+          "longitude (deg)": -121.95938900055003,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                12016153.9
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                49798637.0
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Riverside, California": {
+          "latitude (deg)": 33.73880599987396,
+          "longitude (deg)": -116.22713600017467,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                13829912.9
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                57315412.3
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "El Paso, Colorado": {
+          "latitude (deg)": 38.80966000034033,
+          "longitude (deg)": -104.80838600013597,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                12242873.7
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                50738233.9
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Richland, South Carolina": {
+          "latitude (deg)": 33.87860599982569,
+          "longitude (deg)": -80.90173400024374,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                9635595.1
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                39932869.3
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        },
+        "Carbon, Wyoming": {
+          "latitude (deg)": 41.39060200023617,
+          "longitude (deg)": -107.76794300001319,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "10845.920833765893": {
+              "opening cost ($)": [
+                11562714.1
+              ],
+              "fixed operating cost ($)": [
+                6178670.3
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            },
+            "216918.41667531786": {
+              "opening cost ($)": [
+                47919443.1
+              ],
+              "fixed operating cost ($)": [
+                25606309.7
+              ],
+              "variable operating cost ($/tonne)": [
+                1100.3
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Mega Plant": {
+      "input": "battery",
+      "outputs (tonne/tonne)": {
+        "anode": 0.0,
+        "cathode": 0.0,
+        "nickel": 0.06849074619440637,
+        "nickel-iron scrap": 0.3225887978695189,
+        "iron-nickel scrap": 0.06438274071326791,
+        "mixed-hydroxides": 0.13206856622515012,
+        "rare earth mix": 0.07971192209765014,
+        "rare earth diddy": 0.0,
+        "rare earth cela": 0.0,
+        "rare earth misch": 0.0,
+        "leach residue": 0.05682441831018012,
+        "salt": 0.5151601469021739,
+        "plastic pack": 0.17425126715631323
+      },
+      "energy (GJ/tonne)": [
+        5.571772631999999
+      ],
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.20010000000000003
+        ]
+      },
+      "locations": {
+        "Sharp, Arkansas": {
+          "latitude (deg)": 36.250692000152256,
+          "longitude (deg)": -91.2818820000747,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                16858178.0
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                69865474.0
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Richland, Wisconsin": {
+          "latitude (deg)": 43.21959399969752,
+          "longitude (deg)": -90.4639160001305,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                22269445.0
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                92291428.6
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Mason, West Virginia": {
+          "latitude (deg)": 38.80656499959917,
+          "longitude (deg)": -82.09380299961092,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                19771937.1
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                81940988.0
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "King, Washington": {
+          "latitude (deg)": 47.39535799950611,
+          "longitude (deg)": -122.23256700004765,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                22061319.3
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                91428891.9
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Los Angeles, California": {
+          "latitude (deg)": 34.11262850024355,
+          "longitude (deg)": -118.33495949925755,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                25391329.8
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                105229479.4
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Lewis, Washington": {
+          "latitude (deg)": 46.53533000042736,
+          "longitude (deg)": -121.95938900055003,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                22061319.3
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                91428891.9
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Riverside, California": {
+          "latitude (deg)": 33.73880599987396,
+          "longitude (deg)": -116.22713600017467,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                25391329.8
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                105229479.4
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "El Paso, Colorado": {
+          "latitude (deg)": 38.80966000034033,
+          "longitude (deg)": -104.80838600013597,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                22477570.6
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                93153965.4
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Richland, South Carolina": {
+          "latitude (deg)": 33.87860599982569,
+          "longitude (deg)": -80.90173400024374,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                17690680.6
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                73315620.9
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        },
+        "Carbon, Wyoming": {
+          "latitude (deg)": 41.39060200023617,
+          "longitude (deg)": -107.76794300001319,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "36000.0": {
+              "opening cost ($)": [
+                21228816.7
+              ],
+              "fixed operating cost ($)": [
+                11343864.2
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            },
+            "720000.0": {
+              "opening cost ($)": [
+                87978745.1
+              ],
+              "fixed operating cost ($)": [
+                47012461.9
+              ],
+              "variable operating cost ($/tonne)": [
+                774.6
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Rare Earth Recycling Plant": {
+      "input": "rare earth mix",
+      "outputs (tonne/tonne)": {
+        "anode": 0.0,
+        "cathode": 0.0,
+        "nickel": 0.0,
+        "nickel-iron scrap": 0.0,
+        "iron-nickel scrap": 0.0,
+        "mixed-hydroxides": 0.0,
+        "rare earth mix": 0.0,
+        "rare earth diddy": 0.17270071073009238,
+        "rare earth cela": 0.4087615105277695,
+        "rare earth misch": 0.049580610950200825,
+        "leach residue": 0.0,
+        "salt": 0.1457623632133482,
+        "plastic pack": 0.0
+      },
+      "energy (GJ/tonne)": [
+        25.678604303999997
+      ],
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.9222
+        ]
+      },
+      "locations": {
+        "Sharp, Arkansas": {
+          "latitude (deg)": 36.250692000152256,
+          "longitude (deg)": -91.2818820000747,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                6992685.5
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                30684283.3
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Richland, Wisconsin": {
+          "latitude (deg)": 43.21959399969752,
+          "longitude (deg)": -90.4639160001305,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                9237251.3
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                40533559.4
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Mason, West Virginia": {
+          "latitude (deg)": 38.80656499959917,
+          "longitude (deg)": -82.09380299961092,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                8201297.9
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                35987739.6
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "King, Washington": {
+          "latitude (deg)": 47.39535799950611,
+          "longitude (deg)": -122.23256700004765,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                9150921.8
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                40154741.1
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Los Angeles, California": {
+          "latitude (deg)": 34.11262850024355,
+          "longitude (deg)": -118.33495949925755,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                10532193.0
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                46215834.1
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Lewis, Washington": {
+          "latitude (deg)": 46.53533000042736,
+          "longitude (deg)": -121.95938900055003,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                9150921.8
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                40154741.1
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Riverside, California": {
+          "latitude (deg)": 33.73880599987396,
+          "longitude (deg)": -116.22713600017467,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                10532193.0
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                46215834.1
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "El Paso, Colorado": {
+          "latitude (deg)": 38.80966000034033,
+          "longitude (deg)": -104.80838600013597,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                9323580.7
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                40912377.7
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Richland, South Carolina": {
+          "latitude (deg)": 33.87860599982569,
+          "longitude (deg)": -80.90173400024374,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                7338003.4
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                32199556.5
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        },
+        "Carbon, Wyoming": {
+          "latitude (deg)": 41.39060200023617,
+          "longitude (deg)": -107.76794300001319,
+          "disposal": {
+            "nickel-iron scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "iron-nickel scrap": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "mixed-hydroxides": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "nickel": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth diddy": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth cela": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "rare earth misch": {
+              "cost ($/tonne)": [
+                0.0
+              ]
+            },
+            "leach residue": {
+              "cost ($/tonne)": [
+                203
+              ]
+            },
+            "salt": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            },
+            "plastic pack": {
+              "cost ($/tonne)": [
+                50.4
+              ]
+            }
+          },
+          "capacities (tonne)": {
+            "2869.629195515405": {
+              "opening cost ($)": [
+                8805604.0
+              ],
+              "fixed operating cost ($)": [
+                4705376.5
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            },
+            "57392.5839103081": {
+              "opening cost ($)": [
+                38639467.8
+              ],
+              "fixed operating cost ($)": [
+                20647447.4
+              ],
+              "variable operating cost ($/tonne)": [
+                2283.4
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
