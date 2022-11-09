@@ -6,16 +6,18 @@ using RELOG, JSON, GZip
 
 basedir = @__DIR__
 
-@testset "Reports" begin
-    @testset "from solve" begin
-        solution = RELOG.solve("$basedir/../instances/s1.json")
-        tmp_filename = tempname()
-        # The following should not crash
-        RELOG.write_plant_emissions_report(solution, tmp_filename)
-        RELOG.write_plant_outputs_report(solution, tmp_filename)
-        RELOG.write_plants_report(solution, tmp_filename)
-        RELOG.write_products_report(solution, tmp_filename)
-        RELOG.write_transportation_emissions_report(solution, tmp_filename)
-        RELOG.write_transportation_report(solution, tmp_filename)
+function reports_test()
+    @testset "Reports" begin
+        @testset "from solve" begin
+            solution = RELOG.solve(fixture("instances/s1.json"))
+            tmp_filename = tempname()
+            # The following should not crash
+            RELOG.write_plant_emissions_report(solution, tmp_filename)
+            RELOG.write_plant_outputs_report(solution, tmp_filename)
+            RELOG.write_plants_report(solution, tmp_filename)
+            RELOG.write_products_report(solution, tmp_filename)
+            RELOG.write_transportation_emissions_report(solution, tmp_filename)
+            RELOG.write_transportation_report(solution, tmp_filename)
+        end
     end
 end
