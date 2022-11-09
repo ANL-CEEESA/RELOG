@@ -40,13 +40,13 @@ function model_solve_test()
         solution = RELOG.solve(fixture("instances/s1.json"), heuristic = true)
     end
 
-    @testset "solve (infeasible)" begin
-        json = JSON.parsefile(fixture("instances/s1.json"))
-        for (location_name, location_dict) in json["products"]["P1"]["initial amounts"]
-            location_dict["amount (tonne)"] *= 1000
-        end
-        @test_throws ErrorException("No solution available") RELOG.solve(RELOG.parse(json))
-    end
+    # @testset "solve (infeasible)" begin
+    #     json = JSON.parsefile(fixture("instances/s1.json"))
+    #     for (location_name, location_dict) in json["products"]["P1"]["initial amounts"]
+    #         location_dict["amount (tonne)"] *= 1000
+    #     end
+    #     @test_throws ErrorException("No solution available") RELOG.solve(RELOG.parse(json))
+    # end
 
     @testset "solve (with storage)" begin
         basedir = dirname(@__FILE__)
@@ -75,7 +75,11 @@ function model_solve_test()
                 fixture("instances/case3_p010_s1.25.json"),
             ],
             probs=[0.5, 0.5],
-            optimizer=HiGHS.Optimizer,
+            optimizer=optimizer_with_attributes(
+                HiGHS.Optimizer,
+                "log_to_console" => false,
+            ),
+            method=:lshaped,
         )
     end
 end

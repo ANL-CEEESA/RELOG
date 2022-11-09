@@ -29,6 +29,8 @@ function solve_stochastic(;
     scenarios::Vector{String},
     probs::Vector{Float64},
     optimizer,
+    method=:ef,
+    tol=0.1,
 )
     @info "Reading instance files..."
     instances = [parsefile(sc) for sc in scenarios]
@@ -37,7 +39,7 @@ function solve_stochastic(;
     graphs = [build_graph(inst) for inst in instances]
 
     @info "Building stochastic model..."
-    sp = RELOG.build_model(instances[1], graphs, probs; optimizer)
+    sp = RELOG.build_model(instances[1], graphs, probs; optimizer, method, tol)
 
     @info "Optimizing stochastic model..."
     optimize!(sp)

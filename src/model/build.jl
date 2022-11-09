@@ -24,6 +24,7 @@ function build_model(
     probs::Vector{Float64};
     optimizer,
     method=:ef,
+    tol=0.1,
 )
     T = instance.time
 
@@ -118,6 +119,13 @@ function build_model(
                 upper_bound = graph.collection_shipping_nodes[n].location.amount[t],
             )
 
+            # Var: collection_shortfall
+            @recourse(
+                model,
+                collection_shortfall[n in 1:CSN, t in 1:T],
+                lower_bound = 0,
+            )
+
             # Var: store
             @recourse(
                 model,
@@ -209,6 +217,11 @@ function build_model(
                     csn[n].location.product.disposal_cost[t] * collection_dispose[n, t]
                     for n in 1:CSN
                     for t in 1:T
+                ) + sum(
+                    # Collection shortfall
+                    1e4 * collection_shortfall[n, t]
+                    for n in 1:CSN
+                    for t in 1:T
                 )
             )
 
@@ -280,7 +293,7 @@ function build_model(
                 sum(
                     flow[arc.index, t]
                     for arc in csn[n].outgoing_arcs
-                ) == csn[n].location.amount[t] - collection_dispose[n, t]
+                ) == csn[n].location.amount[t] - collection_dispose[n, t] - collection_shortfall[n, t]
             )
 
             # Material flow at plant shipping nodes
@@ -323,7 +336,7 @@ function build_model(
         sp = instantiate(model, ξ; optimizer=LShaped.Optimizer)
         set_optimizer_attribute(sp, MasterOptimizer(), optimizer)
         set_optimizer_attribute(sp, SubProblemOptimizer(), optimizer)
-        set_optimizer_attribute(sp, FeasibilityStrategy(), FeasibilityCuts())
+        set_optimizer_attribute(sp, RelativeTolerance(), tol)
     else
         error("unknown method: $method")
     end
