@@ -1,4 +1,4 @@
-VERSION := 0.5
+VERSION := 0.6
 
 clean:
 	rm -rfv build Manifest.toml test/Manifest.toml deps/formatter/build deps/formatter/Manifest.toml
