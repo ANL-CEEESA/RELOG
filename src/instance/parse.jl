@@ -38,7 +38,6 @@ function parse(json)::Instance
             error("Unknown distance metric: $metric_name")
         end
     end
-    @show distance_metric
 
     plants = Plant[]
     products = Product[]
