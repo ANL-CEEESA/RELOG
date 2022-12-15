@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
+# [0.6.0] -- 2022-12-15
+### Changed
+- Switch from Euclidean distance to approximate driving distance
+
 ## [0.5.2] -- 2022-08-26
 ### Changed
 - Update to JuMP 1.x

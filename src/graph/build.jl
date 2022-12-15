@@ -2,14 +2,6 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using Geodesy
-
-function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
-    x = LLA(source_lat, source_lon, 0.0)
-    y = LLA(dest_lat, dest_lon, 0.0)
-    return round(euclidean_distance(x, y) / 1000.0, digits = 2)
-end
-
 function build_graph(instance::Instance)::Graph
     arcs = []
     next_index = 0
@@ -48,13 +40,15 @@ function build_graph(instance::Instance)::Graph
     end
 
     # Build arcs from collection centers to plants, and from one plant to another
+    metric = _KnnDrivingDistance()
     for source in [collection_shipping_nodes; plant_shipping_nodes]
         for dest in process_nodes_by_input_product[source.product]
-            distance = calculate_distance(
+            distance = _calculate_distance(
                 source.location.latitude,
                 source.location.longitude,
                 dest.location.latitude,
                 dest.location.longitude,
+                metric,
             )
             values = Dict("distance" => distance)
             arc = Arc(source, dest, values)

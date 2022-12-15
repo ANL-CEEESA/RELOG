@@ -11,6 +11,7 @@ using Test
     end
     @testset "Graph" begin
         include("graph/build_test.jl")
+        include("graph/dist_test.jl")
     end
     @testset "Model" begin
         include("model/build_test.jl")
