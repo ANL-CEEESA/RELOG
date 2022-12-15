@@ -14,6 +14,7 @@ The **parameters** section describes details about the simulation itself.
 |:--------------------------|:---------------|
 |`time horizon (years)`     | Number of years in the simulation.
 |`building period (years)`  | List of years in which we are allowed to open new plants. For example, if this parameter is set to `[1,2,3]`, we can only open plants during the first three years. By default, this equals `[1]`; that is, plants can only be opened during the first year. |
+|`distance metric` | Metric used to compute distances between pairs of locations. Valid options are: `"Euclidean"`, for the straight-line distance between points; or `"driving"` for an approximated driving distance. If not specified, defaults to `"Euclidean"`.
 
 
 #### Example
@@ -21,7 +22,8 @@ The **parameters** section describes details about the simulation itself.
 {
     "parameters": {
         "time horizon (years)": 2,
-        "building period (years)": [1]
+        "building period (years)": [1],
+        "distance metric": "driving",
     }
 }
 ```
@@ -220,6 +222,7 @@ Database | Description | Examples
 * Plants can be expanded at any time, even long after they are open.
 * All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.
 * Up to two plant sizes are currently supported. Variable operating costs must be the same for all plant sizes.
+* Accurate driving distances are only available for the continental United States.
 
 ## Output Data Format (JSON)
 

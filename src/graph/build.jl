@@ -40,7 +40,6 @@ function build_graph(instance::Instance)::Graph
     end
 
     # Build arcs from collection centers to plants, and from one plant to another
-    metric = _KnnDrivingDistance()
     for source in [collection_shipping_nodes; plant_shipping_nodes]
         for dest in process_nodes_by_input_product[source.product]
             distance = _calculate_distance(
@@ -48,7 +47,7 @@ function build_graph(instance::Instance)::Graph
                 source.location.longitude,
                 dest.location.latitude,
                 dest.location.longitude,
-                metric,
+                instance.distance_metric,
             )
             values = Dict("distance" => distance)
             arc = Arc(source, dest, values)

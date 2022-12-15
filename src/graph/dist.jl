@@ -6,19 +6,12 @@ using Geodesy
 using NearestNeighbors
 using DataFrames
 
-Base.@kwdef mutable struct _KnnDrivingDistance
-    tree = nothing
-    ratios = nothing
-end
-
-mutable struct _EuclideanDistance end
-
 function _calculate_distance(
     source_lat,
     source_lon,
     dest_lat,
     dest_lon,
-    ::_EuclideanDistance,
+    ::EuclideanDistance,
 )::Float64
     x = LLA(source_lat, source_lon, 0.0)
     y = LLA(dest_lat, dest_lon, 0.0)
@@ -30,7 +23,7 @@ function _calculate_distance(
     source_lon,
     dest_lat,
     dest_lon,
-    metric::_KnnDrivingDistance,
+    metric::KnnDrivingDistance,
 )::Float64
     if metric.tree === nothing
         basedir = joinpath(dirname(@__FILE__), "..", "..", "data")
@@ -54,13 +47,8 @@ function _calculate_distance(
     end
 
     # Compute Euclidean distance
-    dist_euclidean = _calculate_distance(
-        source_lat,
-        source_lon,
-        dest_lat,
-        dest_lon,
-        _EuclideanDistance(),
-    )
+    dist_euclidean =
+        _calculate_distance(source_lat, source_lon, dest_lat, dest_lon, EuclideanDistance())
 
     # Predict ratio
     idxs, _ = knn(metric.tree, [source_lat, source_lon, dest_lat, dest_lon], 5)

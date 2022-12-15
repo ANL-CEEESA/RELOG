@@ -1,6 +1,7 @@
 {
     "parameters": {
-        "time horizon (years)": 2
+        "time horizon (years)": 2,
+        "distance metric": "driving"
     },
     "products": {
         "P1": {

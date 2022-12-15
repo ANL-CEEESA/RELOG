@@ -11,7 +11,7 @@ using RELOG
         -87.656,
         39.764,
         -86.148,
-        RELOG._EuclideanDistance(),
+        RELOG.EuclideanDistance(),
     ) == 265.818
 
     # Approximate driving distance between Chicago and Indianapolis
@@ -20,6 +20,6 @@ using RELOG
         -87.656,
         39.764,
         -86.148,
-        RELOG._KnnDrivingDistance(),
+        RELOG.KnnDrivingDistance(),
     ) == 316.43
 end
