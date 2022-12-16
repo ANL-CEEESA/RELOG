@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
-# [0.6.0] -- 2022-12-15
+## [0.6.0] -- 2022-12-15
 ### Added
 - Allow RELOG to calculate approximate driving distances, instead of just straight-line distances between points.
 
