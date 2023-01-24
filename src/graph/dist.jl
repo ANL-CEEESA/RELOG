@@ -40,7 +40,8 @@ function _calculate_distance(
         end
 
         # Fit kNN model
-        df = DataFrame(CSV.File(csv_filename))
+        df = DataFrame(CSV.File(csv_filename, missingstring="NaN"))
+        dropmissing!(df)
         coords = Matrix(df[!, [:source_lat, :source_lon, :dest_lat, :dest_lon]])'
         metric.ratios = Matrix(df[!, [:ratio]])
         metric.tree = KDTree(coords)
@@ -53,5 +54,7 @@ function _calculate_distance(
     # Predict ratio
     idxs, _ = knn(metric.tree, [source_lat, source_lon, dest_lat, dest_lon], 5)
     ratio_pred = mean(metric.ratios[idxs])
-    return round(dist_euclidean * ratio_pred, digits = 3)
+    dist_pred = round(dist_euclidean * ratio_pred, digits = 3)
+    isfinite(dist_pred) || error("non-finite distance detected: $dist_pred")
+    return dist_pred
 end
