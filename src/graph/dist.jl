@@ -40,7 +40,7 @@ function _calculate_distance(
         end
 
         # Fit kNN model
-        df = DataFrame(CSV.File(csv_filename, missingstring="NaN"))
+        df = DataFrame(CSV.File(csv_filename, missingstring = "NaN"))
         dropmissing!(df)
         coords = Matrix(df[!, [:source_lat, :source_lon, :dest_lat, :dest_lon]])'
         metric.ratios = Matrix(df[!, [:ratio]])
