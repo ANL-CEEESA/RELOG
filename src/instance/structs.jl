@@ -13,6 +13,9 @@ mutable struct Product
     transportation_cost::Vector{Float64}
     transportation_energy::Vector{Float64}
     transportation_emissions::Dict{String,Vector{Float64}}
+    disposal_limit::Vector{Float64}
+    disposal_cost::Vector{Float64}
+    collection_centers::Vector
 end
 
 mutable struct CollectionCenter
@@ -48,10 +51,21 @@ mutable struct Plant
     storage_cost::Vector{Float64}
 end
 
+
+abstract type DistanceMetric end
+
+Base.@kwdef mutable struct KnnDrivingDistance <: DistanceMetric
+    tree = nothing
+    ratios = nothing
+end
+
+mutable struct EuclideanDistance <: DistanceMetric end
+
 mutable struct Instance
     time::Int64
     products::Vector{Product}
     collection_centers::Vector{CollectionCenter}
     plants::Vector{Plant}
     building_period::Vector{Int64}
+    distance_metric::DistanceMetric
 end

@@ -4,20 +4,24 @@
 
 module RELOG
 
-include("instance/structs.jl")
+using Pkg
 
+version() = Pkg.dependencies()[Base.UUID("a2afcdf7-cf04-4913-85f9-c0d81ddf2008")].version
+
+include("instance/structs.jl")
 include("graph/structs.jl")
 
+include("instance/geodb.jl")
+include("graph/dist.jl")
 include("graph/build.jl")
 include("graph/csv.jl")
 include("instance/compress.jl")
-include("instance/geodb.jl")
 include("instance/parse.jl")
 include("instance/validate.jl")
 include("model/build.jl")
 include("model/getsol.jl")
-include("model/solve.jl")
 include("model/resolve.jl")
+include("model/solve.jl")
 include("reports/plant_emissions.jl")
 include("reports/plant_outputs.jl")
 include("reports/plants.jl")

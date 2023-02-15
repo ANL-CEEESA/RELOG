@@ -2,14 +2,6 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-using Geodesy
-
-function calculate_distance(source_lat, source_lon, dest_lat, dest_lon)::Float64
-    x = LLA(source_lat, source_lon, 0.0)
-    y = LLA(dest_lat, dest_lon, 0.0)
-    return round(euclidean_distance(x, y) / 1000.0, digits = 2)
-end
-
 function build_graph(instance::Instance)::Graph
     arcs = []
     next_index = 0
@@ -18,6 +10,7 @@ function build_graph(instance::Instance)::Graph
     collection_shipping_nodes = ShippingNode[]
 
     name_to_process_node_map = Dict{Tuple{AbstractString,AbstractString},ProcessNode}()
+    collection_center_to_node = Dict()
 
     process_nodes_by_input_product =
         Dict(product => ProcessNode[] for product in instance.products)
@@ -27,6 +20,7 @@ function build_graph(instance::Instance)::Graph
     for center in instance.collection_centers
         node = ShippingNode(next_index, center, center.product, [], [])
         next_index += 1
+        collection_center_to_node[center] = node
         push!(collection_shipping_nodes, node)
     end
 
@@ -50,11 +44,12 @@ function build_graph(instance::Instance)::Graph
     # Build arcs from collection centers to plants, and from one plant to another
     for source in [collection_shipping_nodes; plant_shipping_nodes]
         for dest in process_nodes_by_input_product[source.product]
-            distance = calculate_distance(
+            distance = _calculate_distance(
                 source.location.latitude,
                 source.location.longitude,
                 dest.location.latitude,
                 dest.location.longitude,
+                instance.distance_metric,
             )
             values = Dict("distance" => distance)
             arc = Arc(source, dest, values)
@@ -83,6 +78,7 @@ function build_graph(instance::Instance)::Graph
         collection_shipping_nodes,
         arcs,
         name_to_process_node_map,
+        collection_center_to_node,
     )
 end
 

@@ -154,6 +154,7 @@ Report showing primary product amounts, locations and marginal costs. Generated 
 | `longitude (deg)` | Longitude of the collection center.
 | `year`  | What year this row corresponds to. This reports includes one row for each year.
 | `amount (tonne)` | Amount of product available at this collection center.
+| `amount disposed (tonne)` | Amount of product disposed of at this collection center.
 | `marginal cost ($/tonne)` | Cost to process one additional tonne of this product coming from this collection center.
 
 

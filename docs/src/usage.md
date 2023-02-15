@@ -7,13 +7,7 @@ To use RELOG, the first step is to install the [Julia programming language](http
 
 ```julia
 using Pkg
-Pkg.add(name="RELOG", version="0.5")
-```
-
-After the package and all its dependencies have been installed, please run the RELOG test suite, as shown below, to make sure that the package has been correctly installed:
-
-```julia
-Pkg.test("RELOG")
+Pkg.add(name="RELOG", version="0.6")
 ```
 
 ## 2. Modeling the problem

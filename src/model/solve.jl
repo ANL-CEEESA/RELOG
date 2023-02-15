@@ -14,14 +14,14 @@ end
 
 
 function _print_graph_stats(instance::Instance, graph::Graph)::Nothing
-    @info @sprintf("    %12d time periods", instance.time)
-    @info @sprintf("    %12d process nodes", length(graph.process_nodes))
-    @info @sprintf("    %12d shipping nodes (plant)", length(graph.plant_shipping_nodes))
+    @info @sprintf("%12d time periods", instance.time)
+    @info @sprintf("%12d process nodes", length(graph.process_nodes))
+    @info @sprintf("%12d shipping nodes (plant)", length(graph.plant_shipping_nodes))
     @info @sprintf(
-        "    %12d shipping nodes (collection)",
+        "%12d shipping nodes (collection)",
         length(graph.collection_shipping_nodes)
     )
-    @info @sprintf("    %12d arcs", length(graph.arcs))
+    @info @sprintf("%12d arcs", length(graph.arcs))
     return
 end
 

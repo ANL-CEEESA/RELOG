@@ -20,12 +20,16 @@ function create_vars!(model::JuMP.Model)
     graph, T = model[:graph], model[:instance].time
     model[:flow] =
         Dict((a, t) => @variable(model, lower_bound = 0) for a in graph.arcs, t = 1:T)
-    model[:dispose] = Dict(
+    model[:plant_dispose] = Dict(
         (n, t) => @variable(
             model,
             lower_bound = 0,
             upper_bound = n.location.disposal_limit[n.product][t]
         ) for n in values(graph.plant_shipping_nodes), t = 1:T
+    )
+    model[:collection_dispose] = Dict(
+        (n, t) => @variable(model, lower_bound = 0,) for
+        n in values(graph.collection_shipping_nodes), t = 1:T
     )
     model[:store] = Dict(
         (n, t) =>
@@ -131,14 +135,25 @@ function create_objective_function!(model::JuMP.Model)
         end
     end
 
-    # Shipping node costs
+    # Plant shipping node costs
     for n in values(graph.plant_shipping_nodes), t = 1:T
 
         # Disposal costs
         add_to_expression!(
             obj,
             n.location.disposal_cost[n.product][t],
-            model[:dispose][n, t],
+            model[:plant_dispose][n, t],
+        )
+    end
+
+    # Collection shipping node costs
+    for n in values(graph.collection_shipping_nodes), t = 1:T
+
+        # Disposal costs
+        add_to_expression!(
+            obj,
+            n.location.product.disposal_cost[t],
+            model[:collection_dispose][n, t],
         )
     end
 
@@ -154,8 +169,20 @@ function create_shipping_node_constraints!(model::JuMP.Model)
         for n in graph.collection_shipping_nodes
             model[:eq_balance][n, t] = @constraint(
                 model,
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) == n.location.amount[t]
+                sum(model[:flow][a, t] for a in n.outgoing_arcs) ==
+                n.location.amount[t] + model[:collection_dispose][n, t]
             )
+        end
+        for prod in model[:instance].products
+            if isempty(prod.collection_centers)
+                continue
+            end
+            expr = AffExpr()
+            for center in prod.collection_centers
+                n = graph.collection_center_to_node[center]
+                add_to_expression!(expr, model[:collection_dispose][n, t])
+            end
+            @constraint(model, expr <= prod.disposal_limit[t])
         end
 
         # Plants
@@ -163,7 +190,8 @@ function create_shipping_node_constraints!(model::JuMP.Model)
             @constraint(
                 model,
                 sum(model[:flow][a, t] for a in n.incoming_arcs) ==
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) + model[:dispose][n, t]
+                sum(model[:flow][a, t] for a in n.outgoing_arcs) +
+                model[:plant_dispose][n, t]
             )
         end
     end

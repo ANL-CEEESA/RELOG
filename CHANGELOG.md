@@ -11,6 +11,13 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
+## [0.6.0] -- 2022-12-15
+### Added
+- Allow RELOG to calculate approximate driving distances, instead of just straight-line distances between points.
+
+### Fixed
+- Fix bug that caused building period parameter to be ignored
+
 ## [0.5.2] -- 2022-08-26
 ### Changed
 - Update to JuMP 1.x

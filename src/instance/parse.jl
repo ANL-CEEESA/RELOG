@@ -23,8 +23,20 @@ function parse(json)::Instance
     validate(json, Schema(json_schema))
 
     building_period = [1]
-    if "building period (years)" in keys(json)
-        building_period = json["building period (years)"]
+    if "building period (years)" in keys(json["parameters"])
+        building_period = json["parameters"]["building period (years)"]
+    end
+
+    distance_metric = EuclideanDistance()
+    if "distance metric" in keys(json["parameters"])
+        metric_name = json["parameters"]["distance metric"]
+        if metric_name == "driving"
+            distance_metric = KnnDrivingDistance()
+        elseif metric_name == "Euclidean"
+            # nop
+        else
+            error("Unknown distance metric: $metric_name")
+        end
     end
 
     plants = Plant[]
@@ -37,6 +49,8 @@ function parse(json)::Instance
         cost = product_dict["transportation cost (\$/km/tonne)"]
         energy = zeros(T)
         emissions = Dict()
+        disposal_limit = zeros(T)
+        disposal_cost = zeros(T)
 
         if "transportation energy (J/km/tonne)" in keys(product_dict)
             energy = product_dict["transportation energy (J/km/tonne)"]
@@ -46,7 +60,25 @@ function parse(json)::Instance
             emissions = product_dict["transportation emissions (tonne/km/tonne)"]
         end
 
-        product = Product(product_name, cost, energy, emissions)
+        if "disposal limit (tonne)" in keys(product_dict)
+            disposal_limit = product_dict["disposal limit (tonne)"]
+        end
+
+        if "disposal cost (\$/tonne)" in keys(product_dict)
+            disposal_cost = product_dict["disposal cost (\$/tonne)"]
+        end
+
+        prod_centers = []
+
+        product = Product(
+            product_name,
+            cost,
+            energy,
+            emissions,
+            disposal_limit,
+            disposal_cost,
+            prod_centers,
+        )
         push!(products, product)
         prod_name_to_product[product_name] = product
 
@@ -66,6 +98,7 @@ function parse(json)::Instance
                     product,
                     center_dict["amount (tonne)"],
                 )
+                push!(prod_centers, center)
                 push!(collection_centers, center)
             end
         end
@@ -176,5 +209,12 @@ function parse(json)::Instance
     @info @sprintf("%12d collection centers", length(collection_centers))
     @info @sprintf("%12d candidate plant locations", length(plants))
 
-    return Instance(T, products, collection_centers, plants, building_period)
+    return Instance(
+        T,
+        products,
+        collection_centers,
+        plants,
+        building_period,
+        distance_metric,
+    )
 end
