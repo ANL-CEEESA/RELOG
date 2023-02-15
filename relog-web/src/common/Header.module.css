@@ -1,0 +1,28 @@
+.HeaderBox {
+  background-color: white;
+  border-bottom: var(--box-border);
+  box-shadow: var(--box-shadow);
+  padding: 0;
+  margin: 0;
+}
+
+.HeaderContent {
+  margin: 0 auto;
+  max-width: var(--site-width);
+}
+
+.HeaderContent h1,
+.HeaderContent h2 {
+  line-height: 48px;
+  font-size: 28px;
+  padding: 12px;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.HeaderContent h2 {
+  font-size: 22px;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.6);
+}

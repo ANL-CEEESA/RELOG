@@ -12,3 +12,7 @@ Manifest.toml
 data
 build
 benchmark
+run.jl
+relog-web-legacy
+.vscode
+jobs

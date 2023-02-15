@@ -1,0 +1,19 @@
+.files a {
+  display: block;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--primary);
+}
+
+.files a:hover {
+  background-color: var(--primary);
+  color: white;
+  border-radius: var(--border-radius);
+}
+
+.nodata {
+  text-align: center;
+  padding: 24px 0;
+  color: #888;
+  margin: 0;
+}
