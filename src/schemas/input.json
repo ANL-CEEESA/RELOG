@@ -14,6 +14,9 @@
             "properties": {
                 "time horizon (years)": {
                     "type": "number"
+                },
+                "distance metric": {
+                    "type": "string"
                 }
             },
             "required": [

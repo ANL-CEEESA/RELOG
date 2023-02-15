@@ -21,7 +21,7 @@ using RELOG
     @test node.outgoing_arcs[1].source.location.name == "C1"
     @test node.outgoing_arcs[1].dest.location.plant_name == "F1"
     @test node.outgoing_arcs[1].dest.location.location_name == "L1"
-    @test node.outgoing_arcs[1].values["distance"] == 1095.62
+    @test node.outgoing_arcs[1].values["distance"] == 1695.364
 
     node = process_node_by_location_name["L1"]
     @test node.location.plant_name == "F1"

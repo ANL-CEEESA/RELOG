@@ -11,9 +11,10 @@ RELOG accepts as input a JSON file with three sections: `parameters`, `products`
 The **parameters** section describes details about the simulation itself.
 
 | Key                       | Description
-|:--------------------------|---------------|
+|:--------------------------|:---------------|
 |`time horizon (years)`     | Number of years in the simulation.
 |`building period (years)`  | List of years in which we are allowed to open new plants. For example, if this parameter is set to `[1,2,3]`, we can only open plants during the first three years. By default, this equals `[1]`; that is, plants can only be opened during the first year. |
+|`distance metric` | Metric used to compute distances between pairs of locations. Valid options are: `"Euclidean"`, for the straight-line distance between points; or `"driving"` for an approximated driving distance. If not specified, defaults to `"Euclidean"`.
 
 
 #### Example
@@ -21,7 +22,8 @@ The **parameters** section describes details about the simulation itself.
 {
     "parameters": {
         "time horizon (years)": 2,
-        "building period (years)": [1]
+        "building period (years)": [1],
+        "distance metric": "driving",
     }
 }
 ```
@@ -31,7 +33,7 @@ The **parameters** section describes details about the simulation itself.
 The **products** section describes all products and subproducts in the simulation. The field `instance["Products"]` is a dictionary mapping the name of the product to a dictionary which describes its characteristics. Each product description contains the following keys:
 
 | Key                                   | Description
-|:--------------------------------------|---------------|
+|:--------------------------------------|:---------------|
 |`transportation cost ($/km/tonne)`     | The cost to transport this product. Must be a time series.
 |`transportation energy (J/km/tonne)`   | The energy required to transport this product. Must be a time series. Optional.
 |`transportation emissions (tonne/km/tonne)`  | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.
@@ -42,7 +44,7 @@ The **products** section describes all products and subproducts in the simulatio
 Each product may have some amount available at the beginning of each time period. In this case, the key `initial amounts` maps to a dictionary with the following keys:
 
 | Key                     | Description
-|:------------------------|---------------|
+|:------------------------|:---------------|
 | `latitude (deg)`        | The latitude of the location.
 | `longitude (deg)`       | The longitude of the location.
 | `amount (tonne)`       | The amount of the product initially available at the location. Must be a time series.
@@ -97,7 +99,7 @@ Each product may have some amount available at the beginning of each time period
 The **plants** section describes the available types of reverse manufacturing plants, their potential locations and associated costs, as well as their inputs and outputs. The field `instance["Plants"]` is a dictionary mapping the name of the plant to a dictionary with the following keys:
 
 | Key                     | Description
-|:------------------------|---------------|
+|:------------------------|:---------------|
 | `input`                 | The name of the product that this plant takes as input. Only one input is accepted per plant.
 | `outputs (tonne/tonne)`               | A dictionary specifying how many tonnes of each product is produced for each tonnes of input. For example, if the plant outputs 0.5 tonnes of P2 and 0.25 tonnes of P3 for each tonnes of P1 provided, then this entry should be `{"P2": 0.5, "P3": 0.25}`. If the plant does not output anything, this key may be omitted.
 |`energy (GJ/tonne)`   | The energy required to process 1 tonne of the input. Must be a time series. Optional.
@@ -117,14 +119,14 @@ Each type of plant is associated with a set of potential locations where it can 
 The `storage` dictionary should contain the following keys:
 
 | Key                     | Description
-|:------------------------|---------------|
+|:------------------------|:---------------|
 | `cost ($/tonne)`       | The cost to store a tonne of input product for one time period. Must be a time series.
 | `limit (tonne)`        | The maximum amount of input product this plant can have in storage at any given time.
 
 The keys in the `disposal` dictionary should be the names of the products. The values are dictionaries with the following keys:
 
 | Key                     | Description
-|:------------------------|---------------|
+|:------------------------|:---------------|
 | `cost ($/tonne)`       | The cost to dispose of the product. Must be a time series.
 | `limit (tonne)`        | The maximum amount that can be disposed of. If an unlimited amount can be disposed, this key may be omitted. Must be a time series.
 
@@ -132,7 +134,7 @@ The keys in the `disposal` dictionary should be the names of the products. The v
 The keys in the `capacities (tonne)` dictionary should be the amounts (in tonnes). The values are dictionaries with the following keys:
 
 | Key                                   | Description
-|:--------------------------------------|---------------|
+|:--------------------------------------|:---------------|
 | `opening cost ($)`                    | The cost to open a plant of this size.
 | `fixed operating cost ($)`            | The cost to keep the plant open, even if the plant doesn't process anything. Must be a time series.
 | `variable operating cost ($/tonne)`  | The cost that the plant incurs to process each tonne of input. Must be a time series.
@@ -214,7 +216,7 @@ is is possible to write:
 Location names follow the format `db:id`, where `db` is the name of the database and `id` is the identifier for a specific location. RELOG currently includes the following databases:
 
 Database | Description | Examples
----------|-------------|----------
+:--------|:------------|:---------
 `us-state`| List of states of the United States. | `us-state:IL` (State of Illinois)
 `2018-us-county` | List of United States counties, as of 2018. IDs are 5-digit FIPS codes. | `2018-us-county:17043` (DuPage county in Illinois)
 
@@ -224,6 +226,7 @@ Database | Description | Examples
 * Plants can be expanded at any time, even long after they are open.
 * All material available at the beginning of a time period must be entirely processed by the end of that time period. It is not possible to store unprocessed materials from one time period to the next.
 * Up to two plant sizes are currently supported. Variable operating costs must be the same for all plant sizes.
+* Accurate driving distances are only available for the continental United States.
 
 ## Output Data Format (JSON)
 

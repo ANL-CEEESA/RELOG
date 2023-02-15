@@ -51,10 +51,21 @@ mutable struct Plant
     storage_cost::Vector{Float64}
 end
 
+
+abstract type DistanceMetric end
+
+Base.@kwdef mutable struct KnnDrivingDistance <: DistanceMetric
+    tree = nothing
+    ratios = nothing
+end
+
+mutable struct EuclideanDistance <: DistanceMetric end
+
 mutable struct Instance
     time::Int64
     products::Vector{Product}
     collection_centers::Vector{CollectionCenter}
     plants::Vector{Plant}
     building_period::Vector{Int64}
+    distance_metric::DistanceMetric
 end

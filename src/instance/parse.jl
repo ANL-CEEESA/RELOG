@@ -23,8 +23,20 @@ function parse(json)::Instance
     validate(json, Schema(json_schema))
 
     building_period = [1]
-    if "building period (years)" in keys(json)
-        building_period = json["building period (years)"]
+    if "building period (years)" in keys(json["parameters"])
+        building_period = json["parameters"]["building period (years)"]
+    end
+
+    distance_metric = EuclideanDistance()
+    if "distance metric" in keys(json["parameters"])
+        metric_name = json["parameters"]["distance metric"]
+        if metric_name == "driving"
+            distance_metric = KnnDrivingDistance()
+        elseif metric_name == "Euclidean"
+            # nop
+        else
+            error("Unknown distance metric: $metric_name")
+        end
     end
 
     plants = Plant[]
@@ -197,5 +209,12 @@ function parse(json)::Instance
     @info @sprintf("%12d collection centers", length(collection_centers))
     @info @sprintf("%12d candidate plant locations", length(plants))
 
-    return Instance(T, products, collection_centers, plants, building_period)
+    return Instance(
+        T,
+        products,
+        collection_centers,
+        plants,
+        building_period,
+        distance_metric,
+    )
 end
