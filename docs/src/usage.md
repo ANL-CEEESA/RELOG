@@ -10,12 +10,6 @@ using Pkg
 Pkg.add(name="RELOG", version="0.6")
 ```
 
-After the package and all its dependencies have been installed, please run the RELOG test suite, as shown below, to make sure that the package has been correctly installed:
-
-```julia
-Pkg.test("RELOG")
-```
-
 ## 2. Modeling the problem
 
 The two main model components in RELOG are **products** and **plants**.
