@@ -14,27 +14,21 @@ function solve(root, filename)
     )
     ref_solution, ref_model = RELOG.solve(
         ref_file,
-        heuristic=true,
-        optimizer=optimizer,
-        lp_optimizer=HiGHS.Optimizer,
-        return_model=true,
-        marginal_costs=true,
+        heuristic = true,
+        optimizer = optimizer,
+        lp_optimizer = HiGHS.Optimizer,
+        return_model = true,
+        marginal_costs = true,
     )
     Libc.flush_cstdio()
     flush(stdout)
     sleep(1)
-    
+
     if length(ref_solution) == 0
         return
     end
-    RELOG.write_products_report(
-        ref_solution,
-        replace(ref_file, ".json" => "_products.csv"),
-    )
-    RELOG.write_plants_report(
-        ref_solution,
-        replace(ref_file, ".json" => "_plants.csv"),
-    )
+    RELOG.write_products_report(ref_solution, replace(ref_file, ".json" => "_products.csv"))
+    RELOG.write_plants_report(ref_solution, replace(ref_file, ".json" => "_plants.csv"))
     RELOG.write_plant_outputs_report(
         ref_solution,
         replace(ref_file, ".json" => "_plant_outputs.csv"),
@@ -43,10 +37,7 @@ function solve(root, filename)
         ref_solution,
         replace(ref_file, ".json" => "_plant_emissions.csv"),
     )
-    RELOG.write_transportation_report(
-        ref_solution,
-        replace(ref_file, ".json" => "_tr.csv"),
-    )
+    RELOG.write_transportation_report(ref_solution, replace(ref_file, ".json" => "_tr.csv"))
     RELOG.write_transportation_emissions_report(
         ref_solution,
         replace(ref_file, ".json" => "_tr_emissions.csv"),
@@ -60,16 +51,13 @@ function solve(root, filename)
         sc_solution = RELOG.resolve(
             ref_model,
             scenario,
-            optimizer=optimizer,
-            lp_optimizer=HiGHS.Optimizer,
+            optimizer = optimizer,
+            lp_optimizer = HiGHS.Optimizer,
         )
         if length(sc_solution) == 0
             return
         end
-        RELOG.write_plants_report(
-            sc_solution,
-            replace(scenario, ".json" => "_plants.csv"),
-        )
+        RELOG.write_plants_report(sc_solution, replace(scenario, ".json" => "_plants.csv"))
         RELOG.write_products_report(
             sc_solution,
             replace(scenario, ".json" => "_products.csv"),
@@ -114,10 +102,7 @@ function solve_recursive(path)
             endswith(filename, "_plants.csv") || continue
             push!(
                 results,
-                joinpath(
-                    replace(root, path => ""),
-                    replace(filename, "_plants.csv" => ""),
-                ),
+                joinpath(replace(root, path => ""), replace(filename, "_plants.csv" => "")),
             )
         end
     end

@@ -41,7 +41,7 @@ function solve(
         else
             # If only MIP optimizer is provided, use it as
             # LP solver too.
-            lp_optimizer = optimizer 
+            lp_optimizer = optimizer
         end
     end
 
@@ -103,7 +103,7 @@ function solve(filename::AbstractString; heuristic = false, kwargs...)
             return_model = true,
             output = nothing,
             marginal_costs = false,
-            kwargs...
+            kwargs...,
         )
         @info "Filtering candidate locations..."
         selected_pairs = []

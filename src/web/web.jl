@@ -32,11 +32,11 @@ function submit(req::HTTP.Request)
     end
 
     # Run job
-    run(`bash -c "(julia --project=$PROJECT_DIR $PROJECT_DIR/src/web/run.jl $job_path 2>&1 | tee $job_path/solve.log) >/dev/null 2>&1 &"`)
-
-    response = Dict(
-        "job_id" => job_id,
+    run(
+        `bash -c "(julia --project=$PROJECT_DIR $PROJECT_DIR/src/web/run.jl $job_path 2>&1 | tee $job_path/solve.log) >/dev/null 2>&1 &"`,
     )
+
+    response = Dict("job_id" => job_id)
     return HTTP.Response(200, body = JSON.json(response))
 end
 
@@ -63,4 +63,3 @@ function web(host = "127.0.0.1", port = 8080)
     HTTP.serve(ROUTER, host, port)
     Base.exit_on_sigint(true)
 end
-
