@@ -4,6 +4,10 @@
 
 module RELOG
 
+using Pkg
+
+version() = Pkg.dependencies()[Base.UUID("a2afcdf7-cf04-4913-85f9-c0d81ddf2008")].version
+
 include("instance/structs.jl")
 include("graph/structs.jl")
 
@@ -25,4 +29,5 @@ include("reports/products.jl")
 include("reports/tr_emissions.jl")
 include("reports/tr.jl")
 include("reports/write.jl")
+
 end
