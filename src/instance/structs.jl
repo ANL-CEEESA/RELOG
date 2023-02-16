@@ -15,6 +15,7 @@ mutable struct Product
     transportation_emissions::Dict{String,Vector{Float64}}
     disposal_limit::Vector{Float64}
     disposal_cost::Vector{Float64}
+    acquisition_cost::Vector{Float64}
     collection_centers::Vector
 end
 

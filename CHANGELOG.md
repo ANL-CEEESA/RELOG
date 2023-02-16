@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Allow disposal at collection centers
+- Allow user to specify product acquisition costs
 
 ### Changed
 - Switch from Cbc/Clp to HiGHS

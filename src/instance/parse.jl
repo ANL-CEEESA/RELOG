@@ -51,6 +51,7 @@ function parse(json)::Instance
         emissions = Dict()
         disposal_limit = zeros(T)
         disposal_cost = zeros(T)
+        acquisition_cost = zeros(T)
 
         if "transportation energy (J/km/tonne)" in keys(product_dict)
             energy = product_dict["transportation energy (J/km/tonne)"]
@@ -68,6 +69,10 @@ function parse(json)::Instance
             disposal_cost = product_dict["disposal cost (\$/tonne)"]
         end
 
+        if "acquisition cost (\$/tonne)" in keys(product_dict)
+            acquisition_cost = product_dict["acquisition cost (\$/tonne)"]
+        end
+
         prod_centers = []
 
         product = Product(
@@ -77,6 +82,7 @@ function parse(json)::Instance
             emissions,
             disposal_limit,
             disposal_cost,
+            acquisition_cost,
             prod_centers,
         )
         push!(products, product)

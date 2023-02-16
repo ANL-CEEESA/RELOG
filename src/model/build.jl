@@ -149,10 +149,16 @@ function create_objective_function!(model::JuMP.Model)
     # Collection shipping node costs
     for n in values(graph.collection_shipping_nodes), t = 1:T
 
-        # Disposal costs
+        # Acquisition costs
         add_to_expression!(
             obj,
-            n.location.product.disposal_cost[t],
+            n.location.product.acquisition_cost[t] * n.location.amount[t]
+        )
+
+        # Disposal costs -- in this case, we recover the acquisition cost.
+        add_to_expression!(
+            obj,
+            (n.location.product.disposal_cost[t] - n.location.product.acquisition_cost[t]),
             model[:collection_dispose][n, t],
         )
     end

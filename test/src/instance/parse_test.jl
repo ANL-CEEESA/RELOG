@@ -43,10 +43,12 @@ function instance_parse_test()
         p1 = product_name_to_product["P1"]
         @test p1.disposal_limit == [1.0, 1.0]
         @test p1.disposal_cost == [-1000.0, -1000.0]
+        @test p1.acquisition_cost == [0.5, 0.5]
 
         p2 = product_name_to_product["P2"]
         @test p2.disposal_limit == [0.0, 0.0]
         @test p2.disposal_cost == [0.0, 0.0]
+        @test p2.acquisition_cost == [0.0, 0.0]
 
         p3 = product_name_to_product["P3"]
         @test length(plant.output) == 2

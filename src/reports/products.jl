@@ -15,6 +15,8 @@ function products_report(solution; marginal_costs = true)::DataFrame
     df."amount (tonne)" = Float64[]
     df."amount disposed (tonne)" = Float64[]
     df."marginal cost (\$/tonne)" = Float64[]
+    df."acquisition cost (\$)" = Float64[]
+    df."disposal cost (\$)" = Float64[]
     T = length(solution["Energy"]["Plants (GJ)"])
     for (prod_name, prod_dict) in solution["Products"]
         for (location_name, location_dict) in prod_dict
@@ -24,6 +26,8 @@ function products_report(solution; marginal_costs = true)::DataFrame
                 longitude = round(location_dict["Longitude (deg)"], digits = 6)
                 amount = location_dict["Amount (tonne)"][year]
                 amount_disposed = location_dict["Dispose (tonne)"][year]
+                acquisition_cost = location_dict["Acquisition cost (\$)"][year]
+                disposal_cost = location_dict["Disposal cost (\$)"][year]
                 push!(
                     df,
                     [
@@ -35,6 +39,8 @@ function products_report(solution; marginal_costs = true)::DataFrame
                         amount,
                         marginal_cost,
                         amount_disposed,
+                        acquisition_cost,
+                        disposal_cost,
                     ],
                 )
             end

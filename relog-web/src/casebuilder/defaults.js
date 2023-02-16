@@ -1,5 +1,6 @@
 export const defaultProduct = {
   "initial amounts": {},
+  "acquisition cost ($/tonne)": "0",
   "disposal cost ($/tonne)": "0",
   "disposal limit (tonne)": "0",
   "disposal limit (%)": "",

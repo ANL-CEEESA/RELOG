@@ -15,5 +15,3 @@ function make()
         )
     )
 end
-
-make()

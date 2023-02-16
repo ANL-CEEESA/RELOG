@@ -139,12 +139,14 @@ export const exportProduct = (original, parameters) => {
   );
 
   // Copy cost time series (with inflation)
-  ["disposal cost ($/tonne)", "transportation cost ($/km/tonne)"].forEach(
-    (key) => {
-      const v = exportValue(original[key], T, R);
-      if (v.length > 0) result[key] = v;
-    }
-  );
+  [
+    "disposal cost ($/tonne)",
+    "acquisition cost ($/tonne)",
+    "transportation cost ($/km/tonne)",
+  ].forEach((key) => {
+    const v = exportValue(original[key], T, R);
+    if (v.length > 0) result[key] = v;
+  });
 
   // Copy dictionaries
   ["transportation emissions (tonne/km/tonne)"].forEach((key) => {
@@ -344,16 +346,19 @@ export const importProduct = (original) => {
   const [R, T] = computeInflationAndTimeHorizon(original, [
     "transportation cost ($/km/tonne)",
     "disposal cost ($/tonne)",
+    "acquisition cost ($/tonne)",
   ]);
   parameters["inflation rate (%)"] = String((R - 1) * 100);
   parameters["time horizon (years)"] = String(T);
 
   // Import cost lists
-  ["transportation cost ($/km/tonne)", "disposal cost ($/tonne)"].forEach(
-    (key) => {
-      prod[key] = importList(original[key], R);
-    }
-  );
+  [
+    "transportation cost ($/km/tonne)",
+    "disposal cost ($/tonne)",
+    "acquisition cost ($/tonne)",
+  ].forEach((key) => {
+    prod[key] = importList(original[key], R);
+  });
 
   // Import dicts
   ["transportation emissions (tonne/km/tonne)"].forEach((key) => {

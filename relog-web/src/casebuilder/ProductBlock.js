@@ -118,9 +118,17 @@ const ProductBlock = (props) => {
           />
 
           <h1 style={{ display: nCenters == 0 ? "none" : "block" }}>
-            Disposal
+            Acquisition & disposal
           </h1>
           <div style={{ display: nCenters == 0 ? "none" : "block" }}>
+            <TextInputRow
+              label="Acquisition cost"
+              unit="$/tonne"
+              tooltip="Cost of acquiring one tonne of this product at a collection center."
+              value={props.value["acquisition cost ($/tonne)"]}
+              onChange={(v) => onChange("acquisition cost ($/tonne)", v)}
+              validate="floatList"
+            />
             <TextInputRow
               label="Disposal cost"
               unit="$/tonne"
