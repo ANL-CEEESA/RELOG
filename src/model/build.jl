@@ -152,7 +152,7 @@ function create_objective_function!(model::JuMP.Model)
         # Acquisition costs
         add_to_expression!(
             obj,
-            n.location.product.acquisition_cost[t] * n.location.amount[t]
+            n.location.product.acquisition_cost[t] * n.location.amount[t],
         )
 
         # Disposal costs -- in this case, we recover the acquisition cost.
