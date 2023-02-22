@@ -63,11 +63,8 @@ const PlantBlock = (props) => {
     });
     const result = {};
     data.forEach((el) => {
-      result[el["name"]] = {
-        "latitude (deg)": el["latitude (deg)"],
-        "longitude (deg)": el["longitude (deg)"],
-        "area cost factor": el["area cost factor"],
-      };
+      let { name, ...props } = el;
+      result[name] = props;
     });
     onChange(result, "locations");
   };
@@ -79,9 +76,7 @@ const PlantBlock = (props) => {
     )) {
       result.push({
         name: locationName,
-        "latitude (deg)": locationDict["latitude (deg)"],
-        "longitude (deg)": locationDict["longitude (deg)"],
-        "area cost factor": locationDict["area cost factor"],
+        ...locationDict,
       });
     }
     generateFile(`Candidate locations - ${props.name}.csv`, csvFormat(result));
