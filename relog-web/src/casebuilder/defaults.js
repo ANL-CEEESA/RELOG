@@ -44,6 +44,7 @@ export const defaultData = {
     "time horizon (years)": "1",
     "building period (years)": "[1]",
     "inflation rate (%)": "0",
+    "distance metric": "Euclidean",
   },
   products: {},
   plants: {},

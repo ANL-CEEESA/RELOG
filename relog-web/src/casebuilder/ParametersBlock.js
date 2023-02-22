@@ -37,6 +37,13 @@ const ParametersBlock = (props) => {
             onChange={(v) => onChangeField("inflation rate (%)", v)}
             validate="float"
           />
+          <TextInputRow
+            label="Distance metric"
+            tooltip="Metric used to compute distances between pairs of locations. Valid options are: 'Euclidean', for the straight-line distance between points; or 'driving' for an approximated driving distance."
+            value={props.value["distance metric"]}
+            onChange={(v) => onChangeField("distance metric", v)}
+            default="Euclidean"
+          />
         </Form>
       </Card>
     </>

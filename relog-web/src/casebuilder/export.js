@@ -26,7 +26,7 @@ export const exportValue = (original, T, R = 1, data = {}) => {
       return evaluateExpr(original.toString(), data);
     }
   } catch {
-    // ignore
+    // ignore;
   }
 
   try {
@@ -319,6 +319,14 @@ export const exportData = (original) => {
   ["time horizon (years)", "building period (years)"].forEach((key) => {
     result.parameters[key] = exportValue(original.parameters[key]);
   });
+  ["distance metric"].forEach((key) => {
+    if (original.parameters[key].length > 0) {
+      result.parameters[key] = original.parameters[key];
+    }
+  });
+
+  console.log(original.parameters);
+  console.log(result.parameters);
 
   // Read time horizon
   let T = result.parameters["time horizon (years)"];
@@ -424,6 +432,11 @@ export const importPlant = (original) => {
     plant[key] = null;
   });
 
+  // Initialize defaults
+  if (!original["outputs (tonne/tonne)"]) {
+    original["outputs (tonne/tonne)"] = {};
+  }
+
   // Import scalar values
   ["input"].forEach((key) => {
     plant[key] = original[key];
@@ -443,7 +456,6 @@ export const importPlant = (original) => {
   });
 
   let costsInitialized = false;
-  let R = null;
 
   // Read locations
   const resLocDict = (plant.locations = {});
@@ -491,6 +503,14 @@ export const importPlant = (original) => {
     ]);
     parameters["inflation rate (%)"] = String((R - 1) * 100);
     parameters["time horizon (years)"] = String(T);
+
+    // Initialize defaults
+    if (!origLocDict.storage) {
+      origLocDict.storage = {
+        "cost ($/tonne)": new Array(T).fill(0),
+        "limit (tonne)": new Array(T).fill(0),
+      };
+    }
 
     // Read adjusted costs
     const importListAcf = (obj) =>
@@ -575,6 +595,9 @@ export const importData = (original) => {
   result.parameters = importDict(original.parameters);
   ["building period (years)"].forEach((k) => {
     result.parameters[k] = JSON.stringify(original.parameters[k]);
+  });
+  ["distance metric"].forEach((k) => {
+    result.parameters[k] = original.parameters[k];
   });
   result.parameters["inflation rate (%)"] = "0";
 
