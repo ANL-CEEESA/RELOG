@@ -1,3 +1,5 @@
+import { evaluateExpr } from "./expr";
+
 const isNumeric = (val) => {
   return String(val).length > 0 && !isNaN(val);
 };
@@ -10,10 +12,10 @@ const keysToList = (obj) => {
   return result;
 };
 
-export const exportValue = (original, T, R = 1) => {
-  if (isNumeric(original)) {
+export const exportValue = (original, T, R = 1, data = {}) => {
+  try {
     if (T) {
-      let v = parseFloat(original);
+      let v = evaluateExpr(original.toString(), data);
       const result = [];
       for (let i = 0; i < T; i++) {
         result.push(v);
@@ -21,8 +23,10 @@ export const exportValue = (original, T, R = 1) => {
       }
       return result;
     } else {
-      return parseFloat(original);
+      return evaluateExpr(original.toString(), data);
     }
+  } catch {
+    // ignore
   }
 
   try {
@@ -31,6 +35,7 @@ export const exportValue = (original, T, R = 1) => {
   } catch {
     // ignore
   }
+
   return original;
 };
 
@@ -199,18 +204,28 @@ export const exportPlant = (original, parameters) => {
     if (v) result[key] = v;
   });
 
-  const minCap = original["minimum capacity (tonne)"];
-  const maxCap = original["maximum capacity (tonne)"];
-
   result.locations = {};
   for (const [locName, origDict] of Object.entries(original["locations"])) {
+    const minCap = exportValue(
+      original["minimum capacity (tonne)"],
+      null,
+      null,
+      origDict
+    );
+    const maxCap = exportValue(
+      original["maximum capacity (tonne)"],
+      null,
+      null,
+      origDict
+    );
+
     const resDict = (result.locations[locName] = {});
     const capDict = (resDict["capacities (tonne)"] = {});
 
     const acf = origDict["area cost factor"];
 
-    const exportValueAcf = (obj) => {
-      const v = exportValue(obj, T, R);
+    const exportValueAcf = (obj, data = {}) => {
+      const v = exportValue(obj, T, R, data);
       if (Array.isArray(v)) {
         return v.map((v) => v * acf);
       }
@@ -229,7 +244,10 @@ export const exportPlant = (original, parameters) => {
       "fixed operating cost ($)": "fixed operating cost (min capacity) ($)",
       "variable operating cost ($/tonne)": "variable operating cost ($/tonne)",
     })) {
-      capDict[minCap][resKeyName] = exportValueAcf(original[origKeyName]);
+      capDict[minCap][resKeyName] = exportValueAcf(
+        original[origKeyName],
+        origDict
+      );
     }
 
     if (maxCap !== minCap) {
@@ -241,7 +259,10 @@ export const exportPlant = (original, parameters) => {
         "variable operating cost ($/tonne)":
           "variable operating cost ($/tonne)",
       })) {
-        capDict[maxCap][resKeyName] = exportValueAcf(original[origKeyName]);
+        capDict[maxCap][resKeyName] = exportValueAcf(
+          original[origKeyName],
+          origDict
+        );
       }
     }
 
@@ -251,23 +272,36 @@ export const exportPlant = (original, parameters) => {
       original["disposal cost ($/tonne)"]
     )) {
       if (dispName.length === 0) continue;
-      const v = exportValueAcf(dispCost, T);
+      const v = exportValueAcf(dispCost, origDict);
       if (v) {
         resDict.disposal[dispName] = { "cost ($/tonne)": v };
         const limit = original["disposal limit (tonne)"][dispName];
-        if (isNumeric(limit)) {
-          resDict.disposal[dispName]["limit (tonne)"] = exportValue(limit, T);
+        if (limit.length > 0) {
+          resDict.disposal[dispName]["limit (tonne)"] = exportValue(
+            limit,
+            T,
+            1,
+            origDict
+          );
         }
       }
     }
 
     // Copy storage
     resDict.storage = {
-      "cost ($/tonne)": exportValueAcf(original["storage"]["cost ($/tonne)"]),
+      "cost ($/tonne)": exportValueAcf(
+        original["storage"]["cost ($/tonne)"],
+        origDict
+      ),
     };
     const storLimit = original["storage"]["limit (tonne)"];
-    if (isNumeric(storLimit)) {
-      resDict.storage["limit (tonne)"] = exportValue(storLimit);
+    if (storLimit.length > 0) {
+      resDict.storage["limit (tonne)"] = exportValue(
+        storLimit,
+        null,
+        1,
+        origDict
+      );
     }
   }
 

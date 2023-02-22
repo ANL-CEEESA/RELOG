@@ -124,7 +124,6 @@ const PlantBlock = (props) => {
             value={props.value["outputs (tonne/tonne)"]}
             onChange={(v) => onChange(v, "outputs (tonne/tonne)")}
             disableKeys={true}
-            validate="float"
           />
 
           <h1>Capacity & Costs</h1>
@@ -134,7 +133,6 @@ const PlantBlock = (props) => {
             tooltip="The minimum size of the plant."
             value={props.value["minimum capacity (tonne)"]}
             onChange={(v) => onChange(v, "minimum capacity (tonne)")}
-            validate="float"
           />
           <TextInputRow
             label="Opening cost (min capacity)"
@@ -142,7 +140,6 @@ const PlantBlock = (props) => {
             tooltip="The cost to open the plant at minimum capacity."
             value={props.value["opening cost (min capacity) ($)"]}
             onChange={(v) => onChange(v, "opening cost (min capacity) ($)")}
-            validate="float"
           />
           <TextInputRow
             label="Fixed operating cost (min capacity)"
@@ -152,7 +149,6 @@ const PlantBlock = (props) => {
             onChange={(v) =>
               onChange(v, "fixed operating cost (min capacity) ($)")
             }
-            validate="float"
           />
           <TextInputRow
             label="Maximum capacity"
@@ -160,7 +156,6 @@ const PlantBlock = (props) => {
             tooltip="The maximum size of the plant."
             value={props.value["maximum capacity (tonne)"]}
             onChange={(v) => onChange(v, "maximum capacity (tonne)")}
-            validate="float"
           />
           <TextInputRow
             label="Opening cost (max capacity)"
@@ -172,7 +167,6 @@ const PlantBlock = (props) => {
                 : props.value["opening cost (max capacity) ($)"]
             }
             onChange={(v) => onChange(v, "opening cost (max capacity) ($)")}
-            validate="float"
             disabled={shouldDisableMaxCap}
           />
           <TextInputRow
@@ -187,7 +181,6 @@ const PlantBlock = (props) => {
             onChange={(v) =>
               onChange(v, "fixed operating cost (max capacity) ($)")
             }
-            validate="float"
             disabled={shouldDisableMaxCap}
           />
           <TextInputRow
@@ -196,7 +189,6 @@ const PlantBlock = (props) => {
             tooltip="The cost that the plant incurs to process each tonne of input."
             value={props.value["variable operating cost ($/tonne)"]}
             onChange={(v) => onChange(v, "variable operating cost ($/tonne)")}
-            validate="float"
           />
           <TextInputRow
             label="Energy expenditure"
@@ -204,7 +196,6 @@ const PlantBlock = (props) => {
             tooltip="The energy required to process one tonne of the input."
             value={props.value["energy (GJ/tonne)"]}
             onChange={(v) => onChange(v, "energy (GJ/tonne)")}
-            validate="float"
           />
 
           <h1>Storage</h1>
@@ -214,7 +205,6 @@ const PlantBlock = (props) => {
             tooltip="The cost to store a tonne of input product for one time period."
             value={props.value["storage"]["cost ($/tonne)"]}
             onChange={(v) => onChange(v, "storage", "cost ($/tonne)")}
-            validate="float"
           />
           <TextInputRow
             label="Storage limit"
@@ -222,7 +212,6 @@ const PlantBlock = (props) => {
             tooltip="The maximum amount of input product this plant can have in storage at any given time."
             value={props.value["storage"]["limit (tonne)"]}
             onChange={(v) => onChange(v, "storage", "limit (tonne)")}
-            validate="float"
           />
 
           <h1>Disposal</h1>
@@ -233,7 +222,6 @@ const PlantBlock = (props) => {
             value={props.value["disposal cost ($/tonne)"]}
             onChange={(v) => onChange(v, "disposal cost ($/tonne)")}
             disableKeys={true}
-            validate="float"
           />
           <DictInputRow
             label="Disposal limit"
@@ -243,7 +231,6 @@ const PlantBlock = (props) => {
             onChange={(v) => onChange(v, "disposal limit (tonne)")}
             disableKeys={true}
             valuePlaceholder="Unlimited"
-            validate="float"
           />
 
           <h1>Emissions</h1>
@@ -255,7 +242,6 @@ const PlantBlock = (props) => {
             onChange={(v) => onChange(v, "emissions (tonne/tonne)")}
             keyPlaceholder="Emission name"
             valuePlaceholder="0"
-            validate="float"
           />
         </Form>
       </Card>
