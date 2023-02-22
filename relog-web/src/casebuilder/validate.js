@@ -18,6 +18,9 @@ const schema = {
         "time horizon (years)": {
           type: "number",
         },
+        "distance metric": {
+          type: "string",
+        },
       },
       required: ["time horizon (years)"],
     },
@@ -158,6 +161,15 @@ const schema = {
           },
           "initial amounts": {
             $ref: "#/definitions/InitialAmount",
+          },
+          "disposal limit (tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+          "disposal cost ($/tonne)": {
+            $ref: "#/definitions/TimeSeries",
+          },
+          "acquisition cost ($/tonne)": {
+            $ref: "#/definitions/TimeSeries",
           },
         },
         required: ["transportation cost ($/km/tonne)"],
