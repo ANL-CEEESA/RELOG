@@ -267,7 +267,12 @@ const InputPage = () => {
     const parsed = JSON.parse(contents);
     const valid = validate(parsed);
     if (valid) {
-      const newData = importData(parsed);
+      let newData = null;
+      if (parsed["case builder"]) {
+        newData = parsed["case builder"];
+      } else {
+        newData = importData(parsed);
+      }
       setData(newData);
       save(newData);
     } else {

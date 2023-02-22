@@ -333,6 +333,10 @@ export const exportData = (original) => {
   for (const [plantName, plantDict] of Object.entries(original.plants)) {
     result.plants[plantName] = exportPlant(plantDict, original.parameters);
   }
+
+  // Export original data
+  result["case builder"] = original;
+
   return result;
 };
 
