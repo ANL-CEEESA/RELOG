@@ -1,11 +1,10 @@
-VERSION := 0.6
+VERSION := 0.7
 PKG := ghcr.io/anl-ceeesa/relog-web
 
 clean:
 	rm -rfv build Manifest.toml test/Manifest.toml deps/formatter/build deps/formatter/Manifest.toml
 
 docs:
-	cd docs; julia --project=. make.jl; cd ..
 	rsync -avP --delete-after docs/build/ ../docs/$(VERSION)/
 	
 docker-build:

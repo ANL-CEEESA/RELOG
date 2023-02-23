@@ -1,5 +1,4 @@
-Usage
-=====
+# Usage
 
 ## 1. Installation
 
@@ -7,7 +6,7 @@ To use RELOG, the first step is to install the [Julia programming language](http
 
 ```julia
 using Pkg
-Pkg.add(name="RELOG", version="0.6")
+Pkg.add(name="RELOG", version="0.7")
 ```
 
 ## 2. Modeling the problem
@@ -16,21 +15,21 @@ The two main model components in RELOG are **products** and **plants**.
 
 A **product** is any material that needs to be recycled, any intermediary product produced during the recycling process, or any product recovered at the end of the process. For example, in a NiMH battery recycling study case, products could include (i) the original batteries to be recycled; (ii) the cathode and anode parts of the battery; (iii) rare-earth elements and (iv) scrap metals.
 
-* The model assumes that some products are initially available at user-specified locations (described by their latitude, longitude and the amount available), while other products only become available during the recycling process.
+- The model assumes that some products are initially available at user-specified locations (described by their latitude, longitude and the amount available), while other products only become available during the recycling process.
 
-* Products that are initially available must be sent to a plant for processing during the same time period they became available.
+- Products that are initially available must be sent to a plant for processing during the same time period they became available.
 
-* Transporting products from one location to another incurs a transportation cost (`$/km/tonne`), spends some amount of energy (`J/km/tonne`) and may generate multiple types of emissions (`tonne/tonne`). All these parameters are user-specified and may be product- and time-specific.
+- Transporting products from one location to another incurs a transportation cost (`$/km/tonne`), spends some amount of energy (`J/km/tonne`) and may generate multiple types of emissions (`tonne/tonne`). All these parameters are user-specified and may be product- and time-specific.
 
-A **plant** is a facility that converts one type of product to another. RELOG assumes that each plant receives a single type of product as input and converts this input into multiple types of products. Multiple types of plants, with different inputs, outputs and performance characteristics, may be specified. In the NiMH battery recycling study case, for example, one type of plant could be a *disassembly plant*, which converts *batteries* into *cathode* and *anode*. Another type of plant could be *anode recycling plant*, which converts *anode* into *rare-earth elements* and *scrap metals*.
+A **plant** is a facility that converts one type of product to another. RELOG assumes that each plant receives a single type of product as input and converts this input into multiple types of products. Multiple types of plants, with different inputs, outputs and performance characteristics, may be specified. In the NiMH battery recycling study case, for example, one type of plant could be a _disassembly plant_, which converts _batteries_ into _cathode_ and _anode_. Another type of plant could be _anode recycling plant_, which converts _anode_ into _rare-earth elements_ and _scrap metals_.
 
-* To process each tonne of input material, plants incur a variable operating cost (`$/tonne`), spend some amount of energy (`GJ/tonne`), and produce multiple types of emissions (`tonne/tonne`). Plants also incur a fixed operating cost (`$`) regardless of the amount of material they process. All these parameters are user-specified and may be region- and time-specific.
+- To process each tonne of input material, plants incur a variable operating cost (`$/tonne`), spend some amount of energy (`GJ/tonne`), and produce multiple types of emissions (`tonne/tonne`). Plants also incur a fixed operating cost (`$`) regardless of the amount of material they process. All these parameters are user-specified and may be region- and time-specific.
 
-* Plants can be built at user-specified potential locations. Opening a plant incurs a one-time opening cost (`$`) which may be region- and time-specific. Plants also have a limited capacity (in `tonne`), which indicates the maximum amount of input material they are able to process per year. When specifying potential locations for each type of plant, it is also possible to specify the minimum and maximum capacity of the plants that can be built at that particular location. Different plants sizes may have different opening costs and fixed operating costs. After a plant is built, it can be further expanded in the following years, up to its maximum capacity.
+- Plants can be built at user-specified potential locations. Opening a plant incurs a one-time opening cost (`$`) which may be region- and time-specific. Plants also have a limited capacity (in `tonne`), which indicates the maximum amount of input material they are able to process per year. When specifying potential locations for each type of plant, it is also possible to specify the minimum and maximum capacity of the plants that can be built at that particular location. Different plants sizes may have different opening costs and fixed operating costs. After a plant is built, it can be further expanded in the following years, up to its maximum capacity.
 
-* Products received by a plant can be either processed immediately or stored for later processing. Plants have a maximum storage capacity (`tonne`). Storage costs (`$/tonne`) can also be specified.
+- Products received by a plant can be either processed immediately or stored for later processing. Plants have a maximum storage capacity (`tonne`). Storage costs (`$/tonne`) can also be specified.
 
-* All products generated by a plant can either be sent to another plant for further processing, or disposed of locally for either a profit or a loss (`$/tonne`). To model environmental regulations, it is also possible to specify the maximum amount of each product that can be disposed of at each location.
+- All products generated by a plant can either be sent to another plant for further processing, or disposed of locally for either a profit or a loss (`$/tonne`). To model environmental regulations, it is also possible to specify the maximum amount of each product that can be disposed of at each location.
 
 All user parameters specified above must be provided to RELOG as a JSON file, which is fully described in the [data format page](format.md).
 
@@ -89,7 +88,6 @@ To use the `resolve` method, the new input file should be very similar to the or
 - **Plant's location:** Latitude and longitude.
 - **Plant's storage:** Cost.
 - **Plant's capacity:** Opening cost, fixed operating cost and variable operating cost.
-
 
 ## 5. Advanced options
 

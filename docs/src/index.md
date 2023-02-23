@@ -8,22 +8,24 @@
 </center>
 ```
 
-
 ### Table of Contents
 
-  ```@contents
+```@contents
 Pages = ["usage.md", "format.md", "reports.md", "model.md"]
 Depth = 3
 ```
 
-  
 ### Source Code
 
-  * [https://github.com/ANL-CEEESA/RELOG](https://github.com/ANL-CEEESA/RELOG)
+- [https://github.com/ANL-CEEESA/RELOG](https://github.com/ANL-CEEESA/RELOG)
 
 ### Authors
-* **Alinson S. Xavier,** Argonne National Laboratory <axavier@anl.gov>
-* **Nwike Iloeje,** Argonne National Laboratory <ciloeje@anl.gov>
+
+- **Alinson S. Xavier,** Argonne National Laboratory <axavier@anl.gov>
+- **Nwike Iloeje,** Argonne National Laboratory <ciloeje@anl.gov>
+- **John Atkins**
+- **Kyle Sun**
+- **Audrey Gallier**
 
 ### License
 
