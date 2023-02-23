@@ -29,6 +29,7 @@ function instance_parse_test()
         @test plant.input.name == "P1"
         @test plant.latitude == 0
         @test plant.longitude == 0
+        @test plant.initial_capacity == 500.0
 
         @test length(plant.sizes) == 2
         @test plant.sizes[1].capacity == 250
@@ -64,6 +65,7 @@ function instance_parse_test()
         @test plant.input.name == "P2"
         @test plant.latitude == 25
         @test plant.longitude == 65
+        @test plant.initial_capacity == 0
 
         @test length(plant.sizes) == 2
         @test plant.sizes[1].capacity == 1000.0

@@ -8,48 +8,49 @@ using JSONSchema
 using Printf
 using Statistics
 
-mutable struct Product
-    name::String
-    transportation_cost::Vector{Float64}
-    transportation_energy::Vector{Float64}
-    transportation_emissions::Dict{String,Vector{Float64}}
-    disposal_limit::Vector{Float64}
-    disposal_cost::Vector{Float64}
+Base.@kwdef mutable struct Product
     acquisition_cost::Vector{Float64}
     collection_centers::Vector
+    disposal_cost::Vector{Float64}
+    disposal_limit::Vector{Float64}
+    name::String
+    transportation_cost::Vector{Float64}
+    transportation_emissions::Dict{String,Vector{Float64}}
+    transportation_energy::Vector{Float64}
 end
 
-mutable struct CollectionCenter
+Base.@kwdef mutable struct CollectionCenter
+    amount::Vector{Float64}
     index::Int64
-    name::String
     latitude::Float64
     longitude::Float64
+    name::String
     product::Product
-    amount::Vector{Float64}
 end
 
-mutable struct PlantSize
+Base.@kwdef mutable struct PlantSize
     capacity::Float64
-    variable_operating_cost::Vector{Float64}
     fixed_operating_cost::Vector{Float64}
     opening_cost::Vector{Float64}
+    variable_operating_cost::Vector{Float64}
 end
 
-mutable struct Plant
-    index::Int64
-    plant_name::String
-    location_name::String
-    input::Product
-    output::Dict{Product,Float64}
-    latitude::Float64
-    longitude::Float64
-    disposal_limit::Dict{Product,Vector{Float64}}
+Base.@kwdef mutable struct Plant
     disposal_cost::Dict{Product,Vector{Float64}}
-    sizes::Vector{PlantSize}
-    energy::Vector{Float64}
+    disposal_limit::Dict{Product,Vector{Float64}}
     emissions::Dict{String,Vector{Float64}}
-    storage_limit::Float64
+    energy::Vector{Float64}
+    index::Int64
+    initial_capacity::Float64
+    input::Product
+    latitude::Float64
+    location_name::String
+    longitude::Float64
+    output::Dict{Product,Float64}
+    plant_name::String
+    sizes::Vector{PlantSize}
     storage_cost::Vector{Float64}
+    storage_limit::Float64
 end
 
 
@@ -62,11 +63,11 @@ end
 
 mutable struct EuclideanDistance <: DistanceMetric end
 
-mutable struct Instance
-    time::Int64
-    products::Vector{Product}
-    collection_centers::Vector{CollectionCenter}
-    plants::Vector{Plant}
+Base.@kwdef mutable struct Instance
     building_period::Vector{Int64}
+    collection_centers::Vector{CollectionCenter}
     distance_metric::DistanceMetric
+    plants::Vector{Plant}
+    products::Vector{Product}
+    time::Int64
 end

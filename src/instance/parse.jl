@@ -76,14 +76,14 @@ function parse(json)::Instance
         prod_centers = []
 
         product = Product(
-            product_name,
-            cost,
-            energy,
-            emissions,
-            disposal_limit,
-            disposal_cost,
-            acquisition_cost,
-            prod_centers,
+            acquisition_cost = acquisition_cost,
+            collection_centers = prod_centers,
+            disposal_cost = disposal_cost,
+            disposal_limit = disposal_limit,
+            name = product_name,
+            transportation_cost = cost,
+            transportation_emissions = emissions,
+            transportation_energy = energy,
         )
         push!(products, product)
         prod_name_to_product[product_name] = product
@@ -97,12 +97,12 @@ function parse(json)::Instance
                     center_dict["longitude (deg)"] = region.centroid.lon
                 end
                 center = CollectionCenter(
-                    length(collection_centers) + 1,
-                    center_name,
-                    center_dict["latitude (deg)"],
-                    center_dict["longitude (deg)"],
-                    product,
-                    center_dict["amount (tonne)"],
+                    amount = center_dict["amount (tonne)"],
+                    index = length(collection_centers) + 1,
+                    latitude = center_dict["latitude (deg)"],
+                    longitude = center_dict["longitude (deg)"],
+                    name = center_name,
+                    product = product,
                 )
                 push!(prod_centers, center)
                 push!(collection_centers, center)
@@ -164,15 +164,21 @@ function parse(json)::Instance
                 push!(
                     sizes,
                     PlantSize(
-                        Base.parse(Float64, capacity_name),
-                        capacity_dict["variable operating cost (\$/tonne)"],
-                        capacity_dict["fixed operating cost (\$)"],
-                        capacity_dict["opening cost (\$)"],
+                        capacity = Base.parse(Float64, capacity_name),
+                        fixed_operating_cost = capacity_dict["fixed operating cost (\$)"],
+                        opening_cost = capacity_dict["opening cost (\$)"],
+                        variable_operating_cost = capacity_dict["variable operating cost (\$/tonne)"],
                     ),
                 )
             end
             length(sizes) > 1 || push!(sizes, sizes[1])
             sort!(sizes, by = x -> x.capacity)
+
+            # Initial capacity
+            initial_capacity = 0
+            if "initial capacity (tonne)" in keys(location_dict)
+                initial_capacity = location_dict["initial capacity (tonne)"]
+            end
 
             # Storage
             storage_limit = 0
@@ -192,20 +198,21 @@ function parse(json)::Instance
             end
 
             plant = Plant(
-                length(plants) + 1,
-                plant_name,
-                location_name,
-                input,
-                output,
-                location_dict["latitude (deg)"],
-                location_dict["longitude (deg)"],
-                disposal_limit,
-                disposal_cost,
-                sizes,
-                energy,
-                emissions,
-                storage_limit,
-                storage_cost,
+                disposal_cost = disposal_cost,
+                disposal_limit = disposal_limit,
+                emissions = emissions,
+                energy = energy,
+                index = length(plants) + 1,
+                initial_capacity = initial_capacity,
+                input = input,
+                latitude = location_dict["latitude (deg)"],
+                location_name = location_name,
+                longitude = location_dict["longitude (deg)"],
+                output = output,
+                plant_name = plant_name,
+                sizes = sizes,
+                storage_cost = storage_cost,
+                storage_limit = storage_limit,
             )
 
             push!(plants, plant)
@@ -216,11 +223,11 @@ function parse(json)::Instance
     @info @sprintf("%12d candidate plant locations", length(plants))
 
     return Instance(
-        T,
-        products,
-        collection_centers,
-        plants,
-        building_period,
-        distance_metric,
+        time = T,
+        products = products,
+        collection_centers = collection_centers,
+        plants = plants,
+        building_period = building_period,
+        distance_metric = distance_metric,
     )
 end

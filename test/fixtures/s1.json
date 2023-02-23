@@ -103,6 +103,7 @@
               "limit (tonne)": [1.0, 1.0]
             }
           },
+          "initial capacity (tonne)": 500.0,
           "capacities (tonne)": {
             "250.0": {
               "opening cost ($)": [500.0, 500.0],

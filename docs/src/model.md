@@ -25,9 +25,10 @@ In this page, we describe the precise mathematical optimization model used by RE
 | $c^\text{open}_{pt}$    | Cost of opening plant $p$ at time $t$, at minimum capacity                             | $           |
 | $c^\text{p-disp}_{pmt}$ | Cost of disposing recovered material $m$ at plant $p$ during time $t$                  | \$/tonne/km |
 | $c^\text{store}_{pt}$   | Cost of storing primary material at plant $p$ at time $t$                              | \$/tonne    |
-| $c^\text{var}_{pt}$     | Variable cost of processing primary material at plant $p$ at time $t$                  | \$/tonne    |
+| $c^\text{proc}_{pt}$    | Variable cost of processing primary material at plant $p$ at time $t$                  | \$/tonne    |
 | $m^\text{max}_p$        | Maximum capacity of plant $p$                                                          | tonne       |
 | $m^\text{min}_p$        | Minimum capacity of plant $p$                                                          | tonne       |
+| $m^\text{init}_p$       | Initial capacity of plant $p$                                                          | tonne       |
 | $m^\text{p-disp}_{pmt}$ | Maximum amount of recovered material $m$ that plant $p$ can dispose of during time $t$ | tonne       |
 | $m^\text{store}_p$      | Maximum amount of primary material that plant $p$ can store for later processing.      | tonne       |
 
@@ -72,7 +73,7 @@ RELOG minimizes the overall capital, production and transportation costs:
         \sum_{t \in T} \sum_{p \in P} \left[
                 c^\text{open}_{pt} u_{pt} +
                 c^\text{f-base}_{pt} x_{pt} +
-                \sum_{i=1}^t c^\text{f-exp}_{pt} w_{pi} +
+                c^\text{f-exp}_{pt}  \left( \sum_{i=0}^t w_{pi} \right) +
                 c^{\text{exp}}_{pt} w_{pt}
             \right] + \\
     &
@@ -138,7 +139,7 @@ In the fifth line, we have acquisition and disposal cost at the collection cente
 
 ```math
 \begin{align*}
-    & z^{\text{proc}}_{pt} \leq m^\text{min}_p x_p + \sum_{i=1}^t w_p
+    & z^{\text{proc}}_{pt} \leq m^\text{min}_p x_p + \sum_{i=0}^t w_p
         & \forall p \in P, t \in T
 \end{align*}
 ```
@@ -156,7 +157,7 @@ In the fifth line, we have acquisition and disposal cost at the collection cente
 
 ```math
 \begin{align*}
-    & \sum_{i=1}^t w_p \leq m^\text{max}_p x_p
+    & \sum_{i=0}^t w_p \leq \left( m^\text{max}_p - m^\text{min}_p \right) x_p
         & \forall p \in P, t \in T
 \end{align*}
 ```
@@ -184,9 +185,19 @@ In the fifth line, we have acquisition and disposal cost at the collection cente
 ```math
 \begin{align*}
     & x_{pt} = x_{p,t-1} + u_{pt}
-        & \forall p \in P, t \in T \setminus \{1\} \\
-    & x_{p,1} = u_{p,1}
-        & \forall p \in P
+        & \forall p \in P, t \in T \\
+\end{align*}
+```
+
+- Boundary constants:
+
+```math
+\begin{align*}
+    & x_{p,0} = \begin{cases}
+        0 & \text{ if } m^\text{init}_p = 0 \\
+        1 & \text{ otherwise }
+    \end{cases} \\
+    & w_{p,0} = \max\left\{0, m^\text{init}_p - m^\text{min}_p \right\}
 \end{align*}
 ```
 

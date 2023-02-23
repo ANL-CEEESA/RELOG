@@ -96,7 +96,10 @@ function get_solution(model::JuMP.Model; marginal_costs = true)
             "Expansion cost (\$)" => [
                 (
                     if t == 1
-                        slope_open(plant, t) * JuMP.value(model[:expansion][process_node, t])
+                        slope_open(plant, t) * (
+                            JuMP.value(model[:expansion][process_node, t]) -
+                            model[:expansion][process_node, 0]
+                        )
                     else
                         slope_open(plant, t) * (
                             JuMP.value(model[:expansion][process_node, t]) -

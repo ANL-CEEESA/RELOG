@@ -110,13 +110,14 @@ The **plants** section describes the available types of reverse manufacturing pl
 
 Each type of plant is associated with a set of potential locations where it can be built. Each location is represented by a dictionary with the following keys:
 
-| Key                  | Description                                                                      |
-| :------------------- | -------------------------------------------------------------------------------- |
-| `latitude (deg)`     | The latitude of the location, in degrees.                                        |
-| `longitude (deg)`    | The longitude of the location, in degrees.                                       |
-| `disposal`           | A dictionary describing what products can be disposed locally at the plant.      |
-| `storage`            | A dictionary describing the plant's storage.                                     |
-| `capacities (tonne)` | A dictionary describing what plant sizes are allowed, and their characteristics. |
+| Key                        | Description                                                                      |
+| :------------------------- | -------------------------------------------------------------------------------- |
+| `latitude (deg)`           | The latitude of the location, in degrees.                                        |
+| `longitude (deg)`          | The longitude of the location, in degrees.                                       |
+| `disposal`                 | A dictionary describing what products can be disposed locally at the plant.      |
+| `storage`                  | A dictionary describing the plant's storage.                                     |
+| `capacities (tonne)`       | A dictionary describing what plant sizes are allowed, and their characteristics. |
+| `initial capacity (tonne)` | Capacity already available at this location. Optional.                           |
 
 The `storage` dictionary should contain the following keys:
 

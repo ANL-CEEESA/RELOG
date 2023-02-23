@@ -21,9 +21,12 @@ function model_build_test()
         @test length(model[:plant_dispose]) == 16
         @test length(model[:open_plant]) == 12
         @test length(model[:capacity]) == 12
-        @test length(model[:expansion]) == 12
+        @test length(model[:expansion]) == 18
 
         l1 = process_node_by_location_name["L1"]
+        @test model[:is_open][l1, 0] == 1
+        @test model[:expansion][l1, 0] == 250
+
         v = model[:capacity][l1, 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1000.0
@@ -35,5 +38,9 @@ function model_build_test()
         v = model[:plant_dispose][shipping_node_by_loc_and_prod_names["L1", "P2"], 1]
         @test lower_bound(v) == 0.0
         @test upper_bound(v) == 1.0
+
+        l2 = process_node_by_location_name["L2"]
+        @test model[:is_open][l2, 0] == 0
+        @test model[:expansion][l2, 0] == 0
     end
 end

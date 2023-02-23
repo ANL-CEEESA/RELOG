@@ -65,6 +65,9 @@
           "longitude (deg)": {
             "type": "number"
           },
+          "initial capacity (tonne)": {
+            "type": "number"
+          },
           "disposal": {
             "type": "object",
             "additionalProperties": {

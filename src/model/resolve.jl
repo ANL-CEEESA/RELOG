@@ -59,6 +59,7 @@ function _fix_plants!(model_old, model_new)::Nothing
 
     # Fix is_open variables
     for ((node_old, t), var_old) in model_old[:is_open]
+        t > 0 || continue
         value_old = JuMP.value(var_old)
         node_new = model_new[:graph].name_to_process_node_map[(
             node_old.location.plant_name,
@@ -84,6 +85,7 @@ function _fix_plants!(model_old, model_new)::Nothing
 
     # Fix plant expansion
     for ((node_old, t), var_old) in model_old[:expansion]
+        t > 0 || continue
         value_old = JuMP.value(var_old)
         node_new = model_new[:graph].name_to_process_node_map[(
             node_old.location.plant_name,

@@ -44,7 +44,7 @@ function create_vars!(model::JuMP.Model)
         (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
-    model[:is_open] = Dict(
+    model[:is_open] = Dict{Tuple,Any}(
         (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
         t = 1:T
     )
@@ -55,13 +55,21 @@ function create_vars!(model::JuMP.Model)
             upper_bound = n.location.sizes[2].capacity
         ) for n in values(graph.process_nodes), t = 1:T
     )
-    model[:expansion] = Dict(
+    model[:expansion] = Dict{Tuple,Any}(
         (n, t) => @variable(
             model,
             lower_bound = 0,
             upper_bound = n.location.sizes[2].capacity - n.location.sizes[1].capacity
         ) for n in values(graph.process_nodes), t = 1:T
     )
+
+    # Boundary constants
+    for n in values(graph.process_nodes)
+        m_init = n.location.initial_capacity
+        m_min = n.location.sizes[1].capacity
+        model[:is_open][n, 0] = m_init == 0 ? 0 : 1
+        model[:expansion][n, 0] = max(0, m_init - m_min)
+    end
 end
 
 
@@ -132,6 +140,7 @@ function create_objective_function!(model::JuMP.Model)
             )
         else
             add_to_expression!(obj, slope_open(n.location, t), model[:expansion][n, t])
+            add_to_expression!(obj, -slope_open(n.location, 1) * model[:expansion][n, 0])
         end
     end
 
@@ -244,11 +253,11 @@ function create_process_node_constraints!(model::JuMP.Model)
         # Can only process up to capacity
         @constraint(model, model[:process][n, t] <= model[:capacity][n, t])
 
+        # Plant capacity can only increase over time
         if t > 1
-            # Plant capacity can only increase over time
             @constraint(model, model[:capacity][n, t] >= model[:capacity][n, t-1])
-            @constraint(model, model[:expansion][n, t] >= model[:expansion][n, t-1])
         end
+        @constraint(model, model[:expansion][n, t] >= model[:expansion][n, t-1])
 
         # Amount received equals amount processed plus stored
         store_in = 0
@@ -266,14 +275,10 @@ function create_process_node_constraints!(model::JuMP.Model)
 
         # Plant is currently open if it was already open in the previous time period or
         # if it was built just now
-        if t > 1
-            @constraint(
-                model,
-                model[:is_open][n, t] == model[:is_open][n, t-1] + model[:open_plant][n, t]
-            )
-        else
-            @constraint(model, model[:is_open][n, t] == model[:open_plant][n, t])
-        end
+        @constraint(
+            model,
+            model[:is_open][n, t] == model[:is_open][n, t-1] + model[:open_plant][n, t]
+        )
 
         # Plant can only be opened during building period
         if t ∉ model[:instance].building_period
