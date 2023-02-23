@@ -27,24 +27,28 @@ const PlantBlock = (props) => {
           name: "Washakie County",
           "latitude (deg)": "43.8356",
           "longitude (deg)": "-107.6602",
+          "initial capacity (tonne)": "0",
           "area cost factor": "0.88",
         },
         {
           name: "Platte County",
           "latitude (deg)": "42.1314",
           "longitude (deg)": "-104.9676",
+          "initial capacity (tonne)": "0",
           "area cost factor": "1.29",
         },
         {
           name: "Park County",
           "latitude (deg)": "44.4063",
           "longitude (deg)": "-109.4153",
+          "initial capacity (tonne)": "0",
           "area cost factor": "0.99",
         },
         {
           name: "Goshen County",
           "latitude (deg)": "42.0853",
           "longitude (deg)": "-104.3534",
+          "initial capacity (tonne)": "0",
           "area cost factor": "1",
         },
       ])
@@ -59,6 +63,7 @@ const PlantBlock = (props) => {
         "latitude (deg)",
         "longitude (deg)",
         "area cost factor",
+        "initial capacity (tonne)",
       ],
     });
     const result = {};

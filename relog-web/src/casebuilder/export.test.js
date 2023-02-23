@@ -197,11 +197,13 @@ const samplePlantsOriginal = [
         "latitude (deg)": 43.8356,
         "longitude (deg)": -107.6602,
         "area cost factor": 1.0,
+        "initial capacity (tonne)": 0,
       },
       "Platte County": {
         "latitude (deg)": 42.1314,
         "longitude (deg)": -104.9676,
         "area cost factor": 0.5,
+        "initial capacity (tonne)": 0,
       },
     },
     "disposal cost ($/tonne)": {
@@ -245,11 +247,13 @@ const samplePlantsOriginal = [
         "latitude (deg)": 43.8356,
         "longitude (deg)": -107.6602,
         "area cost factor": 1.0,
+        "initial capacity (tonne)": 0,
       },
       "Platte County": {
         "latitude (deg)": 42.1314,
         "longitude (deg)": -104.9676,
         "area cost factor": 0.5,
+        "initial capacity (tonne)": 0,
       },
     },
     "disposal cost ($/tonne)": {
@@ -293,11 +297,13 @@ const samplePlantsOriginal = [
         "latitude (deg)": 43.8356,
         "longitude (deg)": -107.6602,
         "area cost factor": 1.0,
+        "initial capacity (tonne)": 0,
       },
       "Platte County": {
         "latitude (deg)": 42.1314,
         "longitude (deg)": -104.9676,
         "area cost factor": 0.5,
+        "initial capacity (tonne)": 0,
       },
     },
     "disposal cost ($/tonne)": {
@@ -340,12 +346,14 @@ const samplePlantsOriginal = [
         "latitude (deg)": 43.8356,
         "longitude (deg)": -107.6602,
         "area cost factor": 1.0,
+        "initial capacity (tonne)": 0,
         x: 2,
       },
       "Platte County": {
         "latitude (deg)": 42.1314,
         "longitude (deg)": -104.9676,
         "area cost factor": 0.5,
+        "initial capacity (tonne)": 0,
         x: 4,
       },
     },
@@ -407,6 +415,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [5, 10, 20],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [200000, 400000, 800000],
@@ -439,6 +448,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [2.5, 5, 10],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [100000, 200000, 400000],
@@ -486,6 +496,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [5, 5, 5],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [200000, 200000, 200000],
@@ -513,6 +524,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [2.5, 2.5, 2.5],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [100000, 100000, 100000],
@@ -544,6 +556,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [5, 5, 5],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [200000, 200000, 200000],
@@ -565,6 +578,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [2.5, 2.5, 2.5],
           "limit (tonne)": 10000,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182500: {
             "opening cost ($)": [100000, 100000, 100000],
@@ -611,6 +625,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [7, 14, 28],
           "limit (tonne)": 10002,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182502: {
             "opening cost ($)": [200002, 400004, 800008],
@@ -643,6 +658,7 @@ const samplePlantsExported = [
           "cost ($/tonne)": [4.5, 9, 18],
           "limit (tonne)": 10004,
         },
+        "initial capacity (tonne)": 0,
         "capacities (tonne)": {
           182504: {
             "opening cost ($)": [100002, 200004, 400008],

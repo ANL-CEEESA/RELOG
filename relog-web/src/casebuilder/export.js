@@ -233,9 +233,11 @@ export const exportPlant = (original, parameters) => {
     };
 
     // Copy scalar values
-    ["latitude (deg)", "longitude (deg)"].forEach((key) => {
-      resDict[key] = origDict[key];
-    });
+    ["latitude (deg)", "longitude (deg)", "initial capacity (tonne)"].forEach(
+      (key) => {
+        resDict[key] = origDict[key];
+      }
+    );
 
     // Copy minimum capacity dict
     capDict[minCap] = {};
@@ -462,10 +464,12 @@ export const importPlant = (original) => {
   for (const [locName, origLocDict] of Object.entries(original["locations"])) {
     resLocDict[locName] = {};
 
-    // Import latitude and longitude
-    ["latitude (deg)", "longitude (deg)"].forEach((key) => {
-      resLocDict[locName][key] = origLocDict[key];
-    });
+    // Import scalars
+    ["latitude (deg)", "longitude (deg)", "initial capacity (tonne)"].forEach(
+      (key) => {
+        resLocDict[locName][key] = origLocDict[key];
+      }
+    );
 
     const capacities = keysToList(origLocDict["capacities (tonne)"]);
     const last = capacities.length - 1;

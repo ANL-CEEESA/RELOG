@@ -13,6 +13,7 @@ export const defaultProduct = {
 
 export const defaultPlantLocation = {
   "area cost factor": 1.0,
+  "initial capacity (tonne)": 0,
   "latitude (deg)": 0,
   "longitude (deg)": 0,
 };
@@ -24,17 +25,17 @@ export const defaultPlant = {
   "disposal limit (tonne)": {},
   "emissions (tonne/tonne)": {},
   storage: {
-    "cost ($/tonne)": 0,
-    "limit (tonne)": 0,
+    "cost ($/tonne)": "0",
+    "limit (tonne)": "0",
   },
-  "maximum capacity (tonne)": 0,
-  "minimum capacity (tonne)": 0,
-  "opening cost (max capacity) ($)": 0,
-  "opening cost (min capacity) ($)": 0,
-  "fixed operating cost (max capacity) ($)": 0,
-  "fixed operating cost (min capacity) ($)": 0,
-  "variable operating cost ($/tonne)": 0,
-  "energy (GJ/tonne)": 0,
+  "maximum capacity (tonne)": "0",
+  "minimum capacity (tonne)": "0",
+  "opening cost (max capacity) ($)": "0",
+  "opening cost (min capacity) ($)": "0",
+  "fixed operating cost (max capacity) ($)": "0",
+  "fixed operating cost (min capacity) ($)": "0",
+  "variable operating cost ($/tonne)": "0",
+  "energy (GJ/tonne)": "0",
   x: 0,
   y: 0,
 };
