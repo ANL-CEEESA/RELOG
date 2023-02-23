@@ -1,7 +1,7 @@
 <h1 align="center">RELOG: Reverse Logistics Optimization</h1>
 <p align="center">
   <a href="https://github.com/ANL-CEEESA/RELOG/actions">
-    <img src="https://github.com/ANL-CEEESA/RELOG/workflows/CI/badge.svg">
+    <img src="https://github.com/ANL-CEEESA/RELOG/workflows/Build%20&%20Test/badge.svg">
   </a>
   <a href="https://doi.org/10.5281/zenodo.4302341">
     <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4302341.svg">
