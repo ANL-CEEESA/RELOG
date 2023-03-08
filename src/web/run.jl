@@ -14,7 +14,6 @@ function solve(root, filename)
     )
     ref_solution, ref_model = RELOG.solve(
         ref_file,
-        heuristic = true,
         optimizer = optimizer,
         lp_optimizer = HiGHS.Optimizer,
         return_model = true,
