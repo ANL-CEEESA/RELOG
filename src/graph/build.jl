@@ -44,6 +44,7 @@ function build_graph(instance::Instance)::Graph
     # Build arcs from collection centers to plants, and from one plant to another
     for source in [collection_shipping_nodes; plant_shipping_nodes]
         for dest in process_nodes_by_input_product[source.product]
+            source.location != dest.location || continue
             distance = _calculate_distance(
                 source.location.latitude,
                 source.location.longitude,
