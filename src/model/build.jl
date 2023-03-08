@@ -237,6 +237,12 @@ function create_process_node_constraints!(model::JuMP.Model)
             model[:capacity][n, t] <= n.location.sizes[2].capacity * model[:is_open][n, t]
         )
 
+        # If plant is closed, storage cannot be used
+        @constraint(
+            model,
+            model[:store][n, t] <= n.location.storage_limit * model[:is_open][n, t]
+        )
+
         # If plant is open, capacity is greater than base
         @constraint(
             model,
