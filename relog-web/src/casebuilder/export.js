@@ -277,7 +277,7 @@ export const exportPlant = (original, parameters) => {
       const v = exportValueAcf(dispCost, origDict);
       if (v) {
         resDict.disposal[dispName] = { "cost ($/tonne)": v };
-        const limit = original["disposal limit (tonne)"][dispName];
+        const limit = String(original["disposal limit (tonne)"][dispName]);
         if (limit.length > 0) {
           resDict.disposal[dispName]["limit (tonne)"] = exportValue(
             limit,

@@ -213,7 +213,7 @@ const samplePlantsOriginal = [
     },
     "disposal limit (tonne)": {
       "Hydrogen gas": "10",
-      "Carbon dioxide": "",
+      "Carbon dioxide": 0,
       Tar: "",
     },
     "emissions (tonne/tonne)": {
@@ -406,6 +406,7 @@ const samplePlantsExported = [
           },
           "Carbon dioxide": {
             "cost ($/tonne)": [0, 0, 0],
+            "limit (tonne)": [0, 0, 0],
           },
           Tar: {
             "cost ($/tonne)": [200, 400, 800],
@@ -439,6 +440,7 @@ const samplePlantsExported = [
           },
           "Carbon dioxide": {
             "cost ($/tonne)": [0, 0, 0],
+            "limit (tonne)": [0, 0, 0],
           },
           Tar: {
             "cost ($/tonne)": [100, 200.0, 400],

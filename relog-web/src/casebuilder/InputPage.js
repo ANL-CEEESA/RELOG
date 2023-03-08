@@ -235,7 +235,7 @@ const InputPage = () => {
         "disposal limit (tonne)",
       ].forEach((key) => {
         newData.plants[plantName][key] = { ...newData.plants[plantName][key] };
-        newData.plants[plantName][key][productName] = 0;
+        newData.plants[plantName][key][productName] = "0";
       });
       save(newData);
       return newData;
