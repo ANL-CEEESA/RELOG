@@ -1,0 +1,28 @@
+{
+  "creators": [
+    {
+      "orcid": "0000-0002-5022-9802",
+      "affiliation": "Argonne National Laboratory",
+      "name": "Santos Xavier, Alinson"
+    },
+    {
+      "orcid": "0000-0002-3426-9425",
+      "affiliation": "Argonne National Laboratory",
+      "name": "Iloeje, Chukwunwike"
+    },
+    {
+      "affiliation": "Argonne National Laboratory",
+      "name": "Atkins, John"
+    },
+    {
+      "affiliation": "Argonne National Laboratory",
+      "name": "Sun, Kyle"
+    },
+    {
+      "affiliation": "Argonne National Laboratory",
+      "name": "Gallier, Audrey"
+    }
+  ],
+  "title": "RELOG: Reverse Logistics Optimization",
+  "description": "<b>RELOG</b> is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods."
+}
