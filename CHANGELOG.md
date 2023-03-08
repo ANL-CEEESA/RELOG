@@ -11,6 +11,22 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
+## [0.7.1] -- 2023-03-08
+
+### Added
+
+- Core: Add `write_reports` function
+
+### Changed
+
+- Web UI: Disable usage of heuristic method
+
+### Fixed
+
+- Core: Prevent plants from sending products to themselves
+- Core: Enforce constraint that, if plant is closed, storage cannot be used
+- Web UI: Fix parsing bug in disposal limit
+
 ## [0.7.0] -- 2023-02-23
 
 ### Added
