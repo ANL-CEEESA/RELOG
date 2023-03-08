@@ -12,3 +12,13 @@ function write(solution::AbstractDict, filename::AbstractString)
         JSON.print(file, solution, 2)
     end
 end
+
+function write_reports(solution::AbstractDict, basename::AbstractString)
+    RELOG.write_products_report(solution, "$(basename)_products.csv")
+    RELOG.write_plants_report(solution, "$(basename)_plants.csv")
+    RELOG.write_plant_outputs_report(solution, "$(basename)_plant_outputs.csv")
+    RELOG.write_plant_emissions_report(solution, "$(basename)_plant_emissions.csv")
+    RELOG.write_transportation_report(solution, "$(basename)_tr.csv")
+    RELOG.write_transportation_emissions_report(solution, "$(basename)_tr_emissions.csv")
+    return
+end
