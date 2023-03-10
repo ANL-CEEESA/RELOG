@@ -11,6 +11,13 @@ All notable changes to this project will be documented in this file.
 [semver]: https://semver.org/spec/v2.0.0.html
 [pkjjl]: https://pkgdocs.julialang.org/v1/compatibility/#compat-pre-1.0
 
+## [0.7.2] -- 2023-03-10
+
+### Fixed
+
+- Core: Fixed modeling issue with collection disposal
+- Core: Fix column names in products CSV file
+
 ## [0.7.1] -- 2023-03-08
 
 ### Added
