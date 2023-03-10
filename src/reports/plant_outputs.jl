@@ -30,7 +30,7 @@ function plant_outputs_report(solution)::DataFrame
                         end
                     end
                 end
-                sent = round.(sent, digits = 2)
+                sent = round.(sent, digits = 6)
 
                 disposal_amount = zeros(T)
                 disposal_cost = zeros(T)
@@ -38,8 +38,8 @@ function plant_outputs_report(solution)::DataFrame
                     disposal_amount += disposal_dict[product_name]["Amount (tonne)"]
                     disposal_cost += disposal_dict[product_name]["Cost (\$)"]
                 end
-                disposal_amount = round.(disposal_amount, digits = 2)
-                disposal_cost = round.(disposal_cost, digits = 2)
+                disposal_amount = round.(disposal_amount, digits = 6)
+                disposal_cost = round.(disposal_cost, digits = 6)
 
                 for year = 1:T
                     push!(
@@ -49,7 +49,7 @@ function plant_outputs_report(solution)::DataFrame
                             location_name,
                             year,
                             product_name,
-                            round(amount_produced[year], digits = 2),
+                            round(amount_produced[year], digits = 6),
                             sent[year],
                             disposal_amount[year],
                             disposal_cost[year],

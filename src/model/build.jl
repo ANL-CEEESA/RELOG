@@ -184,8 +184,8 @@ function create_shipping_node_constraints!(model::JuMP.Model)
         for n in graph.collection_shipping_nodes
             model[:eq_balance][n, t] = @constraint(
                 model,
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) ==
-                n.location.amount[t] + model[:collection_dispose][n, t]
+                sum(model[:flow][a, t] for a in n.outgoing_arcs) +
+                model[:collection_dispose][n, t] == n.location.amount[t]
             )
         end
         for prod in model[:instance].products

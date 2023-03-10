@@ -44,18 +44,18 @@ function transportation_emissions_report(solution)::DataFrame
                                     round(dst_location_dict["Longitude (deg)"], digits = 6),
                                     dst_location_dict["Input product"],
                                     year,
-                                    round(src_location_dict["Distance (km)"], digits = 2),
+                                    round(src_location_dict["Distance (km)"], digits = 6),
                                     round(
                                         src_location_dict["Amount (tonne)"][year],
-                                        digits = 2,
+                                        digits = 6,
                                     ),
                                     round(
                                         src_location_dict["Amount (tonne)"][year] *
                                         src_location_dict["Distance (km)"],
-                                        digits = 2,
+                                        digits = 6,
                                     ),
                                     emission_name,
-                                    round(emission_amount[year], digits = 2),
+                                    round(emission_amount[year], digits = 6),
                                 ],
                             )
                         end

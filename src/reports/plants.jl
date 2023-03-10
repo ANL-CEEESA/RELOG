@@ -28,25 +28,25 @@ function plants_report(solution)::DataFrame
     for (plant_name, plant_dict) in solution["Plants"]
         for (location_name, location_dict) in plant_dict
             for year = 1:T
-                capacity = round(location_dict["Capacity (tonne)"][year], digits = 2)
-                received = round(location_dict["Total input (tonne)"][year], digits = 2)
-                processed = round(location_dict["Process (tonne)"][year], digits = 2)
-                in_storage = round(location_dict["Storage (tonne)"][year], digits = 2)
-                utilization_factor = round(processed / capacity * 100.0, digits = 2)
-                energy = round(location_dict["Energy (GJ)"][year], digits = 2)
+                capacity = round(location_dict["Capacity (tonne)"][year], digits = 6)
+                received = round(location_dict["Total input (tonne)"][year], digits = 6)
+                processed = round(location_dict["Process (tonne)"][year], digits = 6)
+                in_storage = round(location_dict["Storage (tonne)"][year], digits = 6)
+                utilization_factor = round(processed / capacity * 100.0, digits = 6)
+                energy = round(location_dict["Energy (GJ)"][year], digits = 6)
                 latitude = round(location_dict["Latitude (deg)"], digits = 6)
                 longitude = round(location_dict["Longitude (deg)"], digits = 6)
-                opening_cost = round(location_dict["Opening cost (\$)"][year], digits = 2)
+                opening_cost = round(location_dict["Opening cost (\$)"][year], digits = 6)
                 expansion_cost =
-                    round(location_dict["Expansion cost (\$)"][year], digits = 2)
+                    round(location_dict["Expansion cost (\$)"][year], digits = 6)
                 fixed_cost =
-                    round(location_dict["Fixed operating cost (\$)"][year], digits = 2)
+                    round(location_dict["Fixed operating cost (\$)"][year], digits = 6)
                 var_cost =
-                    round(location_dict["Variable operating cost (\$)"][year], digits = 2)
-                storage_cost = round(location_dict["Storage cost (\$)"][year], digits = 2)
+                    round(location_dict["Variable operating cost (\$)"][year], digits = 6)
+                storage_cost = round(location_dict["Storage cost (\$)"][year], digits = 6)
                 total_cost = round(
                     opening_cost + expansion_cost + fixed_cost + var_cost + storage_cost,
-                    digits = 2,
+                    digits = 6,
                 )
                 push!(
                     df,

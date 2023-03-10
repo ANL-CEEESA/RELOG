@@ -24,7 +24,7 @@ function plant_emissions_report(solution)::DataFrame
                             location_name,
                             year,
                             emission_name,
-                            round(emission_amount[year], digits = 2),
+                            round(emission_amount[year], digits = 6),
                         ],
                     )
                 end
