@@ -24,6 +24,9 @@ function _compress(instance::Instance)::Instance
 
     # Compress products
     for p in compressed.products
+        p.acquisition_cost = [mean(p.acquisition_cost)]
+        p.disposal_cost = [mean(p.disposal_cost)]
+        p.disposal_limit = [sum(p.disposal_limit)]
         p.transportation_cost = [mean(p.transportation_cost)]
         p.transportation_energy = [mean(p.transportation_energy)]
         for (emission_name, emission_value) in p.transportation_emissions
