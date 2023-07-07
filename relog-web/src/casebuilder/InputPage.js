@@ -207,6 +207,8 @@ const InputPage = () => {
         }
         if (outputFound) {
           delete plant["outputs (tonne/tonne)"][productName];
+          delete plant["disposal cost ($/tonne)"][productName];
+          delete plant["disposal limit (tonne)"][productName];
         }
       }
       save(newData);
