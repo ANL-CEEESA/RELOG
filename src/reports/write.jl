@@ -13,8 +13,8 @@ function write(solution::AbstractDict, filename::AbstractString)
     end
 end
 
-function write_reports(solution::AbstractDict, basename::AbstractString)
-    RELOG.write_products_report(solution, "$(basename)_products.csv")
+function write_reports(solution::AbstractDict, basename::AbstractString; marginal_costs = true)
+    RELOG.write_products_report(solution, "$(basename)_products.csv"; marginal_costs)
     RELOG.write_plants_report(solution, "$(basename)_plants.csv")
     RELOG.write_plant_outputs_report(solution, "$(basename)_plant_outputs.csv")
     RELOG.write_plant_emissions_report(solution, "$(basename)_plant_emissions.csv")

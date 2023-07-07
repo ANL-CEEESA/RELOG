@@ -5,7 +5,7 @@
 using DataFrames
 using CSV
 
-function products_report(solution; marginal_costs = true)::DataFrame
+function products_report(solution; marginal_costs)::DataFrame
     df = DataFrame()
     df."product name" = String[]
     df."location name" = String[]
@@ -21,7 +21,11 @@ function products_report(solution; marginal_costs = true)::DataFrame
     for (prod_name, prod_dict) in solution["Products"]
         for (location_name, location_dict) in prod_dict
             for year = 1:T
-                marginal_cost = location_dict["Marginal cost (\$/tonne)"][year]
+                if marginal_costs
+                    marginal_cost = location_dict["Marginal cost (\$/tonne)"][year]
+                else
+                    marginal_cost = 0.0
+                end
                 latitude = round(location_dict["Latitude (deg)"], digits = 6)
                 longitude = round(location_dict["Longitude (deg)"], digits = 6)
                 amount = location_dict["Amount (tonne)"][year]
@@ -49,4 +53,4 @@ function products_report(solution; marginal_costs = true)::DataFrame
     return df
 end
 
-write_products_report(solution, filename) = CSV.write(filename, products_report(solution))
+write_products_report(solution, filename; marginal_costs = true) = CSV.write(filename, products_report(solution; marginal_costs))
