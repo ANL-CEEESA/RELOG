@@ -171,7 +171,7 @@ function parse(json)::Instance
                     ),
                 )
             end
-            length(sizes) > 1 || push!(sizes, sizes[1])
+            length(sizes) > 1 || push!(sizes, deepcopy(sizes[1]))
             sort!(sizes, by = x -> x.capacity)
 
             # Initial capacity
