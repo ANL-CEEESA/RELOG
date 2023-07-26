@@ -21,7 +21,10 @@ function resolve(model_old, instance::Instance; optimizer = nothing)::OrderedDic
     selected_pairs = Set()
     for ((node_old, t), var_old) in model_old[:is_open]
         if JuMP.value(var_old) > 0.1
-            push!(selected_pairs, (node_old.location.plant_name, node_old.location.location_name))
+            push!(
+                selected_pairs,
+                (node_old.location.plant_name, node_old.location.location_name),
+            )
         end
     end
     filtered_plants = []
@@ -63,10 +66,7 @@ function _fix_plants!(model_old, model_new)::Nothing
     # Fix open_plant variables
     for ((node_old, t), var_old) in model_old[:open_plant]
         value_old = JuMP.value(var_old)
-        key = (
-            node_old.location.plant_name,
-            node_old.location.location_name,
-        )
+        key = (node_old.location.plant_name, node_old.location.location_name)
         key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
         node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:open_plant][node_new, t]
@@ -78,10 +78,7 @@ function _fix_plants!(model_old, model_new)::Nothing
     for ((node_old, t), var_old) in model_old[:is_open]
         t > 0 || continue
         value_old = JuMP.value(var_old)
-        key = (
-            node_old.location.plant_name,
-            node_old.location.location_name,
-        )
+        key = (node_old.location.plant_name, node_old.location.location_name)
         key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
         node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:is_open][node_new, t]
@@ -92,10 +89,7 @@ function _fix_plants!(model_old, model_new)::Nothing
     # Fix plant capacities
     for ((node_old, t), var_old) in model_old[:capacity]
         value_old = JuMP.value(var_old)
-        key = (
-            node_old.location.plant_name,
-            node_old.location.location_name,
-        )
+        key = (node_old.location.plant_name, node_old.location.location_name)
         key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
         node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:capacity][node_new, t]
@@ -108,10 +102,7 @@ function _fix_plants!(model_old, model_new)::Nothing
     for ((node_old, t), var_old) in model_old[:expansion]
         t > 0 || continue
         value_old = JuMP.value(var_old)
-        key = (
-            node_old.location.plant_name,
-            node_old.location.location_name,
-        )
+        key = (node_old.location.plant_name, node_old.location.location_name)
         key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
         node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:expansion][node_new, t]

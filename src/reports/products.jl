@@ -53,4 +53,5 @@ function products_report(solution; marginal_costs)::DataFrame
     return df
 end
 
-write_products_report(solution, filename; marginal_costs = true) = CSV.write(filename, products_report(solution; marginal_costs))
+write_products_report(solution, filename; marginal_costs = true) =
+    CSV.write(filename, products_report(solution; marginal_costs))
