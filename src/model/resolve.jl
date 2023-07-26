@@ -17,6 +17,21 @@ function resolve(model_old, instance::Instance; optimizer = nothing)::OrderedDic
         lp_optimizer = _get_default_lp_optimizer()
     end
 
+    @info "Filtering candidate locations..."
+    selected_pairs = Set()
+    for ((node_old, t), var_old) in model_old[:is_open]
+        if JuMP.value(var_old) > 0.1
+            push!(selected_pairs, (node_old.location.plant_name, node_old.location.location_name))
+        end
+    end
+    filtered_plants = []
+    for p in instance.plants
+        if (p.plant_name, p.location_name) in selected_pairs
+            push!(filtered_plants, p)
+        end
+    end
+    instance.plants = filtered_plants
+
     @info "Building new graph..."
     graph = build_graph(instance)
     _print_graph_stats(instance, graph)
@@ -48,10 +63,12 @@ function _fix_plants!(model_old, model_new)::Nothing
     # Fix open_plant variables
     for ((node_old, t), var_old) in model_old[:open_plant]
         value_old = JuMP.value(var_old)
-        node_new = model_new[:graph].name_to_process_node_map[(
+        key = (
             node_old.location.plant_name,
             node_old.location.location_name,
-        )]
+        )
+        key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
+        node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:open_plant][node_new, t]
         JuMP.unset_binary(var_new)
         JuMP.fix(var_new, value_old)
@@ -61,10 +78,12 @@ function _fix_plants!(model_old, model_new)::Nothing
     for ((node_old, t), var_old) in model_old[:is_open]
         t > 0 || continue
         value_old = JuMP.value(var_old)
-        node_new = model_new[:graph].name_to_process_node_map[(
+        key = (
             node_old.location.plant_name,
             node_old.location.location_name,
-        )]
+        )
+        key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
+        node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:is_open][node_new, t]
         JuMP.unset_binary(var_new)
         JuMP.fix(var_new, value_old)
@@ -73,10 +92,12 @@ function _fix_plants!(model_old, model_new)::Nothing
     # Fix plant capacities
     for ((node_old, t), var_old) in model_old[:capacity]
         value_old = JuMP.value(var_old)
-        node_new = model_new[:graph].name_to_process_node_map[(
+        key = (
             node_old.location.plant_name,
             node_old.location.location_name,
-        )]
+        )
+        key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
+        node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:capacity][node_new, t]
         JuMP.delete_lower_bound(var_new)
         JuMP.delete_upper_bound(var_new)
@@ -87,10 +108,12 @@ function _fix_plants!(model_old, model_new)::Nothing
     for ((node_old, t), var_old) in model_old[:expansion]
         t > 0 || continue
         value_old = JuMP.value(var_old)
-        node_new = model_new[:graph].name_to_process_node_map[(
+        key = (
             node_old.location.plant_name,
             node_old.location.location_name,
-        )]
+        )
+        key ∈ keys(model_new[:graph].name_to_process_node_map) || continue
+        node_new = model_new[:graph].name_to_process_node_map[key]
         var_new = model_new[:expansion][node_new, t]
         JuMP.delete_lower_bound(var_new)
         JuMP.delete_upper_bound(var_new)
