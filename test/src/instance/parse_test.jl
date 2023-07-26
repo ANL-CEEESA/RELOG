@@ -72,7 +72,10 @@ function instance_parse_test()
         @test plant.sizes[1].opening_cost == [3000, 3000]
         @test plant.sizes[1].fixed_operating_cost == [50, 50]
         @test plant.sizes[1].variable_operating_cost == [50, 50]
-        @test plant.sizes[1] == plant.sizes[2]
+        @test plant.sizes[2].capacity == 1000.0
+        @test plant.sizes[2].opening_cost == [3000, 3000]
+        @test plant.sizes[2].fixed_operating_cost == [50, 50]
+        @test plant.sizes[2].variable_operating_cost == [50, 50]
 
         p4 = product_name_to_product["P4"]
         @test plant.output[p3] == 0.05
