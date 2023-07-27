@@ -32,6 +32,7 @@ function solve(
     output = nothing,
     marginal_costs = true,
     return_model = false,
+    graph = nothing,
 )
 
     if lp_optimizer == nothing
@@ -51,7 +52,9 @@ function solve(
 
 
     @info "Building graph..."
-    graph = RELOG.build_graph(instance)
+    if graph === nothing
+        graph = RELOG.build_graph(instance)
+    end
     _print_graph_stats(instance, graph)
 
     @info "Building optimization model..."
