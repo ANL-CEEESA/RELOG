@@ -42,14 +42,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -61,14 +67,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -80,14 +92,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -99,14 +117,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -118,14 +142,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -137,14 +167,20 @@
       "outputs": [
         "Nail"
       ],
-      "fixed output (tonne)": 1,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Nail": 1
+      },
+      "variable output (tonne/tonne)": {
+        "Nail": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Nail": 1000
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Nail": null
+      },
       "disposal cost ($/tonne)": {
         "Nail": 0
       },
@@ -156,14 +192,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -175,14 +217,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -194,14 +242,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -213,14 +267,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -232,14 +292,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -251,14 +317,20 @@
       "outputs": [
         "Wood"
       ],
-      "fixed output (tonne)": 100,
-      "variable output (tonne/tonne)": {},
+      "fixed output (tonne)": {
+        "Wood": 100
+      },
+      "variable output (tonne/tonne)": {
+        "Wood": 0
+      },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
         "Wood": 250
       },
       "operating cost ($)": 0,
-      "disposal limit (tonne)": 100000.0,
+      "disposal limit (tonne)": {
+        "Wood": null
+      },
       "disposal cost ($/tonne)": {
         "Wood": 0
       },
@@ -270,7 +342,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -297,7 +371,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -324,7 +400,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -351,7 +429,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -378,7 +458,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -405,7 +487,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -432,7 +516,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -459,7 +545,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -486,7 +574,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -513,7 +603,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -540,7 +632,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -567,7 +661,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -594,7 +690,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -621,7 +719,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -648,7 +748,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -675,7 +777,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -702,7 +806,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -729,7 +835,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -756,7 +864,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -783,7 +893,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -810,7 +922,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -837,7 +951,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -864,7 +980,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -891,7 +1009,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -918,7 +1038,9 @@
       "outputs": [
         "UsedBoat"
       ],
-      "fixed output (tonne)": 0,
+      "fixed output (tonne)": {
+        "UsedBoat": 0
+      },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
           0.1,
@@ -969,13 +1091,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1012,13 +1134,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1055,13 +1177,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1098,13 +1220,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1141,13 +1263,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1184,13 +1306,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1227,13 +1349,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1270,13 +1392,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1313,13 +1435,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1356,13 +1478,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1399,13 +1521,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1442,13 +1564,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1485,13 +1607,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1528,13 +1650,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1571,13 +1693,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1614,13 +1736,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1657,13 +1779,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1700,13 +1822,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1743,13 +1865,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1786,13 +1908,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1829,13 +1951,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1872,13 +1994,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1915,13 +2037,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -1958,13 +2080,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2001,13 +2123,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2044,13 +2166,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2087,13 +2209,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2130,13 +2252,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2173,13 +2295,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2216,13 +2338,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2259,13 +2381,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2302,13 +2424,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2345,13 +2467,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2388,13 +2510,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2431,13 +2553,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2474,13 +2596,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2517,13 +2639,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2560,13 +2682,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2603,13 +2725,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2646,13 +2768,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2689,13 +2811,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2732,13 +2854,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2775,13 +2897,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2818,13 +2940,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2861,13 +2983,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2904,13 +3026,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2947,13 +3069,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -2990,13 +3112,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -3033,13 +3155,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5
@@ -3076,13 +3198,13 @@
       },
       "capacities": [
         {
-          "size": 50,
+          "size (tonne)": 50,
           "opening cost ($)": 10000,
           "fixed operating cost ($)": 1000,
           "variable operating cost ($/tonne)": 5
         },
         {
-          "size": 500,
+          "size (tonne)": 500,
           "opening cost ($)": 20000,
           "fixed operating cost ($)": 2000,
           "variable operating cost ($/tonne)": 5

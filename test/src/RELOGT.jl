@@ -14,7 +14,8 @@ end
 
 function runtests()
     @testset "RELOG" begin
-        instance_parse_test()
+        instance_parse_test_1()
+        instance_parse_test_2()
     end
 end
 

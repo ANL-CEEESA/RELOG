@@ -2,7 +2,7 @@ using RELOG
 using Test
 using OrderedCollections
 
-function instance_parse_test()
+function instance_parse_test_1()
     instance = RELOG.parsefile(fixture("simple.json"))
 
     # Parameters
@@ -21,6 +21,7 @@ function instance_parse_test()
     @test instance.products_by_name["P1"] === p1
     p2 = instance.products[2]
     p3 = instance.products[3]
+    p4 = instance.products[4]
 
     # Centers
     @test length(instance.centers) == 3
@@ -41,4 +42,36 @@ function instance_parse_test()
     @test c2.input === nothing
     @test c2.revenue == [0, 0, 0, 0]
 
+    # Plants
+    @test length(instance.plants) == 1
+    l1 = instance.plants[1]
+    @test l1.latitude == 41.881
+    @test l1.longitude == -87.623
+    @test l1.input_mix ==
+          Dict(p1 => [0.953, 0.953, 0.953, 0.953], p2 => [0.047, 0.047, 0.047, 0.047])
+    @test l1.output == Dict(p3 => [0.25, 0.25, 0.25, 0.25], p4 => [0.12, 0.12, 0.12, 0.12])
+    @test l1.emissions == Dict("CO2" => [0.1, 0.1, 0.1, 0.1])
+    @test l1.storage_cost == Dict(p1 => [0.1, 0.1, 0.1, 0.1], p2 => [0.1, 0.1, 0.1, 0.1])
+    @test l1.storage_limit == Dict(p1 => [100, 100, 100, 100], p2 => [Inf, Inf, Inf, Inf])
+    @test l1.disposal_cost == Dict(p3 => [0, 0, 0, 0], p4 => [0.86, 0.86, 0.86, 0.86])
+    @test l1.disposal_limit ==
+          Dict(p3 => [Inf, Inf, Inf, Inf], p4 => [1000.0, 1000.0, 1000.0, 1000.0])
+    @test l1.initial_capacity == 150
+    @test length(l1.capacities) == 2
+    c1 = l1.capacities[1]
+    @test c1.size == 100
+    @test c1.opening_cost == [500, 500, 500, 500]
+    @test c1.fix_operating_cost == [300, 300, 300, 300]
+    @test c1.var_operating_cost == [5, 5, 5, 5]
+    c2 = l1.capacities[2]
+    @test c2.size == 500
+    @test c2.opening_cost == [1000, 1000, 1000, 1000]
+    @test c2.fix_operating_cost == [400, 400, 400, 400]
+    @test c2.var_operating_cost == [5, 5, 5, 5]
+end
+
+
+function instance_parse_test_2()
+    # Should not crash
+    RELOG.parsefile(fixture("boat_example.json"))
 end
