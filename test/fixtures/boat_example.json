@@ -1,0 +1,3096 @@
+{
+  "parameters": {
+    "time horizon (years)": 10,
+    "building period (years)": [
+      1
+    ],
+    "distance metric": "Euclidean"
+  },
+  "products": {
+    "Nail": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      }
+    },
+    "Wood": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      }
+    },
+    "NewBoat": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      }
+    },
+    "UsedBoat": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      }
+    }
+  },
+  "centers": {
+    "NailFactory (Chicago)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "NailFactory (Phoenix)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "NailFactory (Dallas)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "NailFactory (San Jose)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    },
+    "NailFactory (Seattle)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 47.606209,
+      "longitude (deg)": -122.332071
+    },
+    "NailFactory (Las Vegas)": {
+      "input": null,
+      "outputs": [
+        "Nail"
+      ],
+      "fixed output (tonne)": 1,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Nail": 1000
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Nail": 0
+      },
+      "latitude (deg)": 36.169941,
+      "longitude (deg)": -115.13983
+    },
+    "Forest (Chicago)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "Forest (Phoenix)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "Forest (Dallas)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "Forest (San Jose)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    },
+    "Forest (Seattle)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 47.606209,
+      "longitude (deg)": -122.332071
+    },
+    "Forest (Las Vegas)": {
+      "input": null,
+      "outputs": [
+        "Wood"
+      ],
+      "fixed output (tonne)": 100,
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Wood": 250
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": 100000.0,
+      "disposal cost ($/tonne)": {
+        "Wood": 0
+      },
+      "latitude (deg)": 36.169941,
+      "longitude (deg)": -115.13983
+    },
+    "Retail (Chicago)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "Retail (New York City)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 40.712776,
+      "longitude (deg)": -74.005974
+    },
+    "Retail (Los Angeles)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 34.052235,
+      "longitude (deg)": -118.243683
+    },
+    "Retail (Houston)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 29.760427,
+      "longitude (deg)": -95.369804
+    },
+    "Retail (Phoenix)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "Retail (Philadelphia)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 39.952583,
+      "longitude (deg)": -75.165222
+    },
+    "Retail (San Antonio)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 29.424122,
+      "longitude (deg)": -98.493629
+    },
+    "Retail (San Diego)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 32.715736,
+      "longitude (deg)": -117.161087
+    },
+    "Retail (Dallas)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "Retail (San Jose)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    },
+    "Retail (Austin)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 30.267153,
+      "longitude (deg)": -97.743061
+    },
+    "Retail (Jacksonville)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 30.332184,
+      "longitude (deg)": -81.655651
+    },
+    "Retail (Fort Worth)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 32.755488,
+      "longitude (deg)": -97.330766
+    },
+    "Retail (Columbus)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 39.961176,
+      "longitude (deg)": -82.998794
+    },
+    "Retail (Charlotte)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 35.227087,
+      "longitude (deg)": -80.843127
+    },
+    "Retail (Indianapolis)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 39.768403,
+      "longitude (deg)": -86.158068
+    },
+    "Retail (San Francisco)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 37.774929,
+      "longitude (deg)": -122.419416
+    },
+    "Retail (Seattle)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 47.606209,
+      "longitude (deg)": -122.332071
+    },
+    "Retail (Denver)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 39.739236,
+      "longitude (deg)": -104.990251
+    },
+    "Retail (Washington D.C.)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 38.907192,
+      "longitude (deg)": -77.036871
+    },
+    "Retail (Nashville)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 36.162664,
+      "longitude (deg)": -86.781602
+    },
+    "Retail (Detroit)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 42.331427,
+      "longitude (deg)": -83.045754
+    },
+    "Retail (Oklahoma City)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 35.46756,
+      "longitude (deg)": -97.516428
+    },
+    "Retail (Portland)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 45.505106,
+      "longitude (deg)": -122.675026
+    },
+    "Retail (Las Vegas)": {
+      "input": "NewBoat",
+      "outputs": [
+        "UsedBoat"
+      ],
+      "fixed output (tonne)": 0,
+      "variable output (tonne/tonne)": {
+        "UsedBoat": [
+          0.1,
+          0.25,
+          0.1
+        ]
+      },
+      "revenue ($/tonne)": 3000,
+      "collection cost ($/tonne)": {
+        "UsedBoat": 100
+      },
+      "operating cost ($)": 125000,
+      "disposal limit (tonne)": {
+        "UsedBoat": 0
+      },
+      "disposal cost ($/tonne)": {
+        "UsedBoat": 0
+      },
+      "latitude (deg)": 36.169941,
+      "longitude (deg)": -115.13983
+    }
+  },
+  "plants": {
+    "BoatFactory (Chicago)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "BoatFactory (New York City)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 40.712776,
+      "longitude (deg)": -74.005974
+    },
+    "BoatFactory (Los Angeles)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 34.052235,
+      "longitude (deg)": -118.243683
+    },
+    "BoatFactory (Houston)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.760427,
+      "longitude (deg)": -95.369804
+    },
+    "BoatFactory (Phoenix)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "BoatFactory (Philadelphia)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.952583,
+      "longitude (deg)": -75.165222
+    },
+    "BoatFactory (San Antonio)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.424122,
+      "longitude (deg)": -98.493629
+    },
+    "BoatFactory (San Diego)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.715736,
+      "longitude (deg)": -117.161087
+    },
+    "BoatFactory (Dallas)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "BoatFactory (San Jose)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    },
+    "BoatFactory (Austin)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 30.267153,
+      "longitude (deg)": -97.743061
+    },
+    "BoatFactory (Jacksonville)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 30.332184,
+      "longitude (deg)": -81.655651
+    },
+    "BoatFactory (Fort Worth)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.755488,
+      "longitude (deg)": -97.330766
+    },
+    "BoatFactory (Columbus)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.961176,
+      "longitude (deg)": -82.998794
+    },
+    "BoatFactory (Charlotte)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 35.227087,
+      "longitude (deg)": -80.843127
+    },
+    "BoatFactory (Indianapolis)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.768403,
+      "longitude (deg)": -86.158068
+    },
+    "BoatFactory (San Francisco)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 37.774929,
+      "longitude (deg)": -122.419416
+    },
+    "BoatFactory (Seattle)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 47.606209,
+      "longitude (deg)": -122.332071
+    },
+    "BoatFactory (Denver)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.739236,
+      "longitude (deg)": -104.990251
+    },
+    "BoatFactory (Washington D.C.)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 38.907192,
+      "longitude (deg)": -77.036871
+    },
+    "BoatFactory (Nashville)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 36.162664,
+      "longitude (deg)": -86.781602
+    },
+    "BoatFactory (Detroit)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 42.331427,
+      "longitude (deg)": -83.045754
+    },
+    "BoatFactory (Oklahoma City)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 35.46756,
+      "longitude (deg)": -97.516428
+    },
+    "BoatFactory (Portland)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 45.505106,
+      "longitude (deg)": -122.675026
+    },
+    "BoatFactory (Las Vegas)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 36.169941,
+      "longitude (deg)": -115.13983
+    },
+    "RecyclingPlant (Chicago)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "RecyclingPlant (New York City)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 40.712776,
+      "longitude (deg)": -74.005974
+    },
+    "RecyclingPlant (Los Angeles)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 34.052235,
+      "longitude (deg)": -118.243683
+    },
+    "RecyclingPlant (Houston)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.760427,
+      "longitude (deg)": -95.369804
+    },
+    "RecyclingPlant (Phoenix)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "RecyclingPlant (Philadelphia)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.952583,
+      "longitude (deg)": -75.165222
+    },
+    "RecyclingPlant (San Antonio)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.424122,
+      "longitude (deg)": -98.493629
+    },
+    "RecyclingPlant (San Diego)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.715736,
+      "longitude (deg)": -117.161087
+    },
+    "RecyclingPlant (Dallas)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "RecyclingPlant (San Jose)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    },
+    "RecyclingPlant (Austin)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 30.267153,
+      "longitude (deg)": -97.743061
+    },
+    "RecyclingPlant (Jacksonville)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 30.332184,
+      "longitude (deg)": -81.655651
+    },
+    "RecyclingPlant (Fort Worth)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.755488,
+      "longitude (deg)": -97.330766
+    },
+    "RecyclingPlant (Columbus)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.961176,
+      "longitude (deg)": -82.998794
+    },
+    "RecyclingPlant (Charlotte)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 35.227087,
+      "longitude (deg)": -80.843127
+    },
+    "RecyclingPlant (Indianapolis)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.768403,
+      "longitude (deg)": -86.158068
+    },
+    "RecyclingPlant (San Francisco)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 37.774929,
+      "longitude (deg)": -122.419416
+    },
+    "RecyclingPlant (Seattle)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 47.606209,
+      "longitude (deg)": -122.332071
+    },
+    "RecyclingPlant (Denver)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.739236,
+      "longitude (deg)": -104.990251
+    },
+    "RecyclingPlant (Washington D.C.)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 38.907192,
+      "longitude (deg)": -77.036871
+    },
+    "RecyclingPlant (Nashville)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 36.162664,
+      "longitude (deg)": -86.781602
+    },
+    "RecyclingPlant (Detroit)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 42.331427,
+      "longitude (deg)": -83.045754
+    },
+    "RecyclingPlant (Oklahoma City)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 35.46756,
+      "longitude (deg)": -97.516428
+    },
+    "RecyclingPlant (Portland)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 45.505106,
+      "longitude (deg)": -122.675026
+    },
+    "RecyclingPlant (Las Vegas)": {
+      "input mix (%)": {
+        "Wood": 95,
+        "Nail": 5
+      },
+      "output (tonne)": {
+        "NewBoat": 1.0
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Wood": 500,
+        "Nail": 200
+      },
+      "storage limit (tonne)": {
+        "Wood": 5,
+        "Nail": 1
+      },
+      "disposal cost ($/tonne)": {
+        "NewBoat": 0
+      },
+      "disposal limit (tonne)": {
+        "NewBoat": 0
+      },
+      "capacities": [
+        {
+          "size": 50,
+          "opening cost ($)": 10000,
+          "fixed operating cost ($)": 1000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size": 500,
+          "opening cost ($)": 20000,
+          "fixed operating cost ($)": 2000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 36.169941,
+      "longitude (deg)": -115.13983
+    }
+  }
+}
