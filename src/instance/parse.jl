@@ -11,13 +11,17 @@ function parse(json)::Instance
     building_period = json["parameters"]["building period (years)"]
     distance_metric = json["parameters"]["distance metric"]
 
+    timeseries(x::Union{Nothing,Number}) = repeat([x], time_horizon)
+    timeseries(x::Array) = x
+    timeseries(d::OrderedDict) = OrderedDict(k => timeseries(v) for (k,v) in d)
+
     # Read products
     products = Product[]
     products_by_name = OrderedDict{String,Product}()
     for (pname, pdict) in json["products"]
-        tr_cost = pdict["transportation cost (\$/km/tonne)"]
-        tr_energy = pdict["transportation energy (J/km/tonne)"]
-        tr_emissions = pdict["transportation emissions (tonne/km/tonne)"]
+        tr_cost = timeseries(pdict["transportation cost (\$/km/tonne)"])
+        tr_energy = timeseries(pdict["transportation energy (J/km/tonne)"])
+        tr_emissions = timeseries(pdict["transportation emissions (tonne/km/tonne)"])
         prod = Product(; name = pname, tr_cost, tr_energy, tr_emissions)
         push!(products, prod)
         products_by_name[pname] = prod
@@ -33,12 +37,12 @@ function parse(json)::Instance
         revenue = [0.0 for t = 1:time_horizon]
         if cdict["input"] !== nothing
             input = products_by_name[cdict["input"]]
-            revenue = cdict["revenue (\$/tonne)"]
+            revenue = timeseries(cdict["revenue (\$/tonne)"])
         end
         outputs = [products_by_name[p] for p in cdict["outputs"]]
-        operating_cost = cdict["operating cost (\$)"]
+        operating_cost = timeseries(cdict["operating cost (\$)"])
         prod_dict(key, null_val) = OrderedDict(
-            p => [v === nothing ? null_val : v for v in cdict[key][p.name]] for
+            p => [v === nothing ? null_val : v for v in timeseries(cdict[key][p.name])] for
             p in outputs
         )
         fixed_output = prod_dict("fixed output (tonne)", 0.0)

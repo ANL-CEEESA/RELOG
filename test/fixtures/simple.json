@@ -6,10 +6,10 @@
   },
   "products": {
     "P1": {
-      "transportation cost ($/km/tonne)": [0.015, 0.015, 0.015, 0.015],
-      "transportation energy (J/km/tonne)": [0.12, 0.12, 0.12, 0.12],
+      "transportation cost ($/km/tonne)": 0.015,
+      "transportation energy (J/km/tonne)": 0.12,
       "transportation emissions (tonne/km/tonne)": {
-        "CO2": [0.052, 0.052, 0.052, 0.052],
+        "CO2": 0.052,
         "CH4": [0.003, 0.003, 0.003, 0.003]
       }
     },
@@ -52,7 +52,7 @@
         "P2": [0.12, 0.25, 0.12, 0.0],
         "P3": [0.25, 0.25, 0.25, 0.0]
       },
-      "revenue ($/tonne)": [12.0, 12.0, 12.0, 12.0],
+      "revenue ($/tonne)": 12.0,
       "collection cost ($/tonne)": {
         "P2": [0.25, 0.25, 0.25, 0.25],
         "P3": [0.37, 0.37, 0.37, 0.37]
@@ -73,21 +73,21 @@
       "input": null,
       "outputs": ["P4"],
       "variable output (tonne/tonne)": {
-        "P4": [0, 0, 0, 0]
+        "P4": 0
       },
       "fixed output (tonne)": {
         "P4": [50, 60, 70, 80]
       },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
-        "P4": [0.25, 0.25, 0.25, 0.25]
+        "P4": 0.25
       },
       "operating cost ($)": [150.0, 150.0, 150.0, 150.0],
       "disposal limit (tonne)": {
-        "P4": [null, null, null, null]
+        "P4": null
       },
       "disposal cost ($/tonne)": {
-        "P4": [0, 0, 0, 0]
+        "P4": 0
       }
     },
     "C3": {
@@ -99,7 +99,7 @@
       "constant output (tonne)": {},
       "revenue ($/tonne)": [12.0, 12.0, 12.0, 12.0],
       "collection cost ($/tonne)": {},
-      "operating cost ($)": [150.0, 150.0, 150.0, 150.0],
+      "operating cost ($)": 150.0,
       "disposal limit (tonne)": {},
       "disposal cost ($/tonne)": {}
     }
