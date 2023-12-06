@@ -119,12 +119,16 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
 
     # Transportation cost
     for (p1, p2, m) in E, t in T
-        add_to_expression!(obj, distances[p1, p2, m], y[p1.name, p2.name, m.name, t])
+        add_to_expression!(
+            obj,
+            distances[p1, p2, m] * m.tr_cost[t],
+            y[p1.name, p2.name, m.name, t],
+        )
     end
 
     # Center: Revenue
     for c in centers, (p, m) in E_in[c], t in T
-        add_to_expression!(obj, c.revenue[t], y[p.name, c.name, m.name, t])
+        add_to_expression!(obj, -c.revenue[t], y[p.name, c.name, m.name, t])
     end
 
     # Center: Collection cost
@@ -240,7 +244,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     eq_building_period = _init(model, :eq_building_period)
     for p in plants, t in T
         if t ∉ instance.building_period
-            eq_building_period[p.name, t] = @constraint(model, x[p.name, t] == 0)
+            eq_building_period[p.name, t] =
+                @constraint(model, x[p.name, t] - x[p.name, t-1] <= 0)
         end
     end
 

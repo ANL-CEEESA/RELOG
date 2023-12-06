@@ -11,6 +11,9 @@ function plants_report(model)::DataFrame
     df."year" = Int[]
     df."operational?" = Bool[]
     df."input amount (tonne)" = Float64[]
+    df."opening cost (\$)" = Float64[]
+    df."fixed operating cost (\$)" = Float64[]
+    df."variable operating cost (\$)" = Float64[]
 
     plants = model.ext[:instance].plants
     T = 1:model.ext[:instance].time_horizon
@@ -18,8 +21,24 @@ function plants_report(model)::DataFrame
     for p in plants, t in T
         operational = JuMP.value(model[:x][p.name, t]) > 0.5
         input = value(model[:z_input][p.name, t])
-        operational || continue
-        push!(df, [p.name, t, operational, input])
+        opening_cost = 0
+        if value(model[:x][p.name, t]) > 0.5 && value(model[:x][p.name, t-1]) < 0.5
+            opening_cost = p.capacities[1].opening_cost[t]
+        end
+        fix_operating_cost = (operational ? p.capacities[1].fix_operating_cost[t] : 0)
+        var_operating_cost = input * p.capacities[1].var_operating_cost[t]
+        push!(
+            df,
+            [
+                p.name,
+                t,
+                operational,
+                _round(input),
+                _round(opening_cost),
+                _round(fix_operating_cost),
+                _round(var_operating_cost),
+            ],
+        )
     end
     return df
 end
@@ -31,6 +50,7 @@ function plant_outputs_report(model)::DataFrame
     df."year" = Int[]
     df."amount produced (tonne)" = Float64[]
     df."amount disposed (tonne)" = Float64[]
+    df."disposal cost (\$)" = Float64[]
 
     plants = model.ext[:instance].plants
     T = 1:model.ext[:instance].time_horizon
@@ -38,8 +58,11 @@ function plant_outputs_report(model)::DataFrame
     for p in plants, m in keys(p.output), t in T
         produced = JuMP.value(model[:z_prod][p.name, m.name, t])
         disposed = JuMP.value(model[:z_disp][p.name, m.name, t])
-        produced > 1e-3 || continue
-        push!(df, [p.name, m.name, t, produced, disposed])
+        disposal_cost = p.disposal_cost[m][t] * disposed
+        push!(
+            df,
+            [p.name, m.name, t, _round(produced), _round(disposed), _round(disposal_cost)],
+        )
     end
     return df
 end

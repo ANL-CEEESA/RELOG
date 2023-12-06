@@ -14,11 +14,11 @@ function model_build_test()
     # print(model)
 
     @test obj.terms[y["L1", "C3", "P4", 1]] == (
-        111.118 + # transportation
-        12.0 # revenue
+        111.118 * 0.015 # transportation
+        - 12.0 # revenue
     )
     @test obj.terms[y["C1", "L1", "P2", 4]] == (
-        333.262 +  # transportation
+        333.262 * 0.015 +  # transportation
         0.25 + # center collection cost
         5.0 # plant operating cost
     )
@@ -83,7 +83,7 @@ function model_build_test()
     # Plants: Building period
     @test ("L1", 1) ∉ keys(model[:eq_building_period])
     @test repr(model[:eq_building_period]["L1", 2]) ==
-          "eq_building_period[L1,2] : x[L1,2] = 0"
+          "eq_building_period[L1,2] : -x[L1,1] + x[L1,2] ≤ 0"
 
     # Centers: Definition of total center input
     @test repr(model[:eq_z_input]["C1", 1]) ==
