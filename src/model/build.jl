@@ -6,14 +6,15 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     products = instance.products
     plants = instance.plants
     T = 1:instance.time_horizon
+    model.ext[:instance] = instance
 
     # Transportation edges
     # -------------------------------------------------------------------------
 
     # Connectivity
-    E = []
-    E_in = Dict(src => [] for src in plants ∪ centers)
-    E_out = Dict(src => [] for src in plants ∪ centers)
+    model.ext[:E] = E = []
+    model.ext[:E_in] = E_in = Dict(src => [] for src in plants ∪ centers)
+    model.ext[:E_out] = E_out = Dict(src => [] for src in plants ∪ centers)
 
     function push_edge!(src, dst, m)
         push!(E, (src, dst, m))
@@ -28,7 +29,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             # Plant to plant
             for p2 in plants
                 p1 != p2 || continue
-                m ∉ keys(p2.input_mix) || continue
+                m ∈ keys(p2.input_mix) || continue
                 push_edge!(p1, p2, m)
             end
 
@@ -57,7 +58,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     end
 
     # Distances
-    distances = Dict()
+    model.ext[:distances] = distances = Dict()
     for (p1, p2, m) in E
         d = _calculate_distance(p1.latitude, p1.longitude, p2.latitude, p2.longitude)
         distances[p1, p2, m] = d
@@ -85,9 +86,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     z_prod = _init(model, :z_prod)
     for p in plants, m in keys(p.output), t in T
         z_prod[p.name, m.name, t] = @variable(model, lower_bound = 0)
-    end
-    for c in centers, m in c.outputs, t in T
-        z_prod[c.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
     # Amount of product m disposed at plant/center p at time T

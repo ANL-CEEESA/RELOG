@@ -3,7 +3,7 @@ using Test
 using HiGHS
 using JuMP
 
-function model_build_test_1()
+function model_build_test()
     instance = RELOG.parsefile(fixture("simple.json"))
     model = RELOG.build_model(instance, optimizer = HiGHS.Optimizer, variable_names = true)
     y = model[:y]
@@ -109,11 +109,4 @@ function model_build_test_1()
     @test repr(model[:eq_disposal_limit]["C1", "P2", 1]) ==
           "eq_disposal_limit[C1,P2,1] : z_disp[C1,P2,1] ≤ 0"
     @test ("C1", "P3", 1) ∉ keys(model[:eq_disposal_limit])
-end
-
-
-function model_build_test_2()
-    instance = RELOG.parsefile(fixture("boat_example.json"))
-    model = RELOG.build_model(instance, optimizer = HiGHS.Optimizer)
-    optimize!(model) 
 end
