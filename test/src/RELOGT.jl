@@ -18,7 +18,8 @@ function runtests()
     @testset "RELOG" begin
         instance_parse_test_1()
         instance_parse_test_2()
-        model_build_test()
+        model_build_test_1()
+        model_build_test_2()
         model_dist_test()
     end
 end

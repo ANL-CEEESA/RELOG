@@ -16,7 +16,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     E_out = Dict(src => [] for src in plants ∪ centers)
 
     function push_edge!(src, dst, m)
-        @show src.name, dst.name, m.name
         push!(E, (src, dst, m))
         push!(E_out[src], (dst, m))
         push!(E_in[dst], (src, m))
@@ -35,7 +34,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
 
             # Plant to center
             for c in centers
-                @show m.name, p1.name, c.name, m == c.input
                 m == c.input || continue
                 push_edge!(p1, c, m)
             end
@@ -63,7 +61,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     for (p1, p2, m) in E
         d = _calculate_distance(p1.latitude, p1.longitude, p2.latitude, p2.longitude)
         distances[p1, p2, m] = d
-        @show p1.name, p2.name, m.name, d
     end
 
     # Decision variables
@@ -102,10 +99,19 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_disp[c.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
-    # Total plant input
+    # Total plant/center input
     z_input = _init(model, :z_input)
     for p in plants, t in T
         z_input[p.name, t] = @variable(model, lower_bound = 0)
+    end
+    for c in centers, t in T
+        z_input[c.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Total amount collected by the center
+    z_collected = _init(model, :z_collected)
+    for c in centers, m in c.outputs, t in T
+        z_collected[c.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
 
@@ -115,47 +121,55 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
 
     # Transportation cost
     for (p1, p2, m) in E, t in T
-        obj += distances[p1, p2, m] * y[p1.name, p2.name, m.name, t]
+        add_to_expression!(obj, distances[p1, p2, m], y[p1.name, p2.name, m.name, t])
     end
 
     # Center: Revenue
     for c in centers, (p, m) in E_in[c], t in T
-        obj += c.revenue[t] * y[p.name, c.name, m.name, t]
+        add_to_expression!(obj, c.revenue[t], y[p.name, c.name, m.name, t])
     end
 
     # Center: Collection cost
     for c in centers, (p, m) in E_out[c], t in T
-        obj += c.collection_cost[m][t] * y[c.name, p.name, m.name, t]
+        add_to_expression!(obj, c.collection_cost[m][t], y[c.name, p.name, m.name, t])
     end
 
     # Center: Disposal cost
     for c in centers, m in c.outputs, t in T
-        obj += c.disposal_cost[m][t] * z_disp[c.name, m.name, t]
+        add_to_expression!(obj, c.disposal_cost[m][t], z_disp[c.name, m.name, t])
     end
 
     # Center: Operating cost
     for c in centers, t in T
-        obj += c.operating_cost[t]
+        add_to_expression!(obj, c.operating_cost[t])
     end
 
     # Plants: Disposal cost
     for p in plants, m in keys(p.output), t in T
-        obj += p.disposal_cost[m][t] * z_disp[p.name, m.name, t]
+        add_to_expression!(obj, p.disposal_cost[m][t], z_disp[p.name, m.name, t])
     end
 
     # Plants: Opening cost
     for p in plants, t in T
-        obj += p.capacities[1].opening_cost[t] * (x[p.name, t] - x[p.name, t-1])
+        add_to_expression!(
+            obj,
+            p.capacities[1].opening_cost[t],
+            (x[p.name, t] - x[p.name, t-1]),
+        )
     end
 
     # Plants: Fixed operating cost
     for p in plants, t in T
-        obj += p.capacities[1].fix_operating_cost[t] * x[p.name, t]
+        add_to_expression!(obj, p.capacities[1].fix_operating_cost[t], x[p.name, t])
     end
 
     # Plants: Variable operating cost
     for p in plants, (src, m) in E_in[p], t in T
-        obj += p.capacities[1].var_operating_cost[t] * y[src.name, p.name, m.name, t]
+        add_to_expression!(
+            obj,
+            p.capacities[1].var_operating_cost[t],
+            y[src.name, p.name, m.name, t],
+        )
     end
 
     @objective(model, Min, obj)
@@ -206,29 +220,73 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     # Plants: Capacity limit
     eq_capacity = _init(model, :eq_capacity)
     for p in plants, t in T
-        eq_capacity[p.name, t] = @constraint(
-            model,
-            z_input[p.name, t] <= p.capacities[1].size * x[p.name, t]
-        )
+        eq_capacity[p.name, t] =
+            @constraint(model, z_input[p.name, t] <= p.capacities[1].size * x[p.name, t])
     end
 
     # Plants: Disposal limit
     eq_disposal_limit = _init(model, :eq_disposal_limit)
     for p in plants, m in keys(p.output), t in T
         isfinite(p.disposal_limit[m][t]) || continue
-        eq_disposal_limit[p.name, m.name, t] = @constraint(
-            model,
-            z_disp[p.name, m.name, t] <= p.disposal_limit[m][t]
-        )
+        eq_disposal_limit[p.name, m.name, t] =
+            @constraint(model, z_disp[p.name, m.name, t] <= p.disposal_limit[m][t])
     end
 
     # Plants: Plant remains open
     eq_keep_open = _init(model, :eq_keep_open)
     for p in plants, t in T
-        eq_keep_open[p.name, t] = @constraint(
+        eq_keep_open[p.name, t] = @constraint(model, x[p.name, t] >= x[p.name, t-1])
+    end
+
+    # Plants: Building period
+    eq_building_period = _init(model, :eq_building_period)
+    for p in plants, t in T
+        if t ∉ instance.building_period
+            eq_building_period[p.name, t] = @constraint(model, x[p.name, t] == 0)
+        end
+    end
+
+    # Centers: Definition of total center input
+    eq_z_input = _init(model, :eq_z_input)
+    for c in centers, t in T
+        eq_z_input[c.name, t] = @constraint(
             model,
-            x[p.name, t] >= x[p.name, t-1]
+            z_input[c.name, t] ==
+            sum(y[src.name, c.name, m.name, t] for (src, m) in E_in[c])
         )
+    end
+
+    # Centers: Calculate amount collected
+    eq_z_collected = _init(model, :eq_z_collected)
+    for c in centers, m in c.outputs, t in T
+        M = length(c.var_output[m])
+        eq_z_collected[c.name, m.name, t] = @constraint(
+            model,
+            z_collected[c.name, m.name, t] ==
+            sum(
+                z_input[c.name, t-offset] * c.var_output[m][offset+1] for
+                offset = 0:min(M - 1, t - 1)
+            ) + c.fixed_output[m][t]
+        )
+    end
+
+    # Centers: Collected products must be disposed or sent
+    eq_balance = _init(model, :eq_balance)
+    for c in centers, m in c.outputs, t in T
+        eq_balance[c.name, m.name, t] = @constraint(
+            model,
+            z_collected[c.name, m.name, t] ==
+            sum(y[c.name, dst.name, m.name, t] for (dst, m2) in E_out[c] if m == m2) +
+            z_disp[c.name, m.name, t]
+        )
+    end
+
+    # Centers: Disposal limit
+    eq_disposal_limit = _init(model, :eq_disposal_limit)
+    for c in centers, m in c.outputs, t in T
+        isfinite(c.disposal_limit[m][t]) || continue
+        eq_disposal_limit[c.name, m.name, t] =
+            @constraint(model, z_disp[c.name, m.name, t] <= c.disposal_limit[m][t])
     end
 
     if variable_names

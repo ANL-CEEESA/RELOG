@@ -31,8 +31,7 @@ function instance_parse_test_1()
     @test c1.input === p1
     @test c1.outputs == [p2, p3]
     @test c1.fixed_output == Dict(p2 => [100, 50, 0, 0], p3 => [20, 10, 0, 0])
-    @test c1.var_output ==
-          Dict(p2 => [0.12, 0.25, 0.12, 0.0], p3 => [0.25, 0.25, 0.25, 0.0])
+    @test c1.var_output == Dict(p2 => [0.2, 0.25, 0.12], p3 => [0.25, 0.25, 0.25])
     @test c1.revenue == [12.0, 12.0, 12.0, 12.0]
     @test c1.operating_cost == [150.0, 150.0, 150.0, 150.0]
     @test c1.disposal_limit == Dict(p2 => [0, 0, 0, 0], p3 => [Inf, Inf, Inf, Inf])
