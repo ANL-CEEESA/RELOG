@@ -18,19 +18,19 @@ function parse(json)::Instance
     # Read products
     products = Product[]
     products_by_name = OrderedDict{String,Product}()
-    for (pname, pdict) in json["products"]
+    for (name, pdict) in json["products"]
         tr_cost = timeseries(pdict["transportation cost (\$/km/tonne)"])
         tr_energy = timeseries(pdict["transportation energy (J/km/tonne)"])
         tr_emissions = timeseries(pdict["transportation emissions (tonne/km/tonne)"])
-        prod = Product(; name = pname, tr_cost, tr_energy, tr_emissions)
+        prod = Product(; name, tr_cost, tr_energy, tr_emissions)
         push!(products, prod)
-        products_by_name[pname] = prod
+        products_by_name[name] = prod
     end
 
     # Read centers
     centers = Center[]
     centers_by_name = OrderedDict{String,Center}()
-    for (cname, cdict) in json["centers"]
+    for (name, cdict) in json["centers"]
         latitude = cdict["latitude (deg)"]
         longitude = cdict["longitude (deg)"]
         input = nothing
@@ -52,6 +52,7 @@ function parse(json)::Instance
         disposal_cost = prod_dict("disposal cost (\$/tonne)", 0.0)
 
         center = Center(;
+            name,
             latitude,
             longitude,
             input,
@@ -65,12 +66,12 @@ function parse(json)::Instance
             disposal_limit,
         )
         push!(centers, center)
-        centers_by_name[cname] = center
+        centers_by_name[name] = center
     end
 
     plants = Plant[]
     plants_by_name = OrderedDict{String,Plant}()
-    for (pname, pdict) in json["plants"]
+    for (name, pdict) in json["plants"]
         prod_dict(key; scale = 1.0, null_val = Inf) = OrderedDict{Product,Vector{Float64}}(
             products_by_name[p] => [
                 v === nothing ? null_val : v * scale for v in timeseries(pdict[key][p])
@@ -100,6 +101,7 @@ function parse(json)::Instance
         end
 
         plant = Plant(;
+            name,
             latitude,
             longitude,
             input_mix,
@@ -113,7 +115,7 @@ function parse(json)::Instance
             initial_capacity,
         )
         push!(plants, plant)
-        plants_by_name[pname] = plant
+        plants_by_name[name] = plant
     end
 
     return Instance(;

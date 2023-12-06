@@ -8,6 +8,7 @@ Base.@kwdef struct Product
 end
 
 Base.@kwdef struct Center
+    name::String
     latitude::Float64
     longitude::Float64
     input::Union{Product,Nothing}
@@ -29,6 +30,7 @@ Base.@kwdef struct PlantCapacity
 end
 
 Base.@kwdef struct Plant
+    name::String
     latitude::Float64
     longitude::Float64
     input_mix::OrderedDict{Product,Vector{Float64}}
