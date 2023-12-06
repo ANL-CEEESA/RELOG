@@ -45,7 +45,7 @@ function instance_parse_test_1()
     # Plants
     @test length(instance.plants) == 1
     l1 = instance.plants[1]
-    @test l1.latitude == 41.881
+    @test l1.latitude == 44.881
     @test l1.longitude == -87.623
     @test l1.input_mix ==
           Dict(p1 => [0.953, 0.953, 0.953, 0.953], p2 => [0.047, 0.047, 0.047, 0.047])
@@ -56,11 +56,11 @@ function instance_parse_test_1()
     @test l1.disposal_cost == Dict(p3 => [0, 0, 0, 0], p4 => [0.86, 0.86, 0.86, 0.86])
     @test l1.disposal_limit ==
           Dict(p3 => [Inf, Inf, Inf, Inf], p4 => [1000.0, 1000.0, 1000.0, 1000.0])
-    @test l1.initial_capacity == 150
+    @test l1.initial_capacity == 0
     @test length(l1.capacities) == 2
     c1 = l1.capacities[1]
     @test c1.size == 100
-    @test c1.opening_cost == [500, 500, 500, 500]
+    @test c1.opening_cost == [300, 400, 450, 475]
     @test c1.fix_operating_cost == [300, 300, 300, 300]
     @test c1.var_operating_cost == [5, 5, 5, 5]
     c2 = l1.capacities[2]

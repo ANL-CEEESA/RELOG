@@ -68,32 +68,32 @@
       }
     },
     "C2": {
-      "latitude (deg)": 41.881,
+      "latitude (deg)": 42.881,
       "longitude (deg)": -87.623,
       "input": null,
-      "outputs": ["P4"],
+      "outputs": ["P1"],
       "variable output (tonne/tonne)": {
-        "P4": 0
+        "P1": 0
       },
       "fixed output (tonne)": {
-        "P4": [50, 60, 70, 80]
+        "P1": [50, 60, 70, 80]
       },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {
-        "P4": 0.25
+        "P1": 0.25
       },
       "operating cost ($)": [150.0, 150.0, 150.0, 150.0],
       "disposal limit (tonne)": {
-        "P4": null
+        "P1": null
       },
       "disposal cost ($/tonne)": {
-        "P4": 0
+        "P1": 0
       }
     },
     "C3": {
-      "latitude (deg)": 41.881,
+      "latitude (deg)": 43.881,
       "longitude (deg)": -87.623,
-      "input": "P1",
+      "input": "P4",
       "outputs": [],
       "variable output (tonne/tonne)": {},
       "constant output (tonne)": {},
@@ -106,7 +106,7 @@
   },
   "plants": {
     "L1": {
-      "latitude (deg)": 41.881,
+      "latitude (deg)": 44.881,
       "longitude (deg)": -87.623,
       "input mix (%)": {
         "P1": 95.3,
@@ -138,7 +138,7 @@
       "capacities": [
         {
           "size (tonne)": 100,
-          "opening cost ($)": 500,
+          "opening cost ($)": [300, 400, 450, 475],
           "fixed operating cost ($)": 300,
           "variable operating cost ($/tonne)": 5.0
         },
@@ -149,7 +149,7 @@
           "variable operating cost ($/tonne)": 5.0
         }
       ],
-      "initial capacity (tonne)": 150
+      "initial capacity (tonne)": 0
     }
   }
 }

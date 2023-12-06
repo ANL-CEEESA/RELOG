@@ -6,6 +6,7 @@ using JuliaFormatter
 
 include("instance/parse_test.jl")
 include("model/build_test.jl")
+include("model/dist_test.jl")
 
 basedir = dirname(@__FILE__)
 
@@ -18,6 +19,7 @@ function runtests()
         instance_parse_test_1()
         instance_parse_test_2()
         model_build_test()
+        model_dist_test()
     end
 end
 

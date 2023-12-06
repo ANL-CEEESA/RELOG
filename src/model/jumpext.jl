@@ -14,7 +14,7 @@ function fix(x::Float64, v::Float64; force)
     return abs(x - v) < 1e-6 || error("Value mismatch: $x != $v")
 end
 
-function set_name(x::Float64, n::String)
+function set_name(x::Number, n::String)
     # nop
 end
 
