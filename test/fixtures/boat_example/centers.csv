@@ -1,0 +1,81 @@
+center,year,input product,input amount (tonne),revenue ($),operating cost ($)
+NailFactory (Chicago),1,,0.0,0.0,0.0
+NailFactory (Chicago),2,,0.0,0.0,0.0
+NailFactory (Chicago),3,,0.0,0.0,0.0
+NailFactory (Chicago),4,,0.0,0.0,0.0
+NailFactory (Chicago),5,,0.0,0.0,0.0
+NailFactory (Phoenix),1,,0.0,0.0,0.0
+NailFactory (Phoenix),2,,0.0,0.0,0.0
+NailFactory (Phoenix),3,,0.0,0.0,0.0
+NailFactory (Phoenix),4,,0.0,0.0,0.0
+NailFactory (Phoenix),5,,0.0,0.0,0.0
+NailFactory (Dallas),1,,0.0,0.0,0.0
+NailFactory (Dallas),2,,0.0,0.0,0.0
+NailFactory (Dallas),3,,0.0,0.0,0.0
+NailFactory (Dallas),4,,0.0,0.0,0.0
+NailFactory (Dallas),5,,0.0,0.0,0.0
+Forest (Chicago),1,,0.0,0.0,0.0
+Forest (Chicago),2,,0.0,0.0,0.0
+Forest (Chicago),3,,0.0,0.0,0.0
+Forest (Chicago),4,,0.0,0.0,0.0
+Forest (Chicago),5,,0.0,0.0,0.0
+Forest (Phoenix),1,,0.0,0.0,0.0
+Forest (Phoenix),2,,0.0,0.0,0.0
+Forest (Phoenix),3,,0.0,0.0,0.0
+Forest (Phoenix),4,,0.0,0.0,0.0
+Forest (Phoenix),5,,0.0,0.0,0.0
+Forest (Dallas),1,,0.0,0.0,0.0
+Forest (Dallas),2,,0.0,0.0,0.0
+Forest (Dallas),3,,0.0,0.0,0.0
+Forest (Dallas),4,,0.0,0.0,0.0
+Forest (Dallas),5,,0.0,0.0,0.0
+Retail (Chicago),1,NewBoat,0.0,0.0,125000.0
+Retail (Chicago),2,NewBoat,0.0,0.0,125000.0
+Retail (Chicago),3,NewBoat,0.0,0.0,125000.0
+Retail (Chicago),4,NewBoat,0.0,0.0,125000.0
+Retail (Chicago),5,NewBoat,0.0,0.0,125000.0
+Retail (New York City),1,NewBoat,0.0,0.0,125000.0
+Retail (New York City),2,NewBoat,0.0,0.0,125000.0
+Retail (New York City),3,NewBoat,0.0,0.0,125000.0
+Retail (New York City),4,NewBoat,0.0,0.0,125000.0
+Retail (New York City),5,NewBoat,0.0,0.0,125000.0
+Retail (Los Angeles),1,NewBoat,0.0,0.0,125000.0
+Retail (Los Angeles),2,NewBoat,0.0,0.0,125000.0
+Retail (Los Angeles),3,NewBoat,0.0,0.0,125000.0
+Retail (Los Angeles),4,NewBoat,0.0,0.0,125000.0
+Retail (Los Angeles),5,NewBoat,0.0,0.0,125000.0
+Retail (Houston),1,NewBoat,0.0,0.0,125000.0
+Retail (Houston),2,NewBoat,0.0,0.0,125000.0
+Retail (Houston),3,NewBoat,0.0,0.0,125000.0
+Retail (Houston),4,NewBoat,0.0,0.0,125000.0
+Retail (Houston),5,NewBoat,0.0,0.0,125000.0
+Retail (Phoenix),1,NewBoat,0.0,0.0,125000.0
+Retail (Phoenix),2,NewBoat,0.0,0.0,125000.0
+Retail (Phoenix),3,NewBoat,0.0,0.0,125000.0
+Retail (Phoenix),4,NewBoat,0.0,0.0,125000.0
+Retail (Phoenix),5,NewBoat,0.0,0.0,125000.0
+Retail (Philadelphia),1,NewBoat,0.0,0.0,125000.0
+Retail (Philadelphia),2,NewBoat,0.0,0.0,125000.0
+Retail (Philadelphia),3,NewBoat,0.0,0.0,125000.0
+Retail (Philadelphia),4,NewBoat,0.0,0.0,125000.0
+Retail (Philadelphia),5,NewBoat,0.0,0.0,125000.0
+Retail (San Antonio),1,NewBoat,0.0,0.0,125000.0
+Retail (San Antonio),2,NewBoat,0.0,0.0,125000.0
+Retail (San Antonio),3,NewBoat,0.0,0.0,125000.0
+Retail (San Antonio),4,NewBoat,0.0,0.0,125000.0
+Retail (San Antonio),5,NewBoat,0.0,0.0,125000.0
+Retail (San Diego),1,NewBoat,0.0,0.0,125000.0
+Retail (San Diego),2,NewBoat,0.0,0.0,125000.0
+Retail (San Diego),3,NewBoat,0.0,0.0,125000.0
+Retail (San Diego),4,NewBoat,0.0,0.0,125000.0
+Retail (San Diego),5,NewBoat,0.0,0.0,125000.0
+Retail (Dallas),1,NewBoat,63.15789,757894.73684,125000.0
+Retail (Dallas),2,NewBoat,71.46814,857617.72853,125000.0
+Retail (Dallas),3,NewBoat,75.8857,910628.37148,125000.0
+Retail (Dallas),4,NewBoat,76.90434,922852.03459,125000.0
+Retail (Dallas),5,NewBoat,77.27087,927250.44516,125000.0
+Retail (San Jose),1,NewBoat,0.0,0.0,125000.0
+Retail (San Jose),2,NewBoat,0.0,0.0,125000.0
+Retail (San Jose),3,NewBoat,0.0,0.0,125000.0
+Retail (San Jose),4,NewBoat,0.0,0.0,125000.0
+Retail (San Jose),5,NewBoat,0.0,0.0,125000.0

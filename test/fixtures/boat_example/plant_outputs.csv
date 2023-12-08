@@ -1,0 +1,151 @@
+plant,output product,year,amount produced (tonne),amount disposed (tonne),disposal cost ($)
+BoatFactory (Chicago),NewBoat,1,0.0,0.0,0.0
+BoatFactory (Chicago),NewBoat,2,0.0,0.0,0.0
+BoatFactory (Chicago),NewBoat,3,0.0,0.0,0.0
+BoatFactory (Chicago),NewBoat,4,0.0,0.0,0.0
+BoatFactory (Chicago),NewBoat,5,0.0,0.0,0.0
+BoatFactory (New York City),NewBoat,1,0.0,0.0,0.0
+BoatFactory (New York City),NewBoat,2,0.0,0.0,0.0
+BoatFactory (New York City),NewBoat,3,0.0,0.0,0.0
+BoatFactory (New York City),NewBoat,4,0.0,0.0,0.0
+BoatFactory (New York City),NewBoat,5,0.0,0.0,0.0
+BoatFactory (Los Angeles),NewBoat,1,0.0,0.0,0.0
+BoatFactory (Los Angeles),NewBoat,2,0.0,0.0,0.0
+BoatFactory (Los Angeles),NewBoat,3,0.0,0.0,0.0
+BoatFactory (Los Angeles),NewBoat,4,0.0,0.0,0.0
+BoatFactory (Los Angeles),NewBoat,5,0.0,0.0,0.0
+BoatFactory (Houston),NewBoat,1,0.0,0.0,0.0
+BoatFactory (Houston),NewBoat,2,0.0,0.0,0.0
+BoatFactory (Houston),NewBoat,3,0.0,0.0,0.0
+BoatFactory (Houston),NewBoat,4,0.0,0.0,0.0
+BoatFactory (Houston),NewBoat,5,0.0,0.0,0.0
+BoatFactory (Phoenix),NewBoat,1,0.0,0.0,0.0
+BoatFactory (Phoenix),NewBoat,2,0.0,0.0,0.0
+BoatFactory (Phoenix),NewBoat,3,0.0,0.0,0.0
+BoatFactory (Phoenix),NewBoat,4,0.0,0.0,0.0
+BoatFactory (Phoenix),NewBoat,5,0.0,0.0,0.0
+BoatFactory (Philadelphia),NewBoat,1,0.0,0.0,0.0
+BoatFactory (Philadelphia),NewBoat,2,0.0,0.0,0.0
+BoatFactory (Philadelphia),NewBoat,3,0.0,0.0,0.0
+BoatFactory (Philadelphia),NewBoat,4,0.0,0.0,0.0
+BoatFactory (Philadelphia),NewBoat,5,0.0,0.0,0.0
+BoatFactory (San Antonio),NewBoat,1,0.0,0.0,0.0
+BoatFactory (San Antonio),NewBoat,2,0.0,0.0,0.0
+BoatFactory (San Antonio),NewBoat,3,0.0,0.0,0.0
+BoatFactory (San Antonio),NewBoat,4,0.0,0.0,0.0
+BoatFactory (San Antonio),NewBoat,5,0.0,0.0,0.0
+BoatFactory (San Diego),NewBoat,1,0.0,0.0,0.0
+BoatFactory (San Diego),NewBoat,2,0.0,0.0,0.0
+BoatFactory (San Diego),NewBoat,3,0.0,0.0,0.0
+BoatFactory (San Diego),NewBoat,4,0.0,0.0,0.0
+BoatFactory (San Diego),NewBoat,5,0.0,0.0,0.0
+BoatFactory (Dallas),NewBoat,1,63.15789,0.0,0.0
+BoatFactory (Dallas),NewBoat,2,71.46814,0.0,0.0
+BoatFactory (Dallas),NewBoat,3,75.8857,0.0,0.0
+BoatFactory (Dallas),NewBoat,4,76.90434,0.0,0.0
+BoatFactory (Dallas),NewBoat,5,77.27087,0.0,0.0
+BoatFactory (San Jose),NewBoat,1,0.0,0.0,0.0
+BoatFactory (San Jose),NewBoat,2,0.0,0.0,0.0
+BoatFactory (San Jose),NewBoat,3,0.0,0.0,0.0
+BoatFactory (San Jose),NewBoat,4,0.0,0.0,0.0
+BoatFactory (San Jose),NewBoat,5,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,1,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,3,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,4,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,5,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,1,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,3,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,4,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,5,0.0,0.0,0.0
+RecyclingPlant (New York City),Nail,1,0.0,0.0,0.0
+RecyclingPlant (New York City),Nail,2,0.0,0.0,0.0
+RecyclingPlant (New York City),Nail,3,0.0,0.0,0.0
+RecyclingPlant (New York City),Nail,4,0.0,0.0,0.0
+RecyclingPlant (New York City),Nail,5,0.0,0.0,0.0
+RecyclingPlant (New York City),Wood,1,0.0,0.0,0.0
+RecyclingPlant (New York City),Wood,2,0.0,0.0,0.0
+RecyclingPlant (New York City),Wood,3,0.0,0.0,0.0
+RecyclingPlant (New York City),Wood,4,0.0,0.0,0.0
+RecyclingPlant (New York City),Wood,5,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Nail,1,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Nail,3,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Nail,4,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Nail,5,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Wood,1,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Wood,3,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Wood,4,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),Wood,5,0.0,0.0,0.0
+RecyclingPlant (Houston),Nail,1,0.0,0.0,0.0
+RecyclingPlant (Houston),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Houston),Nail,3,0.0,0.0,0.0
+RecyclingPlant (Houston),Nail,4,0.0,0.0,0.0
+RecyclingPlant (Houston),Nail,5,0.0,0.0,0.0
+RecyclingPlant (Houston),Wood,1,0.0,0.0,0.0
+RecyclingPlant (Houston),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Houston),Wood,3,0.0,0.0,0.0
+RecyclingPlant (Houston),Wood,4,0.0,0.0,0.0
+RecyclingPlant (Houston),Wood,5,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Nail,1,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Nail,3,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Nail,4,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Nail,5,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Wood,1,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Wood,3,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Wood,4,0.0,0.0,0.0
+RecyclingPlant (Phoenix),Wood,5,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Nail,1,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Nail,3,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Nail,4,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Nail,5,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Wood,1,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Wood,3,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Wood,4,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),Wood,5,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Nail,1,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Nail,2,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Nail,3,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Nail,4,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Nail,5,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Wood,1,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Wood,2,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Wood,3,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Wood,4,0.0,0.0,0.0
+RecyclingPlant (San Antonio),Wood,5,0.0,0.0,0.0
+RecyclingPlant (San Diego),Nail,1,0.0,0.0,0.0
+RecyclingPlant (San Diego),Nail,2,0.0,0.0,0.0
+RecyclingPlant (San Diego),Nail,3,0.0,0.0,0.0
+RecyclingPlant (San Diego),Nail,4,0.0,0.0,0.0
+RecyclingPlant (San Diego),Nail,5,0.0,0.0,0.0
+RecyclingPlant (San Diego),Wood,1,0.0,0.0,0.0
+RecyclingPlant (San Diego),Wood,2,0.0,0.0,0.0
+RecyclingPlant (San Diego),Wood,3,0.0,0.0,0.0
+RecyclingPlant (San Diego),Wood,4,0.0,0.0,0.0
+RecyclingPlant (San Diego),Wood,5,0.0,0.0,0.0
+RecyclingPlant (Dallas),Nail,1,0.15789,0.0,0.0
+RecyclingPlant (Dallas),Nail,2,0.57341,0.0,0.0
+RecyclingPlant (Dallas),Nail,3,0.79428,0.0,0.0
+RecyclingPlant (Dallas),Nail,4,0.84522,0.0,0.0
+RecyclingPlant (Dallas),Nail,5,0.86354,0.0,0.0
+RecyclingPlant (Dallas),Wood,1,3.0,0.0,0.0
+RecyclingPlant (Dallas),Wood,2,10.89474,0.0,0.0
+RecyclingPlant (Dallas),Wood,3,15.09141,0.0,0.0
+RecyclingPlant (Dallas),Wood,4,16.05912,0.0,0.0
+RecyclingPlant (Dallas),Wood,5,16.40733,0.0,0.0
+RecyclingPlant (San Jose),Nail,1,0.0,0.0,0.0
+RecyclingPlant (San Jose),Nail,2,0.0,0.0,0.0
+RecyclingPlant (San Jose),Nail,3,0.0,0.0,0.0
+RecyclingPlant (San Jose),Nail,4,0.0,0.0,0.0
+RecyclingPlant (San Jose),Nail,5,0.0,0.0,0.0
+RecyclingPlant (San Jose),Wood,1,0.0,0.0,0.0
+RecyclingPlant (San Jose),Wood,2,0.0,0.0,0.0
+RecyclingPlant (San Jose),Wood,3,0.0,0.0,0.0
+RecyclingPlant (San Jose),Wood,4,0.0,0.0,0.0
+RecyclingPlant (San Jose),Wood,5,0.0,0.0,0.0

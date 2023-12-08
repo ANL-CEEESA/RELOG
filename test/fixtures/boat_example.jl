@@ -166,7 +166,24 @@ function run_boat_example()
         ),
     )
 
+    # Generate instance file
     open(fixture("boat_example.json"), "w") do file
         JSON.print(file, data, 2)
     end
+
+    # Load and solve example
+    instance = RELOG.parsefile(fixture("boat_example.json"))
+    model = RELOG.build_model(instance, optimizer = HiGHS.Optimizer, variable_names = true)
+    optimize!(model)
+
+    # Write reports
+    mkpath(fixture("boat_example"))
+    write_to_file(model, fixture("boat_example/model.lp"))
+    RELOG.write_plants_report(model, fixture("boat_example/plants.csv"))
+    RELOG.write_plant_outputs_report(model, fixture("boat_example/plant_outputs.csv"))
+    RELOG.write_centers_report(model, fixture("boat_example/centers.csv"))
+    RELOG.write_center_outputs_report(model, fixture("boat_example/center_outputs.csv"))
+    RELOG.write_transportation_report(model, fixture("boat_example/transportation.csv"))
+
+    return
 end

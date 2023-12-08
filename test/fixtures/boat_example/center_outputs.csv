@@ -1,0 +1,81 @@
+center,output product,year,amount collected (tonne),amount disposed (tonne),collection cost ($),disposal cost ($)
+NailFactory (Chicago),Nail,1,1.0,0.0,1000.0,0.0
+NailFactory (Chicago),Nail,2,1.0,0.0,1000.0,0.0
+NailFactory (Chicago),Nail,3,1.0,-0.0,1000.0,-0.0
+NailFactory (Chicago),Nail,4,1.0,0.0,1000.0,0.0
+NailFactory (Chicago),Nail,5,1.0,0.0,1000.0,0.0
+NailFactory (Phoenix),Nail,1,1.0,0.0,1000.0,0.0
+NailFactory (Phoenix),Nail,2,1.0,0.0,1000.0,0.0
+NailFactory (Phoenix),Nail,3,1.0,0.0,1000.0,0.0
+NailFactory (Phoenix),Nail,4,1.0,0.0,1000.0,0.0
+NailFactory (Phoenix),Nail,5,1.0,0.0,1000.0,0.0
+NailFactory (Dallas),Nail,1,1.0,-0.0,1000.0,-0.0
+NailFactory (Dallas),Nail,2,1.0,-0.0,1000.0,-0.0
+NailFactory (Dallas),Nail,3,1.0,-0.0,1000.0,-0.0
+NailFactory (Dallas),Nail,4,1.0,0.0,1000.0,0.0
+NailFactory (Dallas),Nail,5,1.0,0.0,1000.0,0.0
+Forest (Chicago),Wood,1,100.0,100.0,0.0,0.0
+Forest (Chicago),Wood,2,100.0,100.0,0.0,0.0
+Forest (Chicago),Wood,3,100.0,100.0,0.0,0.0
+Forest (Chicago),Wood,4,100.0,100.0,0.0,0.0
+Forest (Chicago),Wood,5,100.0,100.0,0.0,0.0
+Forest (Phoenix),Wood,1,100.0,100.0,0.0,0.0
+Forest (Phoenix),Wood,2,100.0,100.0,0.0,0.0
+Forest (Phoenix),Wood,3,100.0,100.0,0.0,0.0
+Forest (Phoenix),Wood,4,100.0,100.0,0.0,0.0
+Forest (Phoenix),Wood,5,100.0,100.0,0.0,0.0
+Forest (Dallas),Wood,1,100.0,43.0,14250.0,0.0
+Forest (Dallas),Wood,2,100.0,43.0,14250.0,0.0
+Forest (Dallas),Wood,3,100.0,43.0,14250.0,0.0
+Forest (Dallas),Wood,4,100.0,43.0,14250.0,0.0
+Forest (Dallas),Wood,5,100.0,43.0,14250.0,0.0
+Retail (Chicago),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (Chicago),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (Chicago),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (Chicago),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (Chicago),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (New York City),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (New York City),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (New York City),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (New York City),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (New York City),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Philadelphia),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (Philadelphia),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (Philadelphia),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (Philadelphia),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (Philadelphia),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (San Antonio),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (San Antonio),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (San Antonio),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (San Antonio),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (San Antonio),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (San Diego),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (San Diego),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (San Diego),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (San Diego),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (San Diego),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Dallas),UsedBoat,1,6.31579,0.0,631.57895,0.0
+Retail (Dallas),UsedBoat,2,22.93629,0.0,2293.62881,0.0
+Retail (Dallas),UsedBoat,3,31.7714,0.0,3177.13952,0.0
+Retail (Dallas),UsedBoat,4,33.80867,0.0,3380.86724,0.0
+Retail (Dallas),UsedBoat,5,34.54174,0.0,3454.17409,0.0
+Retail (San Jose),UsedBoat,1,0.0,0.0,0.0,0.0
+Retail (San Jose),UsedBoat,2,0.0,0.0,0.0,0.0
+Retail (San Jose),UsedBoat,3,0.0,0.0,0.0,0.0
+Retail (San Jose),UsedBoat,4,0.0,0.0,0.0,0.0
+Retail (San Jose),UsedBoat,5,0.0,0.0,0.0,0.0
