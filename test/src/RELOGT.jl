@@ -8,6 +8,7 @@ include("instance/parse_test.jl")
 include("model/build_test.jl")
 include("model/dist_test.jl")
 include("reports_test.jl")
+include("../fixtures/boat_example.jl")
 
 basedir = dirname(@__FILE__)
 
@@ -28,6 +29,7 @@ end
 function format()
     JuliaFormatter.format(basedir, verbose = true)
     JuliaFormatter.format("$basedir/../../src", verbose = true)
+    JuliaFormatter.format("$basedir/../fixtures", verbose = true)
     return
 end
 end # module RELOGT
