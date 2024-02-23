@@ -1,0 +1,650 @@
+{
+  "parameters": {
+    "time horizon (years)": 5,
+    "building period (years)": [1],
+    "distance metric": "Euclidean"
+  },
+  "products": {
+    "Waste": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      },
+      "components": ["Film", "Paper", "Cardboard"]
+    },
+    "Film Bale": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      },
+      "components": ["Film", "Paper", "Cardboard"]
+    },
+    "Cardboard Bale": {
+      "transportation cost ($/km/tonne)": 0.3,
+      "transportation energy (J/km/tonne)": 7500,
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": 2.68
+      },
+      "components": ["Film", "Paper", "Cardboard"]
+    }
+  },
+  "centers": {
+    "Collection Center (Chicago)": {
+      "input": null,
+      "outputs": ["Waste"],
+      "fixed output (tonne)": {
+        "Waste": [20, 100, 100]
+      },
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Waste": 10
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": {
+        "Waste": null
+      },
+      "disposal cost ($/tonne)": {
+        "Waste": 0
+      },
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "Collection Center (Phoenix)": {
+      "input": null,
+      "outputs": ["Waste"],
+      "fixed output (tonne)": {
+        "Waste": [20, 100, 100]
+      },
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Waste": 10
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": {
+        "Waste": null
+      },
+      "disposal cost ($/tonne)": {
+        "Waste": 0
+      },
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "Collection Center (Dallas)": {
+      "input": null,
+      "outputs": ["Waste"],
+      "fixed output (tonne)": {
+        "Waste": [20, 100, 100]
+      },
+      "variable output (tonne/tonne)": {},
+      "revenue ($/tonne)": null,
+      "collection cost ($/tonne)": {
+        "Waste": 10
+      },
+      "operating cost ($)": 0,
+      "disposal limit (tonne)": {
+        "Waste": null
+      },
+      "disposal cost ($/tonne)": {
+        "Waste": 0
+      },
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    }
+  },
+  "plants": {
+    "RecyclingPlant (Chicago)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 41.881832,
+      "longitude (deg)": -87.623177
+    },
+    "RecyclingPlant (New York City)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 40.712776,
+      "longitude (deg)": -74.005974
+    },
+    "RecyclingPlant (Los Angeles)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 34.052235,
+      "longitude (deg)": -118.243683
+    },
+    "RecyclingPlant (Houston)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.760427,
+      "longitude (deg)": -95.369804
+    },
+    "RecyclingPlant (Phoenix)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 33.448376,
+      "longitude (deg)": -112.074036
+    },
+    "RecyclingPlant (Philadelphia)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 39.952583,
+      "longitude (deg)": -75.165222
+    },
+    "RecyclingPlant (San Antonio)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 29.424122,
+      "longitude (deg)": -98.493629
+    },
+    "RecyclingPlant (San Diego)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.715736,
+      "longitude (deg)": -117.161087
+    },
+    "RecyclingPlant (Dallas)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 32.776664,
+      "longitude (deg)": -96.796988
+    },
+    "RecyclingPlant (San Jose)": {
+      "input mix (%)": {
+        "Waste": 100
+      },
+      "output (tonne)": {
+        "Film Bale": {
+          "Waste": [
+            [0.98, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.02]
+          ]
+        },
+        "Cardboard Bale": {
+          "Waste": [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.02, 0.0],
+            [0.0, 0.0, 0.75]
+          ]
+        }
+      },
+      "processing emissions (tonne)": {
+        "CO2": 5
+      },
+      "storage cost ($/tonne)": {
+        "Waste": 500
+      },
+      "storage limit (tonne)": {
+        "Waste": 5
+      },
+      "disposal cost ($/tonne)": {
+        "Film Bale": -10,
+        "Cardboard Bale": -10
+      },
+      "disposal limit (tonne)": {
+        "Film Bale": null,
+        "Cardboard Bale": null
+      },
+      "capacities": [
+        {
+          "size (tonne)": 500,
+          "opening cost ($)": 100000,
+          "fixed operating cost ($)": 250000,
+          "variable operating cost ($/tonne)": 5
+        },
+        {
+          "size (tonne)": 1000,
+          "opening cost ($)": 2000000,
+          "fixed operating cost ($)": 500000,
+          "variable operating cost ($/tonne)": 5
+        }
+      ],
+      "initial capacity (tonne)": 0,
+      "latitude (deg)": 37.338208,
+      "longitude (deg)": -121.886329
+    }
+  }
+}

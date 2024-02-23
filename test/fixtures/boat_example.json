@@ -12,28 +12,40 @@
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "components": [
+        "1"
+      ]
     },
     "Wood": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "components": [
+        "1"
+      ]
     },
     "NewBoat": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "components": [
+        "1"
+      ]
     },
     "UsedBoat": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "components": [
+        "1"
+      ]
     }
   },
   "centers": {
@@ -43,7 +55,9 @@
         "Nail"
       ],
       "fixed output (tonne)": {
-        "Nail": 1
+        "Nail": [
+          1
+        ]
       },
       "variable output (tonne/tonne)": {
         "Nail": 0
@@ -68,7 +82,9 @@
         "Nail"
       ],
       "fixed output (tonne)": {
-        "Nail": 1
+        "Nail": [
+          1
+        ]
       },
       "variable output (tonne/tonne)": {
         "Nail": 0
@@ -93,7 +109,9 @@
         "Nail"
       ],
       "fixed output (tonne)": {
-        "Nail": 1
+        "Nail": [
+          1
+        ]
       },
       "variable output (tonne/tonne)": {
         "Nail": 0
@@ -118,7 +136,23 @@
         "Wood"
       ],
       "fixed output (tonne)": {
-        "Wood": 100
+        "Wood": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "Wood": 0
@@ -143,7 +177,23 @@
         "Wood"
       ],
       "fixed output (tonne)": {
-        "Wood": 100
+        "Wood": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "Wood": 0
@@ -168,7 +218,23 @@
         "Wood"
       ],
       "fixed output (tonne)": {
-        "Wood": 100
+        "Wood": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "Wood": 0
@@ -193,7 +259,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -222,7 +304,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -251,7 +349,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -280,7 +394,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -309,7 +439,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -338,7 +484,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -367,7 +529,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -396,7 +574,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -425,7 +619,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [
@@ -454,7 +664,23 @@
         "UsedBoat"
       ],
       "fixed output (tonne)": {
-        "UsedBoat": 0
+        "UsedBoat": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
       },
       "variable output (tonne/tonne)": {
         "UsedBoat": [

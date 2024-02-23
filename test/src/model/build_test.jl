@@ -11,7 +11,6 @@ function model_build_test()
     z_input = model[:z_input]
     x = model[:x]
     obj = objective_function(model)
-    # print(model)
 
     @test obj.terms[y["L1", "C3", "P4", 1]] == (
         111.118 * 0.015 # transportation
@@ -98,7 +97,8 @@ function model_build_test()
           "eq_z_collected[C1,P2,3] : -0.12 z_input[C1,1] - 0.25 z_input[C1,2] - 0.2 z_input[C1,3] + z_collected[C1,P2,3] = 0"
     @test repr(model[:eq_z_collected]["C1", "P2", 4]) ==
           "eq_z_collected[C1,P2,4] : -0.12 z_input[C1,2] - 0.25 z_input[C1,3] - 0.2 z_input[C1,4] + z_collected[C1,P2,4] = 0"
-
+    @test repr(model[:eq_z_collected]["C2", "P1", 1]) == "eq_z_collected[C2,P1,1] : z_collected[C2,P1,1] = 55"
+    
     # Centers: Collected products must be disposed or sent
     @test repr(model[:eq_balance]["C1", "P2", 1]) ==
           "eq_balance[C1,P2,1] : -y[C1,L1,P2,1] - z_disp[C1,P2,1] + z_collected[C1,P2,1] = 0"

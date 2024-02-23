@@ -18,6 +18,7 @@ function instance_parse_test_1()
     @test p1.tr_energy == [0.12, 0.12, 0.12, 0.12]
     @test p1.tr_emissions ==
           Dict("CO2" => [0.052, 0.052, 0.052, 0.052], "CH4" => [0.003, 0.003, 0.003, 0.003])
+    @test p1.components == ["1", "2"]
     @test instance.products_by_name["P1"] === p1
     p2 = instance.products[2]
     p3 = instance.products[3]
@@ -30,7 +31,7 @@ function instance_parse_test_1()
     @test c1.longitude == -87.623
     @test c1.input === p1
     @test c1.outputs == [p2, p3]
-    @test c1.fixed_output == Dict(p2 => [100, 50, 0, 0], p3 => [20, 10, 0, 0])
+    @test c1.fixed_output == Dict(p2 => [100; 50; 0; 0;;], p3 => [20; 10; 0; 0;;])
     @test c1.var_output == Dict(p2 => [0.2, 0.25, 0.12], p3 => [0.25, 0.25, 0.25])
     @test c1.revenue == [12.0, 12.0, 12.0, 12.0]
     @test c1.operating_cost == [150.0, 150.0, 150.0, 150.0]

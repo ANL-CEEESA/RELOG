@@ -16,3 +16,4 @@ run.jl
 relog-web-legacy
 .vscode
 jobs
+**/tmp

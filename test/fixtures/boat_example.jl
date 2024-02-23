@@ -32,7 +32,7 @@ function run_boat_example()
     nail_factory = dict(
         "input" => nothing,
         "outputs" => ["Nail"],
-        "fixed output (tonne)" => dict("Nail" => 1),
+        "fixed output (tonne)" => dict("Nail" => [1]),
         "variable output (tonne/tonne)" => dict("Nail" => 0),
         "revenue (\$/tonne)" => nothing,
         "collection cost (\$/tonne)" => dict("Nail" => 1000),
@@ -44,7 +44,7 @@ function run_boat_example()
     forest = dict(
         "input" => nothing,
         "outputs" => ["Wood"],
-        "fixed output (tonne)" => dict("Wood" => 100),
+        "fixed output (tonne)" => dict("Wood" => [[100], [100], [100], [100], [100]]),
         "variable output (tonne/tonne)" => dict("Wood" => 0),
         "revenue (\$/tonne)" => nothing,
         "collection cost (\$/tonne)" => dict("Wood" => 250),
@@ -56,7 +56,7 @@ function run_boat_example()
     retail = dict(
         "input" => "NewBoat",
         "outputs" => ["UsedBoat"],
-        "fixed output (tonne)" => dict("UsedBoat" => 0),
+        "fixed output (tonne)" => dict("UsedBoat" => [[0], [0], [0], [0], [0]]),
         "variable output (tonne/tonne)" => dict("UsedBoat" => [0.10, 0.25, 0.10]),
         "revenue (\$/tonne)" => 12_000,
         "collection cost (\$/tonne)" => dict("UsedBoat" => 100),
@@ -69,6 +69,7 @@ function run_boat_example()
         "transportation cost (\$/km/tonne)" => 0.30,
         "transportation energy (J/km/tonne)" => 7_500,
         "transportation emissions (tonne/km/tonne)" => dict("CO2" => 2.68),
+        "components" => ["1"],
     )
 
     boat_factory = dict(
@@ -121,10 +122,8 @@ function run_boat_example()
         "initial capacity (tonne)" => 0,
     )
 
-    lat_lon_dict(city_location) = dict(
-        "latitude (deg)" => city_location[1],
-        "longitude (deg)" => city_location[2],
-    )
+    lat_lon_dict(city_location) =
+        dict("latitude (deg)" => city_location[1], "longitude (deg)" => city_location[2])
 
     data = dict(
         "parameters" => parameters,
@@ -132,36 +131,29 @@ function run_boat_example()
             dict("Nail" => prod, "Wood" => prod, "NewBoat" => prod, "UsedBoat" => prod),
         "centers" => merge(
             dict(
-                "NailFactory ($city_name)" => merge(
-                    nail_factory,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_b
+                "NailFactory ($city_name)" =>
+                    merge(nail_factory, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_b
             ),
             dict(
-                "Forest ($city_name)" => merge(
-                    forest,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_b
+                "Forest ($city_name)" => merge(forest, lat_lon_dict(city_location))
+                for (city_name, city_location) in cities_b
             ),
             dict(
-                "Retail ($city_name)" => merge(
-                    retail,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "Retail ($city_name)" => merge(retail, lat_lon_dict(city_location))
+                for (city_name, city_location) in cities_a
             ),
         ),
         "plants" => merge(
             dict(
-                "BoatFactory ($city_name)" => merge(
-                    boat_factory,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "BoatFactory ($city_name)" =>
+                    merge(boat_factory, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_a
             ),
             dict(
-                "RecyclingPlant ($city_name)" => merge(
-                    recycling_plant,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "RecyclingPlant ($city_name)" =>
+                    merge(recycling_plant, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_a
             ),
         ),
     )

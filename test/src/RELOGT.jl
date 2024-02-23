@@ -32,4 +32,7 @@ function format()
     JuliaFormatter.format("$basedir/../fixtures", verbose = true)
     return
 end
+
+export format, runtests
+
 end # module RELOGT

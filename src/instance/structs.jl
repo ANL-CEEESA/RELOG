@@ -5,6 +5,7 @@ Base.@kwdef struct Product
     tr_cost::Vector{Float64}
     tr_energy::Vector{Float64}
     tr_emissions::OrderedDict{String,Vector{Float64}}
+    components::Vector{String}
 end
 
 Base.@kwdef struct Center
@@ -13,7 +14,7 @@ Base.@kwdef struct Center
     longitude::Float64
     input::Union{Product,Nothing}
     outputs::Vector{Product}
-    fixed_output::OrderedDict{Product,Vector{Float64}}
+    fixed_output::OrderedDict{Product,Array{Float64,2}}
     var_output::OrderedDict{Product,Vector{Float64}}
     revenue::Vector{Float64}
     collection_cost::OrderedDict{Product,Vector{Float64}}

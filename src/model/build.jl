@@ -269,7 +269,10 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             sum(
                 z_input[c.name, t-offset] * c.var_output[m][offset+1] for
                 offset = 0:min(M - 1, t - 1)
-            ) + c.fixed_output[m][t]
+            ) + sum(
+                c.fixed_output[m][t,mi]
+                for mi in 1:length(m.components)
+            )
         )
     end
 

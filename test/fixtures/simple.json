@@ -11,7 +11,8 @@
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 0.052,
         "CH4": [0.003, 0.003, 0.003, 0.003]
-      }
+      },
+      "components": ["1", "2"]
     },
     "P2": {
       "transportation cost ($/km/tonne)": [0.015, 0.015, 0.015, 0.015],
@@ -19,7 +20,8 @@
       "transportation emissions (tonne/km/tonne)": {
         "CO2": [0.052, 0.052, 0.052, 0.052],
         "CH4": [0.003, 0.003, 0.003, 0.003]
-      }
+      },
+      "components": ["1"]
     },
     "P3": {
       "transportation cost ($/km/tonne)": [0.015, 0.015, 0.015, 0.015],
@@ -27,7 +29,8 @@
       "transportation emissions (tonne/km/tonne)": {
         "CO2": [0.052, 0.052, 0.052, 0.052],
         "CH4": [0.003, 0.003, 0.003, 0.003]
-      }
+      },
+      "components": ["1"]
     },
     "P4": {
       "transportation cost ($/km/tonne)": [0.015, 0.015, 0.015, 0.015],
@@ -35,7 +38,8 @@
       "transportation emissions (tonne/km/tonne)": {
         "CO2": [0.052, 0.052, 0.052, 0.052],
         "CH4": [0.003, 0.003, 0.003, 0.003]
-      }
+      },
+      "components": ["1"]
     }
   },
   "centers": {
@@ -45,11 +49,11 @@
       "input": "P1",
       "outputs": ["P2", "P3"],
       "fixed output (tonne)": {
-        "P2": [100, 50, 0, 0],
-        "P3": [20, 10, 0, 0]
+        "P2": [[100], [50], [0], [0]],
+        "P3": [[20], [10], [0], [0]]
       },
       "variable output (tonne/tonne)": {
-        "P2": [0.20, 0.25, 0.12],
+        "P2": [0.2, 0.25, 0.12],
         "P3": [0.25, 0.25, 0.25]
       },
       "revenue ($/tonne)": 12.0,
@@ -76,7 +80,12 @@
         "P1": 0
       },
       "fixed output (tonne)": {
-        "P1": [50, 60, 70, 80]
+        "P1": [
+          [50, 5],
+          [60, 6],
+          [70, 7],
+          [80, 8]
+        ]
       },
       "revenue ($/tonne)": null,
       "collection cost ($/tonne)": {

@@ -22,7 +22,8 @@ function parse(json)::Instance
         tr_cost = timeseries(pdict["transportation cost (\$/km/tonne)"])
         tr_energy = timeseries(pdict["transportation energy (J/km/tonne)"])
         tr_emissions = timeseries(pdict["transportation emissions (tonne/km/tonne)"])
-        prod = Product(; name, tr_cost, tr_energy, tr_emissions)
+        components = pdict["components"]
+        prod = Product(; name, tr_cost, tr_energy, tr_emissions, components)
         push!(products, prod)
         products_by_name[name] = prod
     end
@@ -45,7 +46,19 @@ function parse(json)::Instance
             p => [v === nothing ? null_val : v for v in timeseries(cdict[key][p.name])]
             for p in outputs
         )
-        fixed_output = prod_dict("fixed output (tonne)", 0.0)
+        to_array(x) = vcat(x'...)
+        prepend_time_dimension(x) = to_array(repeat([x], time_horizon))
+
+        fixed_output = Dict()
+        for p in outputs
+            m = to_array(cdict["fixed output (tonne)"][p.name])
+            if ndims(m) == 1
+                m = prepend_time_dimension(m)
+            end
+            @assert size(m) == (time_horizon, length(p.components))
+            fixed_output[p] = m
+        end
+
         var_output = prod_dict("variable output (tonne/tonne)", 0.0)
         collection_cost = prod_dict("collection cost (\$/tonne)", 0.0)
         disposal_limit = prod_dict("disposal limit (tonne)", Inf)
