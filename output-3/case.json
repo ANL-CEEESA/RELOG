@@ -1,0 +1,815 @@
+{
+  "parameters": {
+    "time horizon (years)": 2
+  },
+  "products": {
+    "Waste": {
+      "components": [
+        "Film",
+        "Paper",
+        "Cardboard"
+      ],
+      "disposal limit (tonne)": [
+        0.0,
+        0.0
+      ],
+      "transportation cost ($/km/tonne)": [
+        0.05,
+        0.05
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Film bale": {
+      "components": [
+        "Film",
+        "Paper",
+        "Cardboard"
+      ],
+      "disposal limit (tonne)": [
+        0.0,
+        0.0
+      ],
+      "transportation cost ($/km/tonne)": [
+        0.05,
+        0.05
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Cardboard bale": {
+      "components": [
+        "Paper",
+        "Cardboard"
+      ],
+      "disposal limit (tonne)": [
+        0.0,
+        0.0
+      ],
+      "transportation cost ($/km/tonne)": [
+        0.05,
+        0.05
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Cardboard sheets": {
+      "components": [
+        "Cardboard"
+      ],
+      "disposal limit (tonne)": [
+        0.0,
+        0.0
+      ],
+      "transportation cost ($/km/tonne)": [
+        0.05,
+        0.05
+      ],
+      "transportation emissions (tonne/km/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    }
+  },
+  "centers": {
+    "Collection (Chicago)": {
+      "latitude": 41.881832,
+      "longitude": -87.623177,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              716.0,
+              2864.0,
+              1074.0
+            ],
+            [
+              1394.0,
+              5576.0,
+              2091.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (New York City)": {
+      "latitude": 40.712776,
+      "longitude": -74.005974,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              990.0,
+              891.0,
+              297.0
+            ],
+            [
+              6450.0,
+              5805.0,
+              1935.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (Los Angeles)": {
+      "latitude": 34.052235,
+      "longitude": -118.243683,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              4160.0,
+              3640.0,
+              5200.0
+            ],
+            [
+              5704.0,
+              4991.0,
+              7130.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (Houston)": {
+      "latitude": 29.760427,
+      "longitude": -95.369804,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              2668.0,
+              4669.0,
+              6670.0
+            ],
+            [
+              1852.0,
+              3241.0,
+              4630.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (Phoenix)": {
+      "latitude": 33.448376,
+      "longitude": -112.074036,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              3635.0,
+              6543.0,
+              5089.0
+            ],
+            [
+              2275.0,
+              4095.0,
+              3185.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (Philadelphia)": {
+      "latitude": 39.952583,
+      "longitude": -75.165222,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              220.0,
+              880.0,
+              880.0
+            ],
+            [
+              962.0,
+              3848.0,
+              3848.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (San Antonio)": {
+      "latitude": 29.424122,
+      "longitude": -98.493629,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              288.0,
+              252.0,
+              324.0
+            ],
+            [
+              4240.0,
+              3710.0,
+              4770.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (San Diego)": {
+      "latitude": 32.715736,
+      "longitude": -117.161087,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              6690.0,
+              1338.0,
+              4014.0
+            ],
+            [
+              8460.0,
+              1692.0,
+              5076.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (Dallas)": {
+      "latitude": 32.776664,
+      "longitude": -96.796988,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              5096.0,
+              728.0,
+              5824.0
+            ],
+            [
+              4354.0,
+              622.0,
+              4976.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "Collection (San Jose)": {
+      "latitude": 37.338208,
+      "longitude": -121.886329,
+      "output": {
+        "Waste": {
+          "initial amount (tonne)": [
+            [
+              1255.0,
+              2510.0,
+              251.0
+            ],
+            [
+              4650.0,
+              9300.0,
+              930.0
+            ]
+          ],
+          "disposal cost ($/tonne)": [
+            0.0,
+            0.0
+          ],
+          "storage cost ($/tonne)": [
+            1.0,
+            1.0
+          ],
+          "storage limit (tonne)": [
+            1000.0,
+            1000.0
+          ],
+          "acquisition cost ($/tonne)": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    }
+  },
+  "plants": {
+    "MRF (Chicago)": {
+      "latitude": 41.881832,
+      "longitude": -87.623177,
+      "input": "Waste",
+      "output": {
+        "Film bale": {
+          "output matrix": [
+            [
+              0.98,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.02
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        },
+        "Cardboard bale": {
+          "output matrix": [
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.75
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "MRF (Phoenix)": {
+      "latitude": 33.448376,
+      "longitude": -112.074036,
+      "input": "Waste",
+      "output": {
+        "Film bale": {
+          "output matrix": [
+            [
+              0.98,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.02
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        },
+        "Cardboard bale": {
+          "output matrix": [
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.75
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "MRF (Dallas)": {
+      "latitude": 32.776664,
+      "longitude": -96.796988,
+      "input": "Waste",
+      "output": {
+        "Film bale": {
+          "output matrix": [
+            [
+              0.98,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.02
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        },
+        "Cardboard bale": {
+          "output matrix": [
+            [
+              0.0,
+              0.02,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.75
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -10.0,
+            -10.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Paper Mill (Chicago)": {
+      "latitude": 41.881832,
+      "longitude": -87.623177,
+      "input": "Cardboard bale",
+      "output": {
+        "Cardboard sheets": {
+          "output matrix": [
+            [
+              0.0,
+              0.95
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -100.0,
+            -100.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Paper Mill (Phoenix)": {
+      "latitude": 33.448376,
+      "longitude": -112.074036,
+      "input": "Cardboard bale",
+      "output": {
+        "Cardboard sheets": {
+          "output matrix": [
+            [
+              0.0,
+              0.95
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -100.0,
+            -100.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "Paper Mill (Dallas)": {
+      "latitude": 32.776664,
+      "longitude": -96.796988,
+      "input": "Cardboard bale",
+      "output": {
+        "Cardboard sheets": {
+          "output matrix": [
+            [
+              0.0,
+              0.95
+            ]
+          ],
+          "disposal limit (tonne)": [
+            1.0e6,
+            1.0e6
+          ],
+          "disposal cost ($/tonne)": [
+            -100.0,
+            -100.0
+          ]
+        }
+      },
+      "fixed operating cost ($)": [
+        1000.0,
+        1000.0
+      ],
+      "variable operating cost ($/tonne)": [
+        1.0,
+        1.0
+      ],
+      "opening cost ($)": [
+        10000.0,
+        10000.0
+      ],
+      "capacity (tonne)": 50000.0,
+      "emissions (tonne/tonne)": {
+        "CO2": [
+          0.01,
+          0.01
+        ]
+      }
+    }
+  },
+  "emissions": {
+    "CO2": {
+      "penalty ($/tonne)": [
+        0.01,
+        0.01
+      ],
+      "limit (tonne)": [
+        1.0e6,
+        1.0e6
+      ]
+    }
+  }
+}

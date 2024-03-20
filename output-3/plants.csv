@@ -1,0 +1,13 @@
+plant,time,is open?,opening cost ($),fixed operating cost ($)
+MRF (Chicago),1,1.0,10000.0,1000.0
+MRF (Chicago),2,1.0,0.0,1000.0
+Paper Mill (Phoenix),1,1.0,10000.0,1000.0
+Paper Mill (Phoenix),2,1.0,0.0,1000.0
+Paper Mill (Dallas),1,1.0,10000.0,1000.0
+Paper Mill (Dallas),2,1.0,0.0,1000.0
+MRF (Phoenix),1,1.0,10000.0,1000.0
+MRF (Phoenix),2,1.0,0.0,1000.0
+MRF (Dallas),1,1.0,10000.0,1000.0
+MRF (Dallas),2,1.0,0.0,1000.0
+Paper Mill (Chicago),1,1.0,10000.0,1000.0
+Paper Mill (Chicago),2,1.0,0.0,1000.0

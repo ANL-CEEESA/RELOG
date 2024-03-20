@@ -1,0 +1,61 @@
+center,product,component,time,amount available (tonne),amount sent (tonne),amount stored (tonne),amount disposed (tonne),acquisition cost ($),storage cost ($),disposal cost ($)
+Collection (San Antonio),Waste,Film,1,288.0,288.0,0.0,0.0,288.0,0.0,0.0
+Collection (San Antonio),Waste,Film,2,4240.0,4240.0,0.0,0.0,4240.0,0.0,0.0
+Collection (San Antonio),Waste,Paper,1,252.0,252.00000000000003,0.0,0.0,252.0,0.0,0.0
+Collection (San Antonio),Waste,Paper,2,3710.0,3710.0000000000005,0.0,0.0,3710.0,0.0,0.0
+Collection (San Antonio),Waste,Cardboard,1,324.0,324.0,0.0,0.0,324.0,0.0,0.0
+Collection (San Antonio),Waste,Cardboard,2,4770.0,4770.0,0.0,0.0,4770.0,0.0,0.0
+Collection (San Jose),Waste,Film,1,1255.0,1255.0,0.0,0.0,1255.0,0.0,0.0
+Collection (San Jose),Waste,Film,2,4650.0,4650.0,0.0,0.0,4650.0,0.0,0.0
+Collection (San Jose),Waste,Paper,1,2510.0,2510.0,0.0,0.0,2510.0,0.0,0.0
+Collection (San Jose),Waste,Paper,2,9300.0,9300.0,0.0,0.0,9300.0,0.0,0.0
+Collection (San Jose),Waste,Cardboard,1,251.0,251.0,0.0,0.0,251.0,0.0,0.0
+Collection (San Jose),Waste,Cardboard,2,930.0,930.0,0.0,0.0,930.0,0.0,0.0
+Collection (New York City),Waste,Film,1,990.0,990.0,0.0,0.0,990.0,0.0,0.0
+Collection (New York City),Waste,Film,2,6450.0,6450.0,0.0,0.0,6450.0,0.0,0.0
+Collection (New York City),Waste,Paper,1,891.0,891.0,0.0,0.0,891.0,0.0,0.0
+Collection (New York City),Waste,Paper,2,5805.0,5805.0,0.0,0.0,5805.0,0.0,0.0
+Collection (New York City),Waste,Cardboard,1,297.0,297.0,0.0,0.0,297.0,0.0,0.0
+Collection (New York City),Waste,Cardboard,2,1935.0,1934.9999999999998,0.0,0.0,1935.0,0.0,0.0
+Collection (Los Angeles),Waste,Film,1,4160.0,4160.0,0.0,0.0,4160.0,0.0,0.0
+Collection (Los Angeles),Waste,Film,2,5704.0,5704.0,0.0,0.0,5704.0,0.0,0.0
+Collection (Los Angeles),Waste,Paper,1,3640.0,3640.0000000000005,0.0,0.0,3640.0,0.0,0.0
+Collection (Los Angeles),Waste,Paper,2,4991.0,4991.000000000001,0.0,0.0,4991.0,0.0,0.0
+Collection (Los Angeles),Waste,Cardboard,1,5200.0,5200.0,0.0,0.0,5200.0,0.0,0.0
+Collection (Los Angeles),Waste,Cardboard,2,7130.0,7130.0,0.0,0.0,7130.0,0.0,0.0
+Collection (Chicago),Waste,Film,1,716.0,716.0,0.0,0.0,716.0,0.0,0.0
+Collection (Chicago),Waste,Film,2,1394.0,1394.0,0.0,0.0,1394.0,0.0,0.0
+Collection (Chicago),Waste,Paper,1,2864.0,2864.0,0.0,0.0,2864.0,0.0,0.0
+Collection (Chicago),Waste,Paper,2,5576.0,5576.0,0.0,0.0,5576.0,0.0,0.0
+Collection (Chicago),Waste,Cardboard,1,1074.0,1074.0,0.0,0.0,1074.0,0.0,0.0
+Collection (Chicago),Waste,Cardboard,2,2091.0,2091.0,0.0,0.0,2091.0,0.0,0.0
+Collection (Dallas),Waste,Film,1,5096.0,5096.0,0.0,0.0,5096.0,0.0,0.0
+Collection (Dallas),Waste,Film,2,4354.0,4354.0,0.0,0.0,4354.0,0.0,0.0
+Collection (Dallas),Waste,Paper,1,728.0,728.0,0.0,0.0,728.0,0.0,0.0
+Collection (Dallas),Waste,Paper,2,622.0,622.0,0.0,0.0,622.0,0.0,0.0
+Collection (Dallas),Waste,Cardboard,1,5824.0,5824.0,0.0,0.0,5824.0,0.0,0.0
+Collection (Dallas),Waste,Cardboard,2,4976.0,4976.0,0.0,0.0,4976.0,0.0,0.0
+Collection (Phoenix),Waste,Film,1,3635.0,3635.0,0.0,0.0,3635.0,0.0,0.0
+Collection (Phoenix),Waste,Film,2,2275.0,2275.0,0.0,0.0,2275.0,0.0,0.0
+Collection (Phoenix),Waste,Paper,1,6543.0,6543.0,0.0,0.0,6543.0,0.0,0.0
+Collection (Phoenix),Waste,Paper,2,4095.0,4095.0,0.0,0.0,4095.0,0.0,0.0
+Collection (Phoenix),Waste,Cardboard,1,5089.0,5089.0,0.0,0.0,5089.0,0.0,0.0
+Collection (Phoenix),Waste,Cardboard,2,3185.0,3185.0,0.0,0.0,3185.0,0.0,0.0
+Collection (San Diego),Waste,Film,1,6690.0,6690.0,0.0,0.0,6690.0,0.0,0.0
+Collection (San Diego),Waste,Film,2,8460.0,8460.0,0.0,0.0,8460.0,0.0,0.0
+Collection (San Diego),Waste,Paper,1,1338.0,1338.0,0.0,0.0,1338.0,0.0,0.0
+Collection (San Diego),Waste,Paper,2,1692.0,1692.0,0.0,0.0,1692.0,0.0,0.0
+Collection (San Diego),Waste,Cardboard,1,4014.0,4014.0,0.0,0.0,4014.0,0.0,0.0
+Collection (San Diego),Waste,Cardboard,2,5076.0,5076.0,0.0,0.0,5076.0,0.0,0.0
+Collection (Philadelphia),Waste,Film,1,220.0,220.0,0.0,0.0,220.0,0.0,0.0
+Collection (Philadelphia),Waste,Film,2,962.0,962.0,0.0,0.0,962.0,0.0,0.0
+Collection (Philadelphia),Waste,Paper,1,880.0,880.0,0.0,0.0,880.0,0.0,0.0
+Collection (Philadelphia),Waste,Paper,2,3848.0,3848.0,0.0,0.0,3848.0,0.0,0.0
+Collection (Philadelphia),Waste,Cardboard,1,880.0,880.0,0.0,0.0,880.0,0.0,0.0
+Collection (Philadelphia),Waste,Cardboard,2,3848.0,3848.0,0.0,0.0,3848.0,0.0,0.0
+Collection (Houston),Waste,Film,1,2668.0,2668.0,0.0,0.0,2668.0,0.0,0.0
+Collection (Houston),Waste,Film,2,1852.0,1852.0,0.0,0.0,1852.0,0.0,0.0
+Collection (Houston),Waste,Paper,1,4669.0,4669.0,0.0,0.0,4669.0,0.0,0.0
+Collection (Houston),Waste,Paper,2,3241.0,3241.0,0.0,0.0,3241.0,0.0,0.0
+Collection (Houston),Waste,Cardboard,1,6670.0,6670.0,0.0,0.0,6670.0,0.0,0.0
+Collection (Houston),Waste,Cardboard,2,4630.0,4630.0,0.0,0.0,4630.0,0.0,0.0

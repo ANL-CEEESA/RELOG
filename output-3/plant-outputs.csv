@@ -1,0 +1,37 @@
+plant,product,component,time,amount produced (tonne),amount disposed (tonne),amount sent (tonne),disposal cost ($)
+MRF (Chicago),Film bale,Film,1,1887.4799999999998,1887.4799999999998,0.0,-18874.8
+MRF (Chicago),Film bale,Film,2,8629.88,8629.88,0.0,-86298.79999999999
+MRF (Chicago),Film bale,Paper,1,92.70000000000002,92.70000000000002,0.0,-927.0000000000002
+MRF (Chicago),Film bale,Paper,2,304.58,304.58,0.0,-3045.7999999999997
+MRF (Chicago),Film bale,Cardboard,1,45.02,45.02,0.0,-450.20000000000005
+MRF (Chicago),Film bale,Cardboard,2,157.48000000000002,157.48000000000002,0.0,-1574.8000000000002
+MRF (Chicago),Cardboard bale,Paper,1,92.70000000000002,0.0,92.70000000000002,-0.0
+MRF (Chicago),Cardboard bale,Paper,2,304.579999999999,0.0,304.579999999999,-0.0
+MRF (Chicago),Cardboard bale,Cardboard,1,1688.25,0.0,1688.25,-0.0
+MRF (Chicago),Cardboard bale,Cardboard,2,5905.5,0.0,5905.5,-0.0
+Paper Mill (Phoenix),Cardboard sheets,Cardboard,1,10369.725,10369.725,0.0,-1.0369725e6
+Paper Mill (Phoenix),Cardboard sheets,Cardboard,2,11295.262499999999,11295.262499999999,0.0,-1.12952625e6
+Paper Mill (Dallas),Cardboard sheets,Cardboard,1,9132.824999999999,9132.824999999999,0.0,-913282.4999999999
+Paper Mill (Dallas),Cardboard sheets,Cardboard,2,10576.35,10576.35,0.0,-1.057635e6
+MRF (Phoenix),Film bale,Film,1,15425.2,15425.2,0.0,-154252.0
+MRF (Phoenix),Film bale,Film,2,18374.02,18374.02,0.0,-183740.2
+MRF (Phoenix),Film bale,Paper,1,280.62,280.62,0.0,-2806.2
+MRF (Phoenix),Film bale,Paper,2,307.96000000000004,307.96000000000004,0.0,-3079.6000000000004
+MRF (Phoenix),Film bale,Cardboard,1,291.08,291.08,0.0,-2910.7999999999997
+MRF (Phoenix),Film bale,Cardboard,2,317.06,317.06,0.0,-3170.6
+MRF (Phoenix),Cardboard bale,Paper,1,280.6200000000026,0.0,280.6200000000026,-0.0
+MRF (Phoenix),Cardboard bale,Paper,2,307.96000000000004,0.0,307.96000000000004,-0.0
+MRF (Phoenix),Cardboard bale,Cardboard,1,10915.5,0.0,10915.5,-0.0
+MRF (Phoenix),Cardboard bale,Cardboard,2,11889.75,0.0,11889.75,-0.0
+MRF (Dallas),Film bale,Film,1,7890.959999999999,7890.959999999999,0.0,-78909.59999999999
+MRF (Dallas),Film bale,Film,2,12530.279999999999,12530.279999999999,0.0,-125302.79999999999
+MRF (Dallas),Film bale,Paper,1,112.97999999999999,112.97999999999999,0.0,-1129.8
+MRF (Dallas),Film bale,Paper,2,245.06,245.06,0.0,-2450.6
+MRF (Dallas),Film bale,Cardboard,1,256.36,256.36,0.0,-2563.6000000000004
+MRF (Dallas),Film bale,Cardboard,2,296.88,296.88,0.0,-2968.8
+MRF (Dallas),Cardboard bale,Paper,1,112.97999999999774,0.0,112.97999999999774,-0.0
+MRF (Dallas),Cardboard bale,Paper,2,245.06,0.0,245.06,-0.0
+MRF (Dallas),Cardboard bale,Cardboard,1,9613.5,0.0,9613.5,-0.0
+MRF (Dallas),Cardboard bale,Cardboard,2,11133.0,0.0,11133.0,-0.0
+Paper Mill (Chicago),Cardboard sheets,Cardboard,1,1603.8374999999999,1603.8374999999999,0.0,-160383.75
+Paper Mill (Chicago),Cardboard sheets,Cardboard,2,5610.224999999999,5610.224999999999,0.0,-561022.5

@@ -1,0 +1,11 @@
+plant,product,component,amount produced (tonne),revenue ($)
+Phoenix,film bale,film,2896.88,28968.800000000003
+Phoenix,film bale,paper,40.800000000000004,408.00000000000006
+Phoenix,film bale,cardboard,53.88,538.8000000000001
+Phoenix,cardboard bale,paper,40.800000000000004,530.4000000000001
+Phoenix,cardboard bale,cardboard,2020.5,26266.5
+Dallas,film bale,film,2144.24,25730.879999999997
+Dallas,film bale,paper,37.08,444.96
+Dallas,film bale,cardboard,31.86,382.32
+Dallas,cardboard bale,paper,37.08,667.4399999999999
+Dallas,cardboard bale,cardboard,1194.75,21505.5
