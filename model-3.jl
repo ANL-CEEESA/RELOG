@@ -4,7 +4,6 @@
 
 using CSV
 using DataFrames
-using Gurobi
 using JSON
 using JuMP
 using OrderedCollections
@@ -603,9 +602,9 @@ function generate_json()
     write_json(data, "output-3/case.json")
 end
 
-function solve()
+function solve(filename, optimizer)
     @info "Reading JSON file"
-    data = read_json("output-3/case.json")
+    data = read_json(filename)
 
     T = data.T
     centers = data.centers
@@ -613,7 +612,7 @@ function solve()
     products = data.products
     emissions = data.emissions
 
-    model = Model(Gurobi.Optimizer)
+    model = Model(optimizer)
 
     # Graph
     # -------------------------------------------------------------------------
@@ -1012,6 +1011,7 @@ function solve()
 
     # Report: Transportation
     # -------------------------------------------------------------------------
+    output_dir = dirname(filename)
     df = DataFrame()
     df."source" = String[]
     df."destination" = String[]
@@ -1041,7 +1041,7 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/transp.csv", df)
+    CSV.write("$output_dir/transp.csv", df)
 
     # Report: Centers
     # -------------------------------------------------------------------------
@@ -1079,7 +1079,7 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/centers.csv", df)
+    CSV.write("$output_dir/centers.csv", df)
 
     # Report: Plants
     # -------------------------------------------------------------------------
@@ -1101,7 +1101,7 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/plants.csv", df)
+    CSV.write("$output_dir/plants.csv", df)
 
     # Report: Plant Outputs
     # -------------------------------------------------------------------------
@@ -1137,7 +1137,7 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/plant-outputs.csv", df)
+    CSV.write("$output_dir/plant-outputs.csv", df)
 
     # Report: Plant Emissions
     # -------------------------------------------------------------------------
@@ -1159,7 +1159,7 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/plant-emissions.csv", df)
+    CSV.write("$output_dir/plant-emissions.csv", df)
 
     # Report: Transportation Emissions
     # -------------------------------------------------------------------------
@@ -1192,6 +1192,8 @@ function solve()
             ]
         )
     end
-    CSV.write("output-3/transp-emissions.csv", df)
+    CSV.write("$output_dir/transp-emissions.csv", df)
+
+    return
 end
 
