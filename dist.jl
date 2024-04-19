@@ -8,6 +8,7 @@ using DataFrames
 using CRC
 using ZipFile
 using Statistics
+using TimerOutputs
 
 crc32 = crc(CRC_32)
 
@@ -77,31 +78,37 @@ function _calculate_distance(
         csv_filename = joinpath(basedir, "dist_driving.csv")
 
         # Download pre-computed driving data
-        if !isfile(csv_filename)
-            _download_zip(
-                "https://axavier.org/RELOG/0.6/data/dist_driving_0b9a6ad6.zip",
-                basedir,
-                csv_filename,
-                0x0b9a6ad6,
-            )
+        @timeit "Download data" begin
+            if !isfile(csv_filename)
+                _download_zip(
+                    "https://axavier.org/RELOG/0.6/data/dist_driving_0b9a6ad6.zip",
+                    basedir,
+                    csv_filename,
+                    0x0b9a6ad6,
+                )
+            end
         end
 
-        # Fit kNN model
-        df = DataFrame(CSV.File(csv_filename, missingstring="NaN"))
-        dropmissing!(df)
-        coords = Matrix(df[!, [:source_lat, :source_lon, :dest_lat, :dest_lon]])'
-        metric.ratios = Matrix(df[!, [:ratio]])
-        metric.tree = KDTree(coords)
+        @timeit "Fit KNN model" begin
+            df = DataFrame(CSV.File(csv_filename, missingstring="NaN"))
+            dropmissing!(df)
+            coords = Matrix(df[!, [:source_lat, :source_lon, :dest_lat, :dest_lon]])'
+            metric.ratios = Matrix(df[!, [:ratio]])
+            metric.tree = KDTree(coords)
+        end
     end
 
-    # Compute Euclidean distance
-    dist_euclidean =
-        _calculate_distance(source_lat, source_lon, dest_lat, dest_lon, EuclideanDistance())
+    @timeit "Compute Euclidean distance" begin
+        dist_euclidean =
+            _calculate_distance(source_lat, source_lon, dest_lat, dest_lon, EuclideanDistance())
+    end
 
-    # Predict ratio
-    idxs, _ = knn(metric.tree, [source_lat, source_lon, dest_lat, dest_lon], 5)
-    ratio_pred = mean(metric.ratios[idxs])
-    dist_pred = round(dist_euclidean * ratio_pred, digits=3)
-    isfinite(dist_pred) || error("non-finite distance detected: $dist_pred")
+    @timeit "Predict driving distance" begin
+        idxs, _ = knn(metric.tree, [source_lat, source_lon, dest_lat, dest_lon], 5)
+        ratio_pred = mean(metric.ratios[idxs])
+        dist_pred = round(dist_euclidean * ratio_pred, digits=3)
+        isfinite(dist_pred) || error("non-finite distance detected: $dist_pred")
+    end
+
     return dist_pred
 end

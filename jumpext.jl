@@ -27,11 +27,9 @@ function _init(model::JuMP.Model, key::Symbol)::OrderedDict
 end
 
 function _set_names!(model::JuMP.Model)
-    @info "Setting variable and constraint names..."
     time_varnames = @elapsed begin
         _set_names!(object_dictionary(model))
     end
-    @info @sprintf("Set names in %.2f seconds", time_varnames)
 end
 
 function _set_names!(dict::Dict)

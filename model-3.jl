@@ -8,6 +8,8 @@ using JSON
 using JuMP
 using OrderedCollections
 using Random
+using TimerOutputs
+using Printf
 
 include("jumpext.jl")
 include("dist.jl")
@@ -47,12 +49,9 @@ Base.@kwdef struct Emission
     name::String
 end
 
-Base.show(
-    io::IO,
-    p::Union{Component,Product,Center,Plant,Emission},
-) = print(io, p.name)
+Base.show(io::IO, p::Union{Component,Product,Center,Plant,Emission}) = print(io, p.name)
 
-Base.@kwdef struct Instance
+Base.@kwdef mutable struct Instance
     T::UnitRange{Int}
     centers::Vector{Center}
     plants::Vector{Plant}
@@ -113,69 +112,49 @@ function generate_data()
     cardboard = Component("Cardboard")
 
     # Products
-    waste = Product(
-        name="Waste",
-        comp=[film, paper, cardboard],
-    )
-    film_bale = Product(
-        name="Film bale",
-        comp=[film, paper, cardboard],
-    )
-    cardboard_bale = Product(
-        name="Cardboard bale",
-        comp=[paper, cardboard],
-    )
-    cardboard_sheets = Product(
-        name="Cardboard sheets",
-        comp=[cardboard],
-    )
+    waste = Product(name = "Waste", comp = [film, paper, cardboard])
+    film_bale = Product(name = "Film bale", comp = [film, paper, cardboard])
+    cardboard_bale = Product(name = "Cardboard bale", comp = [paper, cardboard])
+    cardboard_sheets = Product(name = "Cardboard sheets", comp = [cardboard])
     products = [waste, film_bale, cardboard_bale, cardboard_sheets]
 
     # Centers
     centers = [
         Center(
-            name="Collection ($city_name)",
-            latitude=city_lat,
-            longitude=city_lon,
-            prod_out=[waste],
-        )
-        for (city_name, (city_lat, city_lon)) in cities_a
+            name = "Collection ($city_name)",
+            latitude = city_lat,
+            longitude = city_lon,
+            prod_out = [waste],
+        ) for (city_name, (city_lat, city_lon)) in cities_a
     ]
 
     # Plants
     plants_a = [
         Plant(
-            name="MRF ($city_name)",
-            latitude=city_lat,
-            longitude=city_lon,
-            prod_in=waste,
-            prod_out=[film_bale, cardboard_bale],
-        )
-        for (city_name, (city_lat, city_lon)) in cities_b
+            name = "MRF ($city_name)",
+            latitude = city_lat,
+            longitude = city_lon,
+            prod_in = waste,
+            prod_out = [film_bale, cardboard_bale],
+        ) for (city_name, (city_lat, city_lon)) in cities_b
     ]
     plants_b = [
         Plant(
-            name="Paper Mill ($city_name)",
-            latitude=city_lat,
-            longitude=city_lon,
-            prod_in=cardboard_bale,
-            prod_out=[cardboard_sheets],
-        )
-        for (city_name, (city_lat, city_lon)) in cities_b
+            name = "Paper Mill ($city_name)",
+            latitude = city_lat,
+            longitude = city_lon,
+            prod_in = cardboard_bale,
+            prod_out = [cardboard_sheets],
+        ) for (city_name, (city_lat, city_lon)) in cities_b
     ]
     plants = [plants_a; plants_b]
 
     # Emissions
-    emissions = [
-        Emission("CO2"),
-    ]
+    emissions = [Emission("CO2")]
 
     alpha_mix = dict(
-        (p, r, cin, cout) => 0.0
-        for p in plants
-        for cin in p.prod_in.comp
-        for r in p.prod_out
-        for cout in r.comp
+        (p, r, cin, cout) => 0.0 for p in plants for cin in p.prod_in.comp for
+        r in p.prod_out for cout in r.comp
     )
     for p in plants_a
         alpha_mix[p, film_bale, film, film] = 0.98
@@ -187,63 +166,22 @@ function generate_data()
     for p in plants_b
         alpha_mix[p, cardboard_sheets, cardboard, cardboard] = 0.95
     end
-    alpha_plant_emission = dict(
-        (p, s, t) => 0.01
-        for p in plants, s in emissions, t in T
-    )
-    alpha_tr_emission = dict(
-        (r, s, t) => 0.01
-        for r in products, s in emissions, t in T
-    )
-    c_acq = dict(
-        (q, r, t) => 1.0
-        for q in centers
-        for r in q.prod_out, t in T
-    )
-    c_center_disp = dict(
-        (q, r, t) => 0
-        for q in centers
-        for r in q.prod_out
-        for t in T
-    )
-    c_emission = dict(
-        (s, t) => 0.01
-        for s in emissions, t in T
-    )
-    c_fix = dict(
-        (p, t) => 1_000.0
-        for p in plants, t in T
-    )
-    c_open = dict(
-        (p, t) => 10_000.0
-        for p in plants, t in T
-    )
+    alpha_plant_emission = dict((p, s, t) => 0.01 for p in plants, s in emissions, t in T)
+    alpha_tr_emission = dict((r, s, t) => 0.01 for r in products, s in emissions, t in T)
+    c_acq = dict((q, r, t) => 1.0 for q in centers for r in q.prod_out, t in T)
+    c_center_disp = dict((q, r, t) => 0 for q in centers for r in q.prod_out for t in T)
+    c_emission = dict((s, t) => 0.01 for s in emissions, t in T)
+    c_fix = dict((p, t) => 1_000.0 for p in plants, t in T)
+    c_open = dict((p, t) => 10_000.0 for p in plants, t in T)
     c_plant_disp = dict(
-        (p, r, t) => (r == cardboard_sheets ? -100.0 : -10.0)
-        for p in plants
-        for r in p.prod_out, t in T
+        (p, r, t) => (r == cardboard_sheets ? -100.0 : -10.0) for p in plants for
+        r in p.prod_out, t in T
     )
-    c_store = dict(
-        (q, r, t) => 1.0
-        for q in centers
-        for r in q.prod_out, t in T
-    )
-    c_tr = dict(
-        (r, t) => 0.05
-        for r in products, t in T
-    )
-    c_var = dict(
-        (p, t) => 1.0
-        for p in plants, t in T
-    )
-    m_cap = dict(
-        p => 50000.0
-        for p in plants
-    )
-    m_center_disp = dict(
-        (r, t) => 0.0
-        for r in products, t in T
-    )
+    c_store = dict((q, r, t) => 1.0 for q in centers for r in q.prod_out, t in T)
+    c_tr = dict((r, t) => 0.05 for r in products, t in T)
+    c_var = dict((p, t) => 1.0 for p in plants, t in T)
+    m_cap = dict(p => 50000.0 for p in plants)
+    m_center_disp = dict((r, t) => 0.0 for r in products, t in T)
     metric = KnnDrivingDistance()
     m_dist = dict(
         (p, q) => _calculate_distance(
@@ -252,38 +190,20 @@ function generate_data()
             q.latitude,
             q.longitude,
             metric,
-        )
-        for p in [plants; centers], q in plants
+        ) for p in [plants; centers], q in plants
     )
-    m_emission = dict(
-        (s, t) => 1_000_000
-        for s in emissions, t in T
-    )
+    m_emission = dict((s, t) => 1_000_000 for s in emissions, t in T)
     m_init = dict()
     for q in centers, r in q.prod_out
-        ratio = dict(
-            c => rand(1:10)
-            for c in r.comp
-        )
-        total = dict(
-            t => rand(1:1000)
-            for t in T
-        )
+        ratio = dict(c => rand(1:10) for c in r.comp)
+        total = dict(t => rand(1:1000) for t in T)
         for c in r.comp, t in T
             m_init[q, r, c, t] = ratio[c] * total[t]
         end
     end
-    m_plant_disp = dict(
-        (p, r, t) => 1_000_000
-        for p in plants
-        for r in p.prod_out
-        for t in T
-    )
-    m_store = dict(
-        (q, r, t) => 1_000
-        for q in centers
-        for r in q.prod_out, t in T
-    )
+    m_plant_disp =
+        dict((p, r, t) => 1_000_000 for p in plants for r in p.prod_out for t in T)
+    m_store = dict((q, r, t) => 1_000 for q in centers for r in q.prod_out, t in T)
 
     return Instance(;
         T,
@@ -309,7 +229,7 @@ function generate_data()
         m_emission,
         m_init,
         m_plant_disp,
-        m_store
+        m_store,
     )
 end
 
@@ -318,29 +238,17 @@ end
 
 function write_json(data, filename)
     json = dict()
-    json["parameters"] = dict(
-        "time horizon (years)" => data.T.stop,
-    )
+    json["parameters"] = dict("time horizon (years)" => data.T.stop)
     json["products"] = dict(
         r.name => dict(
             "components" => [c.name for c in r.comp],
-            "disposal limit (tonne)" => [
-                data.m_center_disp[r, t]
-                for t in data.T
-            ],
-            "transportation cost (\$/km/tonne)" => [
-                data.c_tr[r, t]
-                for t in data.T
-            ],
+            "disposal limit (tonne)" => [data.m_center_disp[r, t] for t in data.T],
+            "transportation cost (\$/km/tonne)" => [data.c_tr[r, t] for t in data.T],
             "transportation emissions (tonne/km/tonne)" => dict(
-                s => [
-                    data.alpha_tr_emission[r, s, t]
-                    for t in data.T
-                ]
-                for s in data.emissions
-            )
-        )
-        for r in data.products
+                s => [data.alpha_tr_emission[r, s, t] for t in data.T] for
+                s in data.emissions
+            ),
+        ) for r in data.products
     )
     json["centers"] = dict(
         q.name => dict(
@@ -349,30 +257,18 @@ function write_json(data, filename)
             "output" => dict(
                 r.name => dict(
                     "initial amount (tonne)" => [
-                        data.m_init[q, r, c, t]
-                        for c in r.comp, t in data.T
+                        data.m_init[q, r, c, t] for c in r.comp, t in data.T
                     ],
-                    "disposal cost (\$/tonne)" => [
-                        data.c_center_disp[q, r, t]
-                        for t in data.T
-                    ],
-                    "storage cost (\$/tonne)" => [
-                        data.c_store[q, r, t]
-                        for t in data.T
-                    ],
-                    "storage limit (tonne)" => [
-                        data.m_store[q, r, t]
-                        for t in data.T
-                    ],
-                    "acquisition cost (\$/tonne)" => [
-                        data.c_acq[q, r, t]
-                        for t in data.T
-                    ],
-                )
-                for r in q.prod_out
-            )
-        )
-        for q in data.centers
+                    "disposal cost (\$/tonne)" =>
+                        [data.c_center_disp[q, r, t] for t in data.T],
+                    "storage cost (\$/tonne)" =>
+                        [data.c_store[q, r, t] for t in data.T],
+                    "storage limit (tonne)" => [data.m_store[q, r, t] for t in data.T],
+                    "acquisition cost (\$/tonne)" =>
+                        [data.c_acq[q, r, t] for t in data.T],
+                ) for r in q.prod_out
+            ),
+        ) for q in data.centers
     )
     json["plants"] = dict(
         p.name => dict(
@@ -382,55 +278,30 @@ function write_json(data, filename)
             "output" => dict(
                 r.name => dict(
                     "output matrix" => [
-                        data.alpha_mix[p, r, c_in, c_out]
-                        for c_in in p.prod_in.comp, c_out in r.comp
+                        data.alpha_mix[p, r, c_in, c_out] for
+                        c_in in p.prod_in.comp, c_out in r.comp
                     ],
-                    "disposal limit (tonne)" => [
-                        data.m_plant_disp[p, r, t]
-                        for t in data.T
-                    ],
-                    "disposal cost (\$/tonne)" => [
-                        data.c_plant_disp[p, r, t]
-                        for t in data.T
-                    ],
-                )
-                for r in p.prod_out
+                    "disposal limit (tonne)" =>
+                        [data.m_plant_disp[p, r, t] for t in data.T],
+                    "disposal cost (\$/tonne)" =>
+                        [data.c_plant_disp[p, r, t] for t in data.T],
+                ) for r in p.prod_out
             ),
-            "fixed operating cost (\$)" => [
-                data.c_fix[p, t]
-                for t in data.T
-            ],
-            "variable operating cost (\$/tonne)" => [
-                data.c_var[p, t]
-                for t in data.T
-            ],
-            "opening cost (\$)" => [
-                data.c_open[p, t]
-                for t in data.T
-            ],
+            "fixed operating cost (\$)" => [data.c_fix[p, t] for t in data.T],
+            "variable operating cost (\$/tonne)" => [data.c_var[p, t] for t in data.T],
+            "opening cost (\$)" => [data.c_open[p, t] for t in data.T],
             "capacity (tonne)" => data.m_cap[p],
             "emissions (tonne/tonne)" => dict(
-                s => [
-                    data.alpha_plant_emission[p, s, t]
-                    for t in data.T
-                ]
-                for s in data.emissions
-            )
-        )
-        for p in data.plants
+                s => [data.alpha_plant_emission[p, s, t] for t in data.T] for
+                s in data.emissions
+            ),
+        ) for p in data.plants
     )
     json["emissions"] = dict(
         s.name => dict(
-            "penalty (\$/tonne)" => [
-                data.c_emission[s, t]
-                for t in data.T
-            ],
-            "limit (tonne)" => [
-                data.m_emission[s, t]
-                for t in data.T
-            ]
-        )
-        for s in data.emissions
+            "penalty (\$/tonne)" => [data.c_emission[s, t] for t in data.T],
+            "limit (tonne)" => [data.m_emission[s, t] for t in data.T],
+        ) for s in data.emissions
     )
     open(filename, "w") do io
         JSON.print(io, json, 2)
@@ -439,7 +310,7 @@ end
 
 # Read
 # ==============================================================================
-function read_json(filename)
+function read_json(filename, max_centers = 10, max_plants = 10)
     json = JSON.parsefile(filename)
     T = 1:json["parameters"]["time horizon (years)"]
     centers = []
@@ -468,99 +339,122 @@ function read_json(filename)
     m_plant_disp = dict()
     m_store = dict()
 
-    for (emission_name, emission_data) in json["emissions"]
-        s = Emission(emission_name)
-        emissions_by_name[emission_name] = s
-        push!(emissions, s)
-        for t in T
-            c_emission[s, t] = emission_data["penalty (\$/tonne)"][t]
-            m_emission[s, t] = emission_data["limit (tonne)"][t]
-        end
-    end
-
-    for (name, prod_data) in json["products"]
-        comp = []
-        for (comp_name) in prod_data["components"]
-            if comp_name ∉ keys(components_by_name)
-                components_by_name[comp_name] = Component(comp_name)
-            end
-            push!(comp, components_by_name[comp_name])
-        end
-        r = Product(name, comp)
-        products_by_name[name] = r
-        push!(products, r)
-        for t in T
-            m_center_disp[r, t] = prod_data["disposal limit (tonne)"][t]
-            c_tr[r, t] = prod_data["transportation cost (\$/km/tonne)"][t]
-        end
-        for (s_name, s_data) in prod_data["transportation emissions (tonne/km/tonne)"]
-            s = emissions_by_name[s_name]
+    @timeit "Read: Emissions" begin
+        for (emission_name, emission_data) in json["emissions"]
+            s = Emission(emission_name)
+            emissions_by_name[emission_name] = s
+            push!(emissions, s)
             for t in T
-                alpha_tr_emission[r, s, t] = s_data[t]
+                c_emission[s, t] = emission_data["penalty (\$/tonne)"][t]
+                m_emission[s, t] = emission_data["limit (tonne)"][t]
             end
         end
     end
 
-    for (name, center_data) in json["centers"]
-        latitude = center_data["latitude"]
-        longitude = center_data["longitude"]
-        prod_out = [products_by_name[r] for r in keys(center_data["output"])]
-        q = Center(; name, latitude, longitude, prod_out)
-        push!(centers, q)
-        for r in prod_out, t in T
-            c_acq[q, r, t] = center_data["output"][r.name]["acquisition cost (\$/tonne)"][t]
-            c_center_disp[q, r, t] = center_data["output"][r.name]["disposal cost (\$/tonne)"][t]
-            c_store[q, r, t] = center_data["output"][r.name]["storage cost (\$/tonne)"][t]
-            m_store[q, r, t] = center_data["output"][r.name]["storage limit (tonne)"][t]
-            for (c_idx, c) in enumerate(r.comp)
-                m_init[q, r, c, t] = center_data["output"][r.name]["initial amount (tonne)"][t][c_idx]
+    @timeit "Read: Products" begin
+        for (name, prod_data) in json["products"]
+            comp = []
+            for (comp_name) in prod_data["components"]
+                if comp_name ∉ keys(components_by_name)
+                    components_by_name[comp_name] = Component(comp_name)
+                end
+                push!(comp, components_by_name[comp_name])
             end
-        end
-    end
-
-    for (plant_name, plant_data) in json["plants"]
-        latitude = plant_data["latitude"]
-        longitude = plant_data["longitude"]
-        prod_in = products_by_name[plant_data["input"]]
-        prod_out = [products_by_name[r] for r in keys(plant_data["output"])]
-        p = Plant(plant_name, latitude, longitude, prod_out, prod_in)
-        push!(plants, p)
-        m_cap[p] = plant_data["capacity (tonne)"]
-        for t in T
-            c_fix[p, t] = plant_data["fixed operating cost (\$)"][t]
-            c_var[p, t] = plant_data["variable operating cost (\$/tonne)"][t]
-            c_open[p, t] = plant_data["opening cost (\$)"][t]
-        end
-        for r in prod_out,
-            (cin_idx, c_in) in enumerate(prod_in.comp),
-            (cout_idx, c_out) in enumerate(r.comp)
-
-            alpha_mix[p, r, c_in, c_out] =
-                plant_data["output"][r.name]["output matrix"][cout_idx][cin_idx]
-        end
-        for r in prod_out, t in T
-            c_plant_disp[p, r, t] = plant_data["output"][r.name]["disposal cost (\$/tonne)"][t]
-            m_plant_disp[p, r, t] = plant_data["output"][r.name]["disposal limit (tonne)"][t]
-        end
-        for (s_name, s_data) in plant_data["emissions (tonne/tonne)"]
-            s = emissions_by_name[s_name]
+            r = Product(name, comp)
+            products_by_name[name] = r
+            push!(products, r)
             for t in T
-                alpha_plant_emission[p, s, t] = s_data[t]
+                m_center_disp[r, t] = prod_data["disposal limit (tonne)"][t]
+                c_tr[r, t] = prod_data["transportation cost (\$/km/tonne)"][t]
+            end
+            for (s_name, s_data) in prod_data["transportation emissions (tonne/km/tonne)"]
+                s = emissions_by_name[s_name]
+                for t in T
+                    alpha_tr_emission[r, s, t] = s_data[t]
+                end
             end
         end
     end
 
-    metric = KnnDrivingDistance()
-    m_dist = dict(
-        (p, q) => _calculate_distance(
-            p.latitude,
-            p.longitude,
-            q.latitude,
-            q.longitude,
-            metric,
+    @timeit "Read: Centers" begin
+        for (name, center_data) in json["centers"]
+            if length(centers) >= max_centers
+                @warn "Maximum number of centers reached. Skipping remaining ones."
+                break
+            end
+            latitude = center_data["latitude"]
+            longitude = center_data["longitude"]
+            prod_out = [products_by_name[r] for r in keys(center_data["output"])]
+            q = Center(; name, latitude, longitude, prod_out)
+            push!(centers, q)
+            for r in prod_out, t in T
+                c_acq[q, r, t] =
+                    center_data["output"][r.name]["acquisition cost (\$/tonne)"][t]
+                c_center_disp[q, r, t] =
+                    center_data["output"][r.name]["disposal cost (\$/tonne)"][t]
+                c_store[q, r, t] =
+                    center_data["output"][r.name]["storage cost (\$/tonne)"][t]
+                m_store[q, r, t] = center_data["output"][r.name]["storage limit (tonne)"][t]
+                for (c_idx, c) in enumerate(r.comp)
+                    m_init[q, r, c, t] =
+                        center_data["output"][r.name]["initial amount (tonne)"][t][c_idx]
+                end
+            end
+        end
+    end
+
+    @timeit "Read: Plants" begin
+        for (plant_name, plant_data) in json["plants"]
+            if length(plants) >= max_plants
+                @warn "Maximum number of plants reached. Skipping remaining ones."
+                break
+            end
+            latitude = plant_data["latitude"]
+            longitude = plant_data["longitude"]
+            prod_in = products_by_name[plant_data["input"]]
+            prod_out = [products_by_name[r] for r in keys(plant_data["output"])]
+            p = Plant(plant_name, latitude, longitude, prod_out, prod_in)
+            push!(plants, p)
+            m_cap[p] = plant_data["capacity (tonne)"]
+            for t in T
+                c_fix[p, t] = plant_data["fixed operating cost (\$)"][t]
+                c_var[p, t] = plant_data["variable operating cost (\$/tonne)"][t]
+                c_open[p, t] = plant_data["opening cost (\$)"][t]
+            end
+            for r in prod_out,
+                (cin_idx, c_in) in enumerate(prod_in.comp),
+                (cout_idx, c_out) in enumerate(r.comp)
+
+                alpha_mix[p, r, c_in, c_out] =
+                    plant_data["output"][r.name]["output matrix"][cout_idx][cin_idx]
+            end
+            for r in prod_out, t in T
+                c_plant_disp[p, r, t] =
+                    plant_data["output"][r.name]["disposal cost (\$/tonne)"][t]
+                m_plant_disp[p, r, t] =
+                    plant_data["output"][r.name]["disposal limit (tonne)"][t]
+            end
+            for (s_name, s_data) in plant_data["emissions (tonne/tonne)"]
+                s = emissions_by_name[s_name]
+                for t in T
+                    alpha_plant_emission[p, s, t] = s_data[t]
+                end
+            end
+        end
+    end
+
+    @timeit "Calculate distances" begin
+        metric = KnnDrivingDistance()
+        m_dist = dict(
+            (p, q) => _calculate_distance(
+                p.latitude,
+                p.longitude,
+                q.latitude,
+                q.longitude,
+                metric,
+            ) for p in [plants; centers], q in plants
         )
-        for p in [plants; centers], q in plants
-    )
+    end
 
     return Instance(;
         T,
@@ -586,7 +480,7 @@ function read_json(filename)
         m_emission,
         m_init,
         m_plant_disp,
-        m_store
+        m_store,
     )
 end
 
@@ -603,8 +497,11 @@ function generate_json()
 end
 
 function solve(filename, optimizer)
-    @info "Reading JSON file"
-    data = read_json(filename)
+    reset_timer!()
+
+    @timeit "Read JSON" begin
+        data = read_json(filename)
+    end
 
     T = data.T
     centers = data.centers
@@ -616,397 +513,415 @@ function solve(filename, optimizer)
 
     # Graph
     # -------------------------------------------------------------------------
-    E = []
-    E_in = dict(src => [] for src in plants)
-    E_out = dict(src => [] for src in plants ∪ centers)
-    function push_edge!(src, dst, r)
-        push!(E, (src, dst, r))
-        push!(E_out[src], (dst, r))
-        push!(E_in[dst], (src, r))
-    end
-    for r in products
-        # Plant to plant
-        for p1 in plants
-            r ∈ p1.prod_out || continue
-            for p2 in plants
-                p1 != p2 || continue
-                r == p2.prod_in || continue
-                push_edge!(p1, p2, r)
+    @timeit "Build graph" begin
+        E = []
+        E_in = dict(src => [] for src in plants)
+        E_out = dict(src => [] for src in plants ∪ centers)
+        function push_edge!(src, dst, r)
+            push!(E, (src, dst, r))
+            push!(E_out[src], (dst, r))
+            push!(E_in[dst], (src, r))
+        end
+        for r in products
+            # Plant to plant
+            for p1 in plants
+                r ∈ p1.prod_out || continue
+                for p2 in plants
+                    p1 != p2 || continue
+                    r == p2.prod_in || continue
+                    push_edge!(p1, p2, r)
+                end
+            end
+            # Center to plant
+            for q in centers
+                r ∈ q.prod_out || continue
+                for p in plants
+                    r == p.prod_in || continue
+                    push_edge!(q, p, r)
+                end
             end
         end
-        # Center to plant
-        for q in centers
-            r ∈ q.prod_out || continue
-            for p in plants
-                r == p.prod_in || continue
-                push_edge!(q, p, r)
-            end
-        end
     end
+
+    @printf("Building optimization problem with:\n")
+    @printf("    %8d plants\n", length(plants))
+    @printf("    %8d centers\n", length(centers))
+    @printf("    %8d products\n", length(products))
+    @printf("    %8d time periods\n", length(T))
+    @printf("    %8d transportation edges\n", length(E))
 
     # Decision variables
     # -------------------------------------------------------------------------
-    y = _init(model, :y)
-    for (q, p, r) in E, c in r.comp, t in T
-        y[q, p, r, c, t] = @variable(model, lower_bound = 0)
-    end
-
-    y_total = _init(model, :y_total)
-    for (q, p, r) in E, t in T
-        y_total[q, p, r, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_center_disp = _init(model, :z_center_disp)
-    for q in centers, r in q.prod_out, c in r.comp, t in T
-        z_center_disp[q, r, c, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_center_disp_total = _init(model, :z_center_disp_total)
-    for q in centers, r in q.prod_out, t in T
-        z_center_disp_total[q, r, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_store = _init(model, :z_store)
-    for q in centers, r in q.prod_out, c in r.comp, t in T
-        if t == T.stop
-            z_store[q, r, c, t] = 0.0
-        else
-            z_store[q, r, c, t] = @variable(model, lower_bound = 0)
+    @timeit "Model: Add variables" begin
+        @timeit "y" begin
+            y = _init(model, :y)
+            for (q, p, r) in E
+                y[q, p, r] = @variable(model, [r.comp, T], lower_bound = 0)
+            end
         end
-    end
-
-    z_store_total = _init(model, :z_store_total)
-    for q in centers, r in q.prod_out
-        z_store_total[q, r, 0] = 0.0
-        for t in T
-            if t == T.stop
-                z_store_total[q, r, t] = 0.0
-            else
-                z_store_total[q, r, t] = @variable(model, lower_bound = 0)
+        @timeit "y_total" begin
+            y_total = _init(model, :y_total)
+            for (q, p, r) in E
+                y_total[q, p, r] = @variable(model, [T], lower_bound = 0)
+            end
+        end
+        @timeit "z_center_disp" begin
+            z_center_disp = _init(model, :z_center_disp)
+            for q in centers, r in q.prod_out, c in r.comp, t in T
+                z_center_disp[q, r, c, t] = @variable(model, lower_bound = 0)
+            end
+        end
+        @timeit "z_center_disp_total" begin
+            z_center_disp_total = _init(model, :z_center_disp_total)
+            for q in centers, r in q.prod_out, t in T
+                z_center_disp_total[q, r, t] = @variable(model, lower_bound = 0)
+            end
+        end
+        @timeit "z_store" begin
+            z_store = _init(model, :z_store)
+            for q in centers, r in q.prod_out, c in r.comp, t in T
+                if t == T.stop
+                    z_store[q, r, c, t] = 0.0
+                else
+                    z_store[q, r, c, t] = @variable(model, lower_bound = 0)
+                end
+            end
+        end
+        @timeit "z_store_total" begin
+            z_store_total = _init(model, :z_store_total)
+            for q in centers, r in q.prod_out
+                z_store_total[q, r, 0] = 0.0
+                for t in T
+                    if t == T.stop
+                        z_store_total[q, r, t] = 0.0
+                    else
+                        z_store_total[q, r, t] = @variable(model, lower_bound = 0)
+                    end
+                end
+            end
+        end
+        @timeit "x_open" begin
+            x_open = _init(model, :x_open)
+            for p in plants
+                x_open[p, 0] = 0
+                for t in T
+                    x_open[p, t] = @variable(model, binary = true)
+                end
+            end
+        end
+        @timeit "x_send" begin
+            x_send = _init(model, :x_send)
+            for p in plants, (q, r) in E_out[p], t in T
+                x_send[p, q, r, t] = @variable(model, binary = true)
+            end
+        end
+        @timeit "x_disp" begin
+            x_disp = _init(model, :x_disp)
+            for p in plants, r in p.prod_out, t in T
+                x_disp[p, r, t] = @variable(model, binary = true)
+            end
+        end
+        @timeit "z_prod" begin
+            z_prod = _init(model, :z_prod)
+            for p in plants, r in p.prod_out, c in r.comp, t in T
+                z_prod[p, r, c, t] = @variable(model, lower_bound = 0)
+            end
+        end
+        @timeit "z_plant_disp" begin
+            z_plant_disp = _init(model, :z_plant_disp)
+            for p in plants, r in p.prod_out, c in r.comp, t in T
+                z_plant_disp[p, r, c, t] = @variable(model, lower_bound = 0)
+            end
+        end
+        @timeit "z_tr_emissions" begin
+            z_tr_emissions = _init(model, :z_tr_emissions)
+            for (q, p, r) in E, s in emissions, t in T
+                z_tr_emissions[q, p, r, s, t] = @variable(model, lower_bound = 0)
+            end
+        end
+        @timeit "z_plant_emissions" begin
+            z_plant_emissions = _init(model, :z_plant_emissions)
+            for p in plants, s in emissions, t in T
+                z_plant_emissions[p, s, t] = @variable(model, lower_bound = 0)
             end
         end
     end
 
-    x_open = _init(model, :x_open)
-    for p in plants
-        x_open[p, 0] = 0
-        for t in T
-            x_open[p, t] = @variable(model, binary = true)
-        end
-    end
-
-    x_send = _init(model, :x_send)
-    for p in plants, (q, r) in E_out[p], t in T
-        x_send[p, q, r, t] = @variable(model, binary = true)
-    end
-
-    x_disp = _init(model, :x_disp)
-    for p in plants, r in p.prod_out, t in T
-        x_disp[p, r, t] = @variable(model, binary = true)
-    end
-
-    z_prod = _init(model, :z_prod)
-    for p in plants, r in p.prod_out, c in r.comp, t in T
-        z_prod[p, r, c, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_plant_disp = _init(model, :z_plant_disp)
-    for p in plants, r in p.prod_out, c in r.comp, t in T
-        z_plant_disp[p, r, c, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_tr_emissions = _init(model, :z_tr_emissions)
-    for (q, p, r) in E, s in emissions, t in T
-        z_tr_emissions[q, p, r, s, t] = @variable(model, lower_bound = 0)
-    end
-
-    z_plant_emissions = _init(model, :z_plant_emissions)
-    for p in plants, s in emissions, t in T
-        z_plant_emissions[p, s, t] = @variable(model, lower_bound = 0)
-    end
 
     # Objective function
     # -------------------------------------------------------------------------
-    obj = AffExpr()
+    @timeit "Model: Objective function" begin
+        obj = AffExpr()
 
-    # Center disposal
-    for q in centers, r in q.prod_out, t in T
-        add_to_expression!(
-            obj,
-            data.c_center_disp[q, r, t],
-            z_center_disp_total[q, r, t]
-        )
+        # Center disposal
+        @timeit "c_center_disp" begin
+            for q in centers, r in q.prod_out, t in T
+                add_to_expression!(
+                    obj,
+                    data.c_center_disp[q, r, t],
+                    z_center_disp_total[q, r, t],
+                )
+            end
+        end
+
+        # Center acquisition
+        @timeit "c_acq" begin
+            for q in centers, r in q.prod_out, c in r.comp, t in T
+                add_to_expression!(obj, data.m_init[q, r, c, t] * data.c_acq[q, r, t])
+            end
+        end
+
+        # Center storage
+        @timeit "c_store" begin
+            for q in centers, r in q.prod_out, t in T
+                add_to_expression!(obj, data.c_store[q, r, t], z_store_total[q, r, t])
+            end
+        end
+
+        # Transportation, variable operating cost
+        @timeit "c_tr, c_var" begin
+            for (q, p, r) in E
+                dist = data.m_dist[q, p]
+                y_qpr = y[q, p, r]
+                for c in r.comp, t in T
+                    add_to_expression!(obj, dist * data.c_tr[r, t], y_qpr[c, t])
+                    add_to_expression!(obj, data.c_var[p, t], y_qpr[c, t])
+                end
+            end
+        end
+
+        # Transportation emissions
+        @timeit "c_emission" begin
+            for (q, p, r) in E, s in emissions, t in T
+                add_to_expression!(
+                    obj,
+                    data.c_emission[s, t],
+                    z_tr_emissions[q, p, r, s, t],
+                )
+            end
+        end
+
+        # Fixed cost
+        @timeit "c_fix" begin
+            for p in plants, t in T
+                add_to_expression!(obj, data.c_fix[p, t], x_open[p, t])
+            end
+        end
+
+        # Opening cost
+        @timeit "c_open" begin
+            for p in plants, t in T
+                add_to_expression!(obj, data.c_open[p, t], x_open[p, t] - x_open[p, t-1])
+            end
+        end
+
+        # Plant disposal
+        @timeit "c_plant_disp" begin
+            for p in plants, r in p.prod_out, c in r.comp, t in T
+                add_to_expression!(
+                    obj,
+                    data.c_plant_disp[p, r, t],
+                    z_plant_disp[p, r, c, t],
+                )
+            end
+        end
+
+        # Plant emissions
+        @timeit "c_emission" begin
+            for p in plants, s in emissions, t in T
+                add_to_expression!(obj, data.c_emission[s, t], z_plant_emissions[p, s, t])
+            end
+        end
+
+        @objective(model, Min, obj)
     end
-
-    # Center acquisition
-    for q in centers, r in q.prod_out, c in r.comp, t in T
-        add_to_expression!(
-            obj,
-            data.m_init[q, r, c, t] * data.c_acq[q, r, t]
-        )
-    end
-
-    # Center storage
-    for q in centers, r in q.prod_out, t in T
-        add_to_expression!(
-            obj,
-            data.c_store[q, r, t],
-            z_store_total[q, r, t],
-        )
-    end
-
-    # Transportation
-    for (q, p, r) in E, c in r.comp, t in T
-        add_to_expression!(
-            obj,
-            data.m_dist[q, p] * data.c_tr[r, t],
-            y[q, p, r, c, t]
-        )
-    end
-
-    # Transportation emissions
-    for (q, p, r) in E, s in emissions, t in T
-        add_to_expression!(
-            obj,
-            data.c_emission[s, t],
-            z_tr_emissions[q, p, r, s, t]
-        )
-    end
-
-    # Fixed cost
-    for p in plants, t in T
-        add_to_expression!(
-            obj,
-            data.c_fix[p, t],
-            x_open[p, t]
-        )
-    end
-
-    # Opening cost
-    for p in plants, t in T
-        add_to_expression!(
-            obj,
-            data.c_open[p, t],
-            x_open[p, t] - x_open[p, t-1]
-        )
-    end
-
-    # Variable operating cost
-    for (q, p, r) in E, c in r.comp, t in T
-        add_to_expression!(
-            obj,
-            data.c_var[p, t],
-            y[q, p, r, c, t]
-        )
-    end
-
-    # Plant disposal
-    for p in plants, r in p.prod_out, c in r.comp, t in T
-        add_to_expression!(
-            obj,
-            data.c_plant_disp[p, r, t],
-            z_plant_disp[p, r, c, t]
-        )
-    end
-
-    # Plant emissions
-    for p in plants, s in emissions, t in T
-        add_to_expression!(
-            obj,
-            data.c_emission[s, t],
-            z_plant_emissions[p, s, t]
-        )
-    end
-
-    @objective(model, Min, obj)
 
     # Constraints
     # -------------------------------------------------------------------------
-    eq_balance = _init(model, :eq_balance)
-    for q in centers, r in q.prod_out, t in T
-        eq_balance[q, r, t] = @constraint(
-            model,
-            sum(
-                y_total[q, p, r2, t]
-                for (p, r2) in E_out[q] if r == r2
-            ) + z_store_total[q, r, t] ==
-            sum(data.m_init[q, r, c, t] for c in r.comp) +
-            z_store_total[q, r, t-1]
-        )
-    end
-
-    ratio(q, r, c, t) = (
-        data.m_init[q, r, c, t] /
-        sum(data.m_init[q, r, d, t] for d in r.comp)
-    )
-
-    eq_y_total = _init(model, :eq_y_total)
-    for (q, p, r) in E, t in T
-        eq_y_total[q, p, r, t] = @constraint(
-            model,
-            y_total[q, p, r, t] == sum(y[q, p, r, c, t] for c in r.comp)
-        )
-    end
-
-    eq_split_y = _init(model, :eq_split_y)
-    for (q, p, r) in E, c in r.comp, t in T
-        if q ∉ centers
-            continue
+    @timeit "Model: Constraints" begin
+        @timeit "eq_balance" begin
+            eq_balance = _init(model, :eq_balance)
+            for q in centers, r in q.prod_out, t in T
+                eq_balance[q, r, t] = @constraint(
+                    model,
+                    sum(y_total[q, p, r2][t] for (p, r2) in E_out[q] if r == r2) +
+                    z_store_total[q, r, t] ==
+                    sum(data.m_init[q, r, c, t] for c in r.comp) + z_store_total[q, r, t-1]
+                )
+            end
         end
-        eq_split_y[q, p, r, c, t] = @constraint(
-            model,
-            y[q, p, r, c, t] == ratio(q, r, c, t) * y_total[q, p, r, t]
-        )
-    end
+        ratio(q, r, c, t) =
+            (data.m_init[q, r, c, t] / sum(data.m_init[q, r, d, t] for d in r.comp))
 
-    eq_split_center_disp = _init(model, :eq_split_center_disp)
-    for q in centers, r in q.prod_out, c in r.comp, t in T
-        eq_split_center_disp[q, r, c, t] = @constraint(
-            model,
-            z_center_disp[q, r, c, t] == ratio(q, r, c, t) * z_center_disp_total[q, r, t]
-        )
-    end
-
-    eq_split_store = _init(model, :eq_split_store)
-    for q in centers, r in q.prod_out, c in r.comp, t in T
-        eq_split_store[q, r, c, t] = @constraint(
-            model,
-            z_store[q, r, c, t] == ratio(q, r, c, t) * z_store_total[q, r, t]
-        )
-    end
-
-    eq_center_disposal = _init(model, :eq_center_disposal)
-    for r in products, t in T
-        centers_r = [q for q in centers if r ∈ q.prod_out]
-        if isempty(centers_r)
-            continue
+        @timeit "eq_y_total" begin
+            eq_y_total = _init(model, :eq_y_total)
+            for (q, p, r) in E, t in T
+                eq_y_total[q, p, r, t] = @constraint(
+                    model,
+                    y_total[q, p, r][t] == sum(y[q, p, r][c, t] for c in r.comp)
+                )
+            end
         end
-        eq_center_disposal[r, t] = @constraint(
-            model,
-            sum(z_center_disp_total[q, r, t] for q in centers_r) <= data.m_center_disp[r, t]
-        )
-    end
-
-    eq_center_storage = _init(model, :eq_center_storage)
-    for q in centers, r in q.prod_out, t in T
-        eq_center_storage[q, r, t] = @constraint(
-            model,
-            z_store_total[q, r, t] <= data.m_store[q, r, t]
-        )
-    end
-
-    eq_tr_emissions = _init(model, :eq_tr_emissions)
-    for (q, p, r) in E, s in emissions, t in T
-        eq_tr_emissions[q, p, r, s, t] = @constraint(
-            model,
-            z_tr_emissions[q, p, r, s, t] ==
-            data.m_dist[q, p] * data.alpha_tr_emission[r, s, t] * y_total[q, p, r, t]
-        )
-    end
-
-    eq_plant_capacity = _init(model, :eq_plant_capacity)
-    for p in plants, t in T
-        eq_plant_capacity[p, t] = @constraint(
-            model,
-            sum(y_total[q, p, r, t] for (q, r) in E_in[p]) <=
-            data.m_cap[p] * x_open[p, t]
-        )
-    end
-
-    eq_plant_prod = _init(model, :eq_plant_prod)
-    for p in plants, r_out in p.prod_out, c_out in r_out.comp, t in T
-        eq_plant_prod[p, r_out, c_out, t] = @constraint(
-            model,
-            z_prod[p, r_out, c_out, t] ==
-            sum(
-                data.alpha_mix[p, r_out, c_in, c_out] * y[q, p, r_in, c_in, t]
-                for (q, r_in) in E_in[p]
-                for c_in in r_in.comp
-            )
-        )
-    end
-
-    eq_plant_disp = _init(model, :eq_plant_disp)
-    for p in plants, r in p.prod_out, t in T
-        eq_plant_disp[p, r, t] = @constraint(
-            model,
-            sum(
-                z_plant_disp[p, r, c, t]
-                for c in r.comp
-            ) <= data.m_plant_disp[p, r, t] * x_disp[p, r, t]
-        )
-    end
-
-    eq_plant_emissions = _init(model, :eq_plant_emissions)
-    for p in plants, s in emissions, t in T
-        eq_plant_emissions[p, s, t] = @constraint(
-            model,
-            z_plant_emissions[p, s, t] ==
-            sum(
-                y_total[q, p, r, t]
-                for (q, r,) in E_in[p]
-            ) * data.alpha_plant_emission[p, s, t]
-        )
-    end
-
-    eq_emissions_limit = _init(model, :eq_emissions_limit)
-    for s in emissions, t in T
-        eq_emissions_limit[s, t] = @constraint(
-            model,
-            sum(z_plant_emissions[p, s, t] for p in plants)
-            +
-            sum(
-                z_tr_emissions[q, p, r, s, t]
-                for (q, p, r) in E
-            ) <= data.m_emission[s, t]
-        )
-    end
-
-    eq_plant_remains_open = _init(model, :eq_plant_remains_open)
-    for p in plants, t in T
-        eq_plant_remains_open[p, t] = @constraint(
-            model,
-            x_open[p, t] >= x_open[p, t-1]
-        )
-    end
-
-    eq_plant_single_dest = _init(model, :eq_plant_single_dest)
-    for p in plants, r in p.prod_out, t in T
-        eq_plant_single_dest[p, r, t] = @constraint(
-            model,
-            sum(
-                x_send[p, q, r, t]
-                for (q, r2) in E_out[p]
-                if r == r2
-            ) + x_disp[p, r, t] <= 1
-        )
-    end
-
-    eq_plant_send_limit = _init(model, :eq_plant_send_limit)
-    for p in plants, (q, r) in E_out[p], t in T
-        eq_plant_send_limit[p, q, r, t] = @constraint(
-            model,
-            y_total[p, q, r, t] <= data.m_cap[q] * x_send[p, q, r, t]
-        )
-    end
-
-    eq_plant_balance = _init(model, :eq_plant_balance)
-    for p in plants, r in p.prod_out, c in r.comp, t in T
-        eq_plant_balance[p, r, c, t] = @constraint(
-            model,
-            z_prod[p, r, c, t] ==
-            z_plant_disp[p, r, c, t] +
-            sum(
-                y[p, q, r, c, t]
-                for (q, r2) in E_out[p]
-                if r == r2
-            )
-        )
+        @timeit "eq_split_y" begin
+            eq_split_y = _init(model, :eq_split_y)
+            for (q, p, r) in E, c in r.comp, t in T
+                if q ∉ centers
+                    continue
+                end
+                eq_split_y[q, p, r, c, t] = @constraint(
+                    model,
+                    y[q, p, r][c, t] == ratio(q, r, c, t) * y_total[q, p, r][t]
+                )
+            end
+        end
+        @timeit "eq_split_center_disp" begin
+            eq_split_center_disp = _init(model, :eq_split_center_disp)
+            for q in centers, r in q.prod_out, c in r.comp, t in T
+                eq_split_center_disp[q, r, c, t] = @constraint(
+                    model,
+                    z_center_disp[q, r, c, t] ==
+                    ratio(q, r, c, t) * z_center_disp_total[q, r, t]
+                )
+            end
+        end
+        @timeit "eq_split_store" begin
+            eq_split_store = _init(model, :eq_split_store)
+            for q in centers, r in q.prod_out, c in r.comp, t in T
+                eq_split_store[q, r, c, t] = @constraint(
+                    model,
+                    z_store[q, r, c, t] == ratio(q, r, c, t) * z_store_total[q, r, t]
+                )
+            end
+        end
+        @timeit "eq_center_disposal" begin
+            eq_center_disposal = _init(model, :eq_center_disposal)
+            for r in products, t in T
+                centers_r = [q for q in centers if r ∈ q.prod_out]
+                if isempty(centers_r)
+                    continue
+                end
+                eq_center_disposal[r, t] = @constraint(
+                    model,
+                    sum(z_center_disp_total[q, r, t] for q in centers_r) <=
+                    data.m_center_disp[r, t]
+                )
+            end
+        end
+        @timeit "eq_center_storage" begin
+            eq_center_storage = _init(model, :eq_center_storage)
+            for q in centers, r in q.prod_out, t in T
+                eq_center_storage[q, r, t] =
+                    @constraint(model, z_store_total[q, r, t] <= data.m_store[q, r, t])
+            end
+        end
+        @timeit "eq_tr_emissions" begin
+            eq_tr_emissions = _init(model, :eq_tr_emissions)
+            for (q, p, r) in E, s in emissions, t in T
+                eq_tr_emissions[q, p, r, s, t] = @constraint(
+                    model,
+                    z_tr_emissions[q, p, r, s, t] ==
+                    data.m_dist[q, p] *
+                    data.alpha_tr_emission[r, s, t] *
+                    y_total[q, p, r][t]
+                )
+            end
+        end
+        @timeit "eq_plant_capacity" begin
+            eq_plant_capacity = _init(model, :eq_plant_capacity)
+            for p in plants, t in T
+                eq_plant_capacity[p, t] = @constraint(
+                    model,
+                    sum(y_total[q, p, r][t] for (q, r) in E_in[p]) <=
+                    data.m_cap[p] * x_open[p, t]
+                )
+            end
+        end
+        @timeit "eq_plant_prod" begin
+            eq_plant_prod = _init(model, :eq_plant_prod)
+            for p in plants, r_out in p.prod_out, c_out in r_out.comp, t in T
+                eq_plant_prod[p, r_out, c_out, t] = @constraint(
+                    model,
+                    z_prod[p, r_out, c_out, t] == sum(
+                        data.alpha_mix[p, r_out, c_in, c_out] * y[q, p, r_in][c_in, t]
+                        for (q, r_in) in E_in[p] for
+                        c_in in r_in.comp if data.alpha_mix[p, r_out, c_in, c_out] > 0
+                    )
+                )
+            end
+        end
+        @timeit "eq_plant_disp" begin
+            eq_plant_disp = _init(model, :eq_plant_disp)
+            for p in plants, r in p.prod_out, t in T
+                eq_plant_disp[p, r, t] = @constraint(
+                    model,
+                    sum(z_plant_disp[p, r, c, t] for c in r.comp) <=
+                    data.m_plant_disp[p, r, t] * x_disp[p, r, t]
+                )
+            end
+        end
+        @timeit "eq_plant_emissions" begin
+            eq_plant_emissions = _init(model, :eq_plant_emissions)
+            for p in plants, s in emissions, t in T
+                eq_plant_emissions[p, s, t] = @constraint(
+                    model,
+                    z_plant_emissions[p, s, t] ==
+                    sum(y_total[q, p, r][t] for (q, r) in E_in[p]) *
+                    data.alpha_plant_emission[p, s, t]
+                )
+            end
+        end
+        @timeit "eq_emissions_limit" begin
+            eq_emissions_limit = _init(model, :eq_emissions_limit)
+            for s in emissions, t in T
+                eq_emissions_limit[s, t] = @constraint(
+                    model,
+                    sum(z_plant_emissions[p, s, t] for p in plants) +
+                    sum(z_tr_emissions[q, p, r, s, t] for (q, p, r) in E) <=
+                    data.m_emission[s, t]
+                )
+            end
+        end
+        @timeit "eq_plant_remains_open" begin
+            eq_plant_remains_open = _init(model, :eq_plant_remains_open)
+            for p in plants, t in T
+                eq_plant_remains_open[p, t] =
+                    @constraint(model, x_open[p, t] >= x_open[p, t-1])
+            end
+        end
+        @timeit "eq_plant_single_dest" begin
+            eq_plant_single_dest = _init(model, :eq_plant_single_dest)
+            for p in plants, r in p.prod_out, t in T
+                eq_plant_single_dest[p, r, t] = @constraint(
+                    model,
+                    sum(x_send[p, q, r, t] for (q, r2) in E_out[p] if r == r2) +
+                    x_disp[p, r, t] <= 1
+                )
+            end
+        end
+        @timeit "eq_plant_send_limit" begin
+            eq_plant_send_limit = _init(model, :eq_plant_send_limit)
+            for p in plants, (q, r) in E_out[p], t in T
+                eq_plant_send_limit[p, q, r, t] = @constraint(
+                    model,
+                    y_total[p, q, r][t] <= data.m_cap[q] * x_send[p, q, r, t]
+                )
+            end
+        end
+        @timeit "eq_plant_balance" begin
+            eq_plant_balance = _init(model, :eq_plant_balance)
+            for p in plants, r in p.prod_out, c in r.comp, t in T
+                eq_plant_balance[p, r, c, t] = @constraint(
+                    model,
+                    z_prod[p, r, c, t] ==
+                    z_plant_disp[p, r, c, t] +
+                    sum(y[p, q, r][c, t] for (q, r2) in E_out[p] if r == r2)
+                )
+            end
+        end
     end
 
     # Optimize
     # -------------------------------------------------------------------------
-    _set_names!(model)
     optimize!(model)
 
     # Report: Transportation
@@ -1037,8 +952,8 @@ function solve(filename, optimizer)
                 data.m_dist[q, p],
                 value(y[q, p, r, c, t]),
                 data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r, c, t]),
-                data.c_var[p, t] * value(y[q, p, r, c, t])
-            ]
+                data.c_var[p, t] * value(y[q, p, r, c, t]),
+            ],
         )
     end
     CSV.write("$output_dir/transp.csv", df)
@@ -1066,17 +981,13 @@ function solve(filename, optimizer)
                 c.name,
                 t,
                 data.m_init[q, r, c, t],
-                sum(
-                    value(y[q, p, r, c, t])
-                    for (p, r2) in E_out[q]
-                    if r == r2
-                ),
+                sum(value(y[q, p, r, c, t]) for (p, r2) in E_out[q] if r == r2),
                 value(z_store[q, r, c, t]),
                 value(z_center_disp[q, r, c, t]),
                 data.m_init[q, r, c, t] * data.c_acq[q, r, t],
                 data.c_store[q, r, t] * value(z_store[q, r, c, t]),
                 data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]),
-            ]
+            ],
         )
     end
     CSV.write("$output_dir/centers.csv", df)
@@ -1098,7 +1009,7 @@ function solve(filename, optimizer)
                 value(x_open[p, t]),
                 data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])),
                 data.c_fix[p, t] * value(x_open[p, t]),
-            ]
+            ],
         )
     end
     CSV.write("$output_dir/plants.csv", df)
@@ -1127,14 +1038,9 @@ function solve(filename, optimizer)
                 t,
                 value(z_prod[p, r, c, t]),
                 value(z_plant_disp[p, r, c, t]),
-                sum(
-                    value(y[p, q, r, c, t])
-                    for (q, r2) in E_out[p]
-                    if r == r2;
-                    init=0.0
-                ),
+                sum(value(y[p, q, r, c, t]) for (q, r2) in E_out[p] if r == r2; init = 0.0),
                 data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]),
-            ]
+            ],
         )
     end
     CSV.write("$output_dir/plant-outputs.csv", df)
@@ -1156,7 +1062,7 @@ function solve(filename, optimizer)
                 t,
                 value(z_plant_emissions[p, s, t]),
                 data.c_emission[s, t] * value(z_plant_emissions[p, s, t]),
-            ]
+            ],
         )
     end
     CSV.write("$output_dir/plant-emissions.csv", df)
@@ -1189,11 +1095,10 @@ function solve(filename, optimizer)
                 value(y_total[q, p, r, t]),
                 value(z_tr_emissions[q, p, r, s, t]),
                 data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]),
-            ]
+            ],
         )
     end
     CSV.write("$output_dir/transp-emissions.csv", df)
 
     return
 end
-
