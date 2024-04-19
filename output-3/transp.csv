@@ -1,43 +1,43 @@
 source,destination,product,component,time,distance (km),amount sent (tonne),transportation cost ($),variable operating cost ($)
-MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Paper,1,0.0,92.70000000000002,0.0,92.70000000000002
-MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Paper,2,0.0,304.579999999999,0.0,304.579999999999
+MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Paper,1,0.0,92.7,0.0,92.7
+MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Paper,2,0.0,304.58,0.0,304.58
 MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Cardboard,1,0.0,1688.25,0.0,1688.25
 MRF (Chicago),Paper Mill (Chicago),Cardboard bale,Cardboard,2,0.0,5905.5,0.0,5905.5
-MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Paper,1,0.0,280.6200000000026,0.0,280.6200000000026
-MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Paper,2,0.0,307.96000000000004,0.0,307.96000000000004
+MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Paper,1,0.0,280.62,0.0,280.62
+MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Paper,2,0.0,307.96,0.0,307.96
 MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Cardboard,1,0.0,10915.5,0.0,10915.5
 MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,Cardboard,2,0.0,11889.75,0.0,11889.75
-MRF (Dallas),Paper Mill (Dallas),Cardboard bale,Paper,1,0.0,112.97999999999774,0.0,112.97999999999774
+MRF (Dallas),Paper Mill (Dallas),Cardboard bale,Paper,1,0.0,112.98,0.0,112.98
 MRF (Dallas),Paper Mill (Dallas),Cardboard bale,Paper,2,0.0,245.06,0.0,245.06
 MRF (Dallas),Paper Mill (Dallas),Cardboard bale,Cardboard,1,0.0,9613.5,0.0,9613.5
 MRF (Dallas),Paper Mill (Dallas),Cardboard bale,Cardboard,2,0.0,11133.0,0.0,11133.0
-Collection (San Antonio),MRF (Dallas),Waste,Film,1,476.098,288.0,6855.811200000001,288.0
-Collection (San Antonio),MRF (Dallas),Waste,Film,2,476.098,4240.0,100932.77600000001,4240.0
-Collection (San Antonio),MRF (Dallas),Waste,Paper,1,476.098,252.00000000000003,5998.834800000001,252.00000000000003
-Collection (San Antonio),MRF (Dallas),Waste,Paper,2,476.098,3710.0000000000005,88316.17900000002,3710.0000000000005
-Collection (San Antonio),MRF (Dallas),Waste,Cardboard,1,476.098,324.0,7712.7876000000015,324.0
-Collection (San Antonio),MRF (Dallas),Waste,Cardboard,2,476.098,4770.0,113549.37300000002,4770.0
-Collection (San Jose),MRF (Phoenix),Waste,Film,1,1173.985,1255.0,73667.55875,1255.0
-Collection (San Jose),MRF (Phoenix),Waste,Film,2,1173.985,2310.0,135595.2675,2310.0
-Collection (San Jose),MRF (Phoenix),Waste,Paper,1,1173.985,2510.0,147335.1175,2510.0
-Collection (San Jose),MRF (Phoenix),Waste,Paper,2,1173.985,4620.0,271190.535,4620.0
-Collection (San Jose),MRF (Phoenix),Waste,Cardboard,1,1173.985,251.0,14733.51175,251.0
-Collection (San Jose),MRF (Phoenix),Waste,Cardboard,2,1173.985,462.0,27119.053499999998,462.0
-Collection (San Jose),MRF (Dallas),Waste,Film,2,2705.116,2340.0,316498.572,2340.0
-Collection (San Jose),MRF (Dallas),Waste,Paper,2,2705.116,4680.0,632997.144,4680.0
-Collection (San Jose),MRF (Dallas),Waste,Cardboard,2,2705.116,468.0,63299.7144,468.0
-Collection (New York City),MRF (Chicago),Waste,Film,1,1293.755,990.0,64040.872500000005,990.0
-Collection (New York City),MRF (Chicago),Waste,Film,2,1293.755,6450.0,417235.98750000005,6450.0
-Collection (New York City),MRF (Chicago),Waste,Paper,1,1293.755,891.0,57636.78525000001,891.0
-Collection (New York City),MRF (Chicago),Waste,Paper,2,1293.755,5805.0,375512.38875000004,5805.0
-Collection (New York City),MRF (Chicago),Waste,Cardboard,1,1293.755,297.0,19212.26175,297.0
-Collection (New York City),MRF (Chicago),Waste,Cardboard,2,1293.755,1934.9999999999998,125170.79625,1934.9999999999998
-Collection (Los Angeles),MRF (Phoenix),Waste,Film,1,668.923,4160.0,139135.98400000003,4160.0
-Collection (Los Angeles),MRF (Phoenix),Waste,Film,2,668.923,5704.0,190776.8396,5704.0
-Collection (Los Angeles),MRF (Phoenix),Waste,Paper,1,668.923,3640.0000000000005,121743.98600000002,3640.0000000000005
-Collection (Los Angeles),MRF (Phoenix),Waste,Paper,2,668.923,4991.000000000001,166929.73465000006,4991.000000000001
-Collection (Los Angeles),MRF (Phoenix),Waste,Cardboard,1,668.923,5200.0,173919.98,5200.0
-Collection (Los Angeles),MRF (Phoenix),Waste,Cardboard,2,668.923,7130.0,238471.04950000002,7130.0
+Collection (San Antonio),MRF (Dallas),Waste,Film,1,476.1,288.0,6855.81,288.0
+Collection (San Antonio),MRF (Dallas),Waste,Film,2,476.1,4240.0,100932.78,4240.0
+Collection (San Antonio),MRF (Dallas),Waste,Paper,1,476.1,252.0,5998.83,252.0
+Collection (San Antonio),MRF (Dallas),Waste,Paper,2,476.1,3710.0,88316.18,3710.0
+Collection (San Antonio),MRF (Dallas),Waste,Cardboard,1,476.1,324.0,7712.79,324.0
+Collection (San Antonio),MRF (Dallas),Waste,Cardboard,2,476.1,4770.0,113549.37,4770.0
+Collection (San Jose),MRF (Phoenix),Waste,Film,1,1173.98,1255.0,73667.56,1255.0
+Collection (San Jose),MRF (Phoenix),Waste,Film,2,1173.98,2310.0,135595.27,2310.0
+Collection (San Jose),MRF (Phoenix),Waste,Paper,1,1173.98,2510.0,147335.12,2510.0
+Collection (San Jose),MRF (Phoenix),Waste,Paper,2,1173.98,4620.0,271190.54,4620.0
+Collection (San Jose),MRF (Phoenix),Waste,Cardboard,1,1173.98,251.0,14733.51,251.0
+Collection (San Jose),MRF (Phoenix),Waste,Cardboard,2,1173.98,462.0,27119.05,462.0
+Collection (San Jose),MRF (Dallas),Waste,Film,2,2705.12,2340.0,316498.57,2340.0
+Collection (San Jose),MRF (Dallas),Waste,Paper,2,2705.12,4680.0,632997.14,4680.0
+Collection (San Jose),MRF (Dallas),Waste,Cardboard,2,2705.12,468.0,63299.71,468.0
+Collection (New York City),MRF (Chicago),Waste,Film,1,1293.76,990.0,64040.87,990.0
+Collection (New York City),MRF (Chicago),Waste,Film,2,1293.76,6450.0,417235.99,6450.0
+Collection (New York City),MRF (Chicago),Waste,Paper,1,1293.76,891.0,57636.79,891.0
+Collection (New York City),MRF (Chicago),Waste,Paper,2,1293.76,5805.0,375512.39,5805.0
+Collection (New York City),MRF (Chicago),Waste,Cardboard,1,1293.76,297.0,19212.26,297.0
+Collection (New York City),MRF (Chicago),Waste,Cardboard,2,1293.76,1935.0,125170.8,1935.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Film,1,668.92,4160.0,139135.98,4160.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Film,2,668.92,5704.0,190776.84,5704.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Paper,1,668.92,3640.0,121743.99,3640.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Paper,2,668.92,4991.0,166929.73,4991.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Cardboard,1,668.92,5200.0,173919.98,5200.0
+Collection (Los Angeles),MRF (Phoenix),Waste,Cardboard,2,668.92,7130.0,238471.05,7130.0
 Collection (Chicago),MRF (Chicago),Waste,Film,1,0.0,716.0,0.0,716.0
 Collection (Chicago),MRF (Chicago),Waste,Film,2,0.0,1394.0,0.0,1394.0
 Collection (Chicago),MRF (Chicago),Waste,Paper,1,0.0,2864.0,0.0,2864.0
@@ -56,21 +56,21 @@ Collection (Phoenix),MRF (Phoenix),Waste,Paper,1,0.0,6543.0,0.0,6543.0
 Collection (Phoenix),MRF (Phoenix),Waste,Paper,2,0.0,4095.0,0.0,4095.0
 Collection (Phoenix),MRF (Phoenix),Waste,Cardboard,1,0.0,5089.0,0.0,5089.0
 Collection (Phoenix),MRF (Phoenix),Waste,Cardboard,2,0.0,3185.0,0.0,3185.0
-Collection (San Diego),MRF (Phoenix),Waste,Film,1,567.242,6690.0,189742.449,6690.0
-Collection (San Diego),MRF (Phoenix),Waste,Film,2,567.242,8460.0,239943.36599999998,8460.0
-Collection (San Diego),MRF (Phoenix),Waste,Paper,1,567.242,1338.0,37948.489799999996,1338.0
-Collection (San Diego),MRF (Phoenix),Waste,Paper,2,567.242,1692.0,47988.6732,1692.0
-Collection (San Diego),MRF (Phoenix),Waste,Cardboard,1,567.242,4014.0,113845.46939999999,4014.0
-Collection (San Diego),MRF (Phoenix),Waste,Cardboard,2,567.242,5076.0,143966.0196,5076.0
-Collection (Philadelphia),MRF (Chicago),Waste,Film,1,1244.116,220.0,13685.276000000002,220.0
-Collection (Philadelphia),MRF (Chicago),Waste,Film,2,1244.116,962.0,59841.979600000006,962.0
-Collection (Philadelphia),MRF (Chicago),Waste,Paper,1,1244.116,880.0,54741.10400000001,880.0
-Collection (Philadelphia),MRF (Chicago),Waste,Paper,2,1244.116,3848.0,239367.91840000002,3848.0
-Collection (Philadelphia),MRF (Chicago),Waste,Cardboard,1,1244.116,880.0,54741.10400000001,880.0
-Collection (Philadelphia),MRF (Chicago),Waste,Cardboard,2,1244.116,3848.0,239367.91840000002,3848.0
-Collection (Houston),MRF (Dallas),Waste,Film,1,411.89,2668.0,54946.126,2668.0
-Collection (Houston),MRF (Dallas),Waste,Film,2,411.89,1852.0,38141.014,1852.0
-Collection (Houston),MRF (Dallas),Waste,Paper,1,411.89,4669.0,96155.7205,4669.0
-Collection (Houston),MRF (Dallas),Waste,Paper,2,411.89,3241.0,66746.7745,3241.0
-Collection (Houston),MRF (Dallas),Waste,Cardboard,1,411.89,6670.0,137365.315,6670.0
-Collection (Houston),MRF (Dallas),Waste,Cardboard,2,411.89,4630.0,95352.535,4630.0
+Collection (San Diego),MRF (Phoenix),Waste,Film,1,567.24,6690.0,189742.45,6690.0
+Collection (San Diego),MRF (Phoenix),Waste,Film,2,567.24,8460.0,239943.37,8460.0
+Collection (San Diego),MRF (Phoenix),Waste,Paper,1,567.24,1338.0,37948.49,1338.0
+Collection (San Diego),MRF (Phoenix),Waste,Paper,2,567.24,1692.0,47988.67,1692.0
+Collection (San Diego),MRF (Phoenix),Waste,Cardboard,1,567.24,4014.0,113845.47,4014.0
+Collection (San Diego),MRF (Phoenix),Waste,Cardboard,2,567.24,5076.0,143966.02,5076.0
+Collection (Philadelphia),MRF (Chicago),Waste,Film,1,1244.12,220.0,13685.28,220.0
+Collection (Philadelphia),MRF (Chicago),Waste,Film,2,1244.12,962.0,59841.98,962.0
+Collection (Philadelphia),MRF (Chicago),Waste,Paper,1,1244.12,880.0,54741.1,880.0
+Collection (Philadelphia),MRF (Chicago),Waste,Paper,2,1244.12,3848.0,239367.92,3848.0
+Collection (Philadelphia),MRF (Chicago),Waste,Cardboard,1,1244.12,880.0,54741.1,880.0
+Collection (Philadelphia),MRF (Chicago),Waste,Cardboard,2,1244.12,3848.0,239367.92,3848.0
+Collection (Houston),MRF (Dallas),Waste,Film,1,411.89,2668.0,54946.13,2668.0
+Collection (Houston),MRF (Dallas),Waste,Film,2,411.89,1852.0,38141.01,1852.0
+Collection (Houston),MRF (Dallas),Waste,Paper,1,411.89,4669.0,96155.72,4669.0
+Collection (Houston),MRF (Dallas),Waste,Paper,2,411.89,3241.0,66746.77,3241.0
+Collection (Houston),MRF (Dallas),Waste,Cardboard,1,411.89,6670.0,137365.32,6670.0
+Collection (Houston),MRF (Dallas),Waste,Cardboard,2,411.89,4630.0,95352.53,4630.0

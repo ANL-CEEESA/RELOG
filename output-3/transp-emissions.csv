@@ -1,28 +1,28 @@
 source,destination,product,emission,time,distance (km),amount sent (tonne),amount emitted (tonne),emission cost ($)
 MRF (Chicago),Paper Mill (Chicago),Cardboard bale,CO2,1,0.0,1780.95,0.0,0.0
-MRF (Chicago),Paper Mill (Chicago),Cardboard bale,CO2,2,0.0,6210.079999999999,0.0,0.0
-MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,CO2,1,0.0,11196.120000000003,0.0,0.0
+MRF (Chicago),Paper Mill (Chicago),Cardboard bale,CO2,2,0.0,6210.08,0.0,0.0
+MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,CO2,1,0.0,11196.12,0.0,0.0
 MRF (Phoenix),Paper Mill (Phoenix),Cardboard bale,CO2,2,0.0,12197.71,0.0,0.0
-MRF (Dallas),Paper Mill (Dallas),Cardboard bale,CO2,1,0.0,9726.479999999998,0.0,0.0
+MRF (Dallas),Paper Mill (Dallas),Cardboard bale,CO2,1,0.0,9726.48,0.0,0.0
 MRF (Dallas),Paper Mill (Dallas),Cardboard bale,CO2,2,0.0,11378.06,0.0,0.0
-Collection (San Antonio),MRF (Dallas),Waste,CO2,1,476.098,864.0,4113.48672,41.1348672
-Collection (San Antonio),MRF (Dallas),Waste,CO2,2,476.098,12720.0,60559.6656,605.596656
-Collection (San Jose),MRF (Phoenix),Waste,CO2,1,1173.985,4016.0,47147.23759999999,471.47237599999994
-Collection (San Jose),MRF (Phoenix),Waste,CO2,2,1173.985,7392.0,86780.97119999999,867.8097119999999
-Collection (San Jose),MRF (Dallas),Waste,CO2,2,2705.116,7488.0,202559.08608,2025.5908608000002
-Collection (New York City),MRF (Chicago),Waste,CO2,1,1293.755,2178.0,28177.983900000003,281.77983900000004
-Collection (New York City),MRF (Chicago),Waste,CO2,2,1293.755,14190.0,183583.83450000003,1835.8383450000003
-Collection (Los Angeles),MRF (Phoenix),Waste,CO2,1,668.923,13000.0,86959.99,869.5999
-Collection (Los Angeles),MRF (Phoenix),Waste,CO2,2,668.923,17825.0,119235.52475,1192.3552475
+Collection (San Antonio),MRF (Dallas),Waste,CO2,1,476.1,864.0,4113.49,41.13
+Collection (San Antonio),MRF (Dallas),Waste,CO2,2,476.1,12720.0,60559.67,605.6
+Collection (San Jose),MRF (Phoenix),Waste,CO2,1,1173.98,4016.0,47147.24,471.47
+Collection (San Jose),MRF (Phoenix),Waste,CO2,2,1173.98,7392.0,86780.97,867.81
+Collection (San Jose),MRF (Dallas),Waste,CO2,2,2705.12,7488.0,202559.09,2025.59
+Collection (New York City),MRF (Chicago),Waste,CO2,1,1293.76,2178.0,28177.98,281.78
+Collection (New York City),MRF (Chicago),Waste,CO2,2,1293.76,14190.0,183583.83,1835.84
+Collection (Los Angeles),MRF (Phoenix),Waste,CO2,1,668.92,13000.0,86959.99,869.6
+Collection (Los Angeles),MRF (Phoenix),Waste,CO2,2,668.92,17825.0,119235.52,1192.36
 Collection (Chicago),MRF (Chicago),Waste,CO2,1,0.0,4654.0,0.0,0.0
 Collection (Chicago),MRF (Chicago),Waste,CO2,2,0.0,9061.0,0.0,0.0
 Collection (Dallas),MRF (Dallas),Waste,CO2,1,0.0,11648.0,0.0,0.0
 Collection (Dallas),MRF (Dallas),Waste,CO2,2,0.0,9952.0,0.0,0.0
 Collection (Phoenix),MRF (Phoenix),Waste,CO2,1,0.0,15267.0,0.0,0.0
 Collection (Phoenix),MRF (Phoenix),Waste,CO2,2,0.0,9555.0,0.0,0.0
-Collection (San Diego),MRF (Phoenix),Waste,CO2,1,567.242,12042.0,68307.28164,683.0728164000001
-Collection (San Diego),MRF (Phoenix),Waste,CO2,2,567.242,15228.0,86379.61176,863.7961176
-Collection (Philadelphia),MRF (Chicago),Waste,CO2,1,1244.116,1980.0,24633.4968,246.334968
-Collection (Philadelphia),MRF (Chicago),Waste,CO2,2,1244.116,8658.0,107715.56328,1077.1556328000001
-Collection (Houston),MRF (Dallas),Waste,CO2,1,411.89,14007.0,57693.4323,576.9343230000001
-Collection (Houston),MRF (Dallas),Waste,CO2,2,411.89,9723.0,40048.0647,400.48064700000003
+Collection (San Diego),MRF (Phoenix),Waste,CO2,1,567.24,12042.0,68307.28,683.07
+Collection (San Diego),MRF (Phoenix),Waste,CO2,2,567.24,15228.0,86379.61,863.8
+Collection (Philadelphia),MRF (Chicago),Waste,CO2,1,1244.12,1980.0,24633.5,246.33
+Collection (Philadelphia),MRF (Chicago),Waste,CO2,2,1244.12,8658.0,107715.56,1077.16
+Collection (Houston),MRF (Dallas),Waste,CO2,1,411.89,14007.0,57693.43,576.93
+Collection (Houston),MRF (Dallas),Waste,CO2,2,411.89,9723.0,40048.06,400.48

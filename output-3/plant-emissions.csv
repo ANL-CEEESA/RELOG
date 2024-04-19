@@ -1,13 +1,13 @@
 plant,emission,time,amount emitted (tonne),emission cost ($)
-MRF (Chicago),CO2,1,88.11999999999999,0.8811999999999999
-MRF (Chicago),CO2,2,319.09,3.1908999999999996
-Paper Mill (Phoenix),CO2,1,111.96120000000002,1.1196120000000003
-Paper Mill (Phoenix),CO2,2,121.9771,1.219771
-Paper Mill (Dallas),CO2,1,97.26479999999998,0.9726479999999998
-Paper Mill (Dallas),CO2,2,113.78059999999999,1.1378059999999999
-MRF (Phoenix),CO2,1,443.25000000000006,4.432500000000001
+MRF (Chicago),CO2,1,88.12,0.88
+MRF (Chicago),CO2,2,319.09,3.19
+Paper Mill (Phoenix),CO2,1,111.96,1.12
+Paper Mill (Phoenix),CO2,2,121.98,1.22
+Paper Mill (Dallas),CO2,1,97.26,0.97
+Paper Mill (Dallas),CO2,2,113.78,1.14
+MRF (Phoenix),CO2,1,443.25,4.43
 MRF (Phoenix),CO2,2,500.0,5.0
-MRF (Dallas),CO2,1,265.19,2.6519
-MRF (Dallas),CO2,2,398.83,3.9882999999999997
-Paper Mill (Chicago),CO2,1,17.8095,0.178095
-Paper Mill (Chicago),CO2,2,62.10079999999999,0.6210079999999999
+MRF (Dallas),CO2,1,265.19,2.65
+MRF (Dallas),CO2,2,398.83,3.99
+Paper Mill (Chicago),CO2,1,17.81,0.18
+Paper Mill (Chicago),CO2,2,62.1,0.62

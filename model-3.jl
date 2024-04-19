@@ -938,7 +938,7 @@ function solve(filename, optimizer)
     df."transportation cost (\$)" = Float64[]
     df."variable operating cost (\$)" = Float64[]
     for (q, p, r) in E, c in r.comp, t in T
-        if value(y[q, p, r, c, t]) ≈ 0
+        if value(y[q, p, r][c, t]) ≈ 0
             continue
         end
         push!(
@@ -949,10 +949,10 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                data.m_dist[q, p],
-                value(y[q, p, r, c, t]),
-                data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r, c, t]),
-                data.c_var[p, t] * value(y[q, p, r, c, t]),
+                round(data.m_dist[q, p], digits=2),
+                round(value(y[q, p, r][c, t]), digits=2),
+                round(data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r][c, t]), digits=2),
+                round(data.c_var[p, t] * value(y[q, p, r][c, t]), digits=2),
             ],
         )
     end
@@ -980,13 +980,13 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                data.m_init[q, r, c, t],
-                sum(value(y[q, p, r, c, t]) for (p, r2) in E_out[q] if r == r2),
-                value(z_store[q, r, c, t]),
-                value(z_center_disp[q, r, c, t]),
-                data.m_init[q, r, c, t] * data.c_acq[q, r, t],
-                data.c_store[q, r, t] * value(z_store[q, r, c, t]),
-                data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]),
+                round(data.m_init[q, r, c, t], digits=2),
+                round(sum(value(y[q, p, r][c, t]) for (p, r2) in E_out[q] if r == r2), digits=2),
+                round(value(z_store[q, r, c, t]), digits=2),
+                round(value(z_center_disp[q, r, c, t]), digits=2),
+                round(data.m_init[q, r, c, t] * data.c_acq[q, r, t], digits=2),
+                round(data.c_store[q, r, t] * value(z_store[q, r, c, t]), digits=2),
+                round(data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]), digits=2),
             ],
         )
     end
@@ -1006,9 +1006,9 @@ function solve(filename, optimizer)
             [
                 p.name,
                 t,
-                value(x_open[p, t]),
-                data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])),
-                data.c_fix[p, t] * value(x_open[p, t]),
+                round(value(x_open[p, t]), digits=2),
+                round(data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])), digits=2),
+                round(data.c_fix[p, t] * value(x_open[p, t]), digits=2),
             ],
         )
     end
@@ -1036,10 +1036,10 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                value(z_prod[p, r, c, t]),
-                value(z_plant_disp[p, r, c, t]),
-                sum(value(y[p, q, r, c, t]) for (q, r2) in E_out[p] if r == r2; init = 0.0),
-                data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]),
+                round(value(z_prod[p, r, c, t]), digits=2),
+                round(value(z_plant_disp[p, r, c, t]), digits=2),
+                round(sum(value(y[p, q, r][c, t]) for (q, r2) in E_out[p] if r == r2; init = 0.0), digits=2),
+                round(data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]), digits=2),
             ],
         )
     end
@@ -1060,8 +1060,8 @@ function solve(filename, optimizer)
                 p.name,
                 s.name,
                 t,
-                value(z_plant_emissions[p, s, t]),
-                data.c_emission[s, t] * value(z_plant_emissions[p, s, t]),
+                round(value(z_plant_emissions[p, s, t]), digits=2),
+                round(data.c_emission[s, t] * value(z_plant_emissions[p, s, t]), digits=2),
             ],
         )
     end
@@ -1080,7 +1080,7 @@ function solve(filename, optimizer)
     df."amount emitted (tonne)" = Float64[]
     df."emission cost (\$)" = Float64[]
     for (q, p, r) in E, s in emissions, t in T
-        if value(y_total[q, p, r, t]) ≈ 0
+        if value(y_total[q, p, r][t]) ≈ 0
             continue
         end
         push!(
@@ -1091,14 +1091,16 @@ function solve(filename, optimizer)
                 r.name,
                 s.name,
                 t,
-                data.m_dist[q, p],
-                value(y_total[q, p, r, t]),
-                value(z_tr_emissions[q, p, r, s, t]),
-                data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]),
+                round(data.m_dist[q, p], digits=2),
+                round(value(y_total[q, p, r][t]), digits=2),
+                round(value(z_tr_emissions[q, p, r, s, t]), digits=2),
+                round(data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]), digits=2),
             ],
         )
     end
     CSV.write("$output_dir/transp-emissions.csv", df)
+
+    print_timer()
 
     return
 end
