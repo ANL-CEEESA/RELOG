@@ -21,23 +21,23 @@ Random.seed!(42)
 # Structs
 # =========================================================================
 
-Base.@kwdef struct Component
+Base.@kwdef mutable struct Component
     name::String
 end
 
-Base.@kwdef struct Product
+Base.@kwdef mutable struct Product
     name::String
     comp::Vector{Component}
 end
 
-Base.@kwdef struct Center
+Base.@kwdef mutable struct Center
     name::String
     latitude::Float64
     longitude::Float64
     prod_out::Vector{Product}
 end
 
-Base.@kwdef struct Plant
+Base.@kwdef mutable struct Plant
     name::String
     latitude::Float64
     longitude::Float64
@@ -45,7 +45,7 @@ Base.@kwdef struct Plant
     prod_in::Product
 end
 
-Base.@kwdef struct Emission
+Base.@kwdef mutable struct Emission
     name::String
 end
 
@@ -310,7 +310,7 @@ end
 
 # Read
 # ==============================================================================
-function read_json(filename, max_centers = 10, max_plants = 10)
+function read_json(filename; max_centers = Inf, max_plants = Inf)::Instance
     json = JSON.parsefile(filename)
     T = 1:json["parameters"]["time horizon (years)"]
     centers = []
@@ -484,6 +484,114 @@ function read_json(filename, max_centers = 10, max_plants = 10)
     )
 end
 
+# Multi-period Heuristic
+# ==============================================================================
+
+function compress(original::Instance)::Instance
+    T = original.T
+    alpha_plant_emission = Dict(
+        (p, s, 1) => mean([original.alpha_plant_emission[p, s, t] for t in T]) for
+        p in original.plants, s in original.emissions
+    )
+    alpha_tr_emission = Dict(
+        (r, s, 1) => mean([original.alpha_tr_emission[r, s, t] for t in T]) for
+        r in original.products, s in original.emissions
+    )
+    c_acq = Dict(
+        (q, r, 1) => mean([original.c_acq[q, r, t] for t in T]) for
+        q in original.centers for r in q.prod_out
+    )
+    c_center_disp = Dict(
+        (q, r, 1) => mean([original.c_center_disp[q, r, t] for t in T]) for
+        q in original.centers for r in q.prod_out
+    )
+    c_emission = Dict(
+        (s, 1) => mean([original.c_emission[s, t] for t in T]) for s in original.emissions
+    )
+    c_fix = Dict((p, 1) => sum([original.c_fix[p, t] for t in T]) for p in original.plants)
+    c_open =
+        Dict((p, 1) => mean([original.c_open[p, t] for t in T]) for p in original.plants)
+    c_plant_disp = Dict(
+        (p, r, 1) => mean([original.c_plant_disp[p, r, t] for t in T]) for
+        p in original.plants for r in p.prod_out
+    )
+    c_store = Dict(
+        (q, r, 1) => mean([original.c_store[q, r, t] for t in T]) for
+        q in original.centers for r in q.prod_out
+    )
+    c_tr = Dict((r, 1) => mean([original.c_tr[r, t] for t in T]) for r in original.products)
+    c_var = Dict((p, 1) => mean([original.c_var[p, t] for t in T]) for p in original.plants)
+    m_cap = Dict(p => original.m_cap[p] * length(T) for p in original.plants)
+    m_center_disp = Dict(
+        (r, 1) => sum([original.m_center_disp[r, t] for t in T]) for r in original.products
+    )
+    m_emission = Dict(
+        (s, 1) => sum([original.m_emission[s, t] for t in T]) for s in original.emissions
+    )
+    m_init = Dict(
+        (q, r, c, 1) => sum([original.m_init[q, r, c, t] for t in T]) for
+        q in original.centers for r in q.prod_out for c in r.comp
+    )
+    m_plant_disp = Dict(
+        (p, r, 1) => sum([original.m_plant_disp[p, r, t] for t in T]) for
+        p in original.plants for r in p.prod_out
+    )
+    m_store = Dict(
+        (q, r, 1) => sum([original.m_store[q, r, t] for t in T]) for
+        q in original.centers for r in q.prod_out
+    )
+    return Instance(;
+        T = 1:1,
+        centers = original.centers,
+        plants = original.plants,
+        products = original.products,
+        emissions = original.emissions,
+        alpha_mix=original.alpha_mix,
+        alpha_plant_emission,
+        alpha_tr_emission,
+        c_acq,
+        c_center_disp,
+        c_emission,
+        c_fix,
+        c_open,
+        c_plant_disp,
+        c_store,
+        c_tr,
+        c_var,
+        m_cap,
+        m_center_disp,
+        m_dist=original.m_dist,
+        m_emission,
+        m_init,
+        m_plant_disp,
+        m_store,
+    )
+end
+
+function benchmark_compress(filename, optimizer; max_centers=[Inf], max_plants=[Inf])
+    stats = []
+    for mc in max_centers, mp in max_plants
+        # Solve original
+        orig = read_json(filename; max_centers=mc, max_plants=mp)
+        reset_timer!()
+        stats_orig = solve(orig; optimizer)
+        stats_orig["Filename"] = filename
+        stats_orig["Method"] = "Original"
+        push!(stats, stats_orig)
+
+        # Solve compressed
+        compressed = compress(orig)
+        reset_timer!()
+        stats_comp = solve(compressed; optimizer)
+        stats_comp["Filename"] = filename
+        stats_comp["Method"] = "Compressed"
+        push!(stats, stats_comp)
+
+    end
+
+    return DataFrame(stats)
+end
+
 
 # Run
 # ==============================================================================
@@ -496,13 +604,16 @@ function generate_json()
     write_json(data, "output-3/case.json")
 end
 
-function solve(filename, optimizer)
+function solve(filename, optimizer; max_centers = Inf, max_plants = Inf)
     reset_timer!()
-
     @timeit "Read JSON" begin
-        data = read_json(filename)
+        data = read_json(filename; max_centers, max_plants)
     end
+    return solve(data; optimizer = optimizer, output_dir = dirname(filename))
+    print_timer()
+end
 
+function solve(data::Instance; optimizer, output_dir=nothing)
     T = data.T
     centers = data.centers
     plants = data.plants
@@ -510,6 +621,7 @@ function solve(filename, optimizer)
     emissions = data.emissions
 
     model = Model(optimizer)
+    init_time = time()
 
     # Graph
     # -------------------------------------------------------------------------
@@ -920,13 +1032,30 @@ function solve(filename, optimizer)
         end
     end
 
+    model_build_time = time() - init_time
+
     # Optimize
     # -------------------------------------------------------------------------
     optimize!(model)
 
+    stats = OrderedDict{String,Any}(
+        "Plants" => length(plants),
+        "Centers" => length(centers),
+        "Products" => length(products),
+        "Time periods" => length(T),
+        "Model build time (s)" => model_build_time,
+        "Variables" => num_variables(model),
+        "Constraints" => num_constraints(model, count_variable_in_set_constraints=false),
+        "Objective Value" => objective_value(model),
+        "Solve time (s)" => solve_time(model),
+    )
+
+    if output_dir === nothing
+        return stats
+    end
+
     # Report: Transportation
     # -------------------------------------------------------------------------
-    output_dir = dirname(filename)
     df = DataFrame()
     df."source" = String[]
     df."destination" = String[]
@@ -949,10 +1078,13 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                round(data.m_dist[q, p], digits=2),
-                round(value(y[q, p, r][c, t]), digits=2),
-                round(data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r][c, t]), digits=2),
-                round(data.c_var[p, t] * value(y[q, p, r][c, t]), digits=2),
+                round(data.m_dist[q, p], digits = 2),
+                round(value(y[q, p, r][c, t]), digits = 2),
+                round(
+                    data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r][c, t]),
+                    digits = 2,
+                ),
+                round(data.c_var[p, t] * value(y[q, p, r][c, t]), digits = 2),
             ],
         )
     end
@@ -980,13 +1112,19 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                round(data.m_init[q, r, c, t], digits=2),
-                round(sum(value(y[q, p, r][c, t]) for (p, r2) in E_out[q] if r == r2), digits=2),
-                round(value(z_store[q, r, c, t]), digits=2),
-                round(value(z_center_disp[q, r, c, t]), digits=2),
-                round(data.m_init[q, r, c, t] * data.c_acq[q, r, t], digits=2),
-                round(data.c_store[q, r, t] * value(z_store[q, r, c, t]), digits=2),
-                round(data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]), digits=2),
+                round(data.m_init[q, r, c, t], digits = 2),
+                round(
+                    sum(value(y[q, p, r][c, t]) for (p, r2) in E_out[q] if r == r2),
+                    digits = 2,
+                ),
+                round(value(z_store[q, r, c, t]), digits = 2),
+                round(value(z_center_disp[q, r, c, t]), digits = 2),
+                round(data.m_init[q, r, c, t] * data.c_acq[q, r, t], digits = 2),
+                round(data.c_store[q, r, t] * value(z_store[q, r, c, t]), digits = 2),
+                round(
+                    data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]),
+                    digits = 2,
+                ),
             ],
         )
     end
@@ -1006,9 +1144,12 @@ function solve(filename, optimizer)
             [
                 p.name,
                 t,
-                round(value(x_open[p, t]), digits=2),
-                round(data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])), digits=2),
-                round(data.c_fix[p, t] * value(x_open[p, t]), digits=2),
+                round(value(x_open[p, t]), digits = 2),
+                round(
+                    data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])),
+                    digits = 2,
+                ),
+                round(data.c_fix[p, t] * value(x_open[p, t]), digits = 2),
             ],
         )
     end
@@ -1036,10 +1177,19 @@ function solve(filename, optimizer)
                 r.name,
                 c.name,
                 t,
-                round(value(z_prod[p, r, c, t]), digits=2),
-                round(value(z_plant_disp[p, r, c, t]), digits=2),
-                round(sum(value(y[p, q, r][c, t]) for (q, r2) in E_out[p] if r == r2; init = 0.0), digits=2),
-                round(data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]), digits=2),
+                round(value(z_prod[p, r, c, t]), digits = 2),
+                round(value(z_plant_disp[p, r, c, t]), digits = 2),
+                round(
+                    sum(
+                        value(y[p, q, r][c, t]) for (q, r2) in E_out[p] if r == r2;
+                        init = 0.0,
+                    ),
+                    digits = 2,
+                ),
+                round(
+                    data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]),
+                    digits = 2,
+                ),
             ],
         )
     end
@@ -1060,8 +1210,11 @@ function solve(filename, optimizer)
                 p.name,
                 s.name,
                 t,
-                round(value(z_plant_emissions[p, s, t]), digits=2),
-                round(data.c_emission[s, t] * value(z_plant_emissions[p, s, t]), digits=2),
+                round(value(z_plant_emissions[p, s, t]), digits = 2),
+                round(
+                    data.c_emission[s, t] * value(z_plant_emissions[p, s, t]),
+                    digits = 2,
+                ),
             ],
         )
     end
@@ -1091,16 +1244,17 @@ function solve(filename, optimizer)
                 r.name,
                 s.name,
                 t,
-                round(data.m_dist[q, p], digits=2),
-                round(value(y_total[q, p, r][t]), digits=2),
-                round(value(z_tr_emissions[q, p, r, s, t]), digits=2),
-                round(data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]), digits=2),
+                round(data.m_dist[q, p], digits = 2),
+                round(value(y_total[q, p, r][t]), digits = 2),
+                round(value(z_tr_emissions[q, p, r, s, t]), digits = 2),
+                round(
+                    data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]),
+                    digits = 2,
+                ),
             ],
         )
     end
     CSV.write("$output_dir/transp-emissions.csv", df)
 
-    print_timer()
-
-    return
+    return stats
 end
