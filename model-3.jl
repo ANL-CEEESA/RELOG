@@ -76,6 +76,7 @@ Base.@kwdef mutable struct Instance
     m_init::dict{Tuple{Center,Product,Component,Time},Float64}
     m_plant_disp::dict{Tuple{Plant,Product,Time},Float64}
     m_store::dict{Tuple{Center,Product,Time},Float64}
+    selected_edges::Union{Nothing,Set} = nothing
 end
 
 
@@ -546,7 +547,7 @@ function compress(original::Instance)::Instance
         plants = original.plants,
         products = original.products,
         emissions = original.emissions,
-        alpha_mix=original.alpha_mix,
+        alpha_mix = original.alpha_mix,
         alpha_plant_emission,
         alpha_tr_emission,
         c_acq,
@@ -560,7 +561,7 @@ function compress(original::Instance)::Instance
         c_var,
         m_cap,
         m_center_disp,
-        m_dist=original.m_dist,
+        m_dist = original.m_dist,
         m_emission,
         m_init,
         m_plant_disp,
@@ -568,13 +569,13 @@ function compress(original::Instance)::Instance
     )
 end
 
-function benchmark_compress(filename, optimizer; max_centers=[Inf], max_plants=[Inf])
+function benchmark_compress(filename, optimizer; max_centers = [Inf], max_plants = [Inf])
     stats = []
     for mc in max_centers, mp in max_plants
         # Solve original
-        orig = read_json(filename; max_centers=mc, max_plants=mp)
+        orig = read_json(filename; max_centers = mc, max_plants = mp)
         reset_timer!()
-        stats_orig = solve(orig; optimizer)
+        model_orig, stats_orig = solve(orig; optimizer)
         stats_orig["Filename"] = filename
         stats_orig["Method"] = "Original"
         push!(stats, stats_orig)
@@ -582,7 +583,7 @@ function benchmark_compress(filename, optimizer; max_centers=[Inf], max_plants=[
         # Solve compressed
         compressed = compress(orig)
         reset_timer!()
-        stats_comp = solve(compressed; optimizer)
+        model_comp, stats_comp = solve(compressed; optimizer)
         stats_comp["Filename"] = filename
         stats_comp["Method"] = "Compressed"
         push!(stats, stats_comp)
@@ -604,16 +605,69 @@ function generate_json()
     write_json(data, "output-3/case.json")
 end
 
-function solve(filename, optimizer; max_centers = Inf, max_plants = Inf)
+function solve(filename, optimizer; max_centers = Inf, max_plants = Inf, heuristic = false)
     reset_timer!()
     @timeit "Read JSON" begin
         data = read_json(filename; max_centers, max_plants)
     end
-    return solve(data; optimizer = optimizer, output_dir = dirname(filename))
+    return solve(data; optimizer = optimizer, output_dir = dirname(filename), heuristic)
     print_timer()
 end
 
-function solve(data::Instance; optimizer, output_dir=nothing)
+function solve(data::Instance; optimizer, output_dir = nothing, heuristic = false)
+
+    if heuristic
+        comp_data = compress(data)
+        comp_model, comp_stats = solve(comp_data; optimizer, heuristic = false)
+
+        # Filter plants
+        selected_plants = Plant[]
+        for p in comp_data.plants
+            if value(comp_model[:x_open][p, 1]) > 0.5
+                push!(selected_plants, p)
+            end
+        end
+        @info "Selected $(length(selected_plants)) out of $(length(comp_data.plants)) plants"
+
+        # Filter edges
+        selected_edges = Set()
+        for (src, dst, r) in comp_model[:E]
+            if value(comp_model[:y_total][src, dst, r][1]) > 0.5
+                push!(selected_edges, (src, dst, r))
+            end
+        end
+        @info "Selected $(length(selected_edges)) out of $(length(comp_model[:E])) transportation edges"
+
+        data = Instance(;
+            data.T,
+            data.centers,
+            plants = selected_plants,
+            data.products,
+            data.emissions,
+            data.alpha_mix,
+            data.alpha_plant_emission,
+            data.alpha_tr_emission,
+            data.c_acq,
+            data.c_center_disp,
+            data.c_emission,
+            data.c_fix,
+            data.c_open,
+            data.c_plant_disp,
+            data.c_store,
+            data.c_tr,
+            data.c_var,
+            data.m_cap,
+            data.m_center_disp,
+            data.m_dist,
+            data.m_emission,
+            data.m_init,
+            data.m_plant_disp,
+            data.m_store,
+            selected_edges,
+        )
+    end
+
+
     T = data.T
     centers = data.centers
     plants = data.plants
@@ -630,7 +684,12 @@ function solve(data::Instance; optimizer, output_dir=nothing)
         E_in = dict(src => [] for src in plants)
         E_out = dict(src => [] for src in plants ∪ centers)
         function push_edge!(src, dst, r)
-            push!(E, (src, dst, r))
+            e = (src, dst, r)
+            if data.selected_edges !== nothing && e ∉ data.selected_edges
+                @info "Skipping: $(src.name) $(dst.name) $(r.name)"
+                return
+            end
+            push!(E, e)
             push!(E_out[src], (dst, r))
             push!(E_in[dst], (src, r))
         end
@@ -654,6 +713,9 @@ function solve(data::Instance; optimizer, output_dir=nothing)
             end
         end
     end
+    model[:E] = E
+    model[:E_in] = E_in
+    model[:E_out] = E_out
 
     @printf("Building optimization problem with:\n")
     @printf("    %8d plants\n", length(plants))
@@ -1045,13 +1107,14 @@ function solve(data::Instance; optimizer, output_dir=nothing)
         "Time periods" => length(T),
         "Model build time (s)" => model_build_time,
         "Variables" => num_variables(model),
-        "Constraints" => num_constraints(model, count_variable_in_set_constraints=false),
+        "Constraints" =>
+            num_constraints(model, count_variable_in_set_constraints = false),
         "Objective Value" => objective_value(model),
         "Solve time (s)" => solve_time(model),
     )
 
     if output_dir === nothing
-        return stats
+        return model, stats
     end
 
     # Report: Transportation
@@ -1256,5 +1319,5 @@ function solve(data::Instance; optimizer, output_dir=nothing)
     end
     CSV.write("$output_dir/transp-emissions.csv", df)
 
-    return stats
+    return model, stats
 end
