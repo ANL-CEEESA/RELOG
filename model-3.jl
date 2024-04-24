@@ -113,39 +113,39 @@ function generate_data()
     cardboard = Component("Cardboard")
 
     # Products
-    waste = Product(name = "Waste", comp = [film, paper, cardboard])
-    film_bale = Product(name = "Film bale", comp = [film, paper, cardboard])
-    cardboard_bale = Product(name = "Cardboard bale", comp = [paper, cardboard])
-    cardboard_sheets = Product(name = "Cardboard sheets", comp = [cardboard])
+    waste = Product(name="Waste", comp=[film, paper, cardboard])
+    film_bale = Product(name="Film bale", comp=[film, paper, cardboard])
+    cardboard_bale = Product(name="Cardboard bale", comp=[paper, cardboard])
+    cardboard_sheets = Product(name="Cardboard sheets", comp=[cardboard])
     products = [waste, film_bale, cardboard_bale, cardboard_sheets]
 
     # Centers
     centers = [
         Center(
-            name = "Collection ($city_name)",
-            latitude = city_lat,
-            longitude = city_lon,
-            prod_out = [waste],
+            name="Collection ($city_name)",
+            latitude=city_lat,
+            longitude=city_lon,
+            prod_out=[waste],
         ) for (city_name, (city_lat, city_lon)) in cities_a
     ]
 
     # Plants
     plants_a = [
         Plant(
-            name = "MRF ($city_name)",
-            latitude = city_lat,
-            longitude = city_lon,
-            prod_in = waste,
-            prod_out = [film_bale, cardboard_bale],
+            name="MRF ($city_name)",
+            latitude=city_lat,
+            longitude=city_lon,
+            prod_in=waste,
+            prod_out=[film_bale, cardboard_bale],
         ) for (city_name, (city_lat, city_lon)) in cities_b
     ]
     plants_b = [
         Plant(
-            name = "Paper Mill ($city_name)",
-            latitude = city_lat,
-            longitude = city_lon,
-            prod_in = cardboard_bale,
-            prod_out = [cardboard_sheets],
+            name="Paper Mill ($city_name)",
+            latitude=city_lat,
+            longitude=city_lon,
+            prod_in=cardboard_bale,
+            prod_out=[cardboard_sheets],
         ) for (city_name, (city_lat, city_lon)) in cities_b
     ]
     plants = [plants_a; plants_b]
@@ -311,7 +311,7 @@ end
 
 # Read
 # ==============================================================================
-function read_json(filename; max_centers = Inf, max_plants = Inf)::Instance
+function read_json(filename; max_centers=Inf, max_plants=Inf)::Instance
     json = JSON.parsefile(filename)
     T = 1:json["parameters"]["time horizon (years)"]
     centers = []
@@ -530,24 +530,24 @@ function compress(original::Instance)::Instance
         (s, 1) => sum([original.m_emission[s, t] for t in T]) for s in original.emissions
     )
     m_init = Dict(
-        (q, r, c, 1) => sum([original.m_init[q, r, c, t] for t in T]) for
+        (q, r, c, 1) => length(T) * maximum([original.m_init[q, r, c, t] for t in T]) for
         q in original.centers for r in q.prod_out for c in r.comp
     )
     m_plant_disp = Dict(
-        (p, r, 1) => sum([original.m_plant_disp[p, r, t] for t in T]) for
+        (p, r, 1) => length(T) * minimum([original.m_plant_disp[p, r, t] for t in T]) for
         p in original.plants for r in p.prod_out
     )
     m_store = Dict(
-        (q, r, 1) => sum([original.m_store[q, r, t] for t in T]) for
+        (q, r, 1) => length(T) * minimum([original.m_store[q, r, t] for t in T]) for
         q in original.centers for r in q.prod_out
     )
     return Instance(;
-        T = 1:1,
-        centers = original.centers,
-        plants = original.plants,
-        products = original.products,
-        emissions = original.emissions,
-        alpha_mix = original.alpha_mix,
+        T=1:1,
+        centers=original.centers,
+        plants=original.plants,
+        products=original.products,
+        emissions=original.emissions,
+        alpha_mix=original.alpha_mix,
         alpha_plant_emission,
         alpha_tr_emission,
         c_acq,
@@ -561,7 +561,7 @@ function compress(original::Instance)::Instance
         c_var,
         m_cap,
         m_center_disp,
-        m_dist = original.m_dist,
+        m_dist=original.m_dist,
         m_emission,
         m_init,
         m_plant_disp,
@@ -569,13 +569,13 @@ function compress(original::Instance)::Instance
     )
 end
 
-function benchmark_compress(filename, optimizer; max_centers = [Inf], max_plants = [Inf])
+function benchmark_compress(filename, optimizer; max_centers=[Inf], max_plants=[Inf])
     stats = []
     for mc in max_centers, mp in max_plants
         # Solve original
-        orig = read_json(filename; max_centers = mc, max_plants = mp)
+        orig = read_json(filename; max_centers=mc, max_plants=mp)
         reset_timer!()
-        model_orig, stats_orig = solve(orig; optimizer)
+        _, stats_orig = solve(orig; optimizer)
         stats_orig["Filename"] = filename
         stats_orig["Method"] = "Original"
         push!(stats, stats_orig)
@@ -605,20 +605,21 @@ function generate_json()
     write_json(data, "output-3/case.json")
 end
 
-function solve(filename, optimizer; max_centers = Inf, max_plants = Inf, heuristic = false)
+function solve(filename, optimizer; max_centers=Inf, max_plants=Inf, heuristic=false)
     reset_timer!()
     @timeit "Read JSON" begin
         data = read_json(filename; max_centers, max_plants)
     end
-    return solve(data; optimizer = optimizer, output_dir = dirname(filename), heuristic)
+    return solve(data; optimizer=optimizer, output_dir=dirname(filename), heuristic)
     print_timer()
 end
 
-function solve(data::Instance; optimizer, output_dir = nothing, heuristic = false)
+function solve(data::Instance; optimizer, output_dir=nothing, heuristic=false)
 
     if heuristic
+        @info "Solving compressed instance..."
         comp_data = compress(data)
-        comp_model, comp_stats = solve(comp_data; optimizer, heuristic = false)
+        comp_model, comp_stats = solve(comp_data; optimizer, heuristic=false)
 
         # Filter plants
         selected_plants = Plant[]
@@ -641,7 +642,7 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
         data = Instance(;
             data.T,
             data.centers,
-            plants = selected_plants,
+            plants=selected_plants,
             data.products,
             data.emissions,
             data.alpha_mix,
@@ -686,7 +687,6 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
         function push_edge!(src, dst, r)
             e = (src, dst, r)
             if data.selected_edges !== nothing && e ∉ data.selected_edges
-                @info "Skipping: $(src.name) $(dst.name) $(r.name)"
                 return
             end
             push!(E, e)
@@ -723,6 +723,25 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
     @printf("    %8d products\n", length(products))
     @printf("    %8d time periods\n", length(T))
     @printf("    %8d transportation edges\n", length(E))
+
+    available = Dict((r, t) => 0.0 for r in data.products, t in T)
+    for q in centers, t in T
+        for r in q.prod_out, s in r.comp
+            available[r, t] += data.m_init[q, r, s, t]
+        end
+    end
+
+    capacity = Dict(r => 0.0 for r in data.products)
+    for p in plants
+        capacity[p.prod_in] += data.m_cap[p]
+    end
+
+    for r in products, t in T
+        if available[r, t] > capacity[r]
+            @warn "Not enough capacity to process $(r.name) at time $t: $(available[r,t]) > $(capacity[r])"
+        end
+    end
+
 
     # Decision variables
     # -------------------------------------------------------------------------
@@ -1108,7 +1127,7 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
         "Model build time (s)" => model_build_time,
         "Variables" => num_variables(model),
         "Constraints" =>
-            num_constraints(model, count_variable_in_set_constraints = false),
+            num_constraints(model, count_variable_in_set_constraints=false),
         "Objective Value" => objective_value(model),
         "Solve time (s)" => solve_time(model),
     )
@@ -1141,13 +1160,13 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
                 r.name,
                 c.name,
                 t,
-                round(data.m_dist[q, p], digits = 2),
-                round(value(y[q, p, r][c, t]), digits = 2),
+                round(data.m_dist[q, p], digits=2),
+                round(value(y[q, p, r][c, t]), digits=2),
                 round(
                     data.m_dist[q, p] * data.c_tr[r, t] * value(y[q, p, r][c, t]),
-                    digits = 2,
+                    digits=2,
                 ),
-                round(data.c_var[p, t] * value(y[q, p, r][c, t]), digits = 2),
+                round(data.c_var[p, t] * value(y[q, p, r][c, t]), digits=2),
             ],
         )
     end
@@ -1175,18 +1194,18 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
                 r.name,
                 c.name,
                 t,
-                round(data.m_init[q, r, c, t], digits = 2),
+                round(data.m_init[q, r, c, t], digits=2),
                 round(
                     sum(value(y[q, p, r][c, t]) for (p, r2) in E_out[q] if r == r2),
-                    digits = 2,
+                    digits=2,
                 ),
-                round(value(z_store[q, r, c, t]), digits = 2),
-                round(value(z_center_disp[q, r, c, t]), digits = 2),
-                round(data.m_init[q, r, c, t] * data.c_acq[q, r, t], digits = 2),
-                round(data.c_store[q, r, t] * value(z_store[q, r, c, t]), digits = 2),
+                round(value(z_store[q, r, c, t]), digits=2),
+                round(value(z_center_disp[q, r, c, t]), digits=2),
+                round(data.m_init[q, r, c, t] * data.c_acq[q, r, t], digits=2),
+                round(data.c_store[q, r, t] * value(z_store[q, r, c, t]), digits=2),
                 round(
                     data.c_center_disp[q, r, t] * value(z_center_disp[q, r, c, t]),
-                    digits = 2,
+                    digits=2,
                 ),
             ],
         )
@@ -1207,12 +1226,12 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
             [
                 p.name,
                 t,
-                round(value(x_open[p, t]), digits = 2),
+                round(value(x_open[p, t]), digits=2),
                 round(
                     data.c_open[p, t] * (value(x_open[p, t]) - value(x_open[p, t-1])),
-                    digits = 2,
+                    digits=2,
                 ),
-                round(data.c_fix[p, t] * value(x_open[p, t]), digits = 2),
+                round(data.c_fix[p, t] * value(x_open[p, t]), digits=2),
             ],
         )
     end
@@ -1240,18 +1259,18 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
                 r.name,
                 c.name,
                 t,
-                round(value(z_prod[p, r, c, t]), digits = 2),
-                round(value(z_plant_disp[p, r, c, t]), digits = 2),
+                round(value(z_prod[p, r, c, t]), digits=2),
+                round(value(z_plant_disp[p, r, c, t]), digits=2),
                 round(
                     sum(
                         value(y[p, q, r][c, t]) for (q, r2) in E_out[p] if r == r2;
-                        init = 0.0,
+                        init=0.0,
                     ),
-                    digits = 2,
+                    digits=2,
                 ),
                 round(
                     data.c_plant_disp[p, r, t] * value(z_plant_disp[p, r, c, t]),
-                    digits = 2,
+                    digits=2,
                 ),
             ],
         )
@@ -1273,10 +1292,10 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
                 p.name,
                 s.name,
                 t,
-                round(value(z_plant_emissions[p, s, t]), digits = 2),
+                round(value(z_plant_emissions[p, s, t]), digits=2),
                 round(
                     data.c_emission[s, t] * value(z_plant_emissions[p, s, t]),
-                    digits = 2,
+                    digits=2,
                 ),
             ],
         )
@@ -1307,12 +1326,12 @@ function solve(data::Instance; optimizer, output_dir = nothing, heuristic = fals
                 r.name,
                 s.name,
                 t,
-                round(data.m_dist[q, p], digits = 2),
-                round(value(y_total[q, p, r][t]), digits = 2),
-                round(value(z_tr_emissions[q, p, r, s, t]), digits = 2),
+                round(data.m_dist[q, p], digits=2),
+                round(value(y_total[q, p, r][t]), digits=2),
+                round(value(z_tr_emissions[q, p, r, s, t]), digits=2),
                 round(
                     data.c_emission[s, t] * value(z_tr_emissions[q, p, r, s, t]),
-                    digits = 2,
+                    digits=2,
                 ),
             ],
         )
