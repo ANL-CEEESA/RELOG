@@ -1,4 +1,4 @@
-<h1 align="center">RELOG: Supply Chain Design, Analysis and Optimization</h1>
+<h1 align="center">RELOG: Supply Chain Analysis and Optimization</h1>
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.4302341">
     <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4302341.svg">

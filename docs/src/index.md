@@ -1,4 +1,4 @@
-# RELOG -- Supply Chain Design, Analysis and Optimization
+# RELOG -- Supply Chain Analysis and Optimization
 
 **RELOG** is an open-source package designed to optimize supply chains for
 forward, reverse and circular manufacturing. Using mixed-integer linear
