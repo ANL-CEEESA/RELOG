@@ -5,7 +5,7 @@
 The mathematical model employed by RELOG is based on three main components:
 
 1. **Products and Materials:** Inputs and outputs for both manufacturing and
-   recycling plants. This include raw materials, wheter virgin or recovered, and
+   recycling plants. This include raw materials, whether virgin or recovered, and
    final products, whether new or at their end-of-life. Each product has
    associated transportation parameters, such as costs, energy and emissions.
 
@@ -29,7 +29,7 @@ The mathematical model employed by RELOG is based on three main components:
 
     - We assume that transportation costs, energy and emissions scale linearly with transportation distance and amount being transported. Distances between locations are calculated using either approximated driving distances (continental U.S. only) or straight-line distances.
     - Once a plant is opened, we assume that it remains open until the end of the planning horizon. Similarly, once a plant is expanded, its size cannot be reduced at a later time.
-    - In addition to serving as a source of end-of-life products, centers can also serve as a souce for virgin materials. In this case, the center does not receive any inputs from manufacturing or recycling plants, and it generates the desired material at a fixed rate. Collection cost, in this case, refers to the cost to produce the virgin material.
+    - In addition to serving as a source of end-of-life products, centers can also serve as a source for virgin materials. In this case, the center does not receive any inputs from manufacturing or recycling plants, and it generates the desired material at a fixed rate. Collection cost, in this case, refers to the cost to produce the virgin material.
     - We assume that centers accept either no input product, or a single input product.
 
 ## Sets

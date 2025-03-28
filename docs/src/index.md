@@ -8,9 +8,9 @@ optimization, RELOG helps users determine strategic decisions such as:
 - The size of these plants, when to expand them, and by how much
 - The sources for each plant's input materials and the destinations for their
   processed outputs
-- Whether to process input materials immediatelly or store them for later use
+- Whether to process input materials immediately or store them for later use
 
-RELOG has been successully applied in research at various laboratories and
+RELOG has been successfully applied in research at various laboratories and
 universities, focusing on areas like critical material recovery from spent NiMH
 and Li-Ion batteries, biomass processing for hydrogen production, and the
 recycling of electronics, plastics and solar PV materials, among others. See
