@@ -9,7 +9,16 @@ function parse(json)::Instance
     # Read parameters
     time_horizon = json["parameters"]["time horizon (years)"]
     building_period = json["parameters"]["building period (years)"]
-    distance_metric = json["parameters"]["distance metric"]
+
+    # Read distance metric
+    distance_metric_str = lowercase(json["parameters"]["distance metric"])
+    if distance_metric_str == "driving"
+        distance_metric = KnnDrivingDistance()
+    elseif distance_metric_str == "euclidean"
+        distance_metric = EuclideanDistance()
+    else
+        error("Invalid distance metric: $distance_metric_str")
+    end
 
     timeseries(x::Union{Nothing,Number}) = repeat([x], time_horizon)
     timeseries(x::Array) = x

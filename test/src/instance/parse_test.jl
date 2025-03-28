@@ -8,7 +8,7 @@ function instance_parse_test_1()
     # Parameters
     @test instance.time_horizon == 4
     @test instance.building_period == [1]
-    @test instance.distance_metric == "driving"
+    @test instance.distance_metric isa RELOG.EuclideanDistance
 
     # Products
     @test length(instance.products) == 4

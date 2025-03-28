@@ -2,7 +2,7 @@
   "parameters": {
     "time horizon (years)": 4,
     "building period (years)": [1],
-    "distance metric": "driving"
+    "distance metric": "euclidean"
   },
   "products": {
     "P1": {

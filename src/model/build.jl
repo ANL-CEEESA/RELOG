@@ -60,7 +60,13 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     # Distances
     model.ext[:distances] = distances = Dict()
     for (p1, p2, m) in E
-        d = _calculate_distance(p1.latitude, p1.longitude, p2.latitude, p2.longitude)
+        d = _calculate_distance(
+            p1.latitude,
+            p1.longitude,
+            p2.latitude,
+            p2.longitude,
+            instance.distance_metric,
+        )
         distances[p1, p2, m] = d
     end
 

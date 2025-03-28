@@ -1,5 +1,14 @@
 using OrderedCollections
 
+abstract type DistanceMetric end
+
+Base.@kwdef mutable struct KnnDrivingDistance <: DistanceMetric
+    tree = nothing
+    ratios = nothing
+end
+
+mutable struct EuclideanDistance <: DistanceMetric end
+
 Base.@kwdef struct Product
     name::String
     tr_cost::Vector{Float64}
@@ -48,7 +57,7 @@ Base.@kwdef struct Instance
     building_period::Vector{Int}
     centers_by_name::OrderedDict{String,Center}
     centers::Vector{Center}
-    distance_metric::String
+    distance_metric::DistanceMetric
     products_by_name::OrderedDict{String,Product}
     products::Vector{Product}
     time_horizon::Int
