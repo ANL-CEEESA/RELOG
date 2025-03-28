@@ -1,7 +1,7 @@
 name = "RELOG"
 uuid = "7cafaa7a-b311-45f0-b313-80bf15b5e5e5"
 authors = ["Alinson S. Xavier <git@axavier.org>"]
-version = "0.1.0"
+version = "0.8.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
