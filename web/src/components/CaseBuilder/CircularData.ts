@@ -3,7 +3,6 @@ export interface CircularPlant {
     x: number;
     y: number;
 
-    input?: string; // optional product name
 
 }
 
@@ -18,6 +17,5 @@ export interface CircularData {
 
     products: Record<string, CircularProduct>;
 
-    parameters: Record<string, any>; // Any parameters, ex: simulation years, costs 
 
 }

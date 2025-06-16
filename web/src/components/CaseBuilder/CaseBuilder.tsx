@@ -9,11 +9,66 @@ import Header from "./Header";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "../Common/Forms/Tables.css";
 import Footer from "./Footer";
+import React, { useState } from "react";
+import {CircularData} from "./CircularData.ts";
+
+declare global {
+    interface Window {
+      nextX: number;
+      nextY: number;
+    }
+  }
 
 const CaseBuilder = () => {
+  const [circularData, setCircularData] = useState<CircularData> ( {
+  plants: {},
+  products: {}
+
+});
   const onClear = () => {};
   const onSave = () => {};
   const onLoad = () => {};
+
+  
+
+  const randomPosition = (): [number,number] => {
+    if (window.nextX === undefined) window.nextX = 15;
+    if (window.nextY === undefined) window.nextY = 15;
+
+    window.nextY +=60;
+    if (window.nextY >=500) {
+      window.nextY = 15;
+      window.nextX += 150;
+
+    }
+    return [window.nextX, window.nextY]
+
+  }
+
+  const promptName = (prevData:CircularData): string | undefined => {
+    const name = prompt("Name");
+    if (!name || name.length ===0) return;
+    if (name in prevData.products || name in prevData.plants) return;
+    return name;
+
+  };
+
+  const onAddPlant = () => {
+    setCircularData((prevData) => {
+      const id = promptName(prevData);
+      if (id ==undefined) return prevData;
+      const newData = { ...prevData};
+      const [x,y] = randomPosition();
+      newData.plants[id] = {
+        ...defaultPlant,
+        x: x,
+        y: y,
+        
+      };
+      onSave(newData);
+      return newData;
+    });
+  }
 
   return (
     <div>
