@@ -29,7 +29,8 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "checkJs": true
+    "checkJs": false,
+    "allowImportingTsExtensions": true
   },
   "include": ["src"]
 }

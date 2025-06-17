@@ -10,8 +10,9 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import "../Common/Forms/Tables.css";
 import Footer from "./Footer";
 import React, { useState } from "react";
-import {CircularData} from "./CircularData.ts";
-
+import {CircularData} from "./CircularData";
+import { defaultPlant, defaultProduct } from "./defaults";
+import "../../index.css";
 declare global {
     interface Window {
       nextX: number;
@@ -41,9 +42,9 @@ const CaseBuilder = () => {
       window.nextX += 150;
 
     }
-    return [window.nextX, window.nextY]
+    return [window.nextX, window.nextY];
 
-  }
+  };
 
   const promptName = (prevData:CircularData): string | undefined => {
     const name = prompt("Name");
@@ -57,23 +58,51 @@ const CaseBuilder = () => {
     setCircularData((prevData) => {
       const id = promptName(prevData);
       if (id ==undefined) return prevData;
-      const newData = { ...prevData};
       const [x,y] = randomPosition();
-      newData.plants[id] = {
-        ...defaultPlant,
-        x: x,
-        y: y,
-        
-      };
-      onSave(newData);
-      return newData;
+      const newData: CircularData = {
+         ...prevData,
+         plants: {
+          ...prevData.plants,
+          [id]: {
+            ...defaultPlant,
+            x,
+            y,
+          }
+         }
+        };
+     return newData;
     });
-  }
+  };
+
+  const onAddProduct = () => {
+    setCircularData((prevData) => {
+      const id = promptName(prevData);
+      if (id ==undefined) return prevData;
+      const [x,y] = randomPosition();
+      const newData: CircularData = {
+         ...prevData,
+         products: {
+          ...prevData.products,
+          [id]: {
+            ...defaultProduct,
+            x,
+            y,
+          }
+         }
+        };
+     return newData;
+    });
+
+  };
 
   return (
     <div>
       <Header onClear={onClear} onSave={onSave} onLoad={onLoad} />
-      <div className="content"></div>
+      <div className="content">
+        <div id="contentBackground"> 
+  <div id="content"> </div> 
+</div> 
+      </div>
       <Footer />
     </div>
   );
