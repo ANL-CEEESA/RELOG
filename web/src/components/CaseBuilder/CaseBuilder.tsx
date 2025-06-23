@@ -96,11 +96,13 @@ const CaseBuilder = () => {
 
   };
 
-  const onMovePlant = () => {
+  const onMovePlant = (plantName: string, x: number, y: number) => {
+    console.log("Move plant", plantName, x,y);
 
   };
 
-  const onMoveProduct = () => {
+  const onMoveProduct = (productname: string, x: number, y: number) => {
+    console.log("Move product", productname, x,y);
 
   };
 

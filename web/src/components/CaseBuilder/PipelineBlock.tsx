@@ -4,7 +4,7 @@ import styles from "./PipelineBlock.module.css";
 import { ReactFlow, Background, Controls } from '@xyflow/react';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 
 
 
@@ -19,7 +19,8 @@ interface PipelineBlockProps {
 const onNodeDoubleClick = () => {};
 const onNodeDragStop = () => {};
 const onConnect = () => {};
-const onElementsRemove = () => {};
+const handleNodesDelete = () => {};
+const handleEdgesDelete = () => {};
 const onLayout = () => {};
 
 const PipelineBlock: React.FC<PipelineBlockProps> = (props) => {
@@ -76,11 +77,14 @@ return (
     <Card>
       <div className={styles.PipelineBlock}>
         <ReactFlow
+          nodes={nodes}
+          edges={edges}
           onNodeDoubleClick={onNodeDoubleClick}
           onNodeDragStop={onNodeDragStop}
           onConnect={onConnect}
-          onElementsRemove={onElementsRemove}
-          deleteKeyCode={46}
+          onNodesDelete={handleNodesDelete}
+          onEdgesDelete={handleEdgesDelete}
+          deleteKeyCode={"Delete"}
           maxZoom={1.25}
           minZoom={0.5}
           snapToGrid={true}
