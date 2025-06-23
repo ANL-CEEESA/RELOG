@@ -12,7 +12,8 @@ import Footer from "./Footer";
 import React, { useState } from "react";
 import {CircularData} from "./CircularData";
 import { defaultPlant, defaultProduct } from "./defaults";
-import "../../index.css";
+import PipelineBlock from "./PipelineBlock";
+import '@xyflow/react/dist/style.css';
 declare global {
     interface Window {
       nextX: number;
@@ -57,7 +58,7 @@ const CaseBuilder = () => {
   const onAddPlant = () => {
     setCircularData((prevData) => {
       const id = promptName(prevData);
-      if (id ==undefined) return prevData;
+      if (id ===undefined) return prevData;
       const [x,y] = randomPosition();
       const newData: CircularData = {
          ...prevData,
@@ -77,7 +78,7 @@ const CaseBuilder = () => {
   const onAddProduct = () => {
     setCircularData((prevData) => {
       const id = promptName(prevData);
-      if (id ==undefined) return prevData;
+      if (id ===undefined) return prevData;
       const [x,y] = randomPosition();
       const newData: CircularData = {
          ...prevData,
@@ -95,12 +96,29 @@ const CaseBuilder = () => {
 
   };
 
+  const onMovePlant = () => {
+
+  };
+
+  const onMoveProduct = () => {
+
+  };
+
   return (
     <div>
       <Header onClear={onClear} onSave={onSave} onLoad={onLoad} />
       <div className="content">
         <div id="contentBackground"> 
-  <div id="content"> </div> 
+  <div id="content"> 
+    <PipelineBlock
+            onAddPlant={onAddPlant}
+            onAddProduct={onAddProduct}
+            onMovePlant={onMovePlant}
+            onMoveProduct={onMoveProduct}
+            plants={circularData.plants}
+            products={circularData.products}
+          />
+    </div> 
 </div> 
       </div>
       <Footer />
