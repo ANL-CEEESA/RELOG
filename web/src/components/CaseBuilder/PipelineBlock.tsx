@@ -5,6 +5,7 @@ import { ReactFlow, Background, Controls } from '@xyflow/react';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
 import  { useEffect } from "react";
+import { Connection } from '@xyflow/react';
 
 
 
@@ -13,12 +14,13 @@ interface PipelineBlockProps {
     onAddProduct: () => void;
     onMovePlant: (name: string , x: number, y: number) => void;
     onMoveProduct: (name: string, x: number, y: number) => void;
+    onSetPlantInput: (plantName:string, productName: string) => void;
+    onAddPlantOutput: (plantName: string, productName: string) => void;
     products: Record<string, CircularProduct>;
     plants: Record<string, CircularPlant>;
 }
 const onNodeDoubleClick = () => {};
-const onNodeDragStop = () => {};
-const onConnect = () => {};
+
 const handleNodesDelete = () => {};
 const handleEdgesDelete = () => {};
 const onLayout = () => {};
@@ -29,6 +31,32 @@ const PipelineBlock: React.FC<PipelineBlockProps> = (props) => {
 
     let mapNameToType: Record<string,string> = {};
     let hasNullPositions: boolean = false;
+
+  const onConnect = (params: Connection) => {
+    const { source, target } = params;
+    if (!source || ! target) return;
+
+    const sourceType = mapNameToType[source];
+    const targetType = mapNameToType[target];
+
+    if (sourceType === "product" && targetType === "plant") {
+      props.onSetPlantInput(target,source);
+  } else if (sourceType === "plant" && targetType === "product") {
+    props.onAddPlantOutput(source, target);
+  }
+
+};
+
+const onNodeDragStop =(_:any, node: Node) => {
+  const { id, position, data} = node;
+  if (data.type === "plant") {
+    props.onMovePlant(id, position.x, position.y);
+  } 
+  if (data.type === "product") {
+    props.onMoveProduct(id, position.x, position.y);
+  }
+
+};
 
     for (const [productName, product] of Object.entries(props.products) as [string, CircularProduct][]) {
         if(!product.x || !product.y) hasNullPositions = true;
@@ -52,15 +80,26 @@ const PipelineBlock: React.FC<PipelineBlockProps> = (props) => {
         });
 
          if (plant) {
+          for (const inputProduct of plant.inputs){
             edges.push({
-                id: `${plantName}-${plantName}`,
-                source: plantName,
+                id: `${inputProduct}-${plantName}`,
+                source: inputProduct,
                 target: plantName,
                 animated: true,
                 style: { stroke: "black" },
 
             });
-        
+          }  
+          for (const outputProduct of plant.inputs){
+            edges.push({
+                id: `${plantName}-${outputProduct}`,
+                source: plantName,
+                target: outputProduct,
+                animated: true,
+                style: { stroke: "black" },
+
+            });
+          } 
     }
 
     }

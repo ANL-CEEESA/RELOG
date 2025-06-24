@@ -2,6 +2,8 @@ export interface CircularPlant {
     id: string;
     x: number;
     y: number;
+    inputs: string[];
+    outputs: Record<string, number>;
 
 
 }

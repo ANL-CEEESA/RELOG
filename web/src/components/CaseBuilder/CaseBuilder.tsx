@@ -14,6 +14,7 @@ import {CircularData} from "./CircularData";
 import { defaultPlant, defaultProduct } from "./defaults";
 import PipelineBlock from "./PipelineBlock";
 import '@xyflow/react/dist/style.css';
+import { CircularPlant } from "./CircularData";
 declare global {
     interface Window {
       nextX: number;
@@ -96,13 +97,105 @@ const CaseBuilder = () => {
 
   };
 
+ const onSetPlantInput = (plantName: string, productName: string) => {
+
+  setCircularData((prevData: CircularData) => {
+
+    const plant = prevData.plants[plantName];
+
+    if (!plant) return prevData; 
+ 
+    const updatedPlant: CircularPlant = {
+
+      ...plant,
+
+      inputs: plant.inputs.includes(productName)
+
+        ? plant.inputs
+
+        : [...plant.inputs, productName],
+
+    };
+ 
+    return {
+
+      ...prevData,
+
+      plants: {
+
+        ...prevData.plants,
+
+        [plantName]: updatedPlant,
+
+      },
+
+    };
+
+  });
+
+};
+
+const onAddPlantOutput = (plantName: string, productName: string) => {
+ setCircularData((prevData) => {
+
+    const plant = prevData.plants[plantName];
+
+    if (!plant) return prevData;
+ 
+    const updatedPlant: CircularPlant = {
+
+      ...plant,
+
+      outputs: {
+
+        ...plant.outputs,
+
+        [productName]: 0,
+
+      },
+
+    };
+ 
+    return {
+
+      ...prevData,
+
+      plants: {
+
+        ...prevData.plants,
+
+        [plantName]: updatedPlant,
+
+      },
+
+    };
+
+  });
+ 
+};
+
+ 
+
   const onMovePlant = (plantName: string, x: number, y: number) => {
-    console.log("Move plant", plantName, x,y);
+    setCircularData((prevData: CircularData): CircularData => {
+      const newData: CircularData ={ ...prevData};
+      if (!newData.plants[plantName]) return prevData;
+      newData.plants[plantName].x =x;
+      newData.plants[plantName].y =y;
+      return newData;
+    });
 
   };
 
-  const onMoveProduct = (productname: string, x: number, y: number) => {
-    console.log("Move product", productname, x,y);
+  const onMoveProduct = (productName: string, x: number, y: number) => {
+     setCircularData((prevData: CircularData): CircularData => {
+      const newData: CircularData ={ ...prevData};
+      const product = newData.products[productName];
+      if (!product) return prevData;
+      product.x = x;
+      product.y =y;
+      return newData;
+    });
 
   };
 
@@ -119,6 +212,8 @@ const CaseBuilder = () => {
             onMoveProduct={onMoveProduct}
             plants={circularData.plants}
             products={circularData.products}
+            onSetPlantInput={onSetPlantInput}
+            onAddPlantOutput={onAddPlantOutput}
           />
     </div> 
 </div> 

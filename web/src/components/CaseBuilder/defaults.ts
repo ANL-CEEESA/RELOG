@@ -14,11 +14,12 @@ export const defaultProduct: DefaultProduct = {
   "id": "",
   x: 0,
   y: 0,
-
 };
 
-export const defaultPlant: DefaultPlant = {
+export const defaultPlant: CircularPlant = {
   "id": "",
   x: 0,
   y: 0,
+  inputs : [],
+  outputs: {},
 };
