@@ -6,6 +6,7 @@ import Section from '../Common/Section';
 import Card from '../Common/Card';
 import  { useEffect } from "react";
 import { Connection } from '@xyflow/react';
+import  CustomNode, { CustomNodeData }from "./NodesAndEdges";
 
 
 
@@ -90,7 +91,7 @@ const onNodeDragStop =(_:any, node: Node) => {
 
             });
           }  
-          for (const outputProduct of plant.inputs){
+          /**for (const outputProduct of plant.inputs){
             edges.push({
                 id: `${plantName}-${outputProduct}`,
                 source: plantName,
@@ -100,6 +101,7 @@ const onNodeDragStop =(_:any, node: Node) => {
 
             });
           } 
+            */
     }
 
     }
@@ -128,6 +130,7 @@ return (
           minZoom={0.5}
           snapToGrid={true}
           preventScrolling={false}
+          nodeTypes={{default: CustomNode}}
         >
           <Background />
           <Controls showInteractive={false} />
