@@ -1,5 +1,6 @@
 import React from 'react';
 import { Position, NodeProps, Handle } from '@xyflow/react';
+import styles from './PipelineBlock.module.css';
 
 export interface CustomNodeData {
     label: string;
@@ -9,12 +10,13 @@ export interface CustomNodeData {
 export default function CustomNode({ data }: NodeProps<any>) {
   const nodeStyle =
     data.type === 'plant'
-      ? { background: '#b0e0e6', padding: 10, borderRadius: 5 }
-      : { background: '#ffd700', padding: 10, borderRadius: 5 };
+      ? styles.PlantNode: styles.ProductNode;
  
   return (
-<div style={nodeStyle}>
+<div className={`${styles.node} ${nodeStyle}`}>
+      {data.type === 'plant' && (
 <Handle type="target" position={Position.Left} style={{ background: '#555' }} />
+      )}
 <div>{data.label}</div>
 <Handle type="source" position={Position.Right} style={{ background: '#555' }} />
 </div>

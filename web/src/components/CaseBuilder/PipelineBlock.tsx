@@ -1,7 +1,7 @@
 import  { CircularPlant, CircularProduct } from "./CircularData";
 import { Node, Edge } from "@xyflow/react";
 import styles from "./PipelineBlock.module.css";
-import { ReactFlow, Background, Controls } from '@xyflow/react';
+import { ReactFlow, Background, Controls,MarkerType } from '@xyflow/react';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
 import  { useEffect } from "react";
@@ -88,6 +88,9 @@ const onNodeDragStop =(_:any, node: Node) => {
                 target: plantName,
                 animated: true,
                 style: { stroke: "black" },
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                },
 
             });
           }  
