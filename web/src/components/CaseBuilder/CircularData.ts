@@ -3,7 +3,7 @@ export interface CircularPlant {
     x: number;
     y: number;
     inputs: string[];
-    outputs: Record<string, number>;
+    outputs: string[];
 
 
 }
@@ -16,8 +16,18 @@ export interface CircularProduct {
 
 export interface CircularData {
     plants: Record<string, CircularPlant>;
-
     products: Record<string, CircularProduct>;
+    centers: Record<string, CircularCenter>;
 
 
+}
+
+export interface CircularCenter {
+    id: string;
+    x: number;
+    y: number;
+
+    //single input, multiple outputs 
+    input?: string;
+    output: string[];
 }

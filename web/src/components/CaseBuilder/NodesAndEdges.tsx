@@ -1,24 +1,57 @@
+// NodesAndEdges.tsx
+
 import React from 'react';
-import { Position, NodeProps, Handle } from '@xyflow/react';
+
+import { Handle, Position, NodeProps } from '@xyflow/react';
+
 import styles from './PipelineBlock.module.css';
-
+ 
 export interface CustomNodeData {
-    label: string;
-    type: 'plant' | 'product';
-}
 
-export default function CustomNode({ data }: NodeProps<any>) {
-  const nodeStyle =
-    data.type === 'plant'
-      ? styles.PlantNode: styles.ProductNode;
+  label: string;
+
+  type: 'plant' | 'product' | 'center';
+
+}
+ 
+
+export default function CustomNode({ data, isConnectable }: NodeProps<Node<CustomNodeData>>) {
+  const typeClass =
+    data.type === 'plant'   ? styles.PlantNode  :
+    data.type === 'product' ? styles.ProductNode:
+                              styles.CenterNode;
  
   return (
-<div className={`${styles.node} ${nodeStyle}`}>
-      {data.type === 'plant' && (
-<Handle type="target" position={Position.Left} style={{ background: '#555' }} />
-      )}
-<div>{data.label}</div>
-<Handle type="source" position={Position.Right} style={{ background: '#555' }} />
+<div className={`${styles.node} ${typeClass}`}>
+<Handle
+
+        type="target"
+
+        position={Position.Left}
+
+        isConnectable={isConnectable}
+
+        style={{ background: '#555' }}
+
+      />
+ 
+      <div>{data.label}</div>
+ 
+<Handle
+
+        type="source"
+
+        position={Position.Right}
+
+        isConnectable={isConnectable}
+
+        style={{ background: '#555' }}
+
+      />
 </div>
+
   );
-}; 
+
+}
+
+ 
