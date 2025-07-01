@@ -29,3 +29,9 @@
 .CenterNode {
   background-color: #d3a610;
 }
+
+:global(.react-flow__node-default),
+:global(.react-flow__node-custom)  {
+  width: 150px !important;
+  height: 60px !important;
+}
