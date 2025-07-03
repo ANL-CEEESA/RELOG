@@ -250,6 +250,32 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
     });
   };
 
+  const onRemovePlant = (plantName: string) => {
+    setCircularData(prev => {
+      const next = { ...prev };
+      delete next.plants[plantName];
+
+      return next;
+    });
+  };
+   const onRemoveProduct = (productName: string) => {
+    setCircularData(prev => {
+      const next = { ...prev };
+      delete next.products[productName];
+
+      return next;
+    });
+  };
+
+   const onRemoveCenter = (centerName: string) => {
+    setCircularData(prev => {
+      const next = { ...prev };
+      delete next.centers[centerName];
+
+      return next;
+    });
+  };
+
   return (
     <div>
       <Header onClear={onClear} onSave={onSave} onLoad={onLoad} />
@@ -270,6 +296,9 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
             onAddCenterOutput={onAddCenterOutput}
             onMoveCenter={onMoveCenter}
             centers={circularData.centers}
+            onRemovePlant={onRemovePlant}
+            onRemoveProduct={onRemoveProduct}
+            onRemoveCenter={onRemoveCenter}
           />
     </div> 
 </div> 

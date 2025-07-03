@@ -1,10 +1,10 @@
 import  { CircularPlant, CircularProduct, CircularCenter } from "./CircularData";
 import { Node, Edge } from "@xyflow/react";
 import styles from "./PipelineBlock.module.css";
-import { ReactFlow, Background, Controls,MarkerType } from '@xyflow/react';
+import { ReactFlow, Background, Controls, MarkerType } from '@xyflow/react';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
-import  { useEffect } from "react";
+import  { useEffect, useCallback } from "react";
 import { Connection } from '@xyflow/react';
 import  CustomNode, { CustomNodeData }from "./NodesAndEdges";
 
@@ -21,6 +21,9 @@ interface PipelineBlockProps {
     onAddPlantOutput: (plantName: string, productName: string) => void;
     onAddCenterInput: (plantName: string, productName: string) => void;
     onAddCenterOutput: (plantName: string, productName: string) => void;
+    onRemovePlant: (id:string) => void;
+    onRemoveProduct: (id: string) => void;
+    onRemoveCenter: (id: string) => void;
 
     products: Record<string, CircularProduct>;
     plants: Record<string, CircularPlant>;
@@ -74,6 +77,19 @@ const onNodeDragStop =(_:any, node: Node) => {
   }
 
 };
+ const handleNodesDelete = useCallback((deleted: Node[]) => {
+    deleted.forEach((n) => {
+      const type = mapNameToType[n.id];
+      if (type === "plant") {
+        props.onRemovePlant(n.id);
+      } else if (type === "product") {
+        props.onRemoveProduct(n.id);
+      } else if (type === "center") {
+        props.onRemoveCenter!(n.id);
+      }
+    });
+  }, [props, mapNameToType]);
+
     for (const [productName, product] of Object.entries(props.products) as [string, CircularProduct][]) {
         if(!product.x || !product.y) hasNullPositions = true;
         mapNameToType[productName] = "product";
@@ -81,10 +97,10 @@ const onNodeDragStop =(_:any, node: Node) => {
             id: productName,
             type: "default",
             data: {label: productName, type: 'product'},
-            position: { x:product.x, y:product.y}
+            position: { x:product.x, y:product.y},
+            className: 'ProductNode'
         });
     }
-    console.log("ALL PLANTS:", props.plants);
     for (const [plantName, plant] of Object.entries(props.plants) as [string, CircularPlant][]) {
         if(!plant.x || !plant.y) hasNullPositions = true;
         mapNameToType[plantName] = "plant";
@@ -92,7 +108,8 @@ const onNodeDragStop =(_:any, node: Node) => {
             id: plantName,
             type: "default",
             data: {label: plantName, type: 'plant'},
-            position: { x:plant.x, y:plant.y}
+            position: { x:plant.x, y:plant.y},
+            className: 'PlantNode'
         });
 
          if (plant) {
@@ -130,12 +147,14 @@ const onNodeDragStop =(_:any, node: Node) => {
       type: "default",
       data: { label: centerName, type: "center"},
       position: {x: center.x, y: center.y},
+      className: 'CenterNode'
     });
     if (center.input) {
       edges.push({ 
         id: `${center.input}-${centerName}`,
         source: center.input,
         target:centerName,
+        animated: true,
         style: { stroke: "black"},
         markerEnd: { type: MarkerType.ArrowClosed},
       });
@@ -145,6 +164,7 @@ const onNodeDragStop =(_:any, node: Node) => {
         id: `${centerName}-${out}`,
         source: centerName,
         target:out,
+        animated: true,
         style: { stroke: "black"},
         markerEnd: { type: MarkerType.ArrowClosed},
       });
@@ -165,14 +185,14 @@ return (
 <Card>
 <div className={styles.PipelineBlock}>
 <ReactFlow
+
           nodes={nodes}
           edges={edges}
           onNodeDoubleClick={onNodeDoubleClick}
           onNodeDragStop={onNodeDragStop}
           onConnect={onConnect}
           onNodesDelete={handleNodesDelete}
-          onEdgesDelete={handleEdgesDelete}
-          deleteKeyCode={"Delete"}
+          deleteKeyCode="Delete"
           maxZoom={1.25}
           minZoom={0.5}
           snapToGrid={true}
