@@ -9,7 +9,7 @@ import Header from "./Header";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "../Common/Forms/Tables.css";
 import Footer from "./Footer";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import {CircularData} from "./CircularData";
 import { defaultPlant, defaultProduct, defaultCenter } from "./defaults";
 import PipelineBlock from "./PipelineBlock";
@@ -23,15 +23,18 @@ declare global {
   }
 
 const CaseBuilder = () => {
+  const nextUid= useRef(1);
   const [circularData, setCircularData] = useState<CircularData> ( {
   plants: {},
   products: {},
-  centers: {}
+  centers: {},
+  
 
 });
   const onClear = () => {};
   const onSave = () => {};
   const onLoad = () => {};
+  
 
   
 
@@ -52,24 +55,27 @@ const CaseBuilder = () => {
   const promptName = (prevData:CircularData): string | undefined => {
     const name = prompt("Name");
     if (!name || name.length ===0) return;
-    if (name in prevData.products || name in prevData.plants) return;
     return name;
 
   };
 
   const onAddPlant = () => {
     setCircularData((prevData) => {
-      const id = promptName(prevData);
-      if (id ===undefined) return prevData;
+      const name = promptName(prevData);
+      if (name ===undefined) return prevData;
+
+      const uid = `${name}-${nextUid.current++}`;
       const [x,y] = randomPosition();
       const newData: CircularData = {
          ...prevData,
          plants: {
           ...prevData.plants,
-          [id]: {
+          [uid]: {
             ...defaultPlant,
             x,
             y,
+            name,
+            uid
           }
          }
         };
@@ -79,17 +85,20 @@ const CaseBuilder = () => {
 
   const onAddProduct = () => {
     setCircularData((prevData) => {
-      const id = promptName(prevData);
-      if (id ===undefined) return prevData;
+      const name = promptName(prevData);
+      if (name ===undefined) return prevData;
+      const uid = `${name}-${nextUid.current++}`;
       const [x,y] = randomPosition();
       const newData: CircularData = {
          ...prevData,
          products: {
           ...prevData.products,
-          [id]: {
+          [uid]: {
             ...defaultProduct,
             x,
             y,
+            name,
+            uid
           }
          }
         };
@@ -99,22 +108,26 @@ const CaseBuilder = () => {
   };
 
   const onAddCenter = () => {
-  setCircularData(prev => {
-    const name = prompt("Center name");
-    if (!name || name in prev.centers) return prev;
-
-    const [x,y] = randomPosition();
-    const next = {
-      ...prev,
-      centers: {
-        ...prev.centers,
-        [name]: { ...defaultCenter, id:name, x, y, outputs: []}
-
-      }
-    };
-    return next;
-   
-  });
+    setCircularData((prevData) => {
+      const name = promptName(prevData);
+      if (name ===undefined) return prevData;
+      const uid = `${name}-${nextUid.current++}`;
+      const [x,y] = randomPosition();
+      const newData: CircularData = {
+         ...prevData,
+         centers: {
+          ...prevData.centers,
+          [uid]: {
+            ...defaultCenter,
+            x,
+            y,
+            name,
+            uid
+          }
+         }
+        };
+     return newData;
+    });
 };
 
 const onSetCenterInput = (centerName: string, productName: string) => {

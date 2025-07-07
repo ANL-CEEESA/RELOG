@@ -16,13 +16,15 @@ export interface DefaultCenter extends CircularPlant{
 }
 
 export const defaultProduct: DefaultProduct = {
-  id: "",
+  uid: "",
+  name: "",
   x: 0,
   y: 0,
 };
 
 export const defaultPlant: CircularPlant = {
-  id: "",
+  uid: "",
+  name: "",
   x: 0,
   y: 0,
   inputs : [],
@@ -30,7 +32,8 @@ export const defaultPlant: CircularPlant = {
 };
 
 export const defaultCenter: CircularCenter = {
-  id: "",
+  uid: "",
+  name: "",
   x: 0,
   y: 0,
   output: [],

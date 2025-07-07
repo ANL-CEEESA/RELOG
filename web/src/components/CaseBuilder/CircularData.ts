@@ -1,5 +1,6 @@
 export interface CircularPlant {
-    id: string;
+    uid: string;
+    name: string;
     x: number;
     y: number;
     inputs: string[];
@@ -9,7 +10,8 @@ export interface CircularPlant {
 }
 
 export interface CircularProduct { 
-    id: string;
+    uid: string;
+    name: string;
     x: number;
     y: number;
 }
@@ -23,7 +25,8 @@ export interface CircularData {
 }
 
 export interface CircularCenter {
-    id: string;
+    uid: string;
+    name: string;
     x: number;
     y: number;
 

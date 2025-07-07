@@ -94,9 +94,9 @@ const onNodeDragStop =(_:any, node: Node) => {
         if(!product.x || !product.y) hasNullPositions = true;
         mapNameToType[productName] = "product";
         nodes.push({
-            id: productName,
+            id: product.uid,
             type: "default",
-            data: {label: productName, type: 'product'},
+            data: {label: product.name, type: 'product'},
             position: { x:product.x, y:product.y},
             className: 'ProductNode'
         });
@@ -105,9 +105,9 @@ const onNodeDragStop =(_:any, node: Node) => {
         if(!plant.x || !plant.y) hasNullPositions = true;
         mapNameToType[plantName] = "plant";
         nodes.push({
-            id: plantName,
+            id: plant.uid,
             type: "default",
-            data: {label: plantName, type: 'plant'},
+            data: {label: plant.name, type: 'plant'},
             position: { x:plant.x, y:plant.y},
             className: 'PlantNode'
         });
@@ -143,9 +143,9 @@ const onNodeDragStop =(_:any, node: Node) => {
   for (const [centerName, center] of Object.entries(props.centers)) {
     mapNameToType[centerName] = "center";
     nodes.push({
-      id: centerName,
+      id: center.uid,
       type: "default",
-      data: { label: centerName, type: "center"},
+      data: { label: center.name, type: "center"},
       position: {x: center.x, y: center.y},
       className: 'CenterNode'
     });
