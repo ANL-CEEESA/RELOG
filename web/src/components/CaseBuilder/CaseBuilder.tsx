@@ -189,12 +189,10 @@ const onAddPlantOutput = (plantName: string, productName: string) => {
     const plant = prevData.plants[plantName];
     if (!plant) return prevData;
  
-    // Build a new array of outputs, avoiding duplicates
     const newOutputs = plant.outputs.includes(productName)
       ? plant.outputs
       : [...plant.outputs, productName];
  
-    // Return updated state with outputs as an array
     return {
       ...prevData,
       plants: {
@@ -289,6 +287,56 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
     });
   };
 
+  const onRenamePlant = (prevName: string, newName: string) => {
+    setCircularData(prev => {
+      const oldPlant = prev.plants[prevName];
+      if (!oldPlant) return prev;
+
+      const updatedData: CircularData = {
+        ...prev,
+        plants: { 
+          ...prev.plants,
+          [prevName]: {...oldPlant, name: newName}
+        }
+      };
+    
+  });
+};
+
+const onRenameProduct = (prevName: string, newName: string) => {
+    setCircularData(prev => {
+      const oldProduct = prev.products[prevName];
+      if (!oldProduct) return prev;
+
+      const updatedData: CircularData = {
+        ...prev,
+        products: { 
+          ...prev.products,
+          [newName]: oldProduct,
+        }
+      };
+      delete updatedData.products[prevName];
+      return updatedData;
+  });
+};
+
+const onRenameCenter = (prevName: string, newName: string) => {
+    setCircularData(prev => {
+      const oldCenter = prev.centers[prevName];
+      if (!oldCenter) return prev;
+
+      const updatedData: CircularData = {
+        ...prev,
+        centers: { 
+          ...prev.centers,
+          [newName]: oldCenter,
+        }
+      };
+      delete updatedData.centers[prevName];
+      return updatedData;
+  });
+};
+
   return (
     <div>
       <Header onClear={onClear} onSave={onSave} onLoad={onLoad} />
@@ -312,6 +360,9 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
             onRemovePlant={onRemovePlant}
             onRemoveProduct={onRemoveProduct}
             onRemoveCenter={onRemoveCenter}
+            onRenamePlant = {onRenamePlant}
+            onRenameProduct = {onRenameProduct}
+            onRenameCenter = {onRenameCenter}
           />
     </div> 
 </div> 

@@ -30,6 +30,9 @@ interface PipelineBlockProps {
   onRemovePlant: (id: string) => void;
   onRemoveProduct: (id: string) => void;
   onRemoveCenter: (id: string) => void;
+  onRenameProduct: (prevName: string, newName: string) => void;
+  onRenamePlant: (prevName: string, newName: string) => void;
+  onRenameCenter: (prevName: string, newName: string) => void;
   products: Record<string, CircularProduct>;
   plants: Record<string, CircularPlant>;
   centers: Record<string, CircularCenter>;
@@ -169,6 +172,21 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
     [props]
   );
 
+  const onNodeDoubleClick = (ev: React.MouseEvent, node: Node<CustomNodeData>) => {
+    const oldName = node.data.label;
+    const newName = window.prompt("Enter new name", oldName);
+    if (!newName|| newName.trim().length === 0) return;
+    if (newName in mapNameToType) return;
+    if (node.data.type === "plant") {
+      props.onRenamePlant(oldName, newName);
+    } else if (node.data.type === "product") {
+      props.onRenameProduct(oldName, newName);
+    }
+    else if (node.data.type === "center") {
+      props.onRenameCenter(oldName, newName);
+    }
+  };
+
   const onLayout = () => {
     const { nodes: ln, edges: le } = getLayoutedNodesAndEdges(nodes, edges);
     ln.forEach(n => {
@@ -182,7 +200,7 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
   useEffect(() => {
     if (hasNullPositions) onLayout();
   }, [hasNullPositions]);
-  
+
   return (
     <>
       <Section title="Pipeline" />
@@ -192,6 +210,7 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
             nodes={nodes}
             edges={edges}
             onConnect={onConnect}
+            onNodeDoubleClick={onNodeDoubleClick}
             onNodeDragStop={onNodeDragStop}
             onNodesDelete={handleNodesDelete}
             deleteKeyCode="delete"
