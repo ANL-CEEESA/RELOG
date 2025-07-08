@@ -8,6 +8,8 @@ import styles from './PipelineBlock.module.css';
  
 export interface CustomNodeData {
 
+  [key:string]: unknown;
+  
   label: string;
 
   type: 'plant' | 'product' | 'center';
