@@ -5,6 +5,13 @@
   margin-bottom: 12px !important;
 }
 
+:global(.react-flow__node.PlantNode.selected),
+:global(.react-flow__node.ProductNode.selected),
+:global(.react-flow__node.CenterNode.selected){
+    border: 2px solid #000 !important;
+
+}
+
 :global(.react-flow__node.PlantNode),
 :global(.react-flow__node.ProductNode),
 :global(.react-flow__node.CenterNode) {
