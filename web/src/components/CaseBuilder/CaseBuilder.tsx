@@ -287,53 +287,50 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
     });
   };
 
-  const onRenamePlant = (prevName: string, newName: string) => {
+  const onRenamePlant = (uniqueId: string, newName: string) => {
     setCircularData(prev => {
-      const oldPlant = prev.plants[prevName];
-      if (!oldPlant) return prev;
-
-      const updatedData: CircularData = {
+      const plant = prev.plants[uniqueId];
+      if (!plant) return prev;
+      const next = {
         ...prev,
-        plants: { 
+        plants: {
           ...prev.plants,
-          [prevName]: {...oldPlant, name: newName}
-        }
+          [uniqueId]: { ...plant, name: newName},
+        },
       };
+      return next;
     
+
   });
-};
+ };
 
-const onRenameProduct = (prevName: string, newName: string) => {
+const onRenameProduct = (uniqueId: string, newName: string) => {
     setCircularData(prev => {
-      const oldProduct = prev.products[prevName];
-      if (!oldProduct) return prev;
-
-      const updatedData: CircularData = {
+      const product = prev.products[uniqueId];
+      if (!product) return prev;
+      const next = {
         ...prev,
-        products: { 
+        products: {
           ...prev.products,
-          [newName]: oldProduct,
-        }
+          [uniqueId]: { ...product, name: newName},
+        },
       };
-      delete updatedData.products[prevName];
-      return updatedData;
+      return next;
   });
 };
 
-const onRenameCenter = (prevName: string, newName: string) => {
+const onRenameCenter = (uniqueId: string, newName: string) => {
     setCircularData(prev => {
-      const oldCenter = prev.centers[prevName];
-      if (!oldCenter) return prev;
-
-      const updatedData: CircularData = {
+      const center = prev.centers[uniqueId];
+      if (!center) return prev;
+      const next = {
         ...prev,
-        centers: { 
+        centers: {
           ...prev.centers,
-          [newName]: oldCenter,
-        }
+          [uniqueId]: { ...center, name: newName},
+        },
       };
-      delete updatedData.centers[prevName];
-      return updatedData;
+      return next; 
   });
 };
 
