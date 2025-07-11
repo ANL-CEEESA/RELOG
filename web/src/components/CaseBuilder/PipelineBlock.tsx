@@ -1,13 +1,17 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import dagre from 'dagre';
 import {
-  ReactFlow, useNodesState, useEdgesState, Background,
-  Controls, Node, Edge, Connection, MarkerType } from '@xyflow/react';
+  ReactFlow,ReactFlowProvider, useNodesState, useEdgesState, Background,
+  Controls, Node, Edge, Connection, MarkerType, 
+  getNodesBounds,
+  getViewportForBounds,
+  useReactFlow} from '@xyflow/react';
 import { CircularPlant, CircularProduct, CircularCenter } from './CircularData';
 import CustomNode, { CustomNodeData } from './NodesAndEdges';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
 import styles from './PipelineBlock.module.css';
+import { toPng } from 'html-to-image';
 
 interface PipelineBlockProps {
   onAddPlant: () => void;
@@ -52,6 +56,9 @@ function getLayouted(
 }
 const PipelineBlock: React.FC<PipelineBlockProps> = props => {
   const mapRef = useRef<Record<string, 'plant'|'product'|'center'>>({});
+
+  const flowWrapper = useRef<HTMLDivElement>(null);
+
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
  
@@ -149,13 +156,13 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
   ]);
  
   useEffect(() => { rebuild(); }, [rebuild]);
-  const onConnect = (c: Connection) => {
-    const s = c.source!, t = c.target!;
-    const st = mapRef.current[s], tt = mapRef.current[t];
-    if (st==='product' && tt==='plant') props.onSetPlantInput(t, s);
-    else if (st==='plant' && tt==='product') props.onAddPlantOutput(s, t);
-    else if (st==='product' && tt==='center') props.onAddCenterInput(t, s);
-    else if (st==='center' && tt==='product') props.onAddCenterOutput(s, t);
+    const onConnect = (c: Connection) => {
+      const s = c.source!, t = c.target!;
+      const st = mapRef.current[s], tt = mapRef.current[t];
+      if (st==='product' && tt==='plant') props.onSetPlantInput(t, s);
+      else if (st==='plant' && tt==='product') props.onAddPlantOutput(s, t);
+      else if (st==='product' && tt==='center') props.onAddCenterInput(t, s);
+      else if (st==='center' && tt==='product') props.onAddCenterOutput(s, t);
   };
  
   const onNodeDragStop = (_: any, n: Node<CustomNodeData>) => {
@@ -185,6 +192,23 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
     if (n.data.type==='product') props.onRenameProduct(uniqueId, newName);
     if (n.data.type==='center') props.onRenameCenter(uniqueId, newName);
   };
+  function DownloadButton() {
+    const onDownload = async () => {
+      if (!flowWrapper.current) return;
+      const node = flowWrapper.current;
+      const { width, height } = node.getBoundingClientRect();
+      const dataUrl = await toPng(node, {
+        backgroundColor: '#fff',
+        width: Math.round(width),
+        height: Math.round(height)
+      });
+      const downloadLink = document.createElement('a');
+      downloadLink.href = dataUrl;
+      downloadLink.download = 'pipeline.png';
+      downloadLink.click();
+    };
+    return <button style={{ margin: '0 8px' }} onClick={onDownload}>Export Pipeline</button>;
+  };
  
   const onLayout = () => {
     const { nodes: ln, edges: le } = getLayouted(nodes, edges);
@@ -200,38 +224,45 @@ const PipelineBlock: React.FC<PipelineBlockProps> = props => {
 <>
 <Section title="Pipeline" />
 <Card>
-<div className={styles.PipelineBlock}>
+<ReactFlowProvider>
+<div ref={flowWrapper} className={styles.PipelineBlock} style={{ width: '100%', height: 600 }}>
 <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onNodeDoubleClick={onNodeDoubleClick}
-            onNodeDragStop={onNodeDragStop}
-            onNodesDelete={handleNodesDelete}
-            deleteKeyCode="Delete"
-            maxZoom={1.25}
-            minZoom={0.5}
-            snapToGrid
-            preventScrolling
-            nodeTypes={{ default: CustomNode }}
+
+nodes={nodes}
+edges={edges}
+onNodesChange={onNodesChange}
+onEdgesChange={onEdgesChange}
+onConnect={onConnect}
+onNodeDoubleClick={onNodeDoubleClick}
+onNodeDragStop={onNodeDragStop}
+onNodesDelete={handleNodesDelete}
+deleteKeyCode="Delete"
+maxZoom={1.25}
+minZoom={0.5}
+snapToGrid
+preventScrolling
+nodeTypes={{ default: CustomNode }}
 >
 <Background />
 <Controls showInteractive={false} />
 </ReactFlow>
 </div>
+ 
 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
 <button style={{ margin: '0 8px' }} onClick={props.onAddProduct}>Add product</button>
 <button style={{ margin: '0 8px' }} onClick={props.onAddPlant}>Add plant</button>
 <button style={{ margin: '0 8px' }} onClick={props.onAddCenter}>Add center</button>
 <button style={{ margin: '0 8px' }} onClick={onLayout}>Auto Layout</button>
-<button title="Drag & connect. Double-click to rename. Delete to remove." style={{ margin: '0 8px' }}>?</button>
+<DownloadButton />
+<button style={{ margin: '0 8px' }} title="Drag & connect. Double-click to rename. Delete to remove.">?</button>
+
 </div>
+</ReactFlowProvider>
 </Card>
 </>
 
   );
+
 };
  
 export default PipelineBlock;
