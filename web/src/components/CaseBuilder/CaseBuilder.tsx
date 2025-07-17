@@ -10,11 +10,11 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import "../Common/Forms/Tables.css";
 import Footer from "./Footer";
 import React, { useState,useRef } from "react";
-import {CircularData} from "./CircularData";
 import { defaultPlant, defaultProduct, defaultCenter } from "./defaults";
 import PipelineBlock from "./PipelineBlock";
 import '@xyflow/react/dist/style.css';
-import { CircularPlant, CircularCenter} from "./CircularData";
+import { PlantNode, CenterNode, ProductNode, RELOGScenario} from "./CircularData";
+
 declare global {
     interface Window {
       nextX: number;
@@ -22,15 +22,17 @@ declare global {
     }
   }
 
+  const Default_Scenario: RELOGScenario = {
+    Parameters: { version: "1.0"},
+    Plants: {},
+    Products: {},
+    Centers: {},
+  };
+
 const CaseBuilder = () => {
   const nextUid= useRef(1);
-  const [circularData, setCircularData] = useState<CircularData> ( {
-  plants: {},
-  products: {},
-  centers: {},
-  
+  const [scenario, setScenario] = useState<RELOGScenario>(Default_Scenario);
 
-});
   const onClear = () => {};
   const onSave = () => {};
   const onLoad = () => {};
@@ -52,7 +54,7 @@ const CaseBuilder = () => {
 
   };
 
-  const promptName = (prevData:CircularData): string | undefined => {
+  const promptName = (prevData:RELOGScenario): string | undefined => {
     const name = prompt("Name");
     if (!name || name.length ===0) return;
     return name;
@@ -60,16 +62,16 @@ const CaseBuilder = () => {
   };
 
   const onAddPlant = () => {
-    setCircularData((prevData) => {
+    setScenario((prevData) => {
       const name = promptName(prevData);
       if (name ===undefined) return prevData;
 
       const uid = `${name}-${nextUid.current++}`;
       const [x,y] = randomPosition();
-      const newData: CircularData = {
+      const newData: RELOGScenario = {
          ...prevData,
-         plants: {
-          ...prevData.plants,
+         Plants: {
+          ...prevData.Plants,
           [uid]: {
             ...defaultPlant,
             x,
@@ -84,15 +86,15 @@ const CaseBuilder = () => {
   };
 
   const onAddProduct = () => {
-    setCircularData((prevData) => {
+    setScenario((prevData) => {
       const name = promptName(prevData);
       if (name ===undefined) return prevData;
       const uid = `${name}-${nextUid.current++}`;
       const [x,y] = randomPosition();
-      const newData: CircularData = {
+      const newData: RELOGScenario = {
          ...prevData,
-         products: {
-          ...prevData.products,
+         Products: {
+          ...prevData.Products,
           [uid]: {
             ...defaultProduct,
             x,
@@ -108,15 +110,15 @@ const CaseBuilder = () => {
   };
 
   const onAddCenter = () => {
-    setCircularData((prevData) => {
+    setScenario((prevData) => {
       const name = promptName(prevData);
       if (name ===undefined) return prevData;
       const uid = `${name}-${nextUid.current++}`;
       const [x,y] = randomPosition();
-      const newData: CircularData = {
+      const newData: RELOGScenario = {
          ...prevData,
-         centers: {
-          ...prevData.centers,
+         Centers: {
+          ...prevData.Centers,
           [uid]: {
             ...defaultCenter,
             x,
@@ -131,13 +133,13 @@ const CaseBuilder = () => {
 };
 
 const onSetCenterInput = (centerName: string, productName: string) => {
-  setCircularData((prev) => {
-    const center = prev.centers[centerName];
+  setScenario((prev) => {
+    const center = prev.Centers[centerName];
     if (!center) return prev;
     return {
       ...prev,
       centers: {
-        ...prev.centers,
+        ...prev.Centers,
         [centerName]: { ...center, input: productName},
       },
     };
@@ -146,13 +148,13 @@ const onSetCenterInput = (centerName: string, productName: string) => {
 
  const onSetPlantInput = (plantName: string, productName: string) => {
 
-  setCircularData((prevData: CircularData) => {
+  setScenario((prevData: RELOGScenario) => {
 
-    const plant = prevData.plants[plantName];
+    const plant = prevData.Plants[plantName];
 
     if (!plant) return prevData; 
  
-    const updatedPlant: CircularPlant = {
+    const updatedPlant: PlantNode = {
 
       ...plant,
 
@@ -170,7 +172,7 @@ const onSetCenterInput = (centerName: string, productName: string) => {
 
       plants: {
 
-        ...prevData.plants,
+        ...prevData.Plants,
 
         [plantName]: updatedPlant,
 
@@ -185,8 +187,8 @@ const onSetCenterInput = (centerName: string, productName: string) => {
 
 
 const onAddPlantOutput = (plantName: string, productName: string) => {
-  setCircularData(prevData => {
-    const plant = prevData.plants[plantName];
+  setScenario(prevData => {
+    const plant = prevData.Plants[plantName];
     if (!plant) return prevData;
  
     const newOutputs = plant.outputs.includes(productName)
@@ -196,7 +198,7 @@ const onAddPlantOutput = (plantName: string, productName: string) => {
     return {
       ...prevData,
       plants: {
-        ...prevData.plants,
+        ...prevData.Plants,
         [plantName]: {
           ...plant,
           outputs: newOutputs,
@@ -207,15 +209,15 @@ const onAddPlantOutput = (plantName: string, productName: string) => {
 };
 
 const onAddCenterOutput = (centerName: string, productName: string) => {
-  setCircularData((prev) => {
-    const center = prev.centers[centerName];
+  setScenario((prev) => {
+    const center = prev.Centers[centerName];
     if (!center) return prev;
   
     const updatedOutputs = [...center.output, productName];
   return {
     ...prev,
     centers: {
-      ...prev.centers,
+      ...prev.Centers,
       [centerName]: { ...center, output: updatedOutputs},
     },
   };
@@ -225,20 +227,20 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
  
 
   const onMovePlant = (plantName: string, x: number, y: number) => {
-    setCircularData((prevData: CircularData): CircularData => {
-      const newData: CircularData ={ ...prevData};
-      if (!newData.plants[plantName]) return prevData;
-      newData.plants[plantName].x =x;
-      newData.plants[plantName].y =y;
+    setScenario((prevData: RELOGScenario): RELOGScenario => {
+      const newData: RELOGScenario ={ ...prevData};
+      if (!newData.Plants[plantName]) return prevData;
+      newData.Plants[plantName].x =x;
+      newData.Plants[plantName].y =y;
       return newData;
     });
 
   };
 
   const onMoveProduct = (productName: string, x: number, y: number) => {
-     setCircularData((prevData: CircularData): CircularData => {
-      const newData: CircularData ={ ...prevData};
-      const product = newData.products[productName];
+     setScenario((prevData: RELOGScenario): RELOGScenario => {
+      const newData: RELOGScenario ={ ...prevData};
+      const product = newData.Products[productName];
       if (!product) return prevData;
       product.x = x;
       product.y =y;
@@ -248,13 +250,13 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
   };
 
   const onMoveCenter = (centerName: string, x: number, y: number) => {
-    setCircularData((prev) => {
-      const center = prev.centers[centerName];
+    setScenario((prev) => {
+      const center = prev.Centers[centerName];
       if (!center) return prev;
       return {
         ...prev,
         centers: {
-          ...prev.centers,
+          ...prev.Centers,
           [centerName]: { ...center,x,y},
         },
       };
@@ -262,39 +264,39 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
   };
 
   const onRemovePlant = (plantName: string) => {
-    setCircularData(prev => {
+    setScenario(prev => {
       const next = { ...prev };
-      delete next.plants[plantName];
+      delete next.Plants[plantName];
 
       return next;
     });
   };
    const onRemoveProduct = (productName: string) => {
-    setCircularData(prev => {
+    setScenario(prev => {
       const next = { ...prev };
-      delete next.products[productName];
+      delete next.Products[productName];
 
       return next;
     });
   };
 
    const onRemoveCenter = (centerName: string) => {
-    setCircularData(prev => {
+    setScenario(prev => {
       const next = { ...prev };
-      delete next.centers[centerName];
+      delete next.Centers[centerName];
 
       return next;
     });
   };
 
   const onRenamePlant = (uniqueId: string, newName: string) => {
-    setCircularData(prev => {
-      const plant = prev.plants[uniqueId];
+    setScenario(prev => {
+      const plant = prev.Plants[uniqueId];
       if (!plant) return prev;
       const next = {
         ...prev,
         plants: {
-          ...prev.plants,
+          ...prev.Plants,
           [uniqueId]: { ...plant, name: newName},
         },
       };
@@ -305,13 +307,13 @@ const onAddCenterOutput = (centerName: string, productName: string) => {
  };
 
 const onRenameProduct = (uniqueId: string, newName: string) => {
-    setCircularData(prev => {
-      const product = prev.products[uniqueId];
+    setScenario(prev => {
+      const product = prev.Products[uniqueId];
       if (!product) return prev;
       const next = {
         ...prev,
         products: {
-          ...prev.products,
+          ...prev.Products,
           [uniqueId]: { ...product, name: newName},
         },
       };
@@ -320,13 +322,13 @@ const onRenameProduct = (uniqueId: string, newName: string) => {
 };
 
 const onRenameCenter = (uniqueId: string, newName: string) => {
-    setCircularData(prev => {
-      const center = prev.centers[uniqueId];
+    setScenario(prev => {
+      const center = prev.Centers[uniqueId];
       if (!center) return prev;
       const next = {
         ...prev,
         centers: {
-          ...prev.centers,
+          ...prev.Centers,
           [uniqueId]: { ...center, name: newName},
         },
       };
@@ -345,15 +347,15 @@ const onRenameCenter = (uniqueId: string, newName: string) => {
             onAddProduct={onAddProduct}
             onMovePlant={onMovePlant}
             onMoveProduct={onMoveProduct}
-            plants={circularData.plants}
-            products={circularData.products}
+            plants={scenario.Plants}
+            products={scenario.Products}
             onSetPlantInput={onSetPlantInput}
             onAddPlantOutput={onAddPlantOutput}
             onAddCenter= {onAddCenter}
             onAddCenterInput={onSetCenterInput}
             onAddCenterOutput={onAddCenterOutput}
             onMoveCenter={onMoveCenter}
-            centers={circularData.centers}
+            centers={scenario.Centers}
             onRemovePlant={onRemovePlant}
             onRemoveProduct={onRemoveProduct}
             onRemoveCenter={onRemoveCenter}

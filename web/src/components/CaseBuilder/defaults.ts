@@ -1,16 +1,16 @@
-import { CircularData, CircularPlant, CircularProduct, CircularCenter } from "./CircularData";
+import { CircularData, PlantNode, ProductNode, CenterNode } from "./CircularData";
 
-export interface DefaultProduct extends CircularProduct{ 
+export interface DefaultProduct extends ProductNode{ 
   x: number;
   y: number;
 }
 
-export interface DefaultPlant extends CircularPlant{
+export interface DefaultPlant extends PlantNode{
   x: number;
   y: number;
 }
 
-export interface DefaultCenter extends CircularPlant{
+export interface DefaultCenter extends PlantNode{
   x: number;
   y: number;
 }
@@ -22,7 +22,7 @@ export const defaultProduct: DefaultProduct = {
   y: 0,
 };
 
-export const defaultPlant: CircularPlant = {
+export const defaultPlant: PlantNode = {
   uid: "",
   name: "",
   x: 0,
@@ -31,7 +31,7 @@ export const defaultPlant: CircularPlant = {
   outputs: [],
 };
 
-export const defaultCenter: CircularCenter = {
+export const defaultCenter: CenterNode = {
   uid: "",
   name: "",
   x: 0,

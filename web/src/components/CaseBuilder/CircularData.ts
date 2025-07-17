@@ -1,4 +1,4 @@
-export interface CircularPlant {
+export interface PlantNode {
     uid: string;
     name: string;
     x: number;
@@ -9,22 +9,15 @@ export interface CircularPlant {
 
 }
 
-export interface CircularProduct { 
+export interface ProductNode { 
     uid: string;
     name: string;
     x: number;
     y: number;
 }
 
-export interface CircularData {
-    plants: Record<string, CircularPlant>;
-    products: Record<string, CircularProduct>;
-    centers: Record<string, CircularCenter>;
 
-
-}
-
-export interface CircularCenter {
+export interface CenterNode {
     uid: string;
     name: string;
     x: number;
@@ -33,4 +26,23 @@ export interface CircularCenter {
     //single input, multiple outputs 
     input?: string;
     output: string[];
+}
+
+
+export interface CircularData {
+    plants: Record<string, PlantNode>;
+    products: Record<string, ProductNode>;
+    centers: Record<string, CenterNode>;
+
+
+}
+
+export interface RELOGScenario {
+    Parameters: {
+        version: string;
+    };
+
+    Plants: Record<string, PlantNode>;
+    Products: Record< string, ProductNode>;
+    Centers: Record<string,CenterNode>;
 }

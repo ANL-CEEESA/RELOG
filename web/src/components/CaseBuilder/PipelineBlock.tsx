@@ -6,7 +6,7 @@ import {
   getNodesBounds,
   getViewportForBounds,
   useReactFlow} from '@xyflow/react';
-import { CircularPlant, CircularProduct, CircularCenter } from './CircularData';
+import { PlantNode, ProductNode, CenterNode } from './CircularData';
 import CustomNode, { CustomNodeData } from './NodesAndEdges';
 import Section from '../Common/Section';
 import Card from '../Common/Card';
@@ -30,9 +30,9 @@ interface PipelineBlockProps {
   onRenameProduct: (uid: string, newName: string) => void;
   onRenamePlant: (uid: string, newName: string) => void;
   onRenameCenter: (uid: string, newName: string) => void;
-  products: Record<string, CircularProduct>;
-  plants: Record<string, CircularPlant>;
-  centers: Record<string, CircularCenter>;
+  products: Record<string, ProductNode>;
+  plants: Record<string, PlantNode>;
+  centers: Record<string, CenterNode>;
 }
  
 function getLayouted(
