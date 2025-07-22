@@ -95,7 +95,7 @@ const CaseBuilder = () => {
       if (!center) return prev;
       return {
         ...prev,
-        centers: {
+        Centers: {
           ...prev.Centers,
           [centerName]: { ...center, input: productName },
         },
@@ -120,7 +120,7 @@ const CaseBuilder = () => {
       return {
         ...prevData,
 
-        plants: {
+        Plants: {
           ...prevData.Plants,
 
           [plantName]: updatedPlant,
@@ -140,7 +140,7 @@ const CaseBuilder = () => {
 
       return {
         ...prevData,
-        plants: {
+        Plants: {
           ...prevData.Plants,
           [plantName]: {
             ...plant,
@@ -159,7 +159,7 @@ const CaseBuilder = () => {
       const updatedOutputs = [...center.output, productName];
       return {
         ...prev,
-        centers: {
+        Centers: {
           ...prev.Centers,
           [centerName]: { ...center, output: updatedOutputs },
         },
@@ -195,48 +195,20 @@ const CaseBuilder = () => {
     });
   };
 
-  const onRenamePlant = (uniqueId: string, newName: string) => {
-    setScenario((prev) => {
-      const plant = prev.Plants[uniqueId];
-      if (!plant) return prev;
-      const next = {
-        ...prev,
-        plants: {
-          ...prev.Plants,
-          [uniqueId]: { ...plant, name: newName },
-        },
-      };
-      return next;
-    });
-  };
+  const onRenameNode = (type: EntityKey, uniqueId: string, newName: string) => {
+    setScenario((prevData) => {
+      const entities = prevData[type];
+      const node = entities[uniqueId];
 
-  const onRenameProduct = (uniqueId: string, newName: string) => {
-    setScenario((prev) => {
-      const product = prev.Products[uniqueId];
-      if (!product) return prev;
-      const next = {
-        ...prev,
-        products: {
-          ...prev.Products,
-          [uniqueId]: { ...product, name: newName },
-        },
-      };
-      return next;
-    });
-  };
+      if (!node) return prevData;
 
-  const onRenameCenter = (uniqueId: string, newName: string) => {
-    setScenario((prev) => {
-      const center = prev.Centers[uniqueId];
-      if (!center) return prev;
-      const next = {
-        ...prev,
-        centers: {
-          ...prev.Centers,
-          [uniqueId]: { ...center, name: newName },
+      return {
+        ...prevData,
+        [type]: {
+          ...entities,
+          [uniqueId]: { ...node, name: newName },
         },
       };
-      return next;
     });
   };
 
@@ -263,9 +235,9 @@ const CaseBuilder = () => {
               onRemovePlant={(id) => onRemoveNode("Plants", id)}
               onRemoveProduct={(id) => onRemoveNode("Products", id)}
               onRemoveCenter={(id) => onRemoveNode("Centers", id)}
-              onRenamePlant={onRenamePlant}
-              onRenameProduct={onRenameProduct}
-              onRenameCenter={onRenameCenter}
+              onRenamePlant={(id, name) => onRenameNode("Plants", id, name)}
+              onRenameProduct={(id, name) => onRenameNode("Products", id, name)}
+              onRenameCenter={(id, name) => onRenameNode("Centers", id, name)}
             />
           </div>
         </div>
