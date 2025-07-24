@@ -11,18 +11,16 @@ import {
   Node,
   Edge,
   Connection,
-  addEdge,
   MarkerType,
-  getNodesBounds,
-  getViewportForBounds,
 } from "@xyflow/react";
-import { PlantNode, ProductNode, CenterNode } from "./CircularData";
+import { PlantNode, ProductNode, CenterNode } from "./InitialData";
 import CustomNode, { CustomNodeData } from "./NodesAndEdges";
 import Section from "../Common/Section";
 import Card from "../Common/Card";
 import styles from "./PipelineBlock.module.css";
 import buttonStyles from "./Button.module.css";
 import HelpButton from "../Common/Buttons/HelpButton.module.css";
+import * as htmlToImage from "html-to-image";
 
 interface PipelineBlockProps {
   onAddPlant: () => void;
@@ -211,38 +209,25 @@ const PipelineBlock: React.FC<PipelineBlockProps> = (props) => {
   function DownloadButton() {
     const onDownload = async () => {
       if (!rfInstance || !flowWrapper.current) return;
+      rfInstance.fitView({ padding: 0.1 });
 
-      const minZoom = 0.1;
-      const maxZoom = 2;
-      const padding = 0.1;
+      const renderer = document.getElementsByClassName(
+        "react-flow__renderer",
+      )[0] as HTMLElement;
+      if (!renderer) return;
 
-      const nodes = rfInstance.getNodes();
-      const bounds = getNodesBounds(nodes);
+      const dataurl = await htmlToImage.toSvg(renderer, {
+        filter: (node: Element) => node.tagName.toLowerCase() !== "i",
+      });
 
-      const { clientWidth: width, clientHeight: height } = flowWrapper.current;
-      const { x, y, zoom } = getViewportForBounds(
-        bounds,
-        width,
-        height,
-        minZoom,
-        maxZoom,
-        padding,
+      const printWin = window.open("", "_blank");
+      if (!printWin) return;
+      printWin.document.write(
+        "<html><head> <style> @page {size: A4 landscape; margin: 0; body {margin: 0}</style> </head> <body>${rawSvg}</body> </html>",
       );
-
-      rfInstance.setViewport({ x, y, zoom });
-
-      await new Promise((r) => setTimeout(r, 50));
-
-      const svgString = rfInstance.toSvg();
-      const blob = new Blob([svgString], { type: "image/svg+xml" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "pipeline.svg";
-      a.click();
-      URL.revokeObjectURL(url);
+      printWin.document.close();
+      printWin.onload = () => printWin.print();
     };
-
     return (
       <button className={buttonStyles.Button} onClick={onDownload}>
         Export Pipeline
@@ -309,10 +294,12 @@ const PipelineBlock: React.FC<PipelineBlockProps> = (props) => {
               Auto Layout
             </button>
             <DownloadButton />
-            <button className={`buttonStyles.Button} ${HelpButton.HelpButton}`}>
+            <button
+              className={`${buttonStyles.Button} ${HelpButton.HelpButton}`}
+            >
               ?
               <span className={HelpButton.tooltip}>
-                "Drag & connect. Double-click to rename. Delete to remove."
+                Drag & connect. Double-click to rename. Delete to remove.
               </span>
             </button>
           </div>

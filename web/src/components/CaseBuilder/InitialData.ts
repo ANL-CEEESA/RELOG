@@ -29,7 +29,7 @@ export interface CenterNode {
 }
 
 
-export interface CircularData {
+export interface InitialData {
     plants: Record<string, PlantNode>;
     products: Record<string, ProductNode>;
     centers: Record<string, CenterNode>;

@@ -18,7 +18,7 @@ import {
   CenterNode,
   ProductNode,
   RELOGScenario,
-} from "./CircularData";
+} from "./InitialData";
 import { idText } from "typescript";
 
 declare global {

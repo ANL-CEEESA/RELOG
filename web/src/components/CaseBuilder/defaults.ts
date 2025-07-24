@@ -1,4 +1,4 @@
-import { CircularData, PlantNode, ProductNode, CenterNode } from "./CircularData";
+import { InitialData, PlantNode, ProductNode, CenterNode } from "./InitialData";
 
 export interface DefaultProduct extends ProductNode{ 
   x: number;
@@ -39,7 +39,7 @@ export const defaultCenter: CenterNode = {
   output: [],
 };
 
-export const DefaultData: CircularData = {
+export const DefaultData: InitialData = {
   products: {},
   plants: {},
   centers: {}
