@@ -1,21 +1,8 @@
 import { InitialData, PlantNode, ProductNode, CenterNode } from "./InitialData";
 
-export interface DefaultProduct extends ProductNode{ 
-  x: number;
-  y: number;
-}
 
-export interface DefaultPlant extends PlantNode{
-  x: number;
-  y: number;
-}
 
-export interface DefaultCenter extends PlantNode{
-  x: number;
-  y: number;
-}
-
-export const defaultProduct: DefaultProduct = {
+export const defaultProduct: ProductNode = {
   uid: "",
   name: "",
   x: 0,
