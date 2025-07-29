@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@xyflow/react": "^12.7.0",
+    "i": "^0.3.7",
+    "nanoid": "^5.1.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6"
+  }
+}
