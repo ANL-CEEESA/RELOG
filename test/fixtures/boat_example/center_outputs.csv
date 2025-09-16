@@ -1,7 +1,7 @@
 center,output product,year,amount collected (tonne),amount disposed (tonne),collection cost ($),disposal cost ($)
 NailFactory (Chicago),Nail,1,1.0,0.0,1000.0,0.0
 NailFactory (Chicago),Nail,2,1.0,0.0,1000.0,0.0
-NailFactory (Chicago),Nail,3,1.0,-0.0,1000.0,-0.0
+NailFactory (Chicago),Nail,3,1.0,0.0,1000.0,0.0
 NailFactory (Chicago),Nail,4,1.0,0.0,1000.0,0.0
 NailFactory (Chicago),Nail,5,1.0,0.0,1000.0,0.0
 NailFactory (Phoenix),Nail,1,1.0,0.0,1000.0,0.0
@@ -9,11 +9,11 @@ NailFactory (Phoenix),Nail,2,1.0,0.0,1000.0,0.0
 NailFactory (Phoenix),Nail,3,1.0,0.0,1000.0,0.0
 NailFactory (Phoenix),Nail,4,1.0,0.0,1000.0,0.0
 NailFactory (Phoenix),Nail,5,1.0,0.0,1000.0,0.0
-NailFactory (Dallas),Nail,1,1.0,-0.0,1000.0,-0.0
+NailFactory (Dallas),Nail,1,1.0,0.0,1000.0,0.0
 NailFactory (Dallas),Nail,2,1.0,-0.0,1000.0,-0.0
-NailFactory (Dallas),Nail,3,1.0,-0.0,1000.0,-0.0
-NailFactory (Dallas),Nail,4,1.0,0.0,1000.0,0.0
-NailFactory (Dallas),Nail,5,1.0,0.0,1000.0,0.0
+NailFactory (Dallas),Nail,3,1.0,0.0,1000.0,0.0
+NailFactory (Dallas),Nail,4,1.0,-0.0,1000.0,-0.0
+NailFactory (Dallas),Nail,5,1.0,-0.0,1000.0,-0.0
 Forest (Chicago),Wood,1,100.0,100.0,0.0,0.0
 Forest (Chicago),Wood,2,100.0,100.0,0.0,0.0
 Forest (Chicago),Wood,3,100.0,100.0,0.0,0.0
@@ -43,17 +43,17 @@ Retail (Los Angeles),UsedBoat,1,0.0,0.0,0.0,0.0
 Retail (Los Angeles),UsedBoat,2,0.0,0.0,0.0,0.0
 Retail (Los Angeles),UsedBoat,3,0.0,0.0,0.0,0.0
 Retail (Los Angeles),UsedBoat,4,0.0,0.0,0.0,0.0
-Retail (Los Angeles),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Los Angeles),UsedBoat,5,-0.0,0.0,-0.0,0.0
 Retail (Houston),UsedBoat,1,0.0,0.0,0.0,0.0
 Retail (Houston),UsedBoat,2,0.0,0.0,0.0,0.0
 Retail (Houston),UsedBoat,3,0.0,0.0,0.0,0.0
 Retail (Houston),UsedBoat,4,0.0,0.0,0.0,0.0
-Retail (Houston),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Houston),UsedBoat,5,-0.0,0.0,-0.0,0.0
 Retail (Phoenix),UsedBoat,1,0.0,0.0,0.0,0.0
 Retail (Phoenix),UsedBoat,2,0.0,0.0,0.0,0.0
 Retail (Phoenix),UsedBoat,3,0.0,0.0,0.0,0.0
-Retail (Phoenix),UsedBoat,4,0.0,0.0,0.0,0.0
-Retail (Phoenix),UsedBoat,5,0.0,0.0,0.0,0.0
+Retail (Phoenix),UsedBoat,4,-0.0,0.0,-0.0,0.0
+Retail (Phoenix),UsedBoat,5,-0.0,0.0,-0.0,0.0
 Retail (Philadelphia),UsedBoat,1,0.0,0.0,0.0,0.0
 Retail (Philadelphia),UsedBoat,2,0.0,0.0,0.0,0.0
 Retail (Philadelphia),UsedBoat,3,0.0,0.0,0.0,0.0

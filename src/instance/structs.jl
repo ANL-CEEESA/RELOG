@@ -14,6 +14,7 @@ Base.@kwdef struct Product
     tr_cost::Vector{Float64}
     tr_energy::Vector{Float64}
     tr_emissions::OrderedDict{String,Vector{Float64}}
+    disposal_limit::Vector{Float64}
 end
 
 Base.@kwdef struct Center

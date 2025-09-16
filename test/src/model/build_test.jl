@@ -109,4 +109,13 @@ function model_build_test()
     @test repr(model[:eq_disposal_limit]["C1", "P2", 1]) ==
           "eq_disposal_limit[C1,P2,1] : z_disp[C1,P2,1] ≤ 0"
     @test ("C1", "P3", 1) ∉ keys(model[:eq_disposal_limit])
+
+    # Global disposal limit
+    @test repr(model[:eq_disposal_limit]["P1", 1]) ==
+          "eq_disposal_limit[P1,1] : z_disp[C2,P1,1] ≤ 1"
+    @test repr(model[:eq_disposal_limit]["P2", 1]) ==
+          "eq_disposal_limit[P2,1] : z_disp[C1,P2,1] ≤ 2"
+    @test repr(model[:eq_disposal_limit]["P3", 1]) ==
+          "eq_disposal_limit[P3,1] : z_disp[L1,P3,1] + z_disp[C1,P3,1] ≤ 5"
+    @test ("P4", 1) ∉ keys(model[:eq_disposal_limit])
 end

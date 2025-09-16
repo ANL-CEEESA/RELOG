@@ -18,6 +18,7 @@ function instance_parse_test_1()
     @test p1.tr_energy == [0.12, 0.12, 0.12, 0.12]
     @test p1.tr_emissions ==
           Dict("CO2" => [0.052, 0.052, 0.052, 0.052], "CH4" => [0.003, 0.003, 0.003, 0.003])
+    @test p1.disposal_limit == [1.0, 1.0, 1.0, 1.0]
     @test instance.products_by_name["P1"] === p1
     p2 = instance.products[2]
     p3 = instance.products[3]

@@ -1,39 +1,39 @@
 plant,year,operational?,input amount (tonne),opening cost ($),fixed operating cost ($),variable operating cost ($)
-BoatFactory (Chicago),1,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Chicago),2,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Chicago),3,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Chicago),4,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Chicago),5,false,-0.0,0.0,0.0,-0.0
+BoatFactory (Chicago),1,false,0.0,0.0,0.0,0.0
+BoatFactory (Chicago),2,false,0.0,0.0,0.0,0.0
+BoatFactory (Chicago),3,false,0.0,0.0,0.0,0.0
+BoatFactory (Chicago),4,false,0.0,0.0,0.0,0.0
+BoatFactory (Chicago),5,false,0.0,0.0,0.0,0.0
 BoatFactory (New York City),1,false,0.0,0.0,0.0,0.0
 BoatFactory (New York City),2,false,0.0,0.0,0.0,0.0
 BoatFactory (New York City),3,false,0.0,0.0,0.0,0.0
 BoatFactory (New York City),4,false,0.0,0.0,0.0,0.0
 BoatFactory (New York City),5,false,0.0,0.0,0.0,0.0
-BoatFactory (Los Angeles),1,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Los Angeles),2,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Los Angeles),3,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Los Angeles),4,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Los Angeles),5,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Houston),1,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Houston),2,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Houston),3,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Houston),4,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Houston),5,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Phoenix),1,false,-0.0,0.0,0.0,-0.0
-BoatFactory (Phoenix),2,false,-0.0,0.0,0.0,-0.0
+BoatFactory (Los Angeles),1,false,0.0,0.0,0.0,0.0
+BoatFactory (Los Angeles),2,false,0.0,0.0,0.0,0.0
+BoatFactory (Los Angeles),3,false,0.0,0.0,0.0,0.0
+BoatFactory (Los Angeles),4,false,0.0,0.0,0.0,0.0
+BoatFactory (Los Angeles),5,false,0.0,0.0,0.0,0.0
+BoatFactory (Houston),1,false,0.0,0.0,0.0,0.0
+BoatFactory (Houston),2,false,0.0,0.0,0.0,0.0
+BoatFactory (Houston),3,false,0.0,0.0,0.0,0.0
+BoatFactory (Houston),4,false,0.0,0.0,0.0,0.0
+BoatFactory (Houston),5,false,0.0,0.0,0.0,0.0
+BoatFactory (Phoenix),1,false,0.0,0.0,0.0,0.0
+BoatFactory (Phoenix),2,false,0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),3,false,0.0,0.0,0.0,0.0
-BoatFactory (Phoenix),4,false,-0.0,0.0,0.0,-0.0
+BoatFactory (Phoenix),4,false,0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),5,false,0.0,0.0,0.0,0.0
 BoatFactory (Philadelphia),1,false,0.0,0.0,0.0,0.0
 BoatFactory (Philadelphia),2,false,0.0,0.0,0.0,0.0
 BoatFactory (Philadelphia),3,false,0.0,0.0,0.0,0.0
 BoatFactory (Philadelphia),4,false,0.0,0.0,0.0,0.0
 BoatFactory (Philadelphia),5,false,0.0,0.0,0.0,0.0
-BoatFactory (San Antonio),1,false,-0.0,0.0,0.0,-0.0
-BoatFactory (San Antonio),2,false,-0.0,0.0,0.0,-0.0
-BoatFactory (San Antonio),3,false,-0.0,0.0,0.0,-0.0
-BoatFactory (San Antonio),4,false,-0.0,0.0,0.0,-0.0
-BoatFactory (San Antonio),5,false,-0.0,0.0,0.0,-0.0
+BoatFactory (San Antonio),1,false,0.0,0.0,0.0,0.0
+BoatFactory (San Antonio),2,false,0.0,0.0,0.0,0.0
+BoatFactory (San Antonio),3,false,0.0,0.0,0.0,0.0
+BoatFactory (San Antonio),4,false,0.0,0.0,0.0,0.0
+BoatFactory (San Antonio),5,false,0.0,0.0,0.0,0.0
 BoatFactory (San Diego),1,false,0.0,0.0,0.0,0.0
 BoatFactory (San Diego),2,false,0.0,0.0,0.0,0.0
 BoatFactory (San Diego),3,false,0.0,0.0,0.0,0.0
@@ -50,7 +50,7 @@ BoatFactory (San Jose),3,false,0.0,0.0,0.0,0.0
 BoatFactory (San Jose),4,false,0.0,0.0,0.0,0.0
 BoatFactory (San Jose),5,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),1,false,0.0,0.0,0.0,0.0
-RecyclingPlant (Chicago),2,false,0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),2,false,-0.0,0.0,0.0,-0.0
 RecyclingPlant (Chicago),3,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),4,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),5,false,0.0,0.0,0.0,0.0
@@ -71,7 +71,7 @@ RecyclingPlant (Houston),4,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Houston),5,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),1,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),2,false,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),3,false,-0.0,0.0,0.0,-0.0
+RecyclingPlant (Phoenix),3,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),4,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),5,false,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),1,false,0.0,0.0,0.0,0.0

@@ -12,28 +12,32 @@
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "disposal limit (tonne)": null
     },
     "Wood": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "disposal limit (tonne)": null
     },
     "NewBoat": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "disposal limit (tonne)": null
     },
     "UsedBoat": {
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 2.68
-      }
+      },
+      "disposal limit (tonne)": null
     }
   },
   "centers": {

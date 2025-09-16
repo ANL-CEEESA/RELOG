@@ -5,8 +5,8 @@
 The mathematical model employed by RELOG is based on three main components:
 
 1. **Products and Materials:** Inputs and outputs for both manufacturing and
-   recycling plants. This include raw materials, whether virgin or recovered, and
-   final products, whether new or at their end-of-life. Each product has
+   recycling plants. This include raw materials, whether virgin or recovered,
+   and final products, whether new or at their end-of-life. Each product has
    associated transportation parameters, such as costs, energy and emissions.
 
 2. **Manufacturing and Recycling Plants:** Facilities that take in specific
@@ -48,23 +48,24 @@ The mathematical model employed by RELOG is based on three main components:
 
 ## Constants
 
-| Symbol                      | Description                                                                                                                                                                                                      | Unit          |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------ |
-| $K^{\text{dist}}_{uv}$      | Distance between plants/centers $u$ and $v$                                                                                                                                                                      | km            |
-| $K^\text{cap}_{p}$          | Capacity of plant $p$, if the plant is open                                                                                                                                                                      | tonne         |
-| $K^\text{disp-limit}_{pmt}$ | Maximum amount of material $m$ that can be disposed of at plant $p$ at time $t$                                                                                                                                  | tonne         |
-| $K^\text{mix}_{pmt}$        | If plant $p$ receives one tonne of input material at time $t$, then $K^\text{mix}_{pmt}$ is the amount of product $m$ in this mix. Must be between zero and one, and the sum of these amounts must equal to one. | tonne         |
-| $K^\text{output}_{pmt}$     | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne         |
-| $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne   |
-| $R^\text{collect}_{cmt}$    | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne      |
-| $R^\text{disp}_{umt}$       | Cost to dispose of material at plant/center $u$ at time $t$                                                                                                                                                      | \$/tonne      |
-| $R^\text{fix}_{ut}$         | Fixed operating cost for plant/center $u$ at time $t$                                                                                                                                                            | \$            |
-| $R^\text{open}_{pt}$        | Cost to open plant $p$ at time $t$                                                                                                                                                                               | \$            |
-| $R^\text{rev}_{ct}$         | Revenue for selling the input product of center $c$ at this center at time $t$                                                                                                                                   | \$/tonne      |
-| $R^\text{var}_{pt}$         | Cost to process one tonne of input material at plant $p$ at time $t$                                                                                                                                             | \$/tonne      |
-| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $m$ at time $t$                                                                                                                                                 | \$/tonne      |
-| $K^\text{out-var}_{c,m,i}$  | Factor used to calculate variable amount of material $m$ collected at center $m$. See `eq_z_collected` for more details.                                                                                         | --      |
-| $K^\text{out-var-len}_{cm}$      | Length of the $K^\text{out-var}_{c,m,*}$ vector.                                                                                                                                                                 | -- |
+| Symbol                      | Description                                                                                                                                                                                                      | Unit        |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| $K^{\text{dist}}_{uv}$      | Distance between plants/centers $u$ and $v$                                                                                                                                                                      | km          |
+| $K^\text{cap}_{p}$          | Capacity of plant $p$, if the plant is open                                                                                                                                                                      | tonne       |
+| $K^\text{disp-limit}_{mt}$  | Maximum amount of material $m$ that can be disposed of (globally) at time $t$                                                                                                                                    | tonne       |
+| $K^\text{disp-limit}_{mut}$ | Maximum amount of material $m$ that can be disposed of at plant/center $u$ at time $t$                                                                                                                           | tonne       |
+| $K^\text{mix}_{pmt}$        | If plant $p$ receives one tonne of input material at time $t$, then $K^\text{mix}_{pmt}$ is the amount of product $m$ in this mix. Must be between zero and one, and the sum of these amounts must equal to one. | tonne       |
+| $K^\text{output}_{pmt}$     | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne       |
+| $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne |
+| $R^\text{collect}_{cmt}$    | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne    |
+| $R^\text{disp}_{umt}$       | Cost to dispose of material at plant/center $u$ at time $t$                                                                                                                                                      | \$/tonne    |
+| $R^\text{fix}_{ut}$         | Fixed operating cost for plant/center $u$ at time $t$                                                                                                                                                            | \$          |
+| $R^\text{open}_{pt}$        | Cost to open plant $p$ at time $t$                                                                                                                                                                               | \$          |
+| $R^\text{rev}_{ct}$         | Revenue for selling the input product of center $c$ at this center at time $t$                                                                                                                                   | \$/tonne    |
+| $R^\text{var}_{pt}$         | Cost to process one tonne of input material at plant $p$ at time $t$                                                                                                                                             | \$/tonne    |
+| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $m$ at time $t$                                                                                                                                                 | \$/tonne    |
+| $K^\text{out-var}_{c,m,i}$  | Factor used to calculate variable amount of material $m$ collected at center $m$. See `eq_z_collected` for more details.                                                                                         | --          |
+| $K^\text{out-var-len}_{cm}$ | Length of the $K^\text{out-var}_{c,m,*}$ vector.                                                                                                                                                                 | --          |
 
 ## Decision variables
 
@@ -196,7 +197,7 @@ The goals is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Disposal limit at the plants (`eq_keep_open[p.name, t]`):
+- Disposal limit at the plants (`eq_disposal_limit[p.name, m.name, t]`):
 
 ```math
 \begin{align*}
@@ -253,5 +254,14 @@ The goals is to minimize a linear objective function with the following terms:
 \begin{align*}
 & z^\text{disp}_{cmt} \leq K^\text{disp-limit}_{cmt}
 & \forall c \in C, m \in M^+_c, t \in T
+\end{align*}
+```
+
+- Global disposal limit (`eq_disposal_limit[m.name, t]`)
+
+```math
+\begin{align*}
+& \sum_{p \in P} z^\text{disp}_{pmt} + \sum_{c \in C} z^\text{disp}_{cmt} \leq K^\text{disp-limit}_{mt}
+& \forall m \in M, t \in T
 \end{align*}
 ```

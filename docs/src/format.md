@@ -1,6 +1,7 @@
 # Input data format
 
-RELOG accepts as input a JSON file with four sections: `parameters`, `products`, `centers` and `plants`. Below, we describe each section in more detail.
+RELOG accepts as input a JSON file with four sections: `parameters`, `products`,
+`centers` and `plants`. Below, we describe each section in more detail.
 
 ## Parameters
 
@@ -24,11 +25,12 @@ RELOG accepts as input a JSON file with four sections: `parameters`, `products`,
 
 ## Products
 
-| Key                                         | Description                                                                                                                                                                                            |
-| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `transportation cost ($/km/tonne)`          | The cost to transport this product. Must be a time series.                                                                                                                                             |
-| `transportation energy (J/km/tonne)`        | The energy required to transport this product. Must be a time series. Optional.                                                                                                                        |
-| `transportation emissions (tonne/km/tonne)` | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional. |
+| Key                                         | Description                                                                                                                                                                                                                 |
+| :------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transportation cost ($/km/tonne)`          | The cost to transport this product. Must be a time series.                                                                                                                                                                  |
+| `transportation energy (J/km/tonne)`        | The energy required to transport this product. Must be a time series. Optional.                                                                                                                                             |
+| `transportation emissions (tonne/km/tonne)` | A dictionary mapping the name of each greenhouse gas, produced to transport one tonne of this product along one kilometer, to the amount of gas produced (in tonnes). Must be a time series. Optional.                      |
+| `disposal limit (tonne)`                    | Global disposal limit for this product, per year, across all plants and centers. Entry may be `null` if unlimited. Note that individual plants and centers may also have their individual disposal limits for this product. |
 
 #### Example
 
@@ -41,7 +43,8 @@ RELOG accepts as input a JSON file with four sections: `parameters`, `products`,
       "transportation emissions (tonne/km/tonne)": {
         "CO2": 0.052,
         "CH4": 0.003
-      }
+      },
+      "disposal limit (tonne)": 100.0,
     }
   }
 }

@@ -298,6 +298,18 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             @constraint(model, z_disp[c.name, m.name, t] <= c.disposal_limit[m][t])
     end
 
+    # Global disposal limit
+    eq_disposal_limit = _init(model, :eq_disposal_limit)
+    for m in products, t in T
+        isfinite(m.disposal_limit[t]) || continue
+        eq_disposal_limit[m.name, t] = @constraint(
+            model,
+            sum(z_disp[p.name, m.name, t] for p in plants if m in keys(p.output)) +
+            sum(z_disp[c.name, m.name, t] for c in centers if m in c.outputs) <=
+            m.disposal_limit[t]
+        )
+    end
+
     if variable_names
         _set_names!(model)
     end

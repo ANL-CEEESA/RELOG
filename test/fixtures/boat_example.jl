@@ -69,6 +69,7 @@ function run_boat_example()
         "transportation cost (\$/km/tonne)" => 0.30,
         "transportation energy (J/km/tonne)" => 7_500,
         "transportation emissions (tonne/km/tonne)" => dict("CO2" => 2.68),
+        "disposal limit (tonne)" => nothing,
     )
 
     boat_factory = dict(

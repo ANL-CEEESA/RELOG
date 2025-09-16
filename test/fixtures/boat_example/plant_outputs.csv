@@ -50,12 +50,12 @@ BoatFactory (San Jose),NewBoat,3,0.0,0.0,0.0
 BoatFactory (San Jose),NewBoat,4,0.0,0.0,0.0
 BoatFactory (San Jose),NewBoat,5,0.0,0.0,0.0
 RecyclingPlant (Chicago),Nail,1,0.0,0.0,0.0
-RecyclingPlant (Chicago),Nail,2,0.0,0.0,0.0
+RecyclingPlant (Chicago),Nail,2,-0.0,0.0,0.0
 RecyclingPlant (Chicago),Nail,3,0.0,0.0,0.0
 RecyclingPlant (Chicago),Nail,4,0.0,0.0,0.0
 RecyclingPlant (Chicago),Nail,5,0.0,0.0,0.0
 RecyclingPlant (Chicago),Wood,1,0.0,0.0,0.0
-RecyclingPlant (Chicago),Wood,2,0.0,0.0,0.0
+RecyclingPlant (Chicago),Wood,2,-0.0,0.0,0.0
 RecyclingPlant (Chicago),Wood,3,0.0,0.0,0.0
 RecyclingPlant (Chicago),Wood,4,0.0,0.0,0.0
 RecyclingPlant (Chicago),Wood,5,0.0,0.0,0.0
