@@ -31,14 +31,14 @@ function centers_report(model)::DataFrame
         end
         push!(
             df,
-            [
-                c.name,
-                t,
-                input_name,
-                _round(input),
-                _round(revenue),
-                _round(c.operating_cost[t]),
-            ],
+            Dict(
+                "center" => c.name,
+                "year" => t,
+                "input product" => input_name,
+                "input amount (tonne)" => _round(input),
+                "revenue (\$)" => _round(revenue),
+                "operating cost (\$)" => _round(c.operating_cost[t]),
+            ),
         )
     end
     return df
@@ -72,15 +72,15 @@ function center_outputs_report(model)::DataFrame
         end
         push!(
             df,
-            [
-                c.name,
-                m.name,
-                t,
-                _round(collected),
-                _round(disposed),
-                _round(collection_cost),
-                _round(disposal_cost),
-            ],
+            Dict(
+                "center" => c.name,
+                "output product" => m.name,
+                "year" => t,
+                "amount collected (tonne)" => _round(collected),
+                "amount disposed (tonne)" => _round(disposed),
+                "collection cost (\$)" => _round(collection_cost),
+                "disposal cost (\$)" => _round(disposal_cost),
+            ),
         )
     end
     return df

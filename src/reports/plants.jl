@@ -29,15 +29,15 @@ function plants_report(model)::DataFrame
         var_operating_cost = input * p.capacities[1].var_operating_cost[t]
         push!(
             df,
-            [
-                p.name,
-                t,
-                operational,
-                _round(input),
-                _round(opening_cost),
-                _round(fix_operating_cost),
-                _round(var_operating_cost),
-            ],
+            Dict(
+                "plant" => p.name,
+                "year" => t,
+                "operational?" => operational,
+                "input amount (tonne)" => _round(input),
+                "opening cost (\$)" => _round(opening_cost),
+                "fixed operating cost (\$)" => _round(fix_operating_cost),
+                "variable operating cost (\$)" => _round(var_operating_cost),
+            ),
         )
     end
     return df
@@ -61,7 +61,14 @@ function plant_outputs_report(model)::DataFrame
         disposal_cost = p.disposal_cost[m][t] * disposed
         push!(
             df,
-            [p.name, m.name, t, _round(produced), _round(disposed), _round(disposal_cost)],
+            Dict(
+                "plant" => p.name,
+                "output product" => m.name,
+                "year" => t,
+                "amount produced (tonne)" => _round(produced),
+                "amount disposed (tonne)" => _round(disposed),
+                "disposal cost (\$)" => _round(disposal_cost),
+            ),
         )
     end
     return df

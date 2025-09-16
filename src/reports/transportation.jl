@@ -36,17 +36,17 @@ function transportation_report(model)::DataFrame
         end
         push!(
             df,
-            [
-                p1.name,
-                p2.name,
-                m.name,
-                t,
-                _round(amount),
-                _round(distance),
-                _round(tr_cost),
-                _round(revenue),
-                _round(collection_cost),
-            ],
+            Dict(
+                "source" => p1.name,
+                "destination" => p2.name,
+                "product" => m.name,
+                "year" => t,
+                "amount sent (tonne)" => _round(amount),
+                "distance (km)" => _round(distance),
+                "transportation cost (\$)" => _round(tr_cost),
+                "center revenue (\$)" => _round(revenue),
+                "center collection cost (\$)" => _round(collection_cost),
+            ),
         )
     end
     return df
