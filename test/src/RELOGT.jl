@@ -24,6 +24,7 @@ function runtests()
         model_dist_test()
         report_tests()
     end
+    return
 end
 
 function format()

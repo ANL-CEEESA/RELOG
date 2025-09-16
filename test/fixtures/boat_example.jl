@@ -121,10 +121,8 @@ function run_boat_example()
         "initial capacity (tonne)" => 0,
     )
 
-    lat_lon_dict(city_location) = dict(
-        "latitude (deg)" => city_location[1],
-        "longitude (deg)" => city_location[2],
-    )
+    lat_lon_dict(city_location) =
+        dict("latitude (deg)" => city_location[1], "longitude (deg)" => city_location[2])
 
     data = dict(
         "parameters" => parameters,
@@ -132,36 +130,29 @@ function run_boat_example()
             dict("Nail" => prod, "Wood" => prod, "NewBoat" => prod, "UsedBoat" => prod),
         "centers" => merge(
             dict(
-                "NailFactory ($city_name)" => merge(
-                    nail_factory,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_b
+                "NailFactory ($city_name)" =>
+                    merge(nail_factory, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_b
             ),
             dict(
-                "Forest ($city_name)" => merge(
-                    forest,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_b
+                "Forest ($city_name)" => merge(forest, lat_lon_dict(city_location))
+                for (city_name, city_location) in cities_b
             ),
             dict(
-                "Retail ($city_name)" => merge(
-                    retail,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "Retail ($city_name)" => merge(retail, lat_lon_dict(city_location))
+                for (city_name, city_location) in cities_a
             ),
         ),
         "plants" => merge(
             dict(
-                "BoatFactory ($city_name)" => merge(
-                    boat_factory,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "BoatFactory ($city_name)" =>
+                    merge(boat_factory, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_a
             ),
             dict(
-                "RecyclingPlant ($city_name)" => merge(
-                    recycling_plant,
-                    lat_lon_dict(city_location)
-                ) for (city_name, city_location) in cities_a
+                "RecyclingPlant ($city_name)" =>
+                    merge(recycling_plant, lat_lon_dict(city_location)) for
+                (city_name, city_location) in cities_a
             ),
         ),
     )
