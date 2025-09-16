@@ -8,6 +8,10 @@ using CSV
 function plants_report(model)::DataFrame
     df = DataFrame()
     df."plant" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
+    df."initial capacity" = Float64[]
+    df."current capacity" = Float64[]
     df."year" = Int[]
     df."operational?" = Bool[]
     df."input amount (tonne)" = Float64[]
@@ -21,16 +25,29 @@ function plants_report(model)::DataFrame
     for p in plants, t in T
         operational = JuMP.value(model[:x][p.name, t]) > 0.5
         input = value(model[:z_input][p.name, t])
+
+        # Opening cost
         opening_cost = 0
         if value(model[:x][p.name, t]) > 0.5 && value(model[:x][p.name, t-1]) < 0.5
             opening_cost = p.capacities[1].opening_cost[t]
         end
+
+        # Plant size
+        curr_capacity = 0
+        if operational
+            curr_capacity = p.capacities[1].size
+        end
+
         fix_operating_cost = (operational ? p.capacities[1].fix_operating_cost[t] : 0)
         var_operating_cost = input * p.capacities[1].var_operating_cost[t]
         push!(
             df,
             Dict(
                 "plant" => p.name,
+                "latitude" => p.latitude,
+                "longitude" => p.longitude,
+                "initial capacity" => p.initial_capacity,
+                "current capacity" => curr_capacity,
                 "year" => t,
                 "operational?" => operational,
                 "input amount (tonne)" => _round(input),
@@ -46,10 +63,13 @@ end
 function plant_outputs_report(model)::DataFrame
     df = DataFrame()
     df."plant" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
     df."output product" = String[]
     df."year" = Int[]
     df."amount produced (tonne)" = Float64[]
     df."amount disposed (tonne)" = Float64[]
+    df."disposal limit (tonne)" = Float64[]
     df."disposal cost (\$)" = Float64[]
 
     plants = model.ext[:instance].plants
@@ -63,10 +83,13 @@ function plant_outputs_report(model)::DataFrame
             df,
             Dict(
                 "plant" => p.name,
+                "latitude" => p.latitude,
+                "longitude" => p.longitude,
                 "output product" => m.name,
                 "year" => t,
                 "amount produced (tonne)" => _round(produced),
                 "amount disposed (tonne)" => _round(disposed),
+                "disposal limit (tonne)" => _round(p.disposal_limit[m][t]),
                 "disposal cost (\$)" => _round(disposal_cost),
             ),
         )

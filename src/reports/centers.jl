@@ -8,6 +8,8 @@ using CSV
 function centers_report(model)::DataFrame
     df = DataFrame()
     df."center" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
     df."year" = Int[]
     df."input product" = String[]
     df."input amount (tonne)" = Float64[]
@@ -33,6 +35,8 @@ function centers_report(model)::DataFrame
             df,
             Dict(
                 "center" => c.name,
+                "latitude" => c.latitude,
+                "longitude" => c.longitude,
                 "year" => t,
                 "input product" => input_name,
                 "input amount (tonne)" => _round(input),
@@ -47,10 +51,13 @@ end
 function center_outputs_report(model)::DataFrame
     df = DataFrame()
     df."center" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
     df."output product" = String[]
     df."year" = Int[]
     df."amount collected (tonne)" = Float64[]
     df."amount disposed (tonne)" = Float64[]
+    df."disposal limit (tonne)" = Float64[]
     df."collection cost (\$)" = Float64[]
     df."disposal cost (\$)" = Float64[]
 
@@ -74,10 +81,13 @@ function center_outputs_report(model)::DataFrame
             df,
             Dict(
                 "center" => c.name,
+                "latitude" => c.latitude,
+                "longitude" => c.longitude,
                 "output product" => m.name,
                 "year" => t,
                 "amount collected (tonne)" => _round(collected),
                 "amount disposed (tonne)" => _round(disposed),
+                "disposal limit (tonne)" => _round(c.disposal_limit[m][t]),
                 "collection cost (\$)" => _round(collection_cost),
                 "disposal cost (\$)" => _round(disposal_cost),
             ),
