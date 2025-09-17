@@ -1,7 +1,8 @@
 # Input data format
 
-RELOG accepts as input a JSON file with four sections: `parameters`, `products`,
-`centers` and `plants`. Below, we describe each section in more detail.
+RELOG accepts as input a JSON file with five sections: `parameters`, `products`,
+`centers`, `plants` and `emissions`. Below, we describe each section in more
+detail.
 
 ## Parameters
 
