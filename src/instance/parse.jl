@@ -20,10 +20,11 @@ function parse(json)::Instance
         error("Invalid distance metric: $distance_metric_str")
     end
 
-    timeseries(::Nothing; null_val=nothing) = repeat([null_val], time_horizon)
-    timeseries(x::Number; null_val=nothing) = repeat([x], time_horizon)
-    timeseries(x::Array; null_val=nothing) = [xi === nothing ? null_val : xi for xi in x]
-    timeseries(d::OrderedDict; null_val=nothing) = OrderedDict(k => timeseries(v; null_val) for (k, v) in d)
+    timeseries(::Nothing; null_val = nothing) = repeat([null_val], time_horizon)
+    timeseries(x::Number; null_val = nothing) = repeat([x], time_horizon)
+    timeseries(x::Array; null_val = nothing) = [xi === nothing ? null_val : xi for xi in x]
+    timeseries(d::OrderedDict; null_val = nothing) =
+        OrderedDict(k => timeseries(v; null_val) for (k, v) in d)
 
     # Read products
     products = Product[]
@@ -32,7 +33,7 @@ function parse(json)::Instance
         tr_cost = timeseries(pdict["transportation cost (\$/km/tonne)"])
         tr_energy = timeseries(pdict["transportation energy (J/km/tonne)"])
         tr_emissions = timeseries(pdict["transportation emissions (tonne/km/tonne)"])
-        disposal_limit = timeseries(pdict["disposal limit (tonne)"], null_val=Inf)
+        disposal_limit = timeseries(pdict["disposal limit (tonne)"], null_val = Inf)
         prod = Product(; name, tr_cost, tr_energy, tr_emissions, disposal_limit)
         push!(products, prod)
         products_by_name[name] = prod
@@ -52,10 +53,8 @@ function parse(json)::Instance
         end
         outputs = [products_by_name[p] for p in cdict["outputs"]]
         operating_cost = timeseries(cdict["operating cost (\$)"])
-        prod_dict(key, null_val) = OrderedDict(
-            p => timeseries(cdict[key][p.name]; null_val)
-            for p in outputs
-        )
+        prod_dict(key, null_val) =
+            OrderedDict(p => timeseries(cdict[key][p.name]; null_val) for p in outputs)
         fixed_output = prod_dict("fixed output (tonne)", 0.0)
         var_output = prod_dict("variable output (tonne/tonne)", 0.0)
         collection_cost = prod_dict("collection cost (\$/tonne)", 0.0)

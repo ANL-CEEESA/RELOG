@@ -68,7 +68,8 @@ function run_boat_example()
     prod = dict(
         "transportation cost (\$/km/tonne)" => 0.30,
         "transportation energy (J/km/tonne)" => 7_500,
-        "transportation emissions (tonne/km/tonne)" => dict("CO2" => 2.68),
+        "transportation emissions (tonne/km/tonne)" =>
+            dict("CO2" => 2.68, "NH4" => 1.02),
         "disposal limit (tonne)" => nothing,
     )
 
@@ -176,6 +177,10 @@ function run_boat_example()
     RELOG.write_centers_report(model, fixture("boat_example/centers.csv"))
     RELOG.write_center_outputs_report(model, fixture("boat_example/center_outputs.csv"))
     RELOG.write_transportation_report(model, fixture("boat_example/transportation.csv"))
+    RELOG.write_transportation_emissions_report(
+        model,
+        fixture("boat_example/tr_emissions.csv"),
+    )
 
     return
 end

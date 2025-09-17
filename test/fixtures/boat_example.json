@@ -11,7 +11,8 @@
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
-        "CO2": 2.68
+        "CO2": 2.68,
+        "NH4": 1.02
       },
       "disposal limit (tonne)": null
     },
@@ -19,7 +20,8 @@
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
-        "CO2": 2.68
+        "CO2": 2.68,
+        "NH4": 1.02
       },
       "disposal limit (tonne)": null
     },
@@ -27,7 +29,8 @@
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
-        "CO2": 2.68
+        "CO2": 2.68,
+        "NH4": 1.02
       },
       "disposal limit (tonne)": null
     },
@@ -35,7 +38,8 @@
       "transportation cost ($/km/tonne)": 0.3,
       "transportation energy (J/km/tonne)": 7500,
       "transportation emissions (tonne/km/tonne)": {
-        "CO2": 2.68
+        "CO2": 2.68,
+        "NH4": 1.02
       },
       "disposal limit (tonne)": null
     }

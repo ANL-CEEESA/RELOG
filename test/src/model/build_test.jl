@@ -9,6 +9,7 @@ function model_build_test()
     y = model[:y]
     z_disp = model[:z_disp]
     z_input = model[:z_input]
+    z_tr_em = model[:z_tr_em]
     x = model[:x]
     obj = objective_function(model)
     # print(model)
@@ -43,6 +44,12 @@ function model_build_test()
         475.0 + # opening cost
         300 # fixed operating cost
     )
+
+    # Variables: Transportation emissions
+    @test haskey(z_tr_em, ("CO2", "L1", "C3", "P4", 1))
+    @test haskey(z_tr_em, ("CH4", "L1", "C3", "P4", 1))
+    @test haskey(z_tr_em, ("CO2", "C2", "L1", "P1", 1))
+    @test haskey(z_tr_em, ("CH4", "C2", "L1", "P1", 1))
 
     # Plants: Definition of total plant input
     @test repr(model[:eq_z_input]["L1", 1]) ==
@@ -118,4 +125,8 @@ function model_build_test()
     @test repr(model[:eq_disposal_limit]["P3", 1]) ==
           "eq_disposal_limit[P3,1] : z_disp[L1,P3,1] + z_disp[C1,P3,1] ≤ 5"
     @test ("P4", 1) ∉ keys(model[:eq_disposal_limit])
+
+    # Products: Transportation emissions
+    @test repr(model[:eq_tr_em]["CH4", "L1", "C3", "P4", 1]) ==
+          "eq_tr_em[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_tr_em[CH4,L1,C3,P4,1] = 0"
 end

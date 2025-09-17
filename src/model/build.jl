@@ -118,6 +118,12 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_collected[c.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
+    # Transportation emissions by greenhouse gas
+    z_tr_em = _init(model, :z_tr_em)
+    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
+        z_tr_em[g, p1.name, p2.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
 
     # Objective function
     # -------------------------------------------------------------------------
@@ -307,6 +313,16 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             sum(z_disp[p.name, m.name, t] for p in plants if m in keys(p.output)) +
             sum(z_disp[c.name, m.name, t] for c in centers if m in c.outputs) <=
             m.disposal_limit[t]
+        )
+    end
+
+    # Transportation emissions
+    eq_tr_em = _init(model, :eq_tr_em)
+    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
+        eq_tr_em[g, p1.name, p2.name, m.name, t] = @constraint(
+            model,
+            z_tr_em[g, p1.name, p2.name, m.name, t] ==
+            distances[p1, p2, m] * m.tr_emissions[g][t] * y[p1.name, p2.name, m.name, t]
         )
     end
 
