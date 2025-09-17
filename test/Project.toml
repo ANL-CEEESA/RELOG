@@ -1,19 +1,14 @@
 name = "RELOGT"
-uuid = "a6dae211-05d8-42ed-9081-b88c982fc90a"
+uuid = "d5238ab2-e29b-4856-ba0f-d2b80f40b47d"
 authors = ["Alinson S. Xavier <git@axavier.org>"]
 version = "0.1.0"
 
 [deps]
-GZip = "92fee26a-97fe-5a0c-ad85-20a5f3185b63"
 HiGHS = "87dc4568-4c63-4d18-b0c0-bb2238e4078b"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
-MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
-Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
-RELOG = "a2afcdf7-cf04-4913-85f9-c0d81ddf2008"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
+RELOG = "7cafaa7a-b311-45f0-b313-80bf15b5e5e5"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[compat]
-JuliaFormatter = "1"

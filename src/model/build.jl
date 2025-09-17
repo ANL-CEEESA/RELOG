@@ -1,294 +1,333 @@
-# RELOG: Reverse Logistics Optimization
-# Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
-# Released under the modified BSD license. See COPYING.md for more details.
+using JuMP
 
-using JuMP, LinearAlgebra, Geodesy, ProgressBars, Printf, DataStructures
+function build_model(instance::Instance; optimizer, variable_names::Bool = false)
+    model = JuMP.Model(optimizer)
+    centers = instance.centers
+    products = instance.products
+    plants = instance.plants
+    T = 1:instance.time_horizon
+    model.ext[:instance] = instance
 
-function build_model(instance::Instance, graph::Graph, optimizer)::JuMP.Model
-    model = Model(optimizer)
-    model[:instance] = instance
-    model[:graph] = graph
-    create_vars!(model)
-    create_objective_function!(model)
-    create_shipping_node_constraints!(model)
-    create_process_node_constraints!(model)
-    return model
-end
+    # Transportation edges
+    # -------------------------------------------------------------------------
 
+    # Connectivity
+    model.ext[:E] = E = []
+    model.ext[:E_in] = E_in = Dict(src => [] for src in plants ∪ centers)
+    model.ext[:E_out] = E_out = Dict(src => [] for src in plants ∪ centers)
 
-function create_vars!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    model[:flow] =
-        Dict((a, t) => @variable(model, lower_bound = 0) for a in graph.arcs, t = 1:T)
-    model[:plant_dispose] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.disposal_limit[n.product][t]
-        ) for n in values(graph.plant_shipping_nodes), t = 1:T
-    )
-    model[:collection_dispose] = Dict(
-        (n, t) => @variable(model, lower_bound = 0,) for
-        n in values(graph.collection_shipping_nodes), t = 1:T
-    )
-    model[:store] = Dict(
-        (n, t) =>
-            @variable(model, lower_bound = 0, upper_bound = n.location.storage_limit)
-        for n in values(graph.process_nodes), t = 1:T
-    )
-    model[:process] = Dict(
-        (n, t) => @variable(model, lower_bound = 0) for
-        n in values(graph.process_nodes), t = 1:T
-    )
-    model[:open_plant] = Dict(
-        (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
-        t = 1:T
-    )
-    model[:is_open] = Dict{Tuple,Any}(
-        (n, t) => @variable(model, binary = true) for n in values(graph.process_nodes),
-        t = 1:T
-    )
-    model[:capacity] = Dict(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.sizes[2].capacity
-        ) for n in values(graph.process_nodes), t = 1:T
-    )
-    model[:expansion] = Dict{Tuple,Any}(
-        (n, t) => @variable(
-            model,
-            lower_bound = 0,
-            upper_bound = n.location.sizes[2].capacity - n.location.sizes[1].capacity
-        ) for n in values(graph.process_nodes), t = 1:T
-    )
-
-    # Boundary constants
-    for n in values(graph.process_nodes)
-        m_init = n.location.initial_capacity
-        m_min = n.location.sizes[1].capacity
-        model[:is_open][n, 0] = m_init == 0 ? 0 : 1
-        model[:expansion][n, 0] = max(0, m_init - m_min)
+    function push_edge!(src, dst, m)
+        push!(E, (src, dst, m))
+        push!(E_out[src], (dst, m))
+        push!(E_in[dst], (src, m))
     end
-end
 
+    for m in products
+        for p1 in plants
+            m ∈ keys(p1.output) || continue
 
-function slope_open(plant, t)
-    if plant.sizes[2].capacity <= plant.sizes[1].capacity
-        0.0
-    else
-        (plant.sizes[2].opening_cost[t] - plant.sizes[1].opening_cost[t]) /
-        (plant.sizes[2].capacity - plant.sizes[1].capacity)
-    end
-end
+            # Plant to plant
+            for p2 in plants
+                p1 != p2 || continue
+                m ∈ keys(p2.input_mix) || continue
+                push_edge!(p1, p2, m)
+            end
 
-function slope_fix_oper_cost(plant, t)
-    if plant.sizes[2].capacity <= plant.sizes[1].capacity
-        0.0
-    else
-        (plant.sizes[2].fixed_operating_cost[t] - plant.sizes[1].fixed_operating_cost[t]) /
-        (plant.sizes[2].capacity - plant.sizes[1].capacity)
-    end
-end
-
-function create_objective_function!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    obj = AffExpr(0.0)
-
-    # Process node costs
-    for n in values(graph.process_nodes), t = 1:T
-
-        # Transportation and variable operating costs
-        for a in n.incoming_arcs
-            c = n.location.input.transportation_cost[t] * a.values["distance"]
-            add_to_expression!(obj, c, model[:flow][a, t])
+            # Plant to center
+            for c in centers
+                m == c.input || continue
+                push_edge!(p1, c, m)
+            end
         end
 
-        # Opening costs
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].opening_cost[t],
-            model[:open_plant][n, t],
-        )
+        for c1 in centers
+            m ∈ c1.outputs || continue
 
-        # Fixed operating costs (base)
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].fixed_operating_cost[t],
-            model[:is_open][n, t],
-        )
+            # Center to plant
+            for p in plants
+                m ∈ keys(p.input_mix) || continue
+                push_edge!(c1, p, m)
+            end
 
-        # Fixed operating costs (expansion)
-        add_to_expression!(obj, slope_fix_oper_cost(n.location, t), model[:expansion][n, t])
-
-        # Processing costs
-        add_to_expression!(
-            obj,
-            n.location.sizes[1].variable_operating_cost[t],
-            model[:process][n, t],
-        )
-
-        # Storage costs
-        add_to_expression!(obj, n.location.storage_cost[t], model[:store][n, t])
-
-        # Expansion costs
-        if t < T
-            add_to_expression!(
-                obj,
-                slope_open(n.location, t) - slope_open(n.location, t + 1),
-                model[:expansion][n, t],
-            )
-        else
-            add_to_expression!(obj, slope_open(n.location, t), model[:expansion][n, t])
-            add_to_expression!(obj, -slope_open(n.location, 1) * model[:expansion][n, 0])
+            # Center to center
+            for c2 in centers
+                m == c2.input || continue
+                push_edge!(c1, c2, m)
+            end
         end
     end
 
-    # Plant shipping node costs
-    for n in values(graph.plant_shipping_nodes), t = 1:T
+    # Distances
+    model.ext[:distances] = distances = Dict()
+    for (p1, p2, m) in E
+        d = _calculate_distance(
+            p1.latitude,
+            p1.longitude,
+            p2.latitude,
+            p2.longitude,
+            instance.distance_metric,
+        )
+        distances[p1, p2, m] = d
+    end
 
-        # Disposal costs
+    # Decision variables
+    # -------------------------------------------------------------------------
+
+    # Plant p is operational at time t
+    x = _init(model, :x)
+    for p in plants
+        x[p.name, 0] = p.initial_capacity > 0 ? 1 : 0
+    end
+    for p in plants, t in T
+        x[p.name, t] = @variable(model, binary = true)
+    end
+
+    # Amount of product m sent from center/plant u to center/plant v at time T
+    y = _init(model, :y)
+    for (p1, p2, m) in E, t in T
+        y[p1.name, p2.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Amount of product m produced by plant/center at time T
+    z_prod = _init(model, :z_prod)
+    for p in plants, m in keys(p.output), t in T
+        z_prod[p.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Amount of product m disposed at plant/center p at time T
+    z_disp = _init(model, :z_disp)
+    for p in plants, m in keys(p.output), t in T
+        z_disp[p.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+    for c in centers, m in c.outputs, t in T
+        z_disp[c.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Total plant/center input
+    z_input = _init(model, :z_input)
+    for p in plants, t in T
+        z_input[p.name, t] = @variable(model, lower_bound = 0)
+    end
+    for c in centers, t in T
+        z_input[c.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Total amount collected by the center
+    z_collected = _init(model, :z_collected)
+    for c in centers, m in c.outputs, t in T
+        z_collected[c.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Transportation emissions by greenhouse gas
+    z_tr_em = _init(model, :z_tr_em)
+    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
+        z_tr_em[g, p1.name, p2.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+
+    # Objective function
+    # -------------------------------------------------------------------------
+    obj = AffExpr()
+
+    # Transportation cost
+    for (p1, p2, m) in E, t in T
         add_to_expression!(
             obj,
-            n.location.disposal_cost[n.product][t],
-            model[:plant_dispose][n, t],
+            distances[p1, p2, m] * m.tr_cost[t],
+            y[p1.name, p2.name, m.name, t],
         )
     end
 
-    # Collection shipping node costs
-    for n in values(graph.collection_shipping_nodes), t = 1:T
+    # Center: Revenue
+    for c in centers, (p, m) in E_in[c], t in T
+        add_to_expression!(obj, -c.revenue[t], y[p.name, c.name, m.name, t])
+    end
 
-        # Acquisition costs
+    # Center: Collection cost
+    for c in centers, (p, m) in E_out[c], t in T
+        add_to_expression!(obj, c.collection_cost[m][t], y[c.name, p.name, m.name, t])
+    end
+
+    # Center: Disposal cost
+    for c in centers, m in c.outputs, t in T
+        add_to_expression!(obj, c.disposal_cost[m][t], z_disp[c.name, m.name, t])
+    end
+
+    # Center: Operating cost
+    for c in centers, t in T
+        add_to_expression!(obj, c.operating_cost[t])
+    end
+
+    # Plants: Disposal cost
+    for p in plants, m in keys(p.output), t in T
+        add_to_expression!(obj, p.disposal_cost[m][t], z_disp[p.name, m.name, t])
+    end
+
+    # Plants: Opening cost
+    for p in plants, t in T
         add_to_expression!(
             obj,
-            n.location.product.acquisition_cost[t] * n.location.amount[t],
+            p.capacities[1].opening_cost[t],
+            (x[p.name, t] - x[p.name, t-1]),
         )
+    end
 
-        # Disposal costs -- in this case, we recover the acquisition cost.
+    # Plants: Fixed operating cost
+    for p in plants, t in T
+        add_to_expression!(obj, p.capacities[1].fix_operating_cost[t], x[p.name, t])
+    end
+
+    # Plants: Variable operating cost
+    for p in plants, (src, m) in E_in[p], t in T
         add_to_expression!(
             obj,
-            (n.location.product.disposal_cost[t] - n.location.product.acquisition_cost[t]),
-            model[:collection_dispose][n, t],
+            p.capacities[1].var_operating_cost[t],
+            y[src.name, p.name, m.name, t],
         )
     end
 
     @objective(model, Min, obj)
-end
 
+    # Constraints
+    # -------------------------------------------------------------------------
 
-function create_shipping_node_constraints!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-    model[:eq_balance] = OrderedDict()
-    for t = 1:T
-        # Collection centers
-        for n in graph.collection_shipping_nodes
-            model[:eq_balance][n, t] = @constraint(
-                model,
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) +
-                model[:collection_dispose][n, t] == n.location.amount[t]
-            )
-        end
-        for prod in model[:instance].products
-            if isempty(prod.collection_centers)
-                continue
-            end
-            expr = AffExpr()
-            for center in prod.collection_centers
-                n = graph.collection_center_to_node[center]
-                add_to_expression!(expr, model[:collection_dispose][n, t])
-            end
-            @constraint(model, expr <= prod.disposal_limit[t])
-        end
+    # Plants: Definition of total plant input
+    eq_z_input = _init(model, :eq_z_input)
+    for p in plants, t in T
+        eq_z_input[p.name, t] = @constraint(
+            model,
+            z_input[p.name, t] ==
+            sum(y[src.name, p.name, m.name, t] for (src, m) in E_in[p])
+        )
+    end
 
-        # Plants
-        for n in graph.plant_shipping_nodes
-            @constraint(
-                model,
-                sum(model[:flow][a, t] for a in n.incoming_arcs) ==
-                sum(model[:flow][a, t] for a in n.outgoing_arcs) +
-                model[:plant_dispose][n, t]
-            )
+    # Plants: Must meet input mix
+    eq_input_mix = _init(model, :eq_input_mix)
+    for p in plants, m in keys(p.input_mix), t in T
+        eq_input_mix[p.name, m.name, t] = @constraint(
+            model,
+            sum(y[src.name, p.name, m.name, t] for (src, m2) in E_in[p] if m == m2) ==
+            z_input[p.name, t] * p.input_mix[m][t]
+        )
+    end
+
+    # Plants: Calculate amount produced
+    eq_z_prod = _init(model, :eq_z_prod)
+    for p in plants, m in keys(p.output), t in T
+        eq_z_prod[p.name, m.name, t] = @constraint(
+            model,
+            z_prod[p.name, m.name, t] == z_input[p.name, t] * p.output[m][t]
+        )
+    end
+
+    # Plants: Produced material must be sent or disposed
+    eq_balance = _init(model, :eq_balance)
+    for p in plants, m in keys(p.output), t in T
+        eq_balance[p.name, m.name, t] = @constraint(
+            model,
+            z_prod[p.name, m.name, t] ==
+            sum(y[p.name, dst.name, m.name, t] for (dst, m2) in E_out[p] if m == m2) +
+            z_disp[p.name, m.name, t]
+        )
+    end
+
+    # Plants: Capacity limit
+    eq_capacity = _init(model, :eq_capacity)
+    for p in plants, t in T
+        eq_capacity[p.name, t] =
+            @constraint(model, z_input[p.name, t] <= p.capacities[1].size * x[p.name, t])
+    end
+
+    # Plants: Disposal limit
+    eq_disposal_limit = _init(model, :eq_disposal_limit)
+    for p in plants, m in keys(p.output), t in T
+        isfinite(p.disposal_limit[m][t]) || continue
+        eq_disposal_limit[p.name, m.name, t] =
+            @constraint(model, z_disp[p.name, m.name, t] <= p.disposal_limit[m][t])
+    end
+
+    # Plants: Plant remains open
+    eq_keep_open = _init(model, :eq_keep_open)
+    for p in plants, t in T
+        eq_keep_open[p.name, t] = @constraint(model, x[p.name, t] >= x[p.name, t-1])
+    end
+
+    # Plants: Building period
+    eq_building_period = _init(model, :eq_building_period)
+    for p in plants, t in T
+        if t ∉ instance.building_period
+            eq_building_period[p.name, t] =
+                @constraint(model, x[p.name, t] - x[p.name, t-1] <= 0)
         end
     end
 
-end
-
-
-function create_process_node_constraints!(model::JuMP.Model)
-    graph, T = model[:graph], model[:instance].time
-
-    for t = 1:T, n in graph.process_nodes
-        input_sum = AffExpr(0.0)
-        for a in n.incoming_arcs
-            add_to_expression!(input_sum, 1.0, model[:flow][a, t])
-        end
-
-        # Output amount is implied by amount processed
-        for a in n.outgoing_arcs
-            @constraint(
-                model,
-                model[:flow][a, t] == a.values["weight"] * model[:process][n, t]
-            )
-        end
-
-        # If plant is closed, capacity is zero
-        @constraint(
+    # Centers: Definition of total center input
+    eq_z_input = _init(model, :eq_z_input)
+    for c in centers, t in T
+        eq_z_input[c.name, t] = @constraint(
             model,
-            model[:capacity][n, t] <= n.location.sizes[2].capacity * model[:is_open][n, t]
+            z_input[c.name, t] ==
+            sum(y[src.name, c.name, m.name, t] for (src, m) in E_in[c])
         )
-
-        # If plant is closed, storage cannot be used
-        @constraint(
-            model,
-            model[:store][n, t] <= n.location.storage_limit * model[:is_open][n, t]
-        )
-
-        # If plant is open, capacity is greater than base
-        @constraint(
-            model,
-            model[:capacity][n, t] >= n.location.sizes[1].capacity * model[:is_open][n, t]
-        )
-
-        # Capacity is linked to expansion
-        @constraint(
-            model,
-            model[:capacity][n, t] <=
-            n.location.sizes[1].capacity + model[:expansion][n, t]
-        )
-
-        # Can only process up to capacity
-        @constraint(model, model[:process][n, t] <= model[:capacity][n, t])
-
-        # Plant capacity can only increase over time
-        if t > 1
-            @constraint(model, model[:capacity][n, t] >= model[:capacity][n, t-1])
-        end
-        @constraint(model, model[:expansion][n, t] >= model[:expansion][n, t-1])
-
-        # Amount received equals amount processed plus stored
-        store_in = 0
-        if t > 1
-            store_in = model[:store][n, t-1]
-        end
-        if t == T
-            @constraint(model, model[:store][n, t] == 0)
-        end
-        @constraint(
-            model,
-            input_sum + store_in == model[:store][n, t] + model[:process][n, t]
-        )
-
-
-        # Plant is currently open if it was already open in the previous time period or
-        # if it was built just now
-        @constraint(
-            model,
-            model[:is_open][n, t] == model[:is_open][n, t-1] + model[:open_plant][n, t]
-        )
-
-        # Plant can only be opened during building period
-        if t ∉ model[:instance].building_period
-            @constraint(model, model[:open_plant][n, t] == 0)
-        end
     end
+
+    # Centers: Calculate amount collected
+    eq_z_collected = _init(model, :eq_z_collected)
+    for c in centers, m in c.outputs, t in T
+        M = length(c.var_output[m])
+        eq_z_collected[c.name, m.name, t] = @constraint(
+            model,
+            z_collected[c.name, m.name, t] ==
+            sum(
+                z_input[c.name, t-offset] * c.var_output[m][offset+1] for
+                offset = 0:min(M - 1, t - 1)
+            ) + c.fixed_output[m][t]
+        )
+    end
+
+    # Centers: Collected products must be disposed or sent
+    eq_balance = _init(model, :eq_balance)
+    for c in centers, m in c.outputs, t in T
+        eq_balance[c.name, m.name, t] = @constraint(
+            model,
+            z_collected[c.name, m.name, t] ==
+            sum(y[c.name, dst.name, m.name, t] for (dst, m2) in E_out[c] if m == m2) +
+            z_disp[c.name, m.name, t]
+        )
+    end
+
+    # Centers: Disposal limit
+    eq_disposal_limit = _init(model, :eq_disposal_limit)
+    for c in centers, m in c.outputs, t in T
+        isfinite(c.disposal_limit[m][t]) || continue
+        eq_disposal_limit[c.name, m.name, t] =
+            @constraint(model, z_disp[c.name, m.name, t] <= c.disposal_limit[m][t])
+    end
+
+    # Global disposal limit
+    eq_disposal_limit = _init(model, :eq_disposal_limit)
+    for m in products, t in T
+        isfinite(m.disposal_limit[t]) || continue
+        eq_disposal_limit[m.name, t] = @constraint(
+            model,
+            sum(z_disp[p.name, m.name, t] for p in plants if m in keys(p.output)) +
+            sum(z_disp[c.name, m.name, t] for c in centers if m in c.outputs) <=
+            m.disposal_limit[t]
+        )
+    end
+
+    # Transportation emissions
+    eq_tr_em = _init(model, :eq_tr_em)
+    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
+        eq_tr_em[g, p1.name, p2.name, m.name, t] = @constraint(
+            model,
+            z_tr_em[g, p1.name, p2.name, m.name, t] ==
+            distances[p1, p2, m] * m.tr_emissions[g][t] * y[p1.name, p2.name, m.name, t]
+        )
+    end
+
+    if variable_names
+        _set_names!(model)
+    end
+    return model
 end

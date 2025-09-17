@@ -1,17 +1,14 @@
 module RELOGT
 
 using Test
+using RELOG
 using JuliaFormatter
 
-include("instance/compress_test.jl")
-include("instance/geodb_test.jl")
 include("instance/parse_test.jl")
-include("graph/build_test.jl")
-include("graph/dist_test.jl")
 include("model/build_test.jl")
-include("model/solve_test.jl")
-include("model/resolve_test.jl")
+include("model/dist_test.jl")
 include("reports_test.jl")
+include("../fixtures/boat_example.jl")
 
 basedir = dirname(@__FILE__)
 
@@ -21,21 +18,11 @@ end
 
 function runtests()
     @testset "RELOG" begin
-        @testset "instance" begin
-            instance_compress_test()
-            instance_geodb_test()
-            instance_parse_test()
-        end
-        @testset "graph" begin
-            graph_build_test()
-            graph_dist_test()
-        end
-        @testset "model" begin
-            model_build_test()
-            model_solve_test()
-            model_resolve_test()
-        end
-        reports_test()
+        instance_parse_test_1()
+        instance_parse_test_2()
+        model_build_test()
+        model_dist_test()
+        report_tests()
     end
     return
 end
@@ -43,9 +30,7 @@ end
 function format()
     JuliaFormatter.format(basedir, verbose = true)
     JuliaFormatter.format("$basedir/../../src", verbose = true)
+    JuliaFormatter.format("$basedir/../fixtures", verbose = true)
     return
 end
-
-export runtests, format
-
 end # module RELOGT

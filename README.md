@@ -1,8 +1,5 @@
-<h1 align="center">RELOG: Reverse Logistics Optimization</h1>
+<h1 align="center">RELOG: Supply Chain Analysis and Optimization</h1>
 <p align="center">
-  <a href="https://github.com/ANL-CEEESA/RELOG/actions">
-    <img src="https://github.com/ANL-CEEESA/RELOG/workflows/Build%20&%20Test/badge.svg">
-  </a>
   <a href="https://doi.org/10.5281/zenodo.4302341">
     <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4302341.svg">
   </a>
@@ -11,30 +8,44 @@
   </a>
 </p>
 
-**RELOG** is a supply chain optimization package focusing on reverse logistics and reverse manufacturing. For example, the package can be used to determine where to build recycling plants, what sizes should they have and which customers should be served by which plants. The package supports customized reverse logistics pipelines, with multiple types of plants, multiple types of product and multiple time periods.
+**RELOG** is an open-source package designed to optimize supply chains for
+forward, reverse and circular manufacturing. Using mixed-integer linear
+optimization, RELOG helps users determine strategic decisions such as:
 
-<img src="https://anl-ceeesa.github.io/RELOG/0.7/assets/ex_transportation.png" width="1000px"/>
+- Where and when to build manufacturing and recycling plants
+- The size of these plants, when to expand them, and by how much
+- The sources for each plant's input materials and the destinations for their
+  processed outputs
+- Whether to process input materials immediately or store them for later use
 
-### Documentation
+RELOG has been successfully applied in research at various laboratories and
+universities, focusing on areas like critical material recovery from spent NiMH
+and Li-Ion batteries, biomass processing for hydrogen production, and the
+recycling of electronics, plastics and solar PV materials, among others. See
+references for more details.
 
-- [Usage](https://anl-ceeesa.github.io/RELOG/0.7/usage)
-- [Input and Output Data Formats](https://anl-ceeesa.github.io/RELOG/0.7/format)
-- [Simplified Solution Reports](https://anl-ceeesa.github.io/RELOG/0.7/reports)
-- [Optimization Model](https://anl-ceeesa.github.io/RELOG/0.7/model)
+## Screenshots
 
-### Authors
+<img src="https://raw.githubusercontent.com/ANL-CEEESA/RELOG/refs/heads/circular/docs/src/assets/relog.png" width="1000px"/>
 
-- **Alinson S. Xavier** <<axavier@anl.gov>>
-- **Nwike Iloeje** <<ciloeje@anl.gov>>
-- **John Atkins**
-- **Kyle Sun**
-- **Audrey Gallier**
+## Documentation
 
-### License
+See official documentation at: https://anl-ceeesa.github.io/RELOG/
+
+## Authors
+
+- **Alinson S. Xavier,** Argonne National Laboratory <axavier@anl.gov>
+- **Nwike Iloeje,** Argonne National Laboratory <ciloeje@anl.gov>
+- **Kavitha G. Menon,** Argonne National Laboratory
+- **John Atkins,** Argonne National Laboratory
+- **Kyle Sun,** Argonne National Laboratory
+- **Audrey Gallier,** Argonne National Laboratory
+
+## License
 
 ```text
 RELOG: Reverse Logistics Optimization
-Copyright © 2020, UChicago Argonne, LLC. All Rights Reserved.
+Copyright © 2020-2025, UChicago Argonne, LLC. All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
 provided that the following conditions are met:

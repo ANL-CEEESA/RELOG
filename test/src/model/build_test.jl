@@ -1,46 +1,132 @@
-# Copyright (C) 2020 Argonne National Laboratory
-# Written by Alinson Santos Xavier <axavier@anl.gov>
-
-using RELOG, HiGHS, JuMP, Printf, JSON, MathOptInterface.FileFormats
+using RELOG
+using Test
+using HiGHS
+using JuMP
 
 function model_build_test()
-    @testset "build" begin
-        instance = RELOG.parsefile(fixture("s1.json"))
-        graph = RELOG.build_graph(instance)
-        model = RELOG.build_model(instance, graph, HiGHS.Optimizer)
+    instance = RELOG.parsefile(fixture("simple.json"))
+    model = RELOG.build_model(instance, optimizer = HiGHS.Optimizer, variable_names = true)
+    y = model[:y]
+    z_disp = model[:z_disp]
+    z_input = model[:z_input]
+    z_tr_em = model[:z_tr_em]
+    x = model[:x]
+    obj = objective_function(model)
+    # print(model)
 
-        process_node_by_location_name =
-            Dict(n.location.location_name => n for n in graph.process_nodes)
+    @test obj.terms[y["L1", "C3", "P4", 1]] == (
+        111.118 * 0.015 # transportation
+        - 12.0 # revenue
+    )
+    @test obj.terms[y["C1", "L1", "P2", 4]] == (
+        333.262 * 0.015 +  # transportation
+        0.25 + # center collection cost
+        5.0 # plant operating cost
+    )
+    @test obj.terms[z_disp["C1", "P2", 1]] == 0.23
+    @test obj.constant == (
+        150 * 4 * 3 # center operating cost
+    )
+    @test obj.terms[z_disp["L1", "P4", 2]] == 0.86
+    @test obj.terms[x["L1", 1]] == (
+        -100.0 + # opening cost
+        300 # fixed operating cost
+    )
+    @test obj.terms[x["L1", 2]] == (
+        -50.0 + # opening cost
+        300 # fixed operating cost
+    )
+    @test obj.terms[x["L1", 3]] == (
+        -25.0 + # opening cost
+        300 # fixed operating cost
+    )
+    @test obj.terms[x["L1", 4]] == (
+        475.0 + # opening cost
+        300 # fixed operating cost
+    )
 
-        shipping_node_by_loc_and_prod_names = Dict(
-            (n.location.location_name, n.product.name) => n for
-            n in graph.plant_shipping_nodes
-        )
+    # Variables: Transportation emissions
+    @test haskey(z_tr_em, ("CO2", "L1", "C3", "P4", 1))
+    @test haskey(z_tr_em, ("CH4", "L1", "C3", "P4", 1))
+    @test haskey(z_tr_em, ("CO2", "C2", "L1", "P1", 1))
+    @test haskey(z_tr_em, ("CH4", "C2", "L1", "P1", 1))
 
-        @test length(model[:flow]) == 76
-        @test length(model[:plant_dispose]) == 16
-        @test length(model[:open_plant]) == 12
-        @test length(model[:capacity]) == 12
-        @test length(model[:expansion]) == 18
+    # Plants: Definition of total plant input
+    @test repr(model[:eq_z_input]["L1", 1]) ==
+          "eq_z_input[L1,1] : -y[C2,L1,P1,1] - y[C1,L1,P2,1] + z_input[L1,1] = 0"
 
-        l1 = process_node_by_location_name["L1"]
-        @test model[:is_open][l1, 0] == 1
-        @test model[:expansion][l1, 0] == 250
+    # Plants: Must meet input mix
+    @test repr(model[:eq_input_mix]["L1", "P1", 1]) ==
+          "eq_input_mix[L1,P1,1] : y[C2,L1,P1,1] - 0.953 z_input[L1,1] = 0"
+    @test repr(model[:eq_input_mix]["L1", "P2", 1]) ==
+          "eq_input_mix[L1,P2,1] : y[C1,L1,P2,1] - 0.047 z_input[L1,1] = 0"
 
-        v = model[:capacity][l1, 1]
-        @test lower_bound(v) == 0.0
-        @test upper_bound(v) == 1000.0
+    # Plants: Calculate amount produced
+    @test repr(model[:eq_z_prod]["L1", "P3", 1]) ==
+          "eq_z_prod[L1,P3,1] : z_prod[L1,P3,1] - 0.25 z_input[L1,1] = 0"
+    @test repr(model[:eq_z_prod]["L1", "P4", 1]) ==
+          "eq_z_prod[L1,P4,1] : z_prod[L1,P4,1] - 0.12 z_input[L1,1] = 0"
 
-        v = model[:expansion][l1, 1]
-        @test lower_bound(v) == 0.0
-        @test upper_bound(v) == 750.0
+    # Plants: Produced material must be sent or disposed
+    @test repr(model[:eq_balance]["L1", "P3", 1]) ==
+          "eq_balance[L1,P3,1] : z_prod[L1,P3,1] - z_disp[L1,P3,1] = 0"
+    @test repr(model[:eq_balance]["L1", "P4", 1]) ==
+          "eq_balance[L1,P4,1] : -y[L1,C3,P4,1] + z_prod[L1,P4,1] - z_disp[L1,P4,1] = 0"
 
-        v = model[:plant_dispose][shipping_node_by_loc_and_prod_names["L1", "P2"], 1]
-        @test lower_bound(v) == 0.0
-        @test upper_bound(v) == 1.0
+    # Plants: Capacity limit
+    @test repr(model[:eq_capacity]["L1", 1]) ==
+          "eq_capacity[L1,1] : -100 x[L1,1] + z_input[L1,1] ≤ 0"
 
-        l2 = process_node_by_location_name["L2"]
-        @test model[:is_open][l2, 0] == 0
-        @test model[:expansion][l2, 0] == 0
-    end
+    # Plants: Disposal limit
+    @test repr(model[:eq_disposal_limit]["L1", "P4", 1]) ==
+          "eq_disposal_limit[L1,P4,1] : z_disp[L1,P4,1] ≤ 1000"
+    @test ("L1", "P3", 1) ∉ keys(model[:eq_disposal_limit])
+
+    # Plants: Plant remains open
+    @test repr(model[:eq_keep_open]["L1", 4]) ==
+          "eq_keep_open[L1,4] : -x[L1,3] + x[L1,4] ≥ 0"
+    @test repr(model[:eq_keep_open]["L1", 1]) == "eq_keep_open[L1,1] : x[L1,1] ≥ 0"
+
+    # Plants: Building period
+    @test ("L1", 1) ∉ keys(model[:eq_building_period])
+    @test repr(model[:eq_building_period]["L1", 2]) ==
+          "eq_building_period[L1,2] : -x[L1,1] + x[L1,2] ≤ 0"
+
+    # Centers: Definition of total center input
+    @test repr(model[:eq_z_input]["C1", 1]) ==
+          "eq_z_input[C1,1] : -y[C2,C1,P1,1] + z_input[C1,1] = 0"
+
+    # Centers: Calculate amount collected
+    @test repr(model[:eq_z_collected]["C1", "P2", 1]) ==
+          "eq_z_collected[C1,P2,1] : -0.2 z_input[C1,1] + z_collected[C1,P2,1] = 100"
+    @test repr(model[:eq_z_collected]["C1", "P2", 2]) ==
+          "eq_z_collected[C1,P2,2] : -0.25 z_input[C1,1] - 0.2 z_input[C1,2] + z_collected[C1,P2,2] = 50"
+    @test repr(model[:eq_z_collected]["C1", "P2", 3]) ==
+          "eq_z_collected[C1,P2,3] : -0.12 z_input[C1,1] - 0.25 z_input[C1,2] - 0.2 z_input[C1,3] + z_collected[C1,P2,3] = 0"
+    @test repr(model[:eq_z_collected]["C1", "P2", 4]) ==
+          "eq_z_collected[C1,P2,4] : -0.12 z_input[C1,2] - 0.25 z_input[C1,3] - 0.2 z_input[C1,4] + z_collected[C1,P2,4] = 0"
+
+    # Centers: Collected products must be disposed or sent
+    @test repr(model[:eq_balance]["C1", "P2", 1]) ==
+          "eq_balance[C1,P2,1] : -y[C1,L1,P2,1] - z_disp[C1,P2,1] + z_collected[C1,P2,1] = 0"
+    @test repr(model[:eq_balance]["C1", "P3", 1]) ==
+          "eq_balance[C1,P3,1] : -z_disp[C1,P3,1] + z_collected[C1,P3,1] = 0"
+
+    # Centers: Disposal limit
+    @test repr(model[:eq_disposal_limit]["C1", "P2", 1]) ==
+          "eq_disposal_limit[C1,P2,1] : z_disp[C1,P2,1] ≤ 0"
+    @test ("C1", "P3", 1) ∉ keys(model[:eq_disposal_limit])
+
+    # Global disposal limit
+    @test repr(model[:eq_disposal_limit]["P1", 1]) ==
+          "eq_disposal_limit[P1,1] : z_disp[C2,P1,1] ≤ 1"
+    @test repr(model[:eq_disposal_limit]["P2", 1]) ==
+          "eq_disposal_limit[P2,1] : z_disp[C1,P2,1] ≤ 2"
+    @test repr(model[:eq_disposal_limit]["P3", 1]) ==
+          "eq_disposal_limit[P3,1] : z_disp[L1,P3,1] + z_disp[C1,P3,1] ≤ 5"
+    @test ("P4", 1) ∉ keys(model[:eq_disposal_limit])
+
+    # Products: Transportation emissions
+    @test repr(model[:eq_tr_em]["CH4", "L1", "C3", "P4", 1]) ==
+          "eq_tr_em[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_tr_em[CH4,L1,C3,P4,1] = 0"
 end

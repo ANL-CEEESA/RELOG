@@ -5,75 +5,98 @@
 using DataFrames
 using CSV
 
-function plants_report(solution)::DataFrame
+function plants_report(model)::DataFrame
     df = DataFrame()
-    df."plant type" = String[]
-    df."location name" = String[]
+    df."plant" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
+    df."initial capacity" = Float64[]
+    df."current capacity" = Float64[]
     df."year" = Int[]
-    df."latitude (deg)" = Float64[]
-    df."longitude (deg)" = Float64[]
-    df."capacity (tonne)" = Float64[]
-    df."amount processed (tonne)" = Float64[]
-    df."amount received (tonne)" = Float64[]
-    df."amount in storage (tonne)" = Float64[]
-    df."utilization factor (%)" = Float64[]
-    df."energy (GJ)" = Float64[]
+    df."operational?" = Bool[]
+    df."input amount (tonne)" = Float64[]
     df."opening cost (\$)" = Float64[]
-    df."expansion cost (\$)" = Float64[]
     df."fixed operating cost (\$)" = Float64[]
     df."variable operating cost (\$)" = Float64[]
-    df."storage cost (\$)" = Float64[]
-    df."total cost (\$)" = Float64[]
-    T = length(solution["Energy"]["Plants (GJ)"])
-    for (plant_name, plant_dict) in solution["Plants"]
-        for (location_name, location_dict) in plant_dict
-            for year = 1:T
-                capacity = round(location_dict["Capacity (tonne)"][year], digits = 6)
-                received = round(location_dict["Total input (tonne)"][year], digits = 6)
-                processed = round(location_dict["Process (tonne)"][year], digits = 6)
-                in_storage = round(location_dict["Storage (tonne)"][year], digits = 6)
-                utilization_factor = round(processed / capacity * 100.0, digits = 6)
-                energy = round(location_dict["Energy (GJ)"][year], digits = 6)
-                latitude = round(location_dict["Latitude (deg)"], digits = 6)
-                longitude = round(location_dict["Longitude (deg)"], digits = 6)
-                opening_cost = round(location_dict["Opening cost (\$)"][year], digits = 6)
-                expansion_cost =
-                    round(location_dict["Expansion cost (\$)"][year], digits = 6)
-                fixed_cost =
-                    round(location_dict["Fixed operating cost (\$)"][year], digits = 6)
-                var_cost =
-                    round(location_dict["Variable operating cost (\$)"][year], digits = 6)
-                storage_cost = round(location_dict["Storage cost (\$)"][year], digits = 6)
-                total_cost = round(
-                    opening_cost + expansion_cost + fixed_cost + var_cost + storage_cost,
-                    digits = 6,
-                )
-                push!(
-                    df,
-                    [
-                        plant_name,
-                        location_name,
-                        year,
-                        latitude,
-                        longitude,
-                        capacity,
-                        processed,
-                        received,
-                        in_storage,
-                        utilization_factor,
-                        energy,
-                        opening_cost,
-                        expansion_cost,
-                        fixed_cost,
-                        var_cost,
-                        storage_cost,
-                        total_cost,
-                    ],
-                )
-            end
+
+    plants = model.ext[:instance].plants
+    T = 1:model.ext[:instance].time_horizon
+
+    for p in plants, t in T
+        operational = JuMP.value(model[:x][p.name, t]) > 0.5
+        input = value(model[:z_input][p.name, t])
+
+        # Opening cost
+        opening_cost = 0
+        if value(model[:x][p.name, t]) > 0.5 && value(model[:x][p.name, t-1]) < 0.5
+            opening_cost = p.capacities[1].opening_cost[t]
         end
+
+        # Plant size
+        curr_capacity = 0
+        if operational
+            curr_capacity = p.capacities[1].size
+        end
+
+        fix_operating_cost = (operational ? p.capacities[1].fix_operating_cost[t] : 0)
+        var_operating_cost = input * p.capacities[1].var_operating_cost[t]
+        push!(
+            df,
+            Dict(
+                "plant" => p.name,
+                "latitude" => p.latitude,
+                "longitude" => p.longitude,
+                "initial capacity" => p.initial_capacity,
+                "current capacity" => curr_capacity,
+                "year" => t,
+                "operational?" => operational,
+                "input amount (tonne)" => _round(input),
+                "opening cost (\$)" => _round(opening_cost),
+                "fixed operating cost (\$)" => _round(fix_operating_cost),
+                "variable operating cost (\$)" => _round(var_operating_cost),
+            ),
+        )
+    end
+    return df
+end
+
+function plant_outputs_report(model)::DataFrame
+    df = DataFrame()
+    df."plant" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
+    df."output product" = String[]
+    df."year" = Int[]
+    df."amount produced (tonne)" = Float64[]
+    df."amount disposed (tonne)" = Float64[]
+    df."disposal limit (tonne)" = Float64[]
+    df."disposal cost (\$)" = Float64[]
+
+    plants = model.ext[:instance].plants
+    T = 1:model.ext[:instance].time_horizon
+
+    for p in plants, m in keys(p.output), t in T
+        produced = JuMP.value(model[:z_prod][p.name, m.name, t])
+        disposed = JuMP.value(model[:z_disp][p.name, m.name, t])
+        disposal_cost = p.disposal_cost[m][t] * disposed
+        push!(
+            df,
+            Dict(
+                "plant" => p.name,
+                "latitude" => p.latitude,
+                "longitude" => p.longitude,
+                "output product" => m.name,
+                "year" => t,
+                "amount produced (tonne)" => _round(produced),
+                "amount disposed (tonne)" => _round(disposed),
+                "disposal limit (tonne)" => _round(p.disposal_limit[m][t]),
+                "disposal cost (\$)" => _round(disposal_cost),
+            ),
+        )
     end
     return df
 end
 
 write_plants_report(solution, filename) = CSV.write(filename, plants_report(solution))
+write_plant_outputs_report(solution, filename) =
+    CSV.write(filename, plant_outputs_report(solution))

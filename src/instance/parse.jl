@@ -1,233 +1,142 @@
-# RELOG: Reverse Logistics Optimization
-# Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
-# Released under the modified BSD license. See COPYING.md for more details.
-
-using DataStructures
 using JSON
-using JSONSchema
-using Printf
-using Statistics
+using OrderedCollections
 
 function parsefile(path::String)::Instance
-    return RELOG.parse(JSON.parsefile(path))
+    return RELOG.parse(JSON.parsefile(path, dicttype = () -> OrderedDict()))
 end
 
 function parse(json)::Instance
-    basedir = dirname(@__FILE__)
-    json_schema = JSON.parsefile("$basedir/../schemas/input.json")
-    validate(json, Schema(json_schema))
+    # Read parameters
+    time_horizon = json["parameters"]["time horizon (years)"]
+    building_period = json["parameters"]["building period (years)"]
 
-    T = json["parameters"]["time horizon (years)"]
-    json_schema["definitions"]["TimeSeries"]["minItems"] = T
-    json_schema["definitions"]["TimeSeries"]["maxItems"] = T
-    validate(json, Schema(json_schema))
-
-    building_period = [1]
-    if "building period (years)" in keys(json["parameters"])
-        building_period = json["parameters"]["building period (years)"]
+    # Read distance metric
+    distance_metric_str = lowercase(json["parameters"]["distance metric"])
+    if distance_metric_str == "driving"
+        distance_metric = KnnDrivingDistance()
+    elseif distance_metric_str == "euclidean"
+        distance_metric = EuclideanDistance()
+    else
+        error("Invalid distance metric: $distance_metric_str")
     end
 
-    distance_metric = EuclideanDistance()
-    if "distance metric" in keys(json["parameters"])
-        metric_name = json["parameters"]["distance metric"]
-        if metric_name == "driving"
-            distance_metric = KnnDrivingDistance()
-        elseif metric_name == "Euclidean"
-            # nop
-        else
-            error("Unknown distance metric: $metric_name")
+    timeseries(::Nothing; null_val = nothing) = repeat([null_val], time_horizon)
+    timeseries(x::Number; null_val = nothing) = repeat([x], time_horizon)
+    timeseries(x::Array; null_val = nothing) = [xi === nothing ? null_val : xi for xi in x]
+    timeseries(d::OrderedDict; null_val = nothing) =
+        OrderedDict(k => timeseries(v; null_val) for (k, v) in d)
+
+    # Read products
+    products = Product[]
+    products_by_name = OrderedDict{String,Product}()
+    for (name, pdict) in json["products"]
+        tr_cost = timeseries(pdict["transportation cost (\$/km/tonne)"])
+        tr_energy = timeseries(pdict["transportation energy (J/km/tonne)"])
+        tr_emissions = timeseries(pdict["transportation emissions (tonne/km/tonne)"])
+        disposal_limit = timeseries(pdict["disposal limit (tonne)"], null_val = Inf)
+        prod = Product(; name, tr_cost, tr_energy, tr_emissions, disposal_limit)
+        push!(products, prod)
+        products_by_name[name] = prod
+    end
+
+    # Read centers
+    centers = Center[]
+    centers_by_name = OrderedDict{String,Center}()
+    for (name, cdict) in json["centers"]
+        latitude = cdict["latitude (deg)"]
+        longitude = cdict["longitude (deg)"]
+        input = nothing
+        revenue = [0.0 for t = 1:time_horizon]
+        if cdict["input"] !== nothing
+            input = products_by_name[cdict["input"]]
+            revenue = timeseries(cdict["revenue (\$/tonne)"])
         end
+        outputs = [products_by_name[p] for p in cdict["outputs"]]
+        operating_cost = timeseries(cdict["operating cost (\$)"])
+        prod_dict(key, null_val) =
+            OrderedDict(p => timeseries(cdict[key][p.name]; null_val) for p in outputs)
+        fixed_output = prod_dict("fixed output (tonne)", 0.0)
+        var_output = prod_dict("variable output (tonne/tonne)", 0.0)
+        collection_cost = prod_dict("collection cost (\$/tonne)", 0.0)
+        disposal_limit = prod_dict("disposal limit (tonne)", Inf)
+        disposal_cost = prod_dict("disposal cost (\$/tonne)", 0.0)
+
+        center = Center(;
+            name,
+            latitude,
+            longitude,
+            input,
+            outputs,
+            revenue,
+            operating_cost,
+            fixed_output,
+            var_output,
+            collection_cost,
+            disposal_cost,
+            disposal_limit,
+        )
+        push!(centers, center)
+        centers_by_name[name] = center
     end
 
     plants = Plant[]
-    products = Product[]
-    collection_centers = CollectionCenter[]
-    prod_name_to_product = Dict{String,Product}()
-
-    # Create products
-    for (product_name, product_dict) in json["products"]
-        cost = product_dict["transportation cost (\$/km/tonne)"]
-        energy = zeros(T)
-        emissions = Dict()
-        disposal_limit = zeros(T)
-        disposal_cost = zeros(T)
-        acquisition_cost = zeros(T)
-
-        if "transportation energy (J/km/tonne)" in keys(product_dict)
-            energy = product_dict["transportation energy (J/km/tonne)"]
-        end
-
-        if "transportation emissions (tonne/km/tonne)" in keys(product_dict)
-            emissions = product_dict["transportation emissions (tonne/km/tonne)"]
-        end
-
-        if "disposal limit (tonne)" in keys(product_dict)
-            disposal_limit = product_dict["disposal limit (tonne)"]
-        end
-
-        if "disposal cost (\$/tonne)" in keys(product_dict)
-            disposal_cost = product_dict["disposal cost (\$/tonne)"]
-        end
-
-        if "acquisition cost (\$/tonne)" in keys(product_dict)
-            acquisition_cost = product_dict["acquisition cost (\$/tonne)"]
-        end
-
-        prod_centers = []
-
-        product = Product(
-            acquisition_cost = acquisition_cost,
-            collection_centers = prod_centers,
-            disposal_cost = disposal_cost,
-            disposal_limit = disposal_limit,
-            name = product_name,
-            transportation_cost = cost,
-            transportation_emissions = emissions,
-            transportation_energy = energy,
+    plants_by_name = OrderedDict{String,Plant}()
+    for (name, pdict) in json["plants"]
+        prod_dict(key; scale = 1.0, null_val = Inf) = OrderedDict{Product,Vector{Float64}}(
+            products_by_name[p] => [
+                v === nothing ? null_val : v * scale for v in timeseries(pdict[key][p])
+            ] for p in keys(pdict[key])
         )
-        push!(products, product)
-        prod_name_to_product[product_name] = product
 
-        # Create collection centers
-        if "initial amounts" in keys(product_dict)
-            for (center_name, center_dict) in product_dict["initial amounts"]
-                if "location" in keys(center_dict)
-                    region = geodb_query(center_dict["location"])
-                    center_dict["latitude (deg)"] = region.centroid.lat
-                    center_dict["longitude (deg)"] = region.centroid.lon
-                end
-                center = CollectionCenter(
-                    amount = center_dict["amount (tonne)"],
-                    index = length(collection_centers) + 1,
-                    latitude = center_dict["latitude (deg)"],
-                    longitude = center_dict["longitude (deg)"],
-                    name = center_name,
-                    product = product,
-                )
-                push!(prod_centers, center)
-                push!(collection_centers, center)
-            end
-        end
-    end
-
-    # Create plants
-    for (plant_name, plant_dict) in json["plants"]
-        input = prod_name_to_product[plant_dict["input"]]
-        output = Dict()
-
-        # Plant outputs
-        if "outputs (tonne/tonne)" in keys(plant_dict)
-            output = Dict(
-                prod_name_to_product[key] => value for
-                (key, value) in plant_dict["outputs (tonne/tonne)"] if value > 0
+        latitude = pdict["latitude (deg)"]
+        longitude = pdict["longitude (deg)"]
+        input_mix = prod_dict("input mix (%)", scale = 0.01)
+        output = prod_dict("output (tonne)")
+        emissions = timeseries(pdict["processing emissions (tonne)"])
+        storage_cost = prod_dict("storage cost (\$/tonne)")
+        storage_limit = prod_dict("storage limit (tonne)")
+        disposal_cost = prod_dict("disposal cost (\$/tonne)")
+        disposal_limit = prod_dict("disposal limit (tonne)")
+        initial_capacity = pdict["initial capacity (tonne)"]
+        capacities = PlantCapacity[]
+        for cdict in pdict["capacities"]
+            size = cdict["size (tonne)"]
+            opening_cost = timeseries(cdict["opening cost (\$)"])
+            fix_operating_cost = timeseries(cdict["fixed operating cost (\$)"])
+            var_operating_cost = timeseries(cdict["variable operating cost (\$/tonne)"])
+            push!(
+                capacities,
+                PlantCapacity(; size, opening_cost, fix_operating_cost, var_operating_cost),
             )
         end
 
-        energy = zeros(T)
-        emissions = Dict()
-
-        if "energy (GJ/tonne)" in keys(plant_dict)
-            energy = plant_dict["energy (GJ/tonne)"]
-        end
-
-        if "emissions (tonne/tonne)" in keys(plant_dict)
-            emissions = plant_dict["emissions (tonne/tonne)"]
-        end
-
-        for (location_name, location_dict) in plant_dict["locations"]
-            sizes = PlantSize[]
-            disposal_limit = Dict(p => [0.0 for t = 1:T] for p in keys(output))
-            disposal_cost = Dict(p => [0.0 for t = 1:T] for p in keys(output))
-
-            # GeoDB
-            if "location" in keys(location_dict)
-                region = geodb_query(location_dict["location"])
-                location_dict["latitude (deg)"] = region.centroid.lat
-                location_dict["longitude (deg)"] = region.centroid.lon
-            end
-
-            # Disposal
-            if "disposal" in keys(location_dict)
-                for (product_name, disposal_dict) in location_dict["disposal"]
-                    limit = [1e8 for t = 1:T]
-                    if "limit (tonne)" in keys(disposal_dict)
-                        limit = disposal_dict["limit (tonne)"]
-                    end
-                    disposal_limit[prod_name_to_product[product_name]] = limit
-                    disposal_cost[prod_name_to_product[product_name]] =
-                        disposal_dict["cost (\$/tonne)"]
-                end
-            end
-
-            # Capacities
-            for (capacity_name, capacity_dict) in location_dict["capacities (tonne)"]
-                push!(
-                    sizes,
-                    PlantSize(
-                        capacity = Base.parse(Float64, capacity_name),
-                        fixed_operating_cost = capacity_dict["fixed operating cost (\$)"],
-                        opening_cost = capacity_dict["opening cost (\$)"],
-                        variable_operating_cost = capacity_dict["variable operating cost (\$/tonne)"],
-                    ),
-                )
-            end
-            length(sizes) > 1 || push!(sizes, deepcopy(sizes[1]))
-            sort!(sizes, by = x -> x.capacity)
-
-            # Initial capacity
-            initial_capacity = 0
-            if "initial capacity (tonne)" in keys(location_dict)
-                initial_capacity = location_dict["initial capacity (tonne)"]
-            end
-
-            # Storage
-            storage_limit = 0
-            storage_cost = zeros(T)
-            if "storage" in keys(location_dict)
-                storage_dict = location_dict["storage"]
-                storage_limit = storage_dict["limit (tonne)"]
-                storage_cost = storage_dict["cost (\$/tonne)"]
-            end
-
-            # Validation: Capacities
-            if length(sizes) != 2
-                throw("At most two capacities are supported")
-            end
-            if sizes[1].variable_operating_cost != sizes[2].variable_operating_cost
-                throw("Variable operating costs must be the same for all capacities")
-            end
-
-            plant = Plant(
-                disposal_cost = disposal_cost,
-                disposal_limit = disposal_limit,
-                emissions = emissions,
-                energy = energy,
-                index = length(plants) + 1,
-                initial_capacity = initial_capacity,
-                input = input,
-                latitude = location_dict["latitude (deg)"],
-                location_name = location_name,
-                longitude = location_dict["longitude (deg)"],
-                output = output,
-                plant_name = plant_name,
-                sizes = sizes,
-                storage_cost = storage_cost,
-                storage_limit = storage_limit,
-            )
-
-            push!(plants, plant)
-        end
+        plant = Plant(;
+            name,
+            latitude,
+            longitude,
+            input_mix,
+            output,
+            emissions,
+            storage_cost,
+            storage_limit,
+            disposal_cost,
+            disposal_limit,
+            capacities,
+            initial_capacity,
+        )
+        push!(plants, plant)
+        plants_by_name[name] = plant
     end
 
-    @info @sprintf("%12d collection centers", length(collection_centers))
-    @info @sprintf("%12d candidate plant locations", length(plants))
-
-    return Instance(
-        time = T,
-        products = products,
-        collection_centers = collection_centers,
-        plants = plants,
-        building_period = building_period,
-        distance_metric = distance_metric,
+    return Instance(;
+        time_horizon,
+        building_period,
+        distance_metric,
+        products,
+        products_by_name,
+        centers,
+        centers_by_name,
+        plants,
+        plants_by_name,
     )
 end

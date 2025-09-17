@@ -1,21 +1,13 @@
-# RELOG: Reverse Logistics Optimization
-# Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
-# Released under the modified BSD license. See COPYING.md for more details.
-
-using RELOG, JSON, GZip
-
-function reports_test()
-    @testset "reports" begin
-        @testset "from solve" begin
-            solution = RELOG.solve(fixture("s1.json"))
-            tmp_filename = tempname()
-            # The following should not crash
-            RELOG.write_plant_emissions_report(solution, tmp_filename)
-            RELOG.write_plant_outputs_report(solution, tmp_filename)
-            RELOG.write_plants_report(solution, tmp_filename)
-            RELOG.write_products_report(solution, tmp_filename)
-            RELOG.write_transportation_emissions_report(solution, tmp_filename)
-            RELOG.write_transportation_report(solution, tmp_filename)
-        end
-    end
+function report_tests()
+    # Load and solve the boat example
+    instance = RELOG.parsefile(fixture("boat_example.json"))
+    model = RELOG.build_model(instance, optimizer = HiGHS.Optimizer, variable_names = true)
+    optimize!(model)
+    mkpath("tmp")
+    write_to_file(model, "tmp/model.lp")
+    RELOG.write_plants_report(model, "tmp/plants.csv")
+    RELOG.write_plant_outputs_report(model, "tmp/plant_outputs.csv")
+    RELOG.write_centers_report(model, "tmp/centers.csv")
+    RELOG.write_center_outputs_report(model, "tmp/center_outputs.csv")
+    RELOG.write_transportation_report(model, "tmp/transportation.csv")
 end

@@ -1,4 +1,4 @@
-# Simplified Solution Reports
+# Solution reports
 
 In addition to the full output format described in [data formats](format.md), RELOG can also generate a number of simplified reports in tabular data format (CSV), which can be more easily processed by spreadsheet software (such as Microsoft Excel), by data analysis libraries (such as Pandas) or by relational databases (such as SQLite).
 
