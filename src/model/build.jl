@@ -124,6 +124,12 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_tr_em[g, p1.name, p2.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
+    # Plant emissions by greenhouse gas
+    z_plant_em = _init(model, :z_plant_em)
+    for p in plants, t in T, g in keys(p.emissions)
+        z_plant_em[g, p.name, t] = @variable(model, lower_bound = 0)
+    end
+
 
     # Objective function
     # -------------------------------------------------------------------------
@@ -323,6 +329,16 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             model,
             z_tr_em[g, p1.name, p2.name, m.name, t] ==
             distances[p1, p2, m] * m.tr_emissions[g][t] * y[p1.name, p2.name, m.name, t]
+        )
+    end
+
+    # Plant emissions
+    eq_plant_em = _init(model, :eq_plant_em)
+    for p in plants, t in T, g in keys(p.emissions)
+        eq_plant_em[g, p.name, t] = @constraint(
+            model,
+            z_plant_em[g, p.name, t] ==
+            p.emissions[g][t] * sum(y[src.name, p.name, m.name, t] for (src, m) in E_in[p])
         )
     end
 

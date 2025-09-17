@@ -97,6 +97,44 @@ function plant_outputs_report(model)::DataFrame
     return df
 end
 
+function plant_emissions_report(model)::DataFrame
+    df = DataFrame()
+    df."plant" = String[]
+    df."latitude" = Float64[]
+    df."longitude" = Float64[]
+    df."emission" = String[]
+    df."year" = Int[]
+    df."input amount (tonne)" = Float64[]
+    df."emission factor (tonne/tonne)" = Float64[]
+    df."emissions amount (tonne)" = Float64[]
+
+    plants = model.ext[:instance].plants
+    T = 1:model.ext[:instance].time_horizon
+
+    for p in plants, t in T, g in keys(p.emissions)
+        input_amount = JuMP.value(model[:z_input][p.name, t])
+        input_amount > 1e-3 || continue
+        emissions = JuMP.value(model[:z_plant_em][g, p.name, t])
+        emission_factor = p.emissions[g][t]
+        push!(
+            df,
+            Dict(
+                "plant" => p.name,
+                "latitude" => p.latitude,
+                "longitude" => p.longitude,
+                "emission" => g,
+                "year" => t,
+                "input amount (tonne)" => _round(input_amount),
+                "emission factor (tonne/tonne)" => _round(emission_factor),
+                "emissions amount (tonne)" => _round(emissions),
+            ),
+        )
+    end
+    return df
+end
+
 write_plants_report(solution, filename) = CSV.write(filename, plants_report(solution))
 write_plant_outputs_report(solution, filename) =
     CSV.write(filename, plant_outputs_report(solution))
+write_plant_emissions_report(solution, filename) =
+    CSV.write(filename, plant_emissions_report(solution))

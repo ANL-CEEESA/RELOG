@@ -10,6 +10,7 @@ function model_build_test()
     z_disp = model[:z_disp]
     z_input = model[:z_input]
     z_tr_em = model[:z_tr_em]
+    z_plant_em = model[:z_plant_em]
     x = model[:x]
     obj = objective_function(model)
     # print(model)
@@ -50,6 +51,12 @@ function model_build_test()
     @test haskey(z_tr_em, ("CH4", "L1", "C3", "P4", 1))
     @test haskey(z_tr_em, ("CO2", "C2", "L1", "P1", 1))
     @test haskey(z_tr_em, ("CH4", "C2", "L1", "P1", 1))
+
+    # Variables: Plant emissions
+    @test haskey(z_plant_em, ("CO2", "L1", 1))
+    @test haskey(z_plant_em, ("CO2", "L1", 2))
+    @test haskey(z_plant_em, ("CO2", "L1", 3))
+    @test haskey(z_plant_em, ("CO2", "L1", 4))
 
     # Plants: Definition of total plant input
     @test repr(model[:eq_z_input]["L1", 1]) ==
@@ -129,4 +136,8 @@ function model_build_test()
     # Products: Transportation emissions
     @test repr(model[:eq_tr_em]["CH4", "L1", "C3", "P4", 1]) ==
           "eq_tr_em[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_tr_em[CH4,L1,C3,P4,1] = 0"
+
+    # Plants: Plant emissions
+    @test repr(model[:eq_plant_em]["CO2", "L1", 1]) ==
+          "eq_plant_em[CO2,L1,1] : -0.1 y[C2,L1,P1,1] - 0.1 y[C1,L1,P2,1] + z_plant_em[CO2,L1,1] = 0"
 end

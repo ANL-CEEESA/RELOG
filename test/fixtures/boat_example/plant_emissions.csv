@@ -1,0 +1,11 @@
+plant,latitude,longitude,emission,year,input amount (tonne),emission factor (tonne/tonne),emissions amount (tonne)
+BoatFactory (Dallas),32.776664,-96.796988,CO2,1,63.15789,5.0,315.78947
+BoatFactory (Dallas),32.776664,-96.796988,CO2,2,71.46814,5.0,357.34072
+BoatFactory (Dallas),32.776664,-96.796988,CO2,3,75.8857,5.0,379.42849
+BoatFactory (Dallas),32.776664,-96.796988,CO2,4,76.90434,5.0,384.52168
+BoatFactory (Dallas),32.776664,-96.796988,CO2,5,77.27087,5.0,386.35435
+RecyclingPlant (Dallas),32.776664,-96.796988,CO2,1,6.31579,5.0,31.57895
+RecyclingPlant (Dallas),32.776664,-96.796988,CO2,2,22.93629,5.0,114.68144
+RecyclingPlant (Dallas),32.776664,-96.796988,CO2,3,31.7714,5.0,158.85698
+RecyclingPlant (Dallas),32.776664,-96.796988,CO2,4,33.80867,5.0,169.04336
+RecyclingPlant (Dallas),32.776664,-96.796988,CO2,5,34.54174,5.0,172.7087

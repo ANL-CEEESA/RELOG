@@ -57,6 +57,7 @@ The mathematical model employed by RELOG is based on three main components:
 | $K^\text{disp-limit}_{mut}$ | Maximum amount of material $m$ that can be disposed of at plant/center $u$ at time $t$                                                                                                                           | tonne          |
 | $K^\text{mix}_{pmt}$        | If plant $p$ receives one tonne of input material at time $t$, then $K^\text{mix}_{pmt}$ is the amount of product $m$ in this mix. Must be between zero and one, and the sum of these amounts must equal to one. | tonne          |
 | $K^\text{output}_{pmt}$     | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne          |
+| $K^\text{plant-em}_{gpt}$   | Amount of greenhouse gas $g$ released by plant $p$ at time $t$ for each tonne of input material processed                                                                                                        | tonne/tonne    |
 | $K^\text{tr-em}_{gmt}$      | Amount of greenhouse gas $g$ released by transporting 1 tonne of material $m$ over one km at time $t$                                                                                                            | tonne/km-tonne |
 | $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne    |
 | $R^\text{collect}_{cmt}$    | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne       |
@@ -80,6 +81,7 @@ The mathematical model employed by RELOG is based on three main components:
 | $z^{\text{input}}_{ut}$      | `z_input[u.name, t]`                         | Total plant/center input at time $t$                                                                    | tonne  |
 | $z^{\text{prod}}_{umt}$      | `z_prod[u.name, m.name, t]`                  | Amount of product $m$ produced by plant/center $u$ at time $t$                                          | tonne  |
 | $z^{\text{tr-em}}_{guvmt}$   | `z_tr_em[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
+| $z^{\text{plant-em}}_{gpt}$  | `z_plant_em[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
 
 ## Objective function
 
@@ -269,7 +271,8 @@ The goals is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Computation of transportation emissions (`eq_tr_em[g.name, u.name, v.name, m.name, t`)
+- Computation of transportation emissions
+  (`eq_tr_em[g.name, u.name, v.name, m.name, t`):
 
 ```math
 \begin{align*}
@@ -277,3 +280,11 @@ The goals is to minimize a linear objective function with the following terms:
 & \forall g \in G, (u, v, m) \in E, t \in T
 \end{align*}
 ```
+
+- Computation of plant emissions (`eq_plant_em[g.name, p.name, t]`):
+```math
+\begin{align*}
+& z^{\text{plant-em}}_{gpt} = \sum_{(u,m) \in E^-(p)} K^\text{plant-em}_{gpt} y_{upmt}
+& \forall g \in G, p \in P, t \in T
+```
+

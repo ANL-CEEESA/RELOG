@@ -20,7 +20,7 @@ BoatFactory (Houston),29.760427,-95.369804,NewBoat,3,0.0,0.0,0.0,0.0
 BoatFactory (Houston),29.760427,-95.369804,NewBoat,4,0.0,0.0,0.0,0.0
 BoatFactory (Houston),29.760427,-95.369804,NewBoat,5,0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,1,0.0,0.0,0.0,0.0
-BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,2,0.0,0.0,0.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,2,-0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,3,0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,4,0.0,0.0,0.0,0.0
 BoatFactory (Phoenix),33.448376,-112.074036,NewBoat,5,0.0,0.0,0.0,0.0
@@ -50,25 +50,25 @@ BoatFactory (San Jose),37.338208,-121.886329,NewBoat,3,0.0,0.0,0.0,0.0
 BoatFactory (San Jose),37.338208,-121.886329,NewBoat,4,0.0,0.0,0.0,0.0
 BoatFactory (San Jose),37.338208,-121.886329,NewBoat,5,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Nail,1,0.0,0.0,0.0,0.0
-RecyclingPlant (Chicago),41.881832,-87.623177,Nail,2,-0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,Nail,2,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Nail,3,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Nail,4,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Nail,5,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Wood,1,0.0,0.0,0.0,0.0
-RecyclingPlant (Chicago),41.881832,-87.623177,Wood,2,-0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,Wood,2,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Wood,3,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Wood,4,0.0,0.0,0.0,0.0
 RecyclingPlant (Chicago),41.881832,-87.623177,Wood,5,0.0,0.0,0.0,0.0
 RecyclingPlant (New York City),40.712776,-74.005974,Nail,1,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Nail,2,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Nail,2,-0.0,0.0,0.0,0.0
 RecyclingPlant (New York City),40.712776,-74.005974,Nail,3,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Nail,4,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Nail,5,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Nail,4,-0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Nail,5,-0.0,0.0,0.0,0.0
 RecyclingPlant (New York City),40.712776,-74.005974,Wood,1,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Wood,2,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Wood,2,-0.0,0.0,0.0,0.0
 RecyclingPlant (New York City),40.712776,-74.005974,Wood,3,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Wood,4,0.0,0.0,0.0,0.0
-RecyclingPlant (New York City),40.712776,-74.005974,Wood,5,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Wood,4,-0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,Wood,5,-0.0,0.0,0.0,0.0
 RecyclingPlant (Los Angeles),34.052235,-118.243683,Nail,1,0.0,0.0,0.0,0.0
 RecyclingPlant (Los Angeles),34.052235,-118.243683,Nail,2,0.0,0.0,0.0,0.0
 RecyclingPlant (Los Angeles),34.052235,-118.243683,Nail,3,0.0,0.0,0.0,0.0
@@ -90,14 +90,14 @@ RecyclingPlant (Houston),29.760427,-95.369804,Wood,3,0.0,0.0,0.0,0.0
 RecyclingPlant (Houston),29.760427,-95.369804,Wood,4,0.0,0.0,0.0,0.0
 RecyclingPlant (Houston),29.760427,-95.369804,Wood,5,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,1,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,2,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,3,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,2,-0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,3,-0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,4,-0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),33.448376,-112.074036,Nail,5,0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,1,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,2,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,3,0.0,0.0,0.0,0.0
-RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,2,-0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,3,-0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,4,-0.0,0.0,0.0,0.0
 RecyclingPlant (Phoenix),33.448376,-112.074036,Wood,5,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),39.952583,-75.165222,Nail,1,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),39.952583,-75.165222,Nail,2,0.0,0.0,0.0,0.0
@@ -109,12 +109,12 @@ RecyclingPlant (Philadelphia),39.952583,-75.165222,Wood,2,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),39.952583,-75.165222,Wood,3,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),39.952583,-75.165222,Wood,4,0.0,0.0,0.0,0.0
 RecyclingPlant (Philadelphia),39.952583,-75.165222,Wood,5,0.0,0.0,0.0,0.0
-RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,1,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,1,-0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,2,0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,3,0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,4,0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Nail,5,0.0,0.0,0.0,0.0
-RecyclingPlant (San Antonio),29.424122,-98.493629,Wood,1,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,Wood,1,-0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Wood,2,0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Wood,3,0.0,0.0,0.0,0.0
 RecyclingPlant (San Antonio),29.424122,-98.493629,Wood,4,0.0,0.0,0.0,0.0
