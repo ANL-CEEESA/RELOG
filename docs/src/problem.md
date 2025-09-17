@@ -55,20 +55,22 @@ The mathematical model employed by RELOG is based on three main components:
 | $K^\text{cap}_{p}$          | Capacity of plant $p$, if the plant is open                                                                                                                                                                      | tonne          |
 | $K^\text{disp-limit}_{mt}$  | Maximum amount of material $m$ that can be disposed of (globally) at time $t$                                                                                                                                    | tonne          |
 | $K^\text{disp-limit}_{mut}$ | Maximum amount of material $m$ that can be disposed of at plant/center $u$ at time $t$                                                                                                                           | tonne          |
+| $K^\text{em-limit}_{gt}$    | Maximum amount of greenhouse gas $g$ allowed to be emitted (globally) at time $t$                                                                                                                                | tonne          |
+| $K^\text{em-plant}_{gpt}$   | Amount of greenhouse gas $g$ released by plant $p$ at time $t$ for each tonne of input material processed                                                                                                        | tonne/tonne    |
+| $K^\text{em-tr}_{gmt}$      | Amount of greenhouse gas $g$ released by transporting 1 tonne of material $m$ over one km at time $t$                                                                                                            | tonne/km-tonne |
 | $K^\text{mix}_{pmt}$        | If plant $p$ receives one tonne of input material at time $t$, then $K^\text{mix}_{pmt}$ is the amount of product $m$ in this mix. Must be between zero and one, and the sum of these amounts must equal to one. | tonne          |
+| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $m$ at time $t$                                                                                                                                                 | \$/tonne       |
+| $K^\text{out-var-len}_{cm}$ | Length of the $K^\text{out-var}_{c,m,*}$ vector.                                                                                                                                                                 | --             |
+| $K^\text{out-var}_{c,m,i}$  | Factor used to calculate variable amount of material $m$ collected at center $m$. See `eq_z_collected` for more details.                                                                                         | --             |
 | $K^\text{output}_{pmt}$     | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne          |
-| $K^\text{plant-em}_{gpt}$   | Amount of greenhouse gas $g$ released by plant $p$ at time $t$ for each tonne of input material processed                                                                                                        | tonne/tonne    |
-| $K^\text{tr-em}_{gmt}$      | Amount of greenhouse gas $g$ released by transporting 1 tonne of material $m$ over one km at time $t$                                                                                                            | tonne/km-tonne |
-| $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne    |
 | $R^\text{collect}_{cmt}$    | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne       |
 | $R^\text{disp}_{umt}$       | Cost to dispose of material at plant/center $u$ at time $t$                                                                                                                                                      | \$/tonne       |
+| $R^\text{em}_{gt}$          | Penalty cost per tonne of greenhouse gas $g$ emitted at time $t$                                                                                                                                                 | \$/tonne       |
 | $R^\text{fix}_{ut}$         | Fixed operating cost for plant/center $u$ at time $t$                                                                                                                                                            | \$             |
 | $R^\text{open}_{pt}$        | Cost to open plant $p$ at time $t$                                                                                                                                                                               | \$             |
 | $R^\text{rev}_{ct}$         | Revenue for selling the input product of center $c$ at this center at time $t$                                                                                                                                   | \$/tonne       |
+| $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne    |
 | $R^\text{var}_{pt}$         | Cost to process one tonne of input material at plant $p$ at time $t$                                                                                                                                             | \$/tonne       |
-| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $m$ at time $t$                                                                                                                                                 | \$/tonne       |
-| $K^\text{out-var}_{c,m,i}$  | Factor used to calculate variable amount of material $m$ collected at center $m$. See `eq_z_collected` for more details.                                                                                         | --             |
-| $K^\text{out-var-len}_{cm}$ | Length of the $K^\text{out-var}_{c,m,*}$ vector.                                                                                                                                                                 | --             |
 
 ## Decision variables
 
@@ -80,8 +82,8 @@ The mathematical model employed by RELOG is based on three main components:
 | $z^{\text{disp}}_{umt}$      | `z_disp[u.name, m.name, t]`                  | Amount of product $m$ disposed of at plant/center $u$ at time $t$                                       | tonne  |
 | $z^{\text{input}}_{ut}$      | `z_input[u.name, t]`                         | Total plant/center input at time $t$                                                                    | tonne  |
 | $z^{\text{prod}}_{umt}$      | `z_prod[u.name, m.name, t]`                  | Amount of product $m$ produced by plant/center $u$ at time $t$                                          | tonne  |
-| $z^{\text{tr-em}}_{guvmt}$   | `z_tr_em[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
-| $z^{\text{plant-em}}_{gpt}$  | `z_plant_em[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
+| $z^{\text{em-tr}}_{guvmt}$   | `z_em_tr[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
+| $z^{\text{em-plant}}_{gpt}$  | `z_em_plant[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
 
 ## Objective function
 
@@ -151,6 +153,13 @@ The goals is to minimize a linear objective function with the following terms:
 \sum_{p \in P} \sum_{(u,m) \in E^-(p)} \sum_{t \in T} R^\text{var}_{pt} y_{upmt}
 ```
 
+- Emissions penalty cost, incurred for each tonne of greenhouse gas emitted:
+
+```math
+\sum_{g \in G} \sum_{t \in T} R^\text{em}_{gt} \left(
+  \sum_{p \in P} z^{\text{em-plant}}_{gpt} + \sum_{(u,v,m) \in E} z^{\text{em-tr}}_{guvmt}
+\right)
+```
 ## Constraints
 
 - Definition of plant input (`eq_z_input[p.name, t]`):
@@ -271,20 +280,29 @@ The goals is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Computation of transportation emissions
-  (`eq_tr_em[g.name, u.name, v.name, m.name, t`):
+- Computation of transportation emissions (`eq_emission_tr[g.name, u.name, v.name, m.name, t`):
 
 ```math
 \begin{align*}
-& z^{\text{tr-em}}_{guvmt} = K^{\text{dist}}_{uv} K^\text{tr-em}_{gmt} y_{uvmt}
+& z^{\text{em-tr}}_{guvmt} = K^{\text{dist}}_{uv} K^\text{em-tr}_{gmt} y_{uvmt}
 & \forall g \in G, (u, v, m) \in E, t \in T
 \end{align*}
 ```
 
-- Computation of plant emissions (`eq_plant_em[g.name, p.name, t]`):
+- Computation of plant emissions (`eq_emission_plant[g.name, p.name, t]`):
+
 ```math
 \begin{align*}
-& z^{\text{plant-em}}_{gpt} = \sum_{(u,m) \in E^-(p)} K^\text{plant-em}_{gpt} y_{upmt}
+& z^{\text{em-plant}}_{gpt} = \sum_{(u,m) \in E^-(p)} K^\text{em-plant}_{gpt} y_{upmt}
 & \forall g \in G, p \in P, t \in T
+\end{align*}
 ```
 
+- Global emissions limit (`eq_emission_limit[g.name, t]`):
+
+```math
+\begin{align*}
+& \sum_{p \in P} z^{\text{em-plant}}_{gpt} + \sum_{(u,v,m) \in E} z^{\text{em-tr}}_{guvmt} \leq K^\text{em-limit}_{gt}
+& \forall g \in G, t \in T
+\end{align*}
+```

@@ -44,7 +44,7 @@ RELOG accepts as input a JSON file with four sections: `parameters`, `products`,
         "CO2": 0.052,
         "CH4": 0.003
       },
-      "disposal limit (tonne)": 100.0,
+      "disposal limit (tonne)": 100.0
     }
   }
 }
@@ -214,6 +214,34 @@ keys:
         }
       ],
       "initial capacity (tonne)": 0,
+    }
+  }
+}
+```
+
+## Emissions
+
+| Key                 | Description                                                                                                                            |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit (tonne)`     | Maximum amount of this greenhouse gas allowed to be emitted per year across the entire supply chain. Entry may be `null` if unlimited. |
+| `penalty ($/tonne)` | Penalty cost per tonne of this greenhouse gas emitted.                                                                                 |
+
+#### Example
+
+```json
+{
+  "emissions": {
+    "CO2": {
+      "limit (tonne)": 1000.0,
+      "penalty ($/tonne)": 50.0
+    },
+    "CH4": {
+      "limit (tonne)": null,
+      "penalty ($/tonne)": 1200.0
+    },
+    "N2O": {
+      "limit (tonne)": 10.0,
+      "penalty ($/tonne)": 15000.0
     }
   }
 }

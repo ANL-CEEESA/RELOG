@@ -128,6 +128,19 @@ function parse(json)::Instance
         plants_by_name[name] = plant
     end
 
+    # Read emissions
+    emissions = Emissions[]
+    emissions_by_name = OrderedDict{String,Emissions}()
+    if haskey(json, "emissions")
+        for (name, edict) in json["emissions"]
+            limit = timeseries(edict["limit (tonne)"], null_val = Inf)
+            penalty = timeseries(edict["penalty (\$/tonne)"])
+            emission = Emissions(; name, limit, penalty)
+            push!(emissions, emission)
+            emissions_by_name[name] = emission
+        end
+    end
+
     return Instance(;
         time_horizon,
         building_period,
@@ -138,5 +151,7 @@ function parse(json)::Instance
         centers_by_name,
         plants,
         plants_by_name,
+        emissions,
+        emissions_by_name,
     )
 end

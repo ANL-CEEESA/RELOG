@@ -54,6 +54,12 @@ Base.@kwdef struct Plant
     initial_capacity::Float64
 end
 
+Base.@kwdef struct Emissions
+    name::String
+    limit::Vector{Float64}
+    penalty::Vector{Float64}
+end
+
 Base.@kwdef struct Instance
     building_period::Vector{Int}
     centers_by_name::OrderedDict{String,Center}
@@ -64,4 +70,6 @@ Base.@kwdef struct Instance
     time_horizon::Int
     plants::Vector{Plant}
     plants_by_name::OrderedDict{String,Plant}
+    emissions_by_name::OrderedDict{String,Emissions}
+    emissions::Vector{Emissions}
 end

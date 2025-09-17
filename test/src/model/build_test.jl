@@ -9,8 +9,8 @@ function model_build_test()
     y = model[:y]
     z_disp = model[:z_disp]
     z_input = model[:z_input]
-    z_tr_em = model[:z_tr_em]
-    z_plant_em = model[:z_plant_em]
+    z_em_tr = model[:z_em_tr]
+    z_em_plant = model[:z_em_plant]
     x = model[:x]
     obj = objective_function(model)
     # print(model)
@@ -47,16 +47,16 @@ function model_build_test()
     )
 
     # Variables: Transportation emissions
-    @test haskey(z_tr_em, ("CO2", "L1", "C3", "P4", 1))
-    @test haskey(z_tr_em, ("CH4", "L1", "C3", "P4", 1))
-    @test haskey(z_tr_em, ("CO2", "C2", "L1", "P1", 1))
-    @test haskey(z_tr_em, ("CH4", "C2", "L1", "P1", 1))
+    @test haskey(z_em_tr, ("CO2", "L1", "C3", "P4", 1))
+    @test haskey(z_em_tr, ("CH4", "L1", "C3", "P4", 1))
+    @test haskey(z_em_tr, ("CO2", "C2", "L1", "P1", 1))
+    @test haskey(z_em_tr, ("CH4", "C2", "L1", "P1", 1))
 
     # Variables: Plant emissions
-    @test haskey(z_plant_em, ("CO2", "L1", 1))
-    @test haskey(z_plant_em, ("CO2", "L1", 2))
-    @test haskey(z_plant_em, ("CO2", "L1", 3))
-    @test haskey(z_plant_em, ("CO2", "L1", 4))
+    @test haskey(z_em_plant, ("CO2", "L1", 1))
+    @test haskey(z_em_plant, ("CO2", "L1", 2))
+    @test haskey(z_em_plant, ("CO2", "L1", 3))
+    @test haskey(z_em_plant, ("CO2", "L1", 4))
 
     # Plants: Definition of total plant input
     @test repr(model[:eq_z_input]["L1", 1]) ==
@@ -134,10 +134,23 @@ function model_build_test()
     @test ("P4", 1) ∉ keys(model[:eq_disposal_limit])
 
     # Products: Transportation emissions
-    @test repr(model[:eq_tr_em]["CH4", "L1", "C3", "P4", 1]) ==
-          "eq_tr_em[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_tr_em[CH4,L1,C3,P4,1] = 0"
+    @test repr(model[:eq_emission_tr]["CH4", "L1", "C3", "P4", 1]) ==
+          "eq_emission_tr[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_em_tr[CH4,L1,C3,P4,1] = 0"
 
     # Plants: Plant emissions
-    @test repr(model[:eq_plant_em]["CO2", "L1", 1]) ==
-          "eq_plant_em[CO2,L1,1] : -0.1 y[C2,L1,P1,1] - 0.1 y[C1,L1,P2,1] + z_plant_em[CO2,L1,1] = 0"
+    @test repr(model[:eq_emission_plant]["CO2", "L1", 1]) ==
+          "eq_emission_plant[CO2,L1,1] : -0.1 y[C2,L1,P1,1] - 0.1 y[C1,L1,P2,1] + z_em_plant[CO2,L1,1] = 0"
+
+    # Objective function: Emissions penalty costs
+    @test obj.terms[z_em_plant["CO2", "L1", 1]] == 50.0  # CO2 penalty at time 1
+    @test obj.terms[z_em_plant["CO2", "L1", 2]] == 55.0  # CO2 penalty at time 2
+    @test obj.terms[z_em_plant["CO2", "L1", 3]] == 60.0  # CO2 penalty at time 3
+    @test obj.terms[z_em_plant["CO2", "L1", 4]] == 65.0  # CO2 penalty at time 4
+    @test obj.terms[z_em_tr["CO2", "L1", "C3", "P4", 1]] == 50.0  # CO2 transportation penalty at time 1
+    @test obj.terms[z_em_tr["CH4", "L1", "C3", "P4", 1]] == 1200.0  # CH4 transportation penalty at time 1
+
+    # Global emissions limit constraints
+    @test repr(model[:eq_emission_limit]["CO2", 1]) ==
+          "eq_emission_limit[CO2,1] : z_em_tr[CO2,C2,L1,P1,1] + z_em_tr[CO2,C2,C1,P1,1] + z_em_tr[CO2,C1,L1,P2,1] + z_em_tr[CO2,L1,C3,P4,1] + z_em_plant[CO2,L1,1] ≤ 1000"
+    @test ("CH4", 1) ∉ keys(model[:eq_emission_limit])
 end

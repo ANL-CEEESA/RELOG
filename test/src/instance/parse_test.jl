@@ -68,6 +68,19 @@ function instance_parse_test_1()
     @test c2.opening_cost == [1000, 1000, 1000, 1000]
     @test c2.fix_operating_cost == [400, 400, 400, 400]
     @test c2.var_operating_cost == [5, 5, 5, 5]
+
+    # Emissions
+    @test length(instance.emissions) == 2
+    co2 = instance.emissions[1]
+    @test co2.name == "CO2"
+    @test co2.limit == [1000.0, 1100.0, 1200.0, 1300.0]
+    @test co2.penalty == [50.0, 55.0, 60.0, 65.0]
+    @test instance.emissions_by_name["CO2"] === co2
+    ch4 = instance.emissions[2]
+    @test ch4.name == "CH4"
+    @test ch4.limit == [Inf, Inf, Inf, Inf]
+    @test ch4.penalty == [1200.0, 1200.0, 1200.0, 1200.0]
+    @test instance.emissions_by_name["CH4"] === ch4
 end
 
 

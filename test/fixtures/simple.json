@@ -155,5 +155,15 @@
       ],
       "initial capacity (tonne)": 0
     }
+  },
+  "emissions": {
+    "CO2": {
+      "limit (tonne)": [1000.0, 1100.0, 1200.0, 1300.0],
+      "penalty ($/tonne)": [50.0, 55.0, 60.0, 65.0]
+    },
+    "CH4": {
+      "limit (tonne)": null,
+      "penalty ($/tonne)": 1200.0
+    }
   }
 }
