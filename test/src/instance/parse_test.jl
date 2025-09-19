@@ -56,7 +56,7 @@ function instance_parse_test_1()
     @test l1.disposal_cost == Dict(p3 => [0, 0, 0, 0], p4 => [0.86, 0.86, 0.86, 0.86])
     @test l1.disposal_limit ==
           Dict(p3 => [Inf, Inf, Inf, Inf], p4 => [1000.0, 1000.0, 1000.0, 1000.0])
-    @test l1.initial_capacity == 0
+    @test l1.initial_capacity == 250
     @test length(l1.capacities) == 2
     c1 = l1.capacities[1]
     @test c1.size == 100

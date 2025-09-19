@@ -153,7 +153,7 @@
           "variable operating cost ($/tonne)": 5.0
         }
       ],
-      "initial capacity (tonne)": 0
+      "initial capacity (tonne)": 250
     }
   },
   "emissions": {

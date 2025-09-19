@@ -73,7 +73,7 @@ function transportation_emissions_report(model)::DataFrame
         amount > 1e-3 || continue
         distance = distances[p1, p2, m]
         emission_factor = m.tr_emissions[g][t]
-        emissions = value(model[:z_tr_em][g, p1.name, p2.name, m.name, t])
+        emissions = value(model[:z_em_tr][g, p1.name, p2.name, m.name, t])
         push!(
             df,
             Dict(

@@ -152,6 +152,7 @@ detail.
 | `disposal cost ($/tonne)`      | Dictionary mapping the name of each output product to the cost of disposing it at the plant.                                                 |
 | `disposal limit (tonne)`       | Dictionary mapping the name of each output product to the maximum amount allowed to be disposed of at the plant. May be `null` if unlimited. |
 | `capacities`                   | List describing what plant sizes are allowed, and their characteristics.                                                                     |
+| `initial capacity (tonne)`     | Capacity already available. If the plant has not been built yet, this should be `0`.                                                         |
 
 The entries in the `capacities` list should be dictionaries with the following
 keys:
@@ -160,9 +161,8 @@ keys:
 | :---------------------------------- | :-------------------------------------------------------------------------------------------------- |
 | `size (tonne)`                      | The size of the plant.                                                                              |
 | `opening cost ($)`                  | The cost to open a plant of this size.                                                              |
-| `fixed operating cost ($)`          | The cost to keep the plant open, even if the plant doesn't process anything. Must be a time series. |
-| `variable operating cost ($/tonne)` | The cost that the plant incurs to process each tonne of input. Must be a time series.               |
-| `initial capacity (tonne)`          | Capacity already available. If the plant has not been built yet, this should be `0`.                |
+| `fixed operating cost ($)`          | The cost to keep the plant open, even if the plant doesn't process anything.                        |
+| `variable operating cost ($/tonne)` | The cost that the plant incurs to process each tonne of input. Must be the same for all capacities. |
 
 ```json
 {

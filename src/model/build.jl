@@ -1,4 +1,16 @@
+# RELOG: Reverse Logistics Optimization
+# Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
+# Released under the modified BSD license. See COPYING.md for more details.
+
 using JuMP
+
+R_expand(p::Plant, t::Int) =
+    (p.capacities[2].opening_cost[t] - p.capacities[1].opening_cost[t]) /
+    (p.capacities[2].size - p.capacities[1].size)
+
+R_fix_exp(p::Plant, t::Int) =
+    (p.capacities[2].fix_operating_cost[t] - p.capacities[1].fix_operating_cost[t]) /
+    (p.capacities[2].size - p.capacities[1].size)
 
 function build_model(instance::Instance; optimizer, variable_names::Bool = false)
     model = JuMP.Model(optimizer)
@@ -7,6 +19,15 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     plants = instance.plants
     T = 1:instance.time_horizon
     model.ext[:instance] = instance
+
+    # Constants
+    # -------------------------------------------------------------------------
+    K_cap_min = Dict(p => p.capacities[1].size for p in plants)
+    K_cap_max = Dict(p => p.capacities[2].size for p in plants)
+    R_open = Dict((p, t) => p.capacities[1].opening_cost[t] for p in plants for t in T)
+    R_fix_min =
+        Dict((p, t) => p.capacities[1].fix_operating_cost[t] for p in plants for t in T)
+
 
     # Transportation edges
     # -------------------------------------------------------------------------
@@ -112,6 +133,15 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_input[c.name, t] = @variable(model, lower_bound = 0)
     end
 
+    # Plant expansion
+    z_exp = _init(model, :z_exp)
+    for p in plants
+        z_exp[p.name, 0] = max(0, p.initial_capacity - K_cap_min[p])
+    end
+    for p in plants, t in T
+        z_exp[p.name, t] = @variable(model, lower_bound = 0)
+    end
+
     # Total amount collected by the center
     z_collected = _init(model, :z_collected)
     for c in centers, m in c.outputs, t in T
@@ -171,16 +201,18 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
 
     # Plants: Opening cost
     for p in plants, t in T
-        add_to_expression!(
-            obj,
-            p.capacities[1].opening_cost[t],
-            (x[p.name, t] - x[p.name, t-1]),
-        )
+        add_to_expression!(obj, R_open[p, t], (x[p.name, t] - x[p.name, t-1]))
     end
 
     # Plants: Fixed operating cost
     for p in plants, t in T
-        add_to_expression!(obj, p.capacities[1].fix_operating_cost[t], x[p.name, t])
+        add_to_expression!(obj, R_fix_min[p, t], x[p.name, t])
+        add_to_expression!(obj, R_fix_exp(p, t), z_exp[p.name, t])
+    end
+
+    # Plants: Expansion cost
+    for p in plants, t in T
+        add_to_expression!(obj, R_expand(p, t), z_exp[p.name, t] - z_exp[p.name, t-1])
     end
 
     # Plants: Variable operating cost
@@ -261,11 +293,22 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
-    # Plants: Capacity limit
-    eq_capacity = _init(model, :eq_capacity)
+    # Plants: Expansion upper bound
+    eq_exp_ub = _init(model, :eq_exp_ub)
     for p in plants, t in T
-        eq_capacity[p.name, t] =
-            @constraint(model, z_input[p.name, t] <= p.capacities[1].size * x[p.name, t])
+        eq_exp_ub[p.name, t] = @constraint(
+            model,
+            z_exp[p.name, t] <= (K_cap_max[p] - K_cap_min[p]) * x[p.name, t]
+        )
+    end
+
+    # Plants: Input limit
+    eq_input_limit = _init(model, :eq_input_limit)
+    for p in plants, t in T
+        eq_input_limit[p.name, t] = @constraint(
+            model,
+            z_input[p.name, t] <= K_cap_min[p] * x[p.name, t] + z_exp[p.name, t]
+        )
     end
 
     # Plants: Disposal limit
@@ -361,8 +404,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     for p in plants, t in T, g in keys(p.emissions)
         eq_emission_plant[g, p.name, t] = @constraint(
             model,
-            z_em_plant[g, p.name, t] ==
-            p.emissions[g][t] * sum(y[src.name, p.name, m.name, t] for (src, m) in E_in[p])
+            z_em_plant[g, p.name, t] == p.emissions[g][t] * z_input[p.name, t]
         )
     end
 

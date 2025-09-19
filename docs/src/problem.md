@@ -5,7 +5,7 @@
 The mathematical model employed by RELOG is based on three main components:
 
 1. **Products and Materials:** Inputs and outputs for both manufacturing and
-   recycling plants. This include raw materials, whether virgin or recovered,
+   recycling plants. This includes raw materials, whether virgin or recovered,
    and final products, whether new or at their end-of-life. Each product has
    associated transportation parameters, such as costs, energy and emissions.
 
@@ -52,22 +52,27 @@ The mathematical model employed by RELOG is based on three main components:
 | Symbol                      | Description                                                                                                                                                                                                      | Unit           |
 | :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
 | $K^{\text{dist}}_{uv}$      | Distance between plants/centers $u$ and $v$                                                                                                                                                                      | km             |
-| $K^\text{cap}_{p}$          | Capacity of plant $p$, if the plant is open                                                                                                                                                                      | tonne          |
+| $K^\text{cap-init}_p$       | Initial capacity of plant $p$                                                                                                                                                                                    | tonne          |
+| $K^\text{cap-max}_p$        | Maximum capacity of plant $p$                                                                                                                                                                                    | tonne          |
+| $K^\text{cap-min}_p$        | Minimum capacity of plant $p$                                                                                                                                                                                    | tonne          |
 | $K^\text{disp-limit}_{mt}$  | Maximum amount of material $m$ that can be disposed of (globally) at time $t$                                                                                                                                    | tonne          |
 | $K^\text{disp-limit}_{mut}$ | Maximum amount of material $m$ that can be disposed of at plant/center $u$ at time $t$                                                                                                                           | tonne          |
 | $K^\text{em-limit}_{gt}$    | Maximum amount of greenhouse gas $g$ allowed to be emitted (globally) at time $t$                                                                                                                                | tonne          |
 | $K^\text{em-plant}_{gpt}$   | Amount of greenhouse gas $g$ released by plant $p$ at time $t$ for each tonne of input material processed                                                                                                        | tonne/tonne    |
 | $K^\text{em-tr}_{gmt}$      | Amount of greenhouse gas $g$ released by transporting 1 tonne of material $m$ over one km at time $t$                                                                                                            | tonne/km-tonne |
 | $K^\text{mix}_{pmt}$        | If plant $p$ receives one tonne of input material at time $t$, then $K^\text{mix}_{pmt}$ is the amount of product $m$ in this mix. Must be between zero and one, and the sum of these amounts must equal to one. | tonne          |
-| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $m$ at time $t$                                                                                                                                                 | \$/tonne       |
+| $K^\text{out-fix}_{cmt}$    | Fixed amount of material $m$ collected at center $c$ at time $t$                                                                                                                                                 | tonne          |
 | $K^\text{out-var-len}_{cm}$ | Length of the $K^\text{out-var}_{c,m,*}$ vector.                                                                                                                                                                 | --             |
-| $K^\text{out-var}_{c,m,i}$  | Factor used to calculate variable amount of material $m$ collected at center $m$. See `eq_z_collected` for more details.                                                                                         | --             |
+| $K^\text{out-var}_{cmi}$    | Factor used to calculate variable amount of material $m$ collected at center $c$. See `eq_z_collected` for more details.                                                                                         | --             |
 | $K^\text{output}_{pmt}$     | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne          |
 | $R^\text{collect}_{cmt}$    | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne       |
 | $R^\text{disp}_{umt}$       | Cost to dispose of material at plant/center $u$ at time $t$                                                                                                                                                      | \$/tonne       |
 | $R^\text{em}_{gt}$          | Penalty cost per tonne of greenhouse gas $g$ emitted at time $t$                                                                                                                                                 | \$/tonne       |
-| $R^\text{fix}_{ut}$         | Fixed operating cost for plant/center $u$ at time $t$                                                                                                                                                            | \$             |
-| $R^\text{open}_{pt}$        | Cost to open plant $p$ at time $t$                                                                                                                                                                               | \$             |
+| $R^\text{expand}_{pt}$      | Cost to increase capacity of plant $p$ at time $t$                                                                                                                                                               | \$/tonne       |
+| $R^\text{fix}_{ct}$         | Fixed operating cost for center $c$ at time $t$                                                                                                                                                                  | \$             |
+| $R^\text{fix-min}_{pt}$     | Fixed operating cost for plant $p$ at time $t$ at minimum capacity                                                                                                                                               | \$             |
+| $R^\text{fix-exp}_{pt}$     | Increase in fixed operational cost for plant $p$ at time $t$ for every additional tonne of capacity                                                                                                              | \$/tonne       |
+| $R^\text{open}_{pt}$        | Cost to open plant $p$ at time $t$, at minimum capacity                                                                                                                                                          | \$             |
 | $R^\text{rev}_{ct}$         | Revenue for selling the input product of center $c$ at this center at time $t$                                                                                                                                   | \$/tonne       |
 | $R^\text{tr}_{mt}$          | Cost to send material $m$ at time $t$                                                                                                                                                                            | \$/km-tonne    |
 | $R^\text{var}_{pt}$         | Cost to process one tonne of input material at plant $p$ at time $t$                                                                                                                                             | \$/tonne       |
@@ -78,16 +83,17 @@ The mathematical model employed by RELOG is based on three main components:
 | :--------------------------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------------ | :----- |
 | $x_{pt}$                     | `x[p.name, t]`                               | One if plant $p$ is operational at time $t$                                                             | binary |
 | $y_{uvmt}$                   | `y[u.name, v.name, m.name, t]`               | Amount of product $m$ sent from plant/center $u$ to plant/center $v$ at time $t$                        | tonne  |
+| $z^{\text{exp}}_{pt}$        | `z_exp[p.name, t]`                           | Extra capacity installed at plant $p$ at time $t$ above the minimum capacity                            | tonne  |
 | $z^{\text{collected}}_{cmt}$ | `z_collected[c.name, m.name, t]`             | Amount of material $m$ collected by center $c$ at time $t$                                              | tonne  |
 | $z^{\text{disp}}_{umt}$      | `z_disp[u.name, m.name, t]`                  | Amount of product $m$ disposed of at plant/center $u$ at time $t$                                       | tonne  |
+| $z^{\text{em-plant}}_{gpt}$  | `z_em_plant[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
+| $z^{\text{em-tr}}_{guvmt}$   | `z_em_tr[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
 | $z^{\text{input}}_{ut}$      | `z_input[u.name, t]`                         | Total plant/center input at time $t$                                                                    | tonne  |
 | $z^{\text{prod}}_{umt}$      | `z_prod[u.name, m.name, t]`                  | Amount of product $m$ produced by plant/center $u$ at time $t$                                          | tonne  |
-| $z^{\text{em-tr}}_{guvmt}$   | `z_em_tr[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
-| $z^{\text{em-plant}}_{gpt}$  | `z_em_plant[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
 
 ## Objective function
 
-The goals is to minimize a linear objective function with the following terms:
+The goal is to minimize a linear objective function with the following terms:
 
 - Transportation costs, which depend on transportation distance
   $K^{\text{dist}}_{uv}$ and product-specific factor $R^\text{tr}_{mt}$:
@@ -131,7 +137,9 @@ The goals is to minimize a linear objective function with the following terms:
 \sum_{p \in P} \sum_{m \in M^+_p} \sum_{t \in T} R^\text{disp}_{pmt} z^\text{disp}_{pmt}
 ```
 
-- Plant opening cost:
+- Plant opening cost, incurred when the plant goes from non-operational at time
+  $t-1$ to operational at time $t$. Never incurred if the plant is initially
+  open:
 
 ```math
 \sum_{p \in P} \sum_{t \in T} R^\text{open}_{pt} \left(
@@ -140,10 +148,20 @@ The goals is to minimize a linear objective function with the following terms:
 ```
 
 - Plant fixed operating cost, incurred for every time period, regardless of
-  input or output amounts, as long as the plant is operational:
+  input or output amounts, as long as the plant is operational. Depends on the
+  size of the plant:
 
 ```math
-\sum_{p \in P} \sum_{t \in T} R^\text{fix}_{pt} x_{pt}
+\sum_{p \in P} \sum_{t \in T} \left(
+    R^\text{fix-min}_{pt} x_{pt} +
+    R^\text{fix-exp}_{pt} z^\text{exp}_{pt}
+\right)
+```
+
+- Plant expansion cost, incurred whenever plant capacity increases:
+
+```math
+\sum_{p \in P} \sum_{t \in T} R^\text{expand}_{pt} \left(z^\text{exp}_{pt} - z^\text{exp}_{p,t-1} \right)
 ```
 
 - Plant variable operating cost, incurred for each tonne of input material
@@ -160,6 +178,7 @@ The goals is to minimize a linear objective function with the following terms:
   \sum_{p \in P} z^{\text{em-plant}}_{gpt} + \sum_{(u,v,m) \in E} z^{\text{em-tr}}_{guvmt}
 \right)
 ```
+
 ## Constraints
 
 - Definition of plant input (`eq_z_input[p.name, t]`):
@@ -201,12 +220,42 @@ The goals is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Plants have a maximum capacity; furthermore, if the plant is not open, its
-  capacity is zero (`eq_capacity[p.name,t]`)
+- Plant can only be expanded if the plant is open, and up to a certain amount (`eq_exp_ub[p.name, t]`):
 
 ```math
 \begin{align*}
-& z^\text{input}_{pt} \leq K^\text{cap}_p x_{pt}
+& z^\text{exp}_{pt} \leq \left(K^\text{cap-max}_p - K^\text{cap-min}_p) x_{pt}
+& \forall p \in P, t \in T
+\end{align*}
+```
+
+- Plant is initially open if initial capacity is positive:
+
+```math
+\begin{align*}
+& x_{p,0} = \begin{cases}
+    0 & \text{ if } K^\text{cap-init}_p = 0 \\
+    1 & \text{otherwise}
+\end{cases}
+& \forall p \in P
+\end{align*}
+```
+
+- Calculation of initial plant expansion:
+
+```math
+\begin{align*}
+& z^\text{exp}_{p,0} = K^\text{cap-init}_p - K^\text{cap-min}_p
+& \forall p \in P
+\end{align*}
+```
+
+- Plants cannot process more than their current capacity
+  (`eq_input_limit[p.name,t]`)
+
+```math
+\begin{align*}
+& z^\text{input}_{pt} \leq K^\text{cap-min}_p x_{pt} + z^\text{exp}_{pt}
 & \forall p \in P, t \in T
 \end{align*}
 ```
@@ -280,7 +329,8 @@ The goals is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Computation of transportation emissions (`eq_emission_tr[g.name, u.name, v.name, m.name, t`):
+- Computation of transportation emissions
+  (`eq_emission_tr[g.name, u.name, v.name, m.name, t]`):
 
 ```math
 \begin{align*}
@@ -293,7 +343,7 @@ The goals is to minimize a linear objective function with the following terms:
 
 ```math
 \begin{align*}
-& z^{\text{em-plant}}_{gpt} = \sum_{(u,m) \in E^-(p)} K^\text{em-plant}_{gpt} y_{upmt}
+& z^{\text{em-plant}}_{gpt} = K^\text{em-plant}_{gpt} z^{\text{input}}_{pt}
 & \forall g \in G, p \in P, t \in T
 \end{align*}
 ```

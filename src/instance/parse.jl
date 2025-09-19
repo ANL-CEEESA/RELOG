@@ -110,6 +110,32 @@ function parse(json)::Instance
             )
         end
 
+        # Validate capacity count and duplicate if needed
+        if length(capacities) == 0
+            error("Plant '$name' must have at least one capacity defined")
+        elseif length(capacities) == 1
+            # Duplicate the single capacity
+            push!(capacities, capacities[1])
+        elseif length(capacities) > 2
+            error(
+                "Plant '$name' cannot have more than 2 capacities, got $(length(capacities))",
+            )
+        end
+
+        # Validate capacity sizes are non-decreasing
+        if capacities[1].size > capacities[2].size
+            error(
+                "Plant '$name' capacity sizes must be non-decreasing: $(capacities[1].size) > $(capacities[2].size)",
+            )
+        end
+
+        # Validate variable operating costs are the same
+        if capacities[1].var_operating_cost != capacities[2].var_operating_cost
+            error(
+                "Plant '$name' variable operating costs must be the same across all capacities",
+            )
+        end
+
         plant = Plant(;
             name,
             latitude,

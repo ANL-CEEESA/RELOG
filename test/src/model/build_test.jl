@@ -11,6 +11,7 @@ function model_build_test()
     z_input = model[:z_input]
     z_em_tr = model[:z_em_tr]
     z_em_plant = model[:z_em_plant]
+    z_exp = model[:z_exp]
     x = model[:x]
     obj = objective_function(model)
     # print(model)
@@ -27,6 +28,8 @@ function model_build_test()
     @test obj.terms[z_disp["C1", "P2", 1]] == 0.23
     @test obj.constant == (
         150 * 4 * 3 # center operating cost
+        - 300 # initial opening cost
+        - 150 * 1.75 # initial expansion
     )
     @test obj.terms[z_disp["L1", "P4", 2]] == 0.86
     @test obj.terms[x["L1", 1]] == (
@@ -44,6 +47,23 @@ function model_build_test()
     @test obj.terms[x["L1", 4]] == (
         475.0 + # opening cost
         300 # fixed operating cost
+    )
+
+    # Test expansion variables exist and have correct initial values
+    @test z_exp["L1", 0] == 150.0  # initial_capacity (250) - min_capacity (100)
+    @test haskey(z_exp, ("L1", 1))
+    @test haskey(z_exp, ("L1", 2))
+    @test haskey(z_exp, ("L1", 3))
+    @test haskey(z_exp, ("L1", 4))
+
+    # Test expansion costs in objective function
+    # R_expand[1] = (1000 - 300) / (500 - 100) = 1.75
+    # R_expand[2] = (1000 - 400) / (500 - 100) = 1.5
+    # R_fix_exp[1] = (400 - 300) / (500 - 100) = 0.25
+    @test obj.terms[z_exp["L1", 1]] == (
+        +1.75  # expansion cost[1]
+        - 1.5  # expansion cost[2]
+        + 0.25   # fixed operating cost[1]
     )
 
     # Variables: Transportation emissions
@@ -80,9 +100,13 @@ function model_build_test()
     @test repr(model[:eq_balance]["L1", "P4", 1]) ==
           "eq_balance[L1,P4,1] : -y[L1,C3,P4,1] + z_prod[L1,P4,1] - z_disp[L1,P4,1] = 0"
 
-    # Plants: Capacity limit
-    @test repr(model[:eq_capacity]["L1", 1]) ==
-          "eq_capacity[L1,1] : -100 x[L1,1] + z_input[L1,1] ≤ 0"
+    # Plants: Input limit (capacity constraint)
+    @test repr(model[:eq_input_limit]["L1", 1]) ==
+          "eq_input_limit[L1,1] : -100 x[L1,1] + z_input[L1,1] - z_exp[L1,1] ≤ 0"
+
+    # Plants: Expansion upper bound
+    @test repr(model[:eq_exp_ub]["L1", 1]) ==
+          "eq_exp_ub[L1,1] : -400 x[L1,1] + z_exp[L1,1] ≤ 0"
 
     # Plants: Disposal limit
     @test repr(model[:eq_disposal_limit]["L1", "P4", 1]) ==
@@ -92,7 +116,7 @@ function model_build_test()
     # Plants: Plant remains open
     @test repr(model[:eq_keep_open]["L1", 4]) ==
           "eq_keep_open[L1,4] : -x[L1,3] + x[L1,4] ≥ 0"
-    @test repr(model[:eq_keep_open]["L1", 1]) == "eq_keep_open[L1,1] : x[L1,1] ≥ 0"
+    @test repr(model[:eq_keep_open]["L1", 1]) == "eq_keep_open[L1,1] : x[L1,1] ≥ 1"
 
     # Plants: Building period
     @test ("L1", 1) ∉ keys(model[:eq_building_period])
@@ -137,9 +161,9 @@ function model_build_test()
     @test repr(model[:eq_emission_tr]["CH4", "L1", "C3", "P4", 1]) ==
           "eq_emission_tr[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_em_tr[CH4,L1,C3,P4,1] = 0"
 
-    # Plants: Plant emissions
+    # Plants: Plant emissions (updated to use z_input)
     @test repr(model[:eq_emission_plant]["CO2", "L1", 1]) ==
-          "eq_emission_plant[CO2,L1,1] : -0.1 y[C2,L1,P1,1] - 0.1 y[C1,L1,P2,1] + z_em_plant[CO2,L1,1] = 0"
+          "eq_emission_plant[CO2,L1,1] : -0.1 z_input[L1,1] + z_em_plant[CO2,L1,1] = 0"
 
     # Objective function: Emissions penalty costs
     @test obj.terms[z_em_plant["CO2", "L1", 1]] == 50.0  # CO2 penalty at time 1

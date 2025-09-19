@@ -18,6 +18,7 @@ function plants_report(model)::DataFrame
     df."opening cost (\$)" = Float64[]
     df."fixed operating cost (\$)" = Float64[]
     df."variable operating cost (\$)" = Float64[]
+    df."expansion cost (\$)" = Float64[]
 
     plants = model.ext[:instance].plants
     T = 1:model.ext[:instance].time_horizon
@@ -25,21 +26,25 @@ function plants_report(model)::DataFrame
     for p in plants, t in T
         operational = JuMP.value(model[:x][p.name, t]) > 0.5
         input = value(model[:z_input][p.name, t])
-
-        # Opening cost
+        var_operating_cost = input * p.capacities[1].var_operating_cost[t]
         opening_cost = 0
+        curr_capacity = 0
+        expansion_cost = 0
+        fix_operating_cost = 0
+
         if value(model[:x][p.name, t]) > 0.5 && value(model[:x][p.name, t-1]) < 0.5
             opening_cost = p.capacities[1].opening_cost[t]
         end
 
-        # Plant size
-        curr_capacity = 0
         if operational
-            curr_capacity = p.capacities[1].size
+            curr_expansion = JuMP.value(model[:z_exp][p.name, t])
+            prev_expansion = JuMP.value(model[:z_exp][p.name, t-1])
+            curr_capacity = p.capacities[1].size + curr_expansion
+            expansion_cost = R_expand(p, t) * (curr_expansion - prev_expansion)
+            fix_operating_cost =
+                p.capacities[1].fix_operating_cost[t] + R_fix_exp(p, t) * curr_expansion
         end
 
-        fix_operating_cost = (operational ? p.capacities[1].fix_operating_cost[t] : 0)
-        var_operating_cost = input * p.capacities[1].var_operating_cost[t]
         push!(
             df,
             Dict(
@@ -54,6 +59,7 @@ function plants_report(model)::DataFrame
                 "opening cost (\$)" => _round(opening_cost),
                 "fixed operating cost (\$)" => _round(fix_operating_cost),
                 "variable operating cost (\$)" => _round(var_operating_cost),
+                "expansion cost (\$)" => _round(expansion_cost),
             ),
         )
     end
@@ -114,7 +120,7 @@ function plant_emissions_report(model)::DataFrame
     for p in plants, t in T, g in keys(p.emissions)
         input_amount = JuMP.value(model[:z_input][p.name, t])
         input_amount > 1e-3 || continue
-        emissions = JuMP.value(model[:z_plant_em][g, p.name, t])
+        emissions = JuMP.value(model[:z_em_plant][g, p.name, t])
         emission_factor = p.emissions[g][t]
         push!(
             df,
