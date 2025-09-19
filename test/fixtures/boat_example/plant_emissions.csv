@@ -1,4 +1,4 @@
-plant,latitude,longitude,emission,year,input amount (tonne),emission factor (tonne/tonne),emissions amount (tonne)
+plant,latitude,longitude,emission,year,processed amount (tonne),emission factor (tonne/tonne),emissions amount (tonne)
 BoatFactory (Dallas),32.776664,-96.796988,CO2,1,63.15789,5.0,315.78947
 BoatFactory (Dallas),32.776664,-96.796988,CO2,2,71.46814,5.0,357.34072
 BoatFactory (Dallas),32.776664,-96.796988,CO2,3,75.8857,5.0,379.42849

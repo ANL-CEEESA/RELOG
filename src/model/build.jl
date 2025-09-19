@@ -148,6 +148,23 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_collected[c.name, m.name, t] = @variable(model, lower_bound = 0)
     end
 
+    # Amount of input material stored at plant at end of time period
+    z_storage = _init(model, :z_storage)
+    for p in plants
+        for m in keys(p.input_mix)
+            z_storage[p.name, m.name, 0] = 0  # Initial storage is zero
+        end
+    end
+    for p in plants, m in keys(p.input_mix), t in T
+        z_storage[p.name, m.name, t] = @variable(model, lower_bound = 0)
+    end
+
+    # Total amount of input material processed by plant
+    z_process = _init(model, :z_process)
+    for p in plants, t in T
+        z_process[p.name, t] = @variable(model, lower_bound = 0)
+    end
+
     # Transportation emissions by greenhouse gas
     z_em_tr = _init(model, :z_em_tr)
     for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
@@ -224,6 +241,11 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
+    # Plants: Storage cost
+    for p in plants, m in keys(p.storage_cost), t in T
+        add_to_expression!(obj, p.storage_cost[m][t], z_storage[p.name, m.name, t])
+    end
+
     # Emissions penalty cost
     for emission in instance.emissions, t in T
         # Plant emissions penalty
@@ -263,13 +285,27 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
-    # Plants: Must meet input mix
-    eq_input_mix = _init(model, :eq_input_mix)
-    for p in plants, m in keys(p.input_mix), t in T
-        eq_input_mix[p.name, m.name, t] = @constraint(
+    # Plants: Definition of total processing amount
+    eq_z_process = _init(model, :eq_z_process)
+    for p in plants, t in T
+        eq_z_process[p.name, t] = @constraint(
             model,
-            sum(y[src.name, p.name, m.name, t] for (src, m2) in E_in[p] if m == m2) ==
-            z_input[p.name, t] * p.input_mix[m][t]
+            z_process[p.name, t] == z_input[p.name, t] +
+            sum(
+                z_storage[p.name, m.name, t-1] - z_storage[p.name, m.name, t]
+                for m in keys(p.input_mix)
+            )
+        )
+    end
+
+    # Plants: Processing mix must have correct proportion
+    eq_process_mix = _init(model, :eq_process_mix)
+    for p in plants, m in keys(p.input_mix), t in T
+        eq_process_mix[p.name, m.name, t] = @constraint(
+            model,
+            sum(y[src.name, p.name, m.name, t] for (src, m2) in E_in[p] if m == m2) +
+            z_storage[p.name, m.name, t-1] - z_storage[p.name, m.name, t] ==
+            z_process[p.name, t] * p.input_mix[m][t]
         )
     end
 
@@ -278,7 +314,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     for p in plants, m in keys(p.output), t in T
         eq_z_prod[p.name, m.name, t] = @constraint(
             model,
-            z_prod[p.name, m.name, t] == z_input[p.name, t] * p.output[m][t]
+            z_prod[p.name, m.name, t] == z_process[p.name, t] * p.output[m][t]
         )
     end
 
@@ -302,12 +338,12 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
-    # Plants: Input limit
-    eq_input_limit = _init(model, :eq_input_limit)
+    # Plants: Processing limit
+    eq_process_limit = _init(model, :eq_process_limit)
     for p in plants, t in T
-        eq_input_limit[p.name, t] = @constraint(
+        eq_process_limit[p.name, t] = @constraint(
             model,
-            z_input[p.name, t] <= K_cap_min[p] * x[p.name, t] + z_exp[p.name, t]
+            z_process[p.name, t] <= K_cap_min[p] * x[p.name, t] + z_exp[p.name, t]
         )
     end
 
@@ -404,7 +440,27 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     for p in plants, t in T, g in keys(p.emissions)
         eq_emission_plant[g, p.name, t] = @constraint(
             model,
-            z_em_plant[g, p.name, t] == p.emissions[g][t] * z_input[p.name, t]
+            z_em_plant[g, p.name, t] == p.emissions[g][t] * z_process[p.name, t]
+        )
+    end
+
+    # Storage limit at plants
+    eq_storage_limit = _init(model, :eq_storage_limit)
+    for p in plants, m in keys(p.storage_limit), t in T
+        if isfinite(p.storage_limit[m][t])
+            eq_storage_limit[p.name, m.name, t] = @constraint(
+                model,
+                z_storage[p.name, m.name, t] <= p.storage_limit[m][t]
+            )
+        end
+    end
+
+    # All stored materials must be processed by end of time horizon
+    eq_storage_final = _init(model, :eq_storage_final)
+    for p in plants, m in keys(p.input_mix)
+        eq_storage_final[p.name, m.name] = @constraint(
+            model,
+            z_storage[p.name, m.name, instance.time_horizon] == 0
         )
     end
 

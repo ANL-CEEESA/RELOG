@@ -1,0 +1,151 @@
+plant,latitude,longitude,input product,year,amount received (tonne),current storage level (tonne),storage limit (tonne),storage cost ($)
+BoatFactory (Chicago),41.881832,-87.623177,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (Chicago),41.881832,-87.623177,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (New York City),40.712776,-74.005974,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (Los Angeles),34.052235,-118.243683,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (Houston),29.760427,-95.369804,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (Phoenix),33.448376,-112.074036,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (Philadelphia),39.952583,-75.165222,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (San Antonio),29.424122,-98.493629,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (San Diego),32.715736,-117.161087,Nail,5,0.0,0.0,1.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Wood,1,60.0,0.0,5.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Wood,2,67.89474,0.0,5.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Wood,3,72.09141,0.0,5.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Wood,4,73.05912,0.0,5.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Wood,5,73.40733,0.0,5.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Nail,1,3.15789,0.0,1.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Nail,2,3.57341,0.0,1.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Nail,3,3.79428,0.0,1.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Nail,4,3.84522,0.0,1.0,0.0
+BoatFactory (Dallas),32.776664,-96.796988,Nail,5,3.86354,0.0,1.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Wood,1,0.0,0.0,5.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Wood,2,0.0,0.0,5.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Wood,3,0.0,0.0,5.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Wood,4,0.0,0.0,5.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Wood,5,0.0,0.0,5.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Nail,1,0.0,0.0,1.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Nail,2,0.0,0.0,1.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Nail,3,0.0,0.0,1.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Nail,4,0.0,0.0,1.0,0.0
+BoatFactory (San Jose),37.338208,-121.886329,Nail,5,0.0,0.0,1.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Chicago),41.881832,-87.623177,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (New York City),40.712776,-74.005974,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),34.052235,-118.243683,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),34.052235,-118.243683,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),34.052235,-118.243683,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),34.052235,-118.243683,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Los Angeles),34.052235,-118.243683,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (Houston),29.760427,-95.369804,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (Houston),29.760427,-95.369804,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (Houston),29.760427,-95.369804,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (Houston),29.760427,-95.369804,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Houston),29.760427,-95.369804,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Phoenix),33.448376,-112.074036,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),39.952583,-75.165222,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),39.952583,-75.165222,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),39.952583,-75.165222,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),39.952583,-75.165222,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (Philadelphia),39.952583,-75.165222,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (San Antonio),29.424122,-98.493629,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (San Diego),32.715736,-117.161087,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (San Diego),32.715736,-117.161087,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (San Diego),32.715736,-117.161087,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (San Diego),32.715736,-117.161087,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (San Diego),32.715736,-117.161087,UsedBoat,5,0.0,0.0,0.0,0.0
+RecyclingPlant (Dallas),32.776664,-96.796988,UsedBoat,1,6.31579,0.0,0.0,0.0
+RecyclingPlant (Dallas),32.776664,-96.796988,UsedBoat,2,22.93629,0.0,0.0,0.0
+RecyclingPlant (Dallas),32.776664,-96.796988,UsedBoat,3,31.7714,0.0,0.0,0.0
+RecyclingPlant (Dallas),32.776664,-96.796988,UsedBoat,4,33.80867,0.0,0.0,0.0
+RecyclingPlant (Dallas),32.776664,-96.796988,UsedBoat,5,34.54174,0.0,0.0,0.0
+RecyclingPlant (San Jose),37.338208,-121.886329,UsedBoat,1,0.0,0.0,0.0,0.0
+RecyclingPlant (San Jose),37.338208,-121.886329,UsedBoat,2,0.0,0.0,0.0,0.0
+RecyclingPlant (San Jose),37.338208,-121.886329,UsedBoat,3,0.0,0.0,0.0,0.0
+RecyclingPlant (San Jose),37.338208,-121.886329,UsedBoat,4,0.0,0.0,0.0,0.0
+RecyclingPlant (San Jose),37.338208,-121.886329,UsedBoat,5,0.0,0.0,0.0,0.0

@@ -9,6 +9,8 @@ function model_build_test()
     y = model[:y]
     z_disp = model[:z_disp]
     z_input = model[:z_input]
+    z_process = model[:z_process]
+    z_storage = model[:z_storage]
     z_em_tr = model[:z_em_tr]
     z_em_plant = model[:z_em_plant]
     z_exp = model[:z_exp]
@@ -66,6 +68,10 @@ function model_build_test()
         + 0.25   # fixed operating cost[1]
     )
 
+    # Test storage cost in objective function
+    @test obj.terms[z_storage["L1", "P1", 1]] == 0.1  # P1 storage cost
+    @test obj.terms[z_storage["L1", "P2", 1]] == 0.1  # P2 storage cost
+
     # Variables: Transportation emissions
     @test haskey(z_em_tr, ("CO2", "L1", "C3", "P4", 1))
     @test haskey(z_em_tr, ("CH4", "L1", "C3", "P4", 1))
@@ -82,17 +88,21 @@ function model_build_test()
     @test repr(model[:eq_z_input]["L1", 1]) ==
           "eq_z_input[L1,1] : -y[C2,L1,P1,1] - y[C1,L1,P2,1] + z_input[L1,1] = 0"
 
-    # Plants: Must meet input mix
-    @test repr(model[:eq_input_mix]["L1", "P1", 1]) ==
-          "eq_input_mix[L1,P1,1] : y[C2,L1,P1,1] - 0.953 z_input[L1,1] = 0"
-    @test repr(model[:eq_input_mix]["L1", "P2", 1]) ==
-          "eq_input_mix[L1,P2,1] : y[C1,L1,P2,1] - 0.047 z_input[L1,1] = 0"
+    # Plants: Definition of total processing amount
+    @test repr(model[:eq_z_process]["L1", 1]) ==
+          "eq_z_process[L1,1] : -z_input[L1,1] + z_storage[L1,P1,1] + z_storage[L1,P2,1] + z_process[L1,1] = 0"
+
+    # Plants: Processing mix must have correct proportion
+    @test repr(model[:eq_process_mix]["L1", "P1", 1]) ==
+          "eq_process_mix[L1,P1,1] : y[C2,L1,P1,1] - z_storage[L1,P1,1] - 0.953 z_process[L1,1] = 0"
+    @test repr(model[:eq_process_mix]["L1", "P2", 1]) ==
+          "eq_process_mix[L1,P2,1] : y[C1,L1,P2,1] - z_storage[L1,P2,1] - 0.047 z_process[L1,1] = 0"
 
     # Plants: Calculate amount produced
     @test repr(model[:eq_z_prod]["L1", "P3", 1]) ==
-          "eq_z_prod[L1,P3,1] : z_prod[L1,P3,1] - 0.25 z_input[L1,1] = 0"
+          "eq_z_prod[L1,P3,1] : z_prod[L1,P3,1] - 0.25 z_process[L1,1] = 0"
     @test repr(model[:eq_z_prod]["L1", "P4", 1]) ==
-          "eq_z_prod[L1,P4,1] : z_prod[L1,P4,1] - 0.12 z_input[L1,1] = 0"
+          "eq_z_prod[L1,P4,1] : z_prod[L1,P4,1] - 0.12 z_process[L1,1] = 0"
 
     # Plants: Produced material must be sent or disposed
     @test repr(model[:eq_balance]["L1", "P3", 1]) ==
@@ -100,9 +110,9 @@ function model_build_test()
     @test repr(model[:eq_balance]["L1", "P4", 1]) ==
           "eq_balance[L1,P4,1] : -y[L1,C3,P4,1] + z_prod[L1,P4,1] - z_disp[L1,P4,1] = 0"
 
-    # Plants: Input limit (capacity constraint)
-    @test repr(model[:eq_input_limit]["L1", 1]) ==
-          "eq_input_limit[L1,1] : -100 x[L1,1] + z_input[L1,1] - z_exp[L1,1] ≤ 0"
+    # Plants: Processing limit (capacity constraint)
+    @test repr(model[:eq_process_limit]["L1", 1]) ==
+          "eq_process_limit[L1,1] : -100 x[L1,1] - z_exp[L1,1] + z_process[L1,1] ≤ 0"
 
     # Plants: Expansion upper bound
     @test repr(model[:eq_exp_ub]["L1", 1]) ==
@@ -161,9 +171,9 @@ function model_build_test()
     @test repr(model[:eq_emission_tr]["CH4", "L1", "C3", "P4", 1]) ==
           "eq_emission_tr[CH4,L1,C3,P4,1] : -0.333354 y[L1,C3,P4,1] + z_em_tr[CH4,L1,C3,P4,1] = 0"
 
-    # Plants: Plant emissions (updated to use z_input)
+    # Plants: Plant emissions (updated to use z_process)
     @test repr(model[:eq_emission_plant]["CO2", "L1", 1]) ==
-          "eq_emission_plant[CO2,L1,1] : -0.1 z_input[L1,1] + z_em_plant[CO2,L1,1] = 0"
+          "eq_emission_plant[CO2,L1,1] : -0.1 z_process[L1,1] + z_em_plant[CO2,L1,1] = 0"
 
     # Objective function: Emissions penalty costs
     @test obj.terms[z_em_plant["CO2", "L1", 1]] == 50.0  # CO2 penalty at time 1
@@ -177,4 +187,30 @@ function model_build_test()
     @test repr(model[:eq_emission_limit]["CO2", 1]) ==
           "eq_emission_limit[CO2,1] : z_em_tr[CO2,C2,L1,P1,1] + z_em_tr[CO2,C2,C1,P1,1] + z_em_tr[CO2,C1,L1,P2,1] + z_em_tr[CO2,L1,C3,P4,1] + z_em_plant[CO2,L1,1] ≤ 1000"
     @test ("CH4", 1) ∉ keys(model[:eq_emission_limit])
+
+    # Test storage variables exist
+    @test haskey(z_storage, ("L1", "P1", 1))
+    @test haskey(z_storage, ("L1", "P2", 1))
+    @test haskey(z_process, ("L1", 1))
+    @test haskey(z_process, ("L1", 2))
+    @test haskey(z_process, ("L1", 3))
+    @test haskey(z_process, ("L1", 4))
+
+    # Test initial storage values
+    @test z_storage["L1", "P1", 0] == 0
+    @test z_storage["L1", "P2", 0] == 0
+
+    # Test storage limit constraints (P1 has limit of 100, P2 has no limit)
+    @test haskey(model[:eq_storage_limit], ("L1", "P1", 1))
+    @test repr(model[:eq_storage_limit]["L1", "P1", 1]) ==
+          "eq_storage_limit[L1,P1,1] : z_storage[L1,P1,1] ≤ 100"
+    @test ("L1", "P2", 1) ∉ keys(model[:eq_storage_limit])  # P2 has no storage limit
+
+    # Test final storage constraints exist
+    @test haskey(model[:eq_storage_final], ("L1", "P1"))
+    @test haskey(model[:eq_storage_final], ("L1", "P2"))
+    @test repr(model[:eq_storage_final]["L1", "P1"]) ==
+          "eq_storage_final[L1,P1] : z_storage[L1,P1,4] = 0"
+    @test repr(model[:eq_storage_final]["L1", "P2"]) ==
+          "eq_storage_final[L1,P2] : z_storage[L1,P2,4] = 0"
 end

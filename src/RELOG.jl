@@ -1,6 +1,12 @@
 module RELOG
 
-_round(x::Number) = round(x, digits = 5)
+function _round(x::Number)
+    if abs(x) < 1e-5
+        return 0
+    else
+        return round(x, digits = 5)
+    end
+end
 
 include("instance/structs.jl")
 include("instance/parse.jl")
