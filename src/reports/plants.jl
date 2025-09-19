@@ -36,8 +36,8 @@ function plants_report(model)::DataFrame
 
         # Calculate total storage cost
         storage_cost = sum(
-            p.storage_cost[m][t] * value(model[:z_storage][p.name, m.name, t])
-            for m in keys(p.storage_cost)
+            p.storage_cost[m][t] * value(model[:z_storage][p.name, m.name, t]) for
+            m in keys(p.storage_cost)
         )
 
         var_operating_cost = input * p.capacities[1].var_operating_cost[t]
@@ -100,8 +100,8 @@ function plant_inputs_report(model)::DataFrame
 
     for p in plants, m in keys(p.input_mix), t in T
         amount_received = sum(
-            value(model[:y][src.name, p.name, m.name, t])
-            for (src, prod) in model.ext[:E_in][p] if prod == m
+            value(model[:y][src.name, p.name, m.name, t]) for
+            (src, prod) in model.ext[:E_in][p] if prod == m
         )
         storage_level = value(model[:z_storage][p.name, m.name, t])
         storage_cost = p.storage_cost[m][t] * storage_level
@@ -197,7 +197,8 @@ function plant_emissions_report(model)::DataFrame
 end
 
 write_plants_report(solution, filename) = CSV.write(filename, plants_report(solution))
-write_plant_inputs_report(solution, filename) = CSV.write(filename, plant_inputs_report(solution))
+write_plant_inputs_report(solution, filename) =
+    CSV.write(filename, plant_inputs_report(solution))
 write_plant_outputs_report(solution, filename) =
     CSV.write(filename, plant_outputs_report(solution))
 write_plant_emissions_report(solution, filename) =

@@ -290,10 +290,10 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     for p in plants, t in T
         eq_z_process[p.name, t] = @constraint(
             model,
-            z_process[p.name, t] == z_input[p.name, t] +
-            sum(
-                z_storage[p.name, m.name, t-1] - z_storage[p.name, m.name, t]
-                for m in keys(p.input_mix)
+            z_process[p.name, t] ==
+            z_input[p.name, t] + sum(
+                z_storage[p.name, m.name, t-1] - z_storage[p.name, m.name, t] for
+                m in keys(p.input_mix)
             )
         )
     end
@@ -448,20 +448,16 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     eq_storage_limit = _init(model, :eq_storage_limit)
     for p in plants, m in keys(p.storage_limit), t in T
         if isfinite(p.storage_limit[m][t])
-            eq_storage_limit[p.name, m.name, t] = @constraint(
-                model,
-                z_storage[p.name, m.name, t] <= p.storage_limit[m][t]
-            )
+            eq_storage_limit[p.name, m.name, t] =
+                @constraint(model, z_storage[p.name, m.name, t] <= p.storage_limit[m][t])
         end
     end
 
     # All stored materials must be processed by end of time horizon
     eq_storage_final = _init(model, :eq_storage_final)
     for p in plants, m in keys(p.input_mix)
-        eq_storage_final[p.name, m.name] = @constraint(
-            model,
-            z_storage[p.name, m.name, instance.time_horizon] == 0
-        )
+        eq_storage_final[p.name, m.name] =
+            @constraint(model, z_storage[p.name, m.name, instance.time_horizon] == 0)
     end
 
     # Global emissions limit
