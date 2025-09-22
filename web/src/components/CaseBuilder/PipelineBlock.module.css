@@ -1,0 +1,41 @@
+.PipelineBlock {
+  height: 800px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--border-radius) !important;
+  margin-bottom: 12px !important;
+}
+
+:global(.react-flow__node.PlantNode.selected),
+:global(.react-flow__node.ProductNode.selected),
+:global(.react-flow__node.CenterNode.selected){
+    border: 2px solid #000 !important;
+
+}
+
+:global(.react-flow__node.PlantNode),
+:global(.react-flow__node.ProductNode),
+:global(.react-flow__node.CenterNode) {
+  border-color: rgba(0, 0, 0, 0.8) !important;
+  color: black !important;
+  font-size: 13px !important;
+  border-width: 1px !important;
+  border-radius: 6px !important;
+  box-shadow: 0px 2px 4px -3px black !important;
+  width: 140px !important;
+  height: 40px !important;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  display: flex;
+
+}
+
+:global(.react-flow__node.PlantNode) {
+  --xy-node-background-color: #8d8 !important;
+}
+:global(.react-flow__node.ProductNode) {
+  --xy-node-background-color: #e6e6e6 !important;
+}
+:global(.react-flow__node.CenterNode) {
+  --xy-node-background-color: #d3a610 !important;
+}
