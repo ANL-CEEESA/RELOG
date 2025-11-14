@@ -4,13 +4,22 @@
 
 using JuMP
 
-R_expand(p::Plant, t::Int) =
-    (p.capacities[2].opening_cost[t] - p.capacities[1].opening_cost[t]) /
-    (p.capacities[2].size - p.capacities[1].size)
+function R_expand(p::Plant, t::Int)
+    denominator = p.capacities[2].size - p.capacities[1].size
+    if denominator == 0
+        return 0.0
+    end
+    return (p.capacities[2].opening_cost[t] - p.capacities[1].opening_cost[t]) / denominator
+end
 
-R_fix_exp(p::Plant, t::Int) =
-    (p.capacities[2].fix_operating_cost[t] - p.capacities[1].fix_operating_cost[t]) /
-    (p.capacities[2].size - p.capacities[1].size)
+function R_fix_exp(p::Plant, t::Int)
+    denominator = p.capacities[2].size - p.capacities[1].size
+    if denominator == 0
+        return 0.0
+    end
+    return (p.capacities[2].fix_operating_cost[t] - p.capacities[1].fix_operating_cost[t]) /
+           denominator
+end
 
 function build_model(instance::Instance; optimizer, variable_names::Bool = false)
     model = JuMP.Model(optimizer)
@@ -389,7 +398,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             z_collected[c.name, m.name, t] ==
             sum(
                 z_input[c.name, t-offset] * c.var_output[m][offset+1] for
-                offset = 0:min(M - 1, t - 1)
+                offset = 0:min(M-1, t-1)
             ) + c.fixed_output[m][t]
         )
     end
