@@ -2,7 +2,7 @@ using JSON
 using OrderedCollections
 
 function parsefile(path::String)::Instance
-    return RELOG.parse(JSON.parsefile(path, dicttype = () -> OrderedDict()))
+    return RELOG.parse(JSON.parsefile(path; dicttype = OrderedDict))
 end
 
 function parse(json)::Instance
