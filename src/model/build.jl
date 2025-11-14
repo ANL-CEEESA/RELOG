@@ -370,6 +370,13 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         eq_keep_open[p.name, t] = @constraint(model, x[p.name, t] >= x[p.name, t-1])
     end
 
+    # Plants: Capacity cannot decrease over time
+    eq_capacity_nondecreasing = _init(model, :eq_capacity_nondecreasing)
+    for p in plants, t in T
+        eq_capacity_nondecreasing[p.name, t] =
+            @constraint(model, z_exp[p.name, t] >= z_exp[p.name, t-1])
+    end
+
     # Plants: Building period
     eq_building_period = _init(model, :eq_building_period)
     for p in plants, t in T

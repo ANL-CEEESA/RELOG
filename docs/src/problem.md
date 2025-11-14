@@ -249,6 +249,15 @@ The goal is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
+- Plant capacity cannot decrease over time (`eq_capacity_nondecreasing[p.name, t]`):
+
+```math
+\begin{align*}
+& z^\text{exp}_{pt} \geq z^\text{exp}_{p,t-1}
+& \forall p \in P, t \in T
+\end{align*}
+```
+
 - Plant is initially open if initial capacity is positive:
 
 ```math

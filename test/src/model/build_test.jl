@@ -128,6 +128,12 @@ function model_build_test()
           "eq_keep_open[L1,4] : -x[L1,3] + x[L1,4] ≥ 0"
     @test repr(model[:eq_keep_open]["L1", 1]) == "eq_keep_open[L1,1] : x[L1,1] ≥ 1"
 
+    # Plants: Capacity cannot decrease over time
+    @test repr(model[:eq_capacity_nondecreasing]["L1", 4]) ==
+          "eq_capacity_nondecreasing[L1,4] : -z_exp[L1,3] + z_exp[L1,4] ≥ 0"
+    @test repr(model[:eq_capacity_nondecreasing]["L1", 1]) ==
+          "eq_capacity_nondecreasing[L1,1] : z_exp[L1,1] ≥ 150"
+
     # Plants: Building period
     @test ("L1", 1) ∉ keys(model[:eq_building_period])
     @test repr(model[:eq_building_period]["L1", 2]) ==
