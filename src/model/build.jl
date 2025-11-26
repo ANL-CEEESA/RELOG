@@ -356,6 +356,33 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
+
+    # Demand bounds (only when active: > 0 for min; finite and > 0 for max)
+    eq_min_demand = _init(model, :eq_min_demand)
+    eq_max_demand = _init(model, :eq_max_demand)
+    for m in products, t in T
+        if m.minimum_demand[t] > 0
+            eq_min_demand[m.name, t] = @constraint(
+                model,
+                sum(
+                    y[src.name, c.name, m.name, t]
+                    for c in centers if c.input == m
+                    for (src, m2) in E_in[c] if m2 == m
+                ) >= m.minimum_demand[t]
+            )
+        end
+        if isfinite(m.maximum_demand[t]) && m.maximum_demand[t] > 0
+            eq_max_demand[m.name, t] = @constraint(
+                model,
+                sum(
+                    y[src.name, c.name, m.name, t]
+                    for c in centers if c.input == m
+                    for (src, m2) in E_in[c] if m2 == m
+                ) <= m.maximum_demand[t]
+            )
+        end
+    end
+
     # Plants: Disposal limit
     eq_disposal_limit = _init(model, :eq_disposal_limit)
     for p in plants, m in keys(p.output), t in T
