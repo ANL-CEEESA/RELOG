@@ -365,9 +365,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             eq_min_demand[m.name, t] = @constraint(
                 model,
                 sum(
-                    y[src.name, c.name, m.name, t]
-                    for c in centers if c.input == m
-                    for (src, m2) in E_in[c] if m2 == m
+                    y[src.name, c.name, m.name, t] for c in centers if c.input == m for (src, m2) in E_in[c] if m2 == m
                 ) >= m.minimum_demand[t]
             )
         end
@@ -375,9 +373,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             eq_max_demand[m.name, t] = @constraint(
                 model,
                 sum(
-                    y[src.name, c.name, m.name, t]
-                    for c in centers if c.input == m
-                    for (src, m2) in E_in[c] if m2 == m
+                    y[src.name, c.name, m.name, t] for c in centers if c.input == m for (src, m2) in E_in[c] if m2 == m
                 ) <= m.maximum_demand[t]
             )
         end
