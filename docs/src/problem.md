@@ -66,8 +66,8 @@ The mathematical model employed by RELOG is based on three main components:
 | $K^\text{out-var}_{cmi}$      | Factor used to calculate variable amount of material $m$ collected at center $c$. See `eq_z_collected` for more details.                                                                                         | --             |
 | $K^\text{output}_{pmt}$       | Amount of material $m$ produced by plant $p$ at time $t$ for each tonne of input material processed                                                                                                              | tonne          |
 | $K^\text{storage-limit}_{pm}$ | Maximum amount of material $m$ that can be stored at plant $p$ at any time                                                                                                                                       | tonne          |
-| $K^\text{dem-min}_{mt}$      | Minimum demand of material $m$ at time $t$  | tonne          |
-| $K^\text{dem-max}_{mt}$      | Maximum demand of material $m$ at time $t$  | tonne          |
+| $K^\text{dem-min}_{ct}$      | Minimum amount of input product that must be sent to the center $c$ at time $t$  | tonne          |
+| $K^\text{dem-max}_{ct}$      | Maximum amount of input product that must be sent to the center $c$ at time $t$  | tonne          |
 | $R^\text{collect}_{cmt}$      | Cost of collecting material $m$ at center $c$ at time $t$                                                                                                                                                        | \$/tonne       |
 | $R^\text{disp}_{umt}$         | Cost to dispose of material at plant/center $u$ at time $t$                                                                                                                                                      | \$/tonne       |
 | $R^\text{em}_{gt}$            | Penalty cost per tonne of greenhouse gas $g$ emitted at time $t$                                                                                                                                                 | \$/tonne       |
@@ -331,15 +331,15 @@ The goal is to minimize a linear objective function with the following terms:
 - Minimum product demands for products at centers:
 ```math
 \begin{align*}
-& \sum_{c : m \in M^-_c} \sum_{u : (u,m) \in E^-(c)} y_{ucmt} \geq K^\text{dem-min}_{mt}
-& \forall m \in M, t \in T
+& \sum_{u : (u,m) \in E^-(c)} y_{ucmt} \geq K^\text{dem-min}_{ct}
+& \forall c \in C, t \in T
 \end{align*}
 ```
 - Maximum product demands for products at centers:
 ```math
 \begin{align*}
-& \sum_{c : m \in M^-_c} \sum_{u : (u,m) \in E^-(c)} y_{ucmt} \leq K^\text{dem-max}_{mt}
-& \forall m \in M, t \in T
+&\sum_{u : (u,m) \in E^-(c)} y_{ucmt} \leq K^\text{dem-max}_{ct}
+& \forall c \in C, t \in T
 \end{align*}
 ```
 

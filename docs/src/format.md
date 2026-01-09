@@ -66,6 +66,8 @@ detail.
 | `operating cost ($)`            | Fixed cost to operate the center for one year, regardless of amount of product received or generated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `disposal limit (tonne)`        | Dictionary mapping the name of each output product to the maximum disposal amount allowed per year of the product at the center. Entry may be `null` if unlimited.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `disposal cost ($/tonne)`       | Dictionary mapping the name of each output product to the cost to dispose one tonne of the product at the center.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `minimum demand (tonne)`       | Minimum amount of the input product that must be sent to this center per year. Must be a time series. Only valid when input in not null.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `maximum demand ($/tonne)`       | Maximum amount of the input product that must be sent to this center per year. Must be a time series. Only valid when input in not null.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ```json
 {
@@ -75,6 +77,8 @@ detail.
       "longitude (deg)": -87.623,
       "input": "P1",
       "outputs": ["P2", "P3"],
+      "minimum demand (tonne)": [10, 10, 10, 10],
+      "maximum demand (tonne)": [100, 100, 100, 100],
       "fixed output (tonne)": {
         "P2": [100, 50, 0, 0],
         "P3": [20, 10, 0, 0]
@@ -103,6 +107,8 @@ detail.
       "longitude (deg)": -87.623,
       "input": null,
       "outputs": ["P4"],
+      "minimum demand (tonne)": [],
+      "maximum demand (tonne)": [],
       "variable output (tonne/tonne)": {
         "P4": [0, 0, 0, 0]
       },
@@ -126,6 +132,8 @@ detail.
       "longitude (deg)": -87.623,
       "input": "P1",
       "outputs": [],
+      "minimum demand (tonne)": [10, 10, 10, 10],
+      "maximum demand (tonne)": [100, 100, 100, 100],
       "variable output (tonne/tonne)": {},
       "constant output (tonne)": {},
       "revenue ($/tonne)": [12.0, 12.0, 12.0, 12.0],
