@@ -30,6 +30,10 @@ Base.@kwdef struct Center
     operating_cost::Vector{Float64}
     disposal_limit::OrderedDict{Product,Vector{Float64}}
     disposal_cost::OrderedDict{Product,Vector{Float64}}
+    
+    # demand for its input product, per year
+    minimum_demand::Vector{Float64}
+    maximum_demand::Vector{Float64}
 end
 
 Base.@kwdef struct PlantCapacity

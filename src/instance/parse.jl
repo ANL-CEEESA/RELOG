@@ -45,12 +45,25 @@ function parse(json)::Instance
     for (name, cdict) in json["centers"]
         latitude = cdict["latitude (deg)"]
         longitude = cdict["longitude (deg)"]
+
         input = nothing
         revenue = [0.0 for t = 1:time_horizon]
+        minimum_demand = [0.0 for t = 1:time_horizon]
+        maximum_demand = [Inf  for t = 1:time_horizon]
+
         if cdict["input"] !== nothing
             input = products_by_name[cdict["input"]]
             revenue = timeseries(cdict["revenue (\$/tonne)"])
+            minimum_demand = timeseries(
+                get(cdict, "minimum demand (tonne)", nothing);
+                null_val = 0.0,
+            )
+            maximum_demand = timeseries(
+                get(cdict, "maximum demand (tonne)", nothing);
+                null_val = Inf,
+            )
         end
+
         outputs = [products_by_name[p] for p in cdict["outputs"]]
         operating_cost = timeseries(cdict["operating cost (\$)"])
         prod_dict(key, null_val) =
@@ -74,6 +87,8 @@ function parse(json)::Instance
             collection_cost,
             disposal_cost,
             disposal_limit,
+            minimum_demand,
+            maximum_demand
         )
         push!(centers, center)
         centers_by_name[name] = center
