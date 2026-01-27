@@ -371,7 +371,7 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
                     ) >= c.minimum_demand[t]
                 )
             end
-            if isfinite(c.maximum_demand[t]) && c.maximum_demand[t] > 0
+            if isfinite(c.maximum_demand[t])
                 eq_max_demand[c.name, t] = @constraint(
                     model,
                     sum(

@@ -69,7 +69,9 @@
       "disposal cost ($/tonne)": {
         "P2": [0.23, 0.23, 0.23, 0.23],
         "P3": [1.0, 1.0, 1.0, 1.0]
-      }
+      },
+      "minimum demand (tonne)": [5, 10, 0, 15],
+      "maximum demand (tonne)": [100, 200, null, 50]
     },
     "C2": {
       "latitude (deg)": 42.881,
@@ -105,7 +107,9 @@
       "collection cost ($/tonne)": {},
       "operating cost ($)": 150.0,
       "disposal limit (tonne)": {},
-      "disposal cost ($/tonne)": {}
+      "disposal cost ($/tonne)": {},
+      "minimum demand (tonne)": [0, 0, 0, 0],
+      "maximum demand (tonne)": [0, 25, 50, 75]
     }
   },
   "plants": {

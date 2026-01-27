@@ -164,6 +164,36 @@ function model_build_test()
           "eq_disposal_limit[C1,P2,1] : z_disp[C1,P2,1] ≤ 0"
     @test ("C1", "P3", 1) ∉ keys(model[:eq_disposal_limit])
 
+    # Centers: Minimum demand constraints
+    @test repr(model[:eq_min_demand]["C1", 1]) ==
+          "eq_min_demand[C1,1] : y[C2,C1,P1,1] ≥ 5"
+    @test repr(model[:eq_min_demand]["C1", 2]) ==
+          "eq_min_demand[C1,2] : y[C2,C1,P1,2] ≥ 10"
+    @test ("C1", 3) ∉ keys(model[:eq_min_demand])
+    @test repr(model[:eq_min_demand]["C1", 4]) ==
+          "eq_min_demand[C1,4] : y[C2,C1,P1,4] ≥ 15"
+    @test ("C2", 1) ∉ keys(model[:eq_min_demand])
+    @test ("C3", 1) ∉ keys(model[:eq_min_demand])
+    @test ("C3", 2) ∉ keys(model[:eq_min_demand])
+
+    # Centers: Maximum demand constraints
+    @test repr(model[:eq_max_demand]["C1", 1]) ==
+          "eq_max_demand[C1,1] : y[C2,C1,P1,1] ≤ 100"
+    @test repr(model[:eq_max_demand]["C1", 2]) ==
+          "eq_max_demand[C1,2] : y[C2,C1,P1,2] ≤ 200"
+    @test ("C1", 3) ∉ keys(model[:eq_max_demand])
+    @test repr(model[:eq_max_demand]["C1", 4]) ==
+          "eq_max_demand[C1,4] : y[C2,C1,P1,4] ≤ 50"
+    @test ("C2", 1) ∉ keys(model[:eq_max_demand])
+    @test repr(model[:eq_max_demand]["C3", 1]) ==
+          "eq_max_demand[C3,1] : y[L1,C3,P4,1] ≤ 0"
+    @test repr(model[:eq_max_demand]["C3", 2]) ==
+          "eq_max_demand[C3,2] : y[L1,C3,P4,2] ≤ 25"
+    @test repr(model[:eq_max_demand]["C3", 3]) ==
+          "eq_max_demand[C3,3] : y[L1,C3,P4,3] ≤ 50"
+    @test repr(model[:eq_max_demand]["C3", 4]) ==
+          "eq_max_demand[C3,4] : y[L1,C3,P4,4] ≤ 75"
+
     # Global disposal limit
     @test repr(model[:eq_disposal_limit]["P1", 1]) ==
           "eq_disposal_limit[P1,1] : z_disp[C2,P1,1] ≤ 1"
