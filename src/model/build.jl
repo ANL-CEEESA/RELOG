@@ -3,6 +3,8 @@
 # Released under the modified BSD license. See COPYING.md for more details.
 
 using JuMP
+using DataStructures: BinaryMaxHeap
+using OrderedCollections: OrderedDict
 
 function R_expand(p::Plant, t::Int)
     denominator = p.capacities[2].size - p.capacities[1].size
@@ -21,7 +23,12 @@ function R_fix_exp(p::Plant, t::Int)
            denominator
 end
 
-function build_model(instance::Instance; optimizer, variable_names::Bool = false)
+function build_model(
+    instance::Instance;
+    optimizer,
+    variable_names::Bool = false,
+    max_neighbors::Int = 1_000_000,
+)
     model = JuMP.Model(optimizer)
     centers = instance.centers
     products = instance.products
@@ -40,64 +47,73 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
 
     # Transportation edges
     # -------------------------------------------------------------------------
+    HeapEntry = Tuple{Float64,String,Union{Plant,Center}}
+    heaps = OrderedDict{Tuple{Union{Plant,Center},Product},BinaryMaxHeap{HeapEntry}}()
+    for m in products
+        for p in plants
+            m ∈ keys(p.input_mix) || continue
+            heaps[(p, m)] = BinaryMaxHeap{HeapEntry}()
+        end
+        for c in centers
+            c.input === m || continue
+            heaps[(c, m)] = BinaryMaxHeap{HeapEntry}()
+        end
+    end
 
-    # Connectivity
-    model.ext[:E] = E = []
-    model.ext[:E_in] = E_in = Dict(src => [] for src in plants ∪ centers)
-    model.ext[:E_out] = E_out = Dict(src => [] for src in plants ∪ centers)
-
-    function push_edge!(src, dst, m)
-        push!(E, (src, dst, m))
-        push!(E_out[src], (dst, m))
-        push!(E_in[dst], (src, m))
+    function offer_edge!(src, dst, m)
+        d = _calculate_distance(
+            src.latitude, src.longitude,
+            dst.latitude, dst.longitude,
+            instance.distance_metric,
+        )
+        heap = heaps[(dst, m)]
+        if length(heap) < max_neighbors
+            push!(heap, (d, src.name, src))
+        elseif d < first(heap)[1]
+            pop!(heap)
+            push!(heap, (d, src.name, src))
+        end
     end
 
     for m in products
         for p1 in plants
             m ∈ keys(p1.output) || continue
-
-            # Plant to plant
             for p2 in plants
                 p1 != p2 || continue
                 m ∈ keys(p2.input_mix) || continue
-                push_edge!(p1, p2, m)
+                offer_edge!(p1, p2, m)
             end
-
-            # Plant to center
             for c in centers
                 m == c.input || continue
-                push_edge!(p1, c, m)
+                offer_edge!(p1, c, m)
             end
         end
-
         for c1 in centers
             m ∈ c1.outputs || continue
-
-            # Center to plant
             for p in plants
                 m ∈ keys(p.input_mix) || continue
-                push_edge!(c1, p, m)
+                offer_edge!(c1, p, m)
             end
-
-            # Center to center
             for c2 in centers
                 m == c2.input || continue
-                push_edge!(c1, c2, m)
+                offer_edge!(c1, c2, m)
             end
         end
     end
 
-    # Distances
+    model.ext[:E] = E = []
+    model.ext[:E_in] = E_in = Dict(n => [] for n in plants ∪ centers)
+    model.ext[:E_out] = E_out = Dict(n => [] for n in plants ∪ centers)
     model.ext[:distances] = distances = Dict()
-    for (p1, p2, m) in E
-        d = _calculate_distance(
-            p1.latitude,
-            p1.longitude,
-            p2.latitude,
-            p2.longitude,
-            instance.distance_metric,
-        )
-        distances[p1, p2, m] = d
+
+    for ((dst, m), heap) in heaps
+        while !isempty(heap)
+            (d, _, src) = pop!(heap)
+            push!(E, (src, dst, m))
+            push!(E_out[src], (dst, m))
+            push!(E_in[dst], (src, m))
+            distances[src, dst, m] = d
+        end
     end
 
     # Decision variables
