@@ -90,8 +90,6 @@ The mathematical model employed by RELOG is based on three main components:
 | $z^{\text{exp}}_{pt}$        | `z_exp[p.name, t]`                           | Extra capacity installed at plant $p$ at time $t$ above the minimum capacity                            | tonne  |
 | $z^{\text{collected}}_{cmt}$ | `z_collected[c.name, m.name, t]`             | Amount of material $m$ collected by center $c$ at time $t$                                              | tonne  |
 | $z^{\text{disp}}_{umt}$      | `z_disp[u.name, m.name, t]`                  | Amount of product $m$ disposed of at plant/center $u$ at time $t$                                       | tonne  |
-| $z^{\text{em-plant}}_{gpt}$  | `z_em_plant[g.name, p.name, t]`              | Amount of greenhouse gas $g$ released by plant $p$ at time $t$                                          | tonne  |
-| $z^{\text{em-tr}}_{guvmt}$   | `z_em_tr[g.name, u.name, v.name, m.name, t]` | Amount of greenhouse gas $g$ released at time $t$ due to transportation of material $m$ from $u$ to $v$ | tonne  |
 | $z^{\text{input}}_{ut}$      | `z_input[u.name, t]`                         | Total amount received by plant/center $u$ at time $t$                                                   | tonne  |
 | $z^{\text{prod}}_{umt}$      | `z_prod[u.name, m.name, t]`                  | Amount of product $m$ produced by plant/center $u$ at time $t$                                          | tonne  |
 | $z^{\text{storage}}_{pmt}$   | `z_storage[p.name, m.name, t]`               | Amount of input material $m$ stored at plant $p$ at the end of time $t$                                 | tonne  |
@@ -183,11 +181,14 @@ The goal is to minimize a linear objective function with the following terms:
 \sum_{p \in P} \sum_{m \in M^-_p} \sum_{t \in T} R^\text{storage}_{pmt} z^{\text{storage}}_{pmt}
 ```
 
-- Emissions penalty cost, incurred for each tonne of greenhouse gas emitted:
+- Emissions penalty cost, incurred for each tonne of greenhouse gas emitted.
+  Plant emission penalties are folded into the coefficient of
+  $z^{\text{process}}_{pt}$, and transportation emission penalties are folded
+  into the coefficient of $y_{uvmt}$:
 
 ```math
 \sum_{g \in G} \sum_{t \in T} R^\text{em}_{gt} \left(
-  \sum_{p \in P} z^{\text{em-plant}}_{gpt} + \sum_{(u,v,m) \in E} z^{\text{em-tr}}_{guvmt}
+  \sum_{p \in P} K^\text{em-plant}_{gpt} z^{\text{process}}_{pt} + \sum_{(u,v,m) \in E} K^{\text{dist}}_{uv} K^\text{em-tr}_{gmt} y_{uvmt}
 \right)
 ```
 
@@ -384,30 +385,13 @@ The goal is to minimize a linear objective function with the following terms:
 \end{align*}
 ```
 
-- Computation of transportation emissions
-  (`eq_emission_tr[g.name, u.name, v.name, m.name, t]`):
+- Global emissions limit (`eq_emission_limit[g.name, t]`). Emission amounts
+  are computed directly from the flow and processing variables rather than
+  through auxiliary emission variables:
 
 ```math
 \begin{align*}
-& z^{\text{em-tr}}_{guvmt} = K^{\text{dist}}_{uv} K^\text{em-tr}_{gmt} y_{uvmt}
-& \forall g \in G, (u, v, m) \in E, t \in T
-\end{align*}
-```
-
-- Computation of plant emissions (`eq_emission_plant[g.name, p.name, t]`):
-
-```math
-\begin{align*}
-& z^{\text{em-plant}}_{gpt} = K^\text{em-plant}_{gpt} z^{\text{process}}_{pt}
-& \forall g \in G, p \in P, t \in T
-\end{align*}
-```
-
-- Global emissions limit (`eq_emission_limit[g.name, t]`):
-
-```math
-\begin{align*}
-& \sum_{p \in P} z^{\text{em-plant}}_{gpt} + \sum_{(u,v,m) \in E} z^{\text{em-tr}}_{guvmt} \leq K^\text{em-limit}_{gt}
+& \sum_{p \in P} K^\text{em-plant}_{gpt} z^{\text{process}}_{pt} + \sum_{(u,v,m) \in E} K^{\text{dist}}_{uv} K^\text{em-tr}_{gmt} y_{uvmt} \leq K^\text{em-limit}_{gt}
 & \forall g \in G, t \in T
 \end{align*}
 ```

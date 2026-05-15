@@ -177,7 +177,7 @@ function plant_emissions_report(model)::DataFrame
     for p in plants, t in T, g in keys(p.emissions)
         processed_amount = JuMP.value(model[:z_process][p.name, t])
         processed_amount > 1e-3 || continue
-        emissions = JuMP.value(model[:z_em_plant][g, p.name, t])
+        emissions = p.emissions[g][t] * processed_amount
         emission_factor = p.emissions[g][t]
         push!(
             df,

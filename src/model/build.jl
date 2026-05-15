@@ -174,18 +174,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         z_process[p.name, t] = @variable(model, lower_bound = 0)
     end
 
-    # Transportation emissions by greenhouse gas
-    z_em_tr = _init(model, :z_em_tr)
-    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
-        z_em_tr[g, p1.name, p2.name, m.name, t] = @variable(model, lower_bound = 0)
-    end
-
-    # Plant emissions by greenhouse gas
-    z_em_plant = _init(model, :z_em_plant)
-    for p in plants, t in T, g in keys(p.emissions)
-        z_em_plant[g, p.name, t] = @variable(model, lower_bound = 0)
-    end
-
 
     # Objective function
     # -------------------------------------------------------------------------
@@ -262,8 +250,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             if emission.name in keys(p.emissions)
                 add_to_expression!(
                     obj,
-                    emission.penalty[t],
-                    z_em_plant[emission.name, p.name, t],
+                    emission.penalty[t] * p.emissions[emission.name][t],
+                    z_process[p.name, t],
                 )
             end
         end
@@ -272,8 +260,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             if emission.name in keys(m.tr_emissions)
                 add_to_expression!(
                     obj,
-                    emission.penalty[t],
-                    z_em_tr[emission.name, p1.name, p2.name, m.name, t],
+                    emission.penalty[t] * distances[p1, p2, m] * m.tr_emissions[emission.name][t],
+                    y[p1.name, p2.name, m.name, t],
                 )
             end
         end
@@ -468,25 +456,6 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         )
     end
 
-    # Transportation emissions
-    eq_emission_tr = _init(model, :eq_emission_tr)
-    for (p1, p2, m) in E, t in T, g in keys(m.tr_emissions)
-        eq_emission_tr[g, p1.name, p2.name, m.name, t] = @constraint(
-            model,
-            z_em_tr[g, p1.name, p2.name, m.name, t] ==
-            distances[p1, p2, m] * m.tr_emissions[g][t] * y[p1.name, p2.name, m.name, t]
-        )
-    end
-
-    # Plant emissions
-    eq_emission_plant = _init(model, :eq_emission_plant)
-    for p in plants, t in T, g in keys(p.emissions)
-        eq_emission_plant[g, p.name, t] = @constraint(
-            model,
-            z_em_plant[g, p.name, t] == p.emissions[g][t] * z_process[p.name, t]
-        )
-    end
-
     # Storage limit at plants
     eq_storage_limit = _init(model, :eq_storage_limit)
     for p in plants, m in keys(p.storage_limit), t in T
@@ -510,10 +479,11 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
         eq_emission_limit[emission.name, t] = @constraint(
             model,
             sum(
-                z_em_plant[emission.name, p.name, t] for
+                p.emissions[emission.name][t] * z_process[p.name, t] for
                 p in plants if emission.name in keys(p.emissions)
             ) + sum(
-                z_em_tr[emission.name, p1.name, p2.name, m.name, t] for
+                distances[p1, p2, m] * m.tr_emissions[emission.name][t] *
+                y[p1.name, p2.name, m.name, t] for
                 (p1, p2, m) in E if emission.name in keys(m.tr_emissions)
             ) <= emission.limit[t]
         )
