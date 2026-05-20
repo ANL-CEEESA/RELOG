@@ -17,5 +17,6 @@ include("model/build.jl")
 include("reports/plants.jl")
 include("reports/transportation.jl")
 include("reports/centers.jl")
+include("solve.jl")
 
 end # module RELOG
