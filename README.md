@@ -1,7 +1,7 @@
 <h1 align="center">RELOG: Supply Chain Analysis and Optimization</h1>
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.4302341">
-    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4302341.svg">
+    <img src="https://img.shields.io/badge/DOI-10.5281/zenodo.4302341-blue.svg">
   </a>
   <a href="https://github.com/ANL-CEEESA/RELOG/releases/">
     <img src="https://img.shields.io/github/v/release/ANL-CEEESA/RELOG?include_prereleases&label=pre-release">
