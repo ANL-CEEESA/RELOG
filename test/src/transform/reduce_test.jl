@@ -8,7 +8,7 @@ function reduce_test()
         instance = RELOG.parsefile(fixture("boat_example.json"))
         n_before = length(instance.plants)
 
-        reduced = RELOG.reduce_plants(instance)
+        reduced = RELOG.reduce_plants(instance, max_plants = n_before - 1)
         @test length(reduced.plants) == n_before - 1
 
         model = RELOG.build_model(reduced, optimizer = HiGHS.Optimizer)

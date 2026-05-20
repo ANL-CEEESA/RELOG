@@ -5,50 +5,34 @@
 using OrderedCollections
 
 """
-    reduce_plants(instance::Instance) -> Instance
+    reduce_plants(instance::Instance; max_plants::Int) -> Instance
 
-Reduce problem size by merging the two nearest plants within the first type
-group into a single superplant. Plants are grouped by type — two plants share
-a type if they have identical input mix and output ratios. Groups are assigned
-increasing IDs in order of first appearance; the first group (ID 1) is
-selected and the closest pair within it is merged.
+Reduce problem size by iteratively merging the two nearest plants of the
+same type until the number of plants is at most `max_plants`.
 
-The merged superplant Q has:
-- Location at the centroid of P1 and P2
-- Capacity range [min(a1,a2), b1+b2]
-- Capacity-level costs averaged (at min) and summed (at max)
-- Variable operating cost averaged
-- Emissions, disposal cost, storage cost averaged (union of keys)
-- Disposal and storage limits summed (union of keys)
-- Initial capacity summed
-
-Returns a new Instance with one fewer plant. If the first group has fewer
-than 2 plants, returns the instance unchanged.
+Returns a new Instance with at most `max_plants` plants. If no further
+merges are possible (every type group has fewer than 2 plants), returns
+the instance as reduced so far.
 """
-function reduce_plants(instance::Instance)::Instance
-    # Step 1: Group plants by type
-    groups = _group_plants_by_type(instance.plants)
+function reduce_plants(instance::Instance; max_plants::Int)::Instance
+    plants = copy(instance.plants)
 
-    # Step 2: Select the first type group (ID 1)
-    first = get(groups, 1, nothing)
-    (first === nothing || length(first) < 2) && return instance
+    while length(plants) > max_plants
+        groups = _group_plants_by_type(plants)
+        pair = _find_global_nearest_pair(plants, groups)
+        pair === nothing && break
 
-    # Step 3: Find nearest mergeable pair within the first group
-    pair = _find_nearest_pair_in_group(instance.plants, first)
-    pair === nothing && return instance
+        i, j = pair
+        merged = _merge_plants(plants[i], plants[j])
 
-    i, j = pair
-    p1, p2 = instance.plants[i], instance.plants[j]
-    merged = _merge_plants(p1, p2)
-
-    # Build new plant list: remove p1 and p2, add merged
-    new_plants = Plant[]
-    for (k, p) in enumerate(instance.plants)
-        k == i || k == j || push!(new_plants, p)
+        # Remove the higher index first to keep the lower index valid
+        hi, lo = max(i, j), min(i, j)
+        deleteat!(plants, hi)
+        deleteat!(plants, lo)
+        push!(plants, merged)
     end
-    push!(new_plants, merged)
 
-    new_plants_by_name = OrderedDict{String,Plant}(p.name => p for p in new_plants)
+    new_plants_by_name = OrderedDict{String,Plant}(p.name => p for p in plants)
 
     return Instance(;
         building_period = instance.building_period,
@@ -58,11 +42,43 @@ function reduce_plants(instance::Instance)::Instance
         products_by_name = instance.products_by_name,
         products = instance.products,
         time_horizon = instance.time_horizon,
-        plants = new_plants,
+        plants = plants,
         plants_by_name = new_plants_by_name,
         emissions_by_name = instance.emissions_by_name,
         emissions = instance.emissions,
     )
+end
+
+"""
+    _find_global_nearest_pair(plants, groups)
+
+Find the nearest pair of plants across all type groups. Returns (i, j) plant
+indices or nothing if no group has at least 2 plants.
+"""
+function _find_global_nearest_pair(
+    plants::Vector{Plant},
+    groups::Dict{Int,Vector{Int}},
+)
+    best_dist = Inf
+    best_pair = nothing
+
+    for (_, indices) in groups
+        length(indices) < 2 && continue
+        pair = _find_nearest_pair_in_group(plants, indices)
+        pair === nothing && continue
+        i, j = pair
+        d = _calculate_distance(
+            plants[i].latitude, plants[i].longitude,
+            plants[j].latitude, plants[j].longitude,
+            EuclideanDistance(),
+        )
+        if d < best_dist
+            best_dist = d
+            best_pair = pair
+        end
+    end
+
+    return best_pair
 end
 
 function _product_dict_key(d::OrderedDict{Product,Vector{Float64}})
