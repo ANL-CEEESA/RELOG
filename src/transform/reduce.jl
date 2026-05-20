@@ -5,17 +5,31 @@
 using OrderedCollections
 
 """
-    reduce_plants(instance::Instance; max_plants::Int) -> Instance
+    reduce_plants(instance::Instance; max_plants::Int)
+        -> (Instance, Dict{String, Vector{String}})
 
 Reduce problem size by iteratively merging the two nearest plants of the
 same type until the number of plants is at most `max_plants`.
 
-Returns a new Instance with at most `max_plants` plants. If no further
-merges are possible (every type group has fewer than 2 plants), returns
-the instance as reduced so far.
+Returns a tuple of:
+- A new Instance with at most `max_plants` plants.
+- A merge map from each resulting plant name to the list of original plant
+  names it was formed from. Plants that were never merged map to a
+  single-element vector containing their own name.
+
+If no further merges are possible (every type group has fewer than 2
+plants), returns the instance as reduced so far.
 """
-function reduce_plants(instance::Instance; max_plants::Int)::Instance
+function reduce_plants(
+    instance::Instance;
+    max_plants::Int,
+)::Tuple{Instance,Dict{String,Vector{String}}}
     plants = copy(instance.plants)
+
+    # Initialize merge map: each original plant maps to itself
+    merge_map = Dict{String,Vector{String}}(
+        p.name => [p.name] for p in plants
+    )
 
     while length(plants) > max_plants
         groups = _group_plants_by_type(plants)
@@ -24,6 +38,14 @@ function reduce_plants(instance::Instance; max_plants::Int)::Instance
 
         i, j = pair
         merged = _merge_plants(plants[i], plants[j])
+
+        # Union the constituent lists from both parents
+        merge_map[merged.name] = vcat(
+            merge_map[plants[i].name],
+            merge_map[plants[j].name],
+        )
+        delete!(merge_map, plants[i].name)
+        delete!(merge_map, plants[j].name)
 
         # Remove the higher index first to keep the lower index valid
         hi, lo = max(i, j), min(i, j)
@@ -34,7 +56,7 @@ function reduce_plants(instance::Instance; max_plants::Int)::Instance
 
     new_plants_by_name = OrderedDict{String,Plant}(p.name => p for p in plants)
 
-    return Instance(;
+    reduced = Instance(;
         building_period = instance.building_period,
         centers_by_name = instance.centers_by_name,
         centers = instance.centers,
@@ -47,6 +69,8 @@ function reduce_plants(instance::Instance; max_plants::Int)::Instance
         emissions_by_name = instance.emissions_by_name,
         emissions = instance.emissions,
     )
+
+    return (reduced, merge_map)
 end
 
 """
