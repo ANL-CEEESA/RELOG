@@ -10,6 +10,7 @@ end
 
 include("instance/structs.jl")
 include("instance/parse.jl")
+include("transform/reduce.jl")
 include("model/jumpext.jl")
 include("model/dist.jl")
 include("model/build.jl")

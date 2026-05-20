@@ -8,6 +8,7 @@ include("instance/parse_test.jl")
 include("model/build_test.jl")
 include("model/dist_test.jl")
 include("model/jumpext_test.jl")
+include("transform/reduce_test.jl")
 include("reports_test.jl")
 include("../fixtures/boat_example.jl")
 
@@ -25,6 +26,7 @@ function runtests()
         model_dist_test()
         report_tests()
         jumpext_test()
+        reduce_test()
     end
     return
 end
