@@ -3,6 +3,10 @@
 # Released under the modified BSD license. See COPYING.md for more details.
 
 using JuMP
+using Printf
+using DataFrames
+using Format
+using JuMP: GenericVariableRef, ConstraintRef
 
 function R_expand(p::Plant, t::Int)
     denominator = p.capacities[2].size - p.capacities[1].size
@@ -260,7 +264,9 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
             if emission.name in keys(m.tr_emissions)
                 add_to_expression!(
                     obj,
-                    emission.penalty[t] * distances[p1, p2, m] * m.tr_emissions[emission.name][t],
+                    emission.penalty[t] *
+                    distances[p1, p2, m] *
+                    m.tr_emissions[emission.name][t],
                     y[p1.name, p2.name, m.name, t],
                 )
             end
@@ -354,8 +360,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
                 eq_min_demand[c.name, t] = @constraint(
                     model,
                     sum(
-                        y[src.name, c.name, c.input.name, t]
-                        for (src, m2) in E_in[c] if m2 == c.input
+                        y[src.name, c.name, c.input.name, t] for
+                        (src, m2) in E_in[c] if m2 == c.input
                     ) >= c.minimum_demand[t]
                 )
             end
@@ -363,8 +369,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
                 eq_max_demand[c.name, t] = @constraint(
                     model,
                     sum(
-                        y[src.name, c.name, c.input.name, t]
-                        for (src, m2) in E_in[c] if m2 == c.input
+                        y[src.name, c.name, c.input.name, t] for
+                        (src, m2) in E_in[c] if m2 == c.input
                     ) <= c.maximum_demand[t]
                 )
             end
@@ -482,7 +488,8 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
                 p.emissions[emission.name][t] * z_process[p.name, t] for
                 p in plants if emission.name in keys(p.emissions)
             ) + sum(
-                distances[p1, p2, m] * m.tr_emissions[emission.name][t] *
+                distances[p1, p2, m] *
+                m.tr_emissions[emission.name][t] *
                 y[p1.name, p2.name, m.name, t] for
                 (p1, p2, m) in E if emission.name in keys(m.tr_emissions)
             ) <= emission.limit[t]
@@ -492,5 +499,24 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     if variable_names
         _set_names!(model)
     end
+
+    var_dict = object_dictionary(model)
+    rows = NamedTuple{(:symbol, :count)}[]
+    for (name, dict) in var_dict
+        dict isa AbstractDict || continue
+        count = length(dict)
+        push!(rows, (symbol = name, count = count))
+    end
+    df = DataFrame(rows)
+    df.symbol = String.(df.symbol)
+    sort!(df, :symbol)
+    name_width = maximum(length.(df.symbol))
+    count_width = maximum(length(format(c, commas = true)) for c in df.count)
+    for row in eachrow(df)
+        name = rpad(row.symbol, name_width)
+        count = format(row.count, commas = true, width = count_width)
+        log_info("  $name  $count")
+    end
+
     return model
 end

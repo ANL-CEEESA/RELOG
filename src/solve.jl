@@ -7,13 +7,26 @@ function solve(
     optimizer,
     max_plants::Union{Int,Nothing} = nothing,
 )::Nothing
+    log_info("RELOG: Supply Chain Analysis and Optimization, version 0.5.0")
+    log_info("Copyright (C) 2020-2026, UChicago Argonne, LLC")
+
+    log_info("Parsing: $path")
     basename = replace(path, r"\.json$" => "")
     instance = parsefile(path)
 
+    log_info(
+        "Parsed instance with " * 
+        "$(length(instance.plants)) plants, "*
+        "$(length(instance.centers)) centers, "*
+        "$(length(instance.products)) products, "*
+        "$(instance.time_horizon) time steps"
+    )
+
     if max_plants !== nothing
-        instance = _reduce_and_restrict(instance; optimizer, max_plants)
+        instance = _reduce_and_restrict(instance; optimizer, max_plants, path)
     end
 
+    log_info("Building final model with $(length(instance.plants)) plants and $(length(instance.centers)) centers")
     model = build_model(instance; optimizer = optimizer)
     optimize!(model)
     write_plants_report(model, "$basename.plants.csv")
@@ -39,16 +52,19 @@ function _reduce_and_restrict(
     instance::Instance;
     optimizer,
     max_plants::Int,
+    path::String = "",
 )::Instance
-    # Step 1: Reduce the instance by merging nearby plants
+
+    log_info("Reducing instance to at most $(max_plants) plants")
     reduced, merge_map = reduce_plants(instance; max_plants = max_plants)
 
-    # Step 2: Solve the reduced problem
+    log_info("Building reduced model...")
     reduced_model = build_model(reduced; optimizer = optimizer)
+
+    log_info("Optimizing reduced model...")
     optimize!(reduced_model)
 
-    # Step 3: Identify utilized plants in the reduced solution.
-    # A reduced plant is utilized if it is operational (x > 0.5) at any time.
+    log_info("Identifying utilized plants...")
     T = reduced.time_horizon
     utilized_reduced = Set{String}()
     for p in reduced.plants
@@ -59,20 +75,17 @@ function _reduce_and_restrict(
             end
         end
     end
-
-    # Step 4: Map back to original plant names via merge_map
     utilized_original = Set{String}()
     for rname in utilized_reduced
         for orig_name in merge_map[rname]
             push!(utilized_original, orig_name)
         end
     end
-
-    # Step 5: Build a restricted instance with only the utilized plants
     restricted_plants = [p for p in instance.plants if p.name in utilized_original]
     restricted_plants_by_name = OrderedDict{String,Plant}(
         p.name => p for p in restricted_plants
     )
+    log_info("$(length(utilized_reduced)) super plants utilized, mapping back to $(length(utilized_original)) original plants")
 
     return Instance(;
         building_period = instance.building_period,
