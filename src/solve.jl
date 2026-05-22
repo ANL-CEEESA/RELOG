@@ -2,11 +2,7 @@
 # Copyright (C) 2020, UChicago Argonne, LLC. All rights reserved.
 # Released under the modified BSD license. See COPYING.md for more details.
 
-function solve(
-    path::String;
-    optimizer,
-    max_plants::Union{Int,Nothing} = nothing,
-)::Nothing
+function solve(path::String; optimizer, max_plants::Union{Int,Nothing} = nothing)::Nothing
     log_info("RELOG: Supply Chain Analysis and Optimization, version 0.5.0")
     log_info("Copyright (C) 2020-2026, UChicago Argonne, LLC")
 
@@ -16,15 +12,14 @@ function solve(
 
     log_info(
         "Parsed instance with " *
-        "$(length(instance.plants)) plants, "*
-        "$(length(instance.centers)) centers, "*
-        "$(length(instance.products)) products, "*
-        "$(instance.time_horizon) time steps"
+        "$(length(instance.plants)) plants, " *
+        "$(length(instance.centers)) centers, " *
+        "$(length(instance.products)) products, " *
+        "$(instance.time_horizon) time steps",
     )
 
     if max_plants !== nothing
-        instance, allowed_arcs = _reduce_and_restrict(instance; optimizer, max_plants, path)
-        model = build_model(instance; optimizer = optimizer, allowed_arcs = allowed_arcs)
+        instance, model = _reduce_and_restrict(instance; optimizer, max_plants, path)
     else
         model = build_model(instance; optimizer = optimizer)
     end
@@ -41,20 +36,21 @@ function solve(
 end
 
 """
-    _reduce_and_restrict(instance; optimizer, max_plants) -> (Instance, Set{Tuple{String, String, String}})
+    _reduce_and_restrict(instance; optimizer, max_plants) -> (Instance, Model)
 
 Heuristic pre-solve: reduce the instance to at most `max_plants` plants,
 solve the reduced problem to identify which plants are utilized, then
 return a restricted version of the *original* instance containing only
-the plants that were utilized in the reduced solution. Also returns the
-set of allowed arcs expanded from the reduced model solution.
+the plants that were utilized in the reduced solution, along with the
+fully built JuMP model using the restricted instance and arc/variable
+fixings from the reduced solution.
 """
 function _reduce_and_restrict(
     instance::Instance;
     optimizer,
     max_plants::Int,
     path::String = "",
-)::Tuple{Instance,Set{Tuple{String, String, String}}}
+)::Tuple{Instance,Model}
 
     log_info("Reducing instance to at most $(max_plants) plants")
     reduced, merge_map = reduce_plants(instance; max_plants = max_plants)
@@ -65,11 +61,10 @@ function _reduce_and_restrict(
     log_info("Optimizing reduced model...")
     optimize!(reduced_model)
 
-    log_info("Identifying utilized plants...")
     T = reduced.time_horizon
     utilized_reduced = Set{String}()
     for p in reduced.plants
-        for t in 1:T
+        for t = 1:T
             if JuMP.value(reduced_model[:x][p.name, t]) > 0.5
                 push!(utilized_reduced, p.name)
                 break
@@ -83,21 +78,21 @@ function _reduce_and_restrict(
         end
     end
     restricted_plants = [p for p in instance.plants if p.name in utilized_original]
-    restricted_plants_by_name = OrderedDict{String,Plant}(
-        p.name => p for p in restricted_plants
+    restricted_plants_by_name =
+        OrderedDict{String,Plant}(p.name => p for p in restricted_plants)
+    log_info(
+        "$(length(utilized_reduced)) super plants utilized, mapping back to $(length(utilized_original)) original plants",
     )
-    log_info("$(length(utilized_reduced)) super plants utilized, mapping back to $(length(utilized_original)) original plants")
 
-    log_info("Identifying utilized arcs...")
     tol = 1e-7
-    allowed_arcs = Set{Tuple{String, String, String}}()
+    allowed_arcs = Set{Tuple{String,String,String}}()
     arc_count = 0
     for (src, dst, m) in reduced_model.ext[:E]
         src_name = src.name
         dst_name = dst.name
 
         has_flow = false
-        for t in 1:T
+        for t = 1:T
             if JuMP.value(reduced_model[:y][src_name, dst_name, m.name, t]) > tol
                 has_flow = true
                 break
@@ -131,7 +126,9 @@ function _reduce_and_restrict(
             push!(allowed_arcs, (src_name, dst_name, m.name))
         end
     end
-    log_info("$(arc_count) arcs utilized in reduced solution, mapping back to $(length(allowed_arcs)) original arcs")
+    log_info(
+        "$(arc_count) arcs utilized in reduced solution, mapping back to $(length(allowed_arcs)) original arcs",
+    )
 
     restricted_instance = Instance(;
         building_period = instance.building_period,
@@ -147,5 +144,84 @@ function _reduce_and_restrict(
         emissions = instance.emissions,
     )
 
-    return (restricted_instance, allowed_arcs)
+    log_info("Building restricted model...")
+    restricted_model =
+        build_model(restricted_instance; optimizer = optimizer, allowed_arcs = allowed_arcs)
+
+    log_info("Applying variable fixings...")
+    fix_x_count = 0
+    for super_name in utilized_reduced
+        for t = 1:T
+            if JuMP.value(reduced_model[:x][super_name, t]) <= 0.5
+                for orig_name in merge_map[super_name]
+                    JuMP.fix(restricted_model[:x][orig_name, t], 0.0)
+                    fix_x_count += 1
+                end
+            end
+        end
+    end
+    log_info("$fix_x_count x variables fixed")
+
+    fix_y_count = 0
+    for (src, dst, m) in reduced_model.ext[:E]
+        src_name = src.name
+        dst_name = dst.name
+        m_name = m.name
+
+        src_is_plant = src_name in keys(merge_map)
+        dst_is_plant = dst_name in keys(merge_map)
+
+        for t = 1:T
+            if JuMP.value(reduced_model[:y][src_name, dst_name, m_name, t]) <= tol
+                if src_is_plant && dst_is_plant
+                    for orig_src in merge_map[src_name]
+                        for orig_dst in merge_map[dst_name]
+                            if (orig_src, orig_dst, m_name) in allowed_arcs
+                                JuMP.fix(
+                                    restricted_model[:y][orig_src, orig_dst, m_name, t],
+                                    0.0,
+                                    force = true,
+                                )
+                                fix_y_count += 1
+                            end
+                        end
+                    end
+                elseif src_is_plant && !dst_is_plant
+                    for orig_src in merge_map[src_name]
+                        if (orig_src, dst_name, m_name) in allowed_arcs
+                            JuMP.fix(
+                                restricted_model[:y][orig_src, dst_name, m_name, t],
+                                0.0,
+                                force = true,
+                            )
+                            fix_y_count += 1
+                        end
+                    end
+                elseif !src_is_plant && dst_is_plant
+                    for orig_dst in merge_map[dst_name]
+                        if (src_name, orig_dst, m_name) in allowed_arcs
+                            JuMP.fix(
+                                restricted_model[:y][src_name, orig_dst, m_name, t],
+                                0.0,
+                                force = true,
+                            )
+                            fix_y_count += 1
+                        end
+                    end
+                else
+                    if (src_name, dst_name, m_name) in allowed_arcs
+                        JuMP.fix(
+                            restricted_model[:y][src_name, dst_name, m_name, t],
+                            0.0,
+                            force = true,
+                        )
+                        fix_y_count += 1
+                    end
+                end
+            end
+        end
+    end
+    log_info("$fix_y_count y variables fixed")
+
+    return (restricted_instance, restricted_model)
 end
