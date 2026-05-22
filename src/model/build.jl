@@ -25,7 +25,8 @@ function R_fix_exp(p::Plant, t::Int)
            denominator
 end
 
-function build_model(instance::Instance; optimizer, variable_names::Bool = false)
+function build_model(instance::Instance; optimizer, variable_names::Bool = false,
+                     allowed_arcs::Set{Tuple{String, String, String}} = Set{Tuple{String, String, String}}())
     model = JuMP.Model(optimizer)
     centers = instance.centers
     products = instance.products
@@ -51,6 +52,9 @@ function build_model(instance::Instance; optimizer, variable_names::Bool = false
     model.ext[:E_out] = E_out = Dict(src => [] for src in plants ∪ centers)
 
     function push_edge!(src, dst, m)
+        if !isempty(allowed_arcs)
+            (src.name, dst.name, m.name) ∈ allowed_arcs || return
+        end
         push!(E, (src, dst, m))
         push!(E_out[src], (dst, m))
         push!(E_in[dst], (src, m))

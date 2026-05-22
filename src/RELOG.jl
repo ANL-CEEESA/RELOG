@@ -2,7 +2,7 @@ module RELOG
 
 using Dates
 
-log_info(msg::AbstractString) = printstyled("[$(Dates.format(Dates.now(), "yyyy-mm-dd HH:MM:SS.sss"))] ", msg, "\n"; color=:light_blue)
+log_info(msg::AbstractString) = printstyled("[$(Dates.format(Dates.now(), "yyyy-mm-dd HH:MM:SS.sss"))] ", msg, "\n"; color=:cyan)
 
 function _round(x::Number)
     if abs(x) < 1e-5

@@ -15,7 +15,7 @@ function solve(
     instance = parsefile(path)
 
     log_info(
-        "Parsed instance with " * 
+        "Parsed instance with " *
         "$(length(instance.plants)) plants, "*
         "$(length(instance.centers)) centers, "*
         "$(length(instance.products)) products, "*
@@ -23,11 +23,11 @@ function solve(
     )
 
     if max_plants !== nothing
-        instance = _reduce_and_restrict(instance; optimizer, max_plants, path)
+        instance, allowed_arcs = _reduce_and_restrict(instance; optimizer, max_plants, path)
+        model = build_model(instance; optimizer = optimizer, allowed_arcs = allowed_arcs)
+    else
+        model = build_model(instance; optimizer = optimizer)
     end
-
-    log_info("Building final model with $(length(instance.plants)) plants and $(length(instance.centers)) centers")
-    model = build_model(instance; optimizer = optimizer)
     optimize!(model)
     write_plants_report(model, "$basename.plants.csv")
     write_plant_inputs_report(model, "$basename.plant_inputs.csv")
@@ -41,19 +41,20 @@ function solve(
 end
 
 """
-    _reduce_and_restrict(instance; optimizer, max_plants) -> Instance
+    _reduce_and_restrict(instance; optimizer, max_plants) -> (Instance, Set{Tuple{String, String, String}})
 
 Heuristic pre-solve: reduce the instance to at most `max_plants` plants,
 solve the reduced problem to identify which plants are utilized, then
 return a restricted version of the *original* instance containing only
-the plants that were utilized in the reduced solution.
+the plants that were utilized in the reduced solution. Also returns the
+set of allowed arcs expanded from the reduced model solution.
 """
 function _reduce_and_restrict(
     instance::Instance;
     optimizer,
     max_plants::Int,
     path::String = "",
-)::Instance
+)::Tuple{Instance,Set{Tuple{String, String, String}}}
 
     log_info("Reducing instance to at most $(max_plants) plants")
     reduced, merge_map = reduce_plants(instance; max_plants = max_plants)
@@ -87,7 +88,52 @@ function _reduce_and_restrict(
     )
     log_info("$(length(utilized_reduced)) super plants utilized, mapping back to $(length(utilized_original)) original plants")
 
-    return Instance(;
+    log_info("Identifying utilized arcs...")
+    tol = 1e-7
+    allowed_arcs = Set{Tuple{String, String, String}}()
+    arc_count = 0
+    for (src, dst, m) in reduced_model.ext[:E]
+        src_name = src.name
+        dst_name = dst.name
+
+        has_flow = false
+        for t in 1:T
+            if JuMP.value(reduced_model[:y][src_name, dst_name, m.name, t]) > tol
+                has_flow = true
+                break
+            end
+        end
+
+        if !has_flow
+            continue
+        end
+
+        arc_count += 1
+
+        src_is_plant = src_name in keys(merge_map)
+        dst_is_plant = dst_name in keys(merge_map)
+
+        if src_is_plant && dst_is_plant
+            for orig_src in merge_map[src_name]
+                for orig_dst in merge_map[dst_name]
+                    push!(allowed_arcs, (orig_src, orig_dst, m.name))
+                end
+            end
+        elseif src_is_plant && !dst_is_plant
+            for orig_src in merge_map[src_name]
+                push!(allowed_arcs, (orig_src, dst_name, m.name))
+            end
+        elseif !src_is_plant && dst_is_plant
+            for orig_dst in merge_map[dst_name]
+                push!(allowed_arcs, (src_name, orig_dst, m.name))
+            end
+        else
+            push!(allowed_arcs, (src_name, dst_name, m.name))
+        end
+    end
+    log_info("$(arc_count) arcs utilized in reduced solution, mapping back to $(length(allowed_arcs)) original arcs")
+
+    restricted_instance = Instance(;
         building_period = instance.building_period,
         centers_by_name = instance.centers_by_name,
         centers = instance.centers,
@@ -100,4 +146,6 @@ function _reduce_and_restrict(
         emissions_by_name = instance.emissions_by_name,
         emissions = instance.emissions,
     )
+
+    return (restricted_instance, allowed_arcs)
 end
